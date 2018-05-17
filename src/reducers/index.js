@@ -1,0 +1,14 @@
+import { combineReducers } from 'redux';
+import LoginReducer from './LoginReducer';
+import ArmazenaReducer from './ArmazenaReducer';
+import ConfereReducer from './ConfereReducer';
+import VersionReducer from './VersionReducer';
+import EstoqueReducer from './EstoqueReducer';
+
+export default combineReducers({
+    LoginReducer,
+    ArmazenaReducer,
+    ConfereReducer,
+    VersionReducer,
+    EstoqueReducer
+});
