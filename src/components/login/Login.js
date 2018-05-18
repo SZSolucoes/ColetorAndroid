@@ -5,7 +5,8 @@ import {
     Button,
     TextInput,
     Text,
-    Keyboard
+    Keyboard,
+    ActivityIndicator
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -13,7 +14,8 @@ import {
     modificaUsuario, 
     modificaSenha,
     doLogin,
-    iniciaPermissao
+    iniciaPermissao,
+    modificaLoadingLogin
 } from '../../actions/LoginActions';
 
 class Login extends Component {
@@ -25,7 +27,21 @@ class Login extends Component {
 
         Keyboard.dismiss();
 
+        this.props.modificaLoadingLogin();
         this.props.doLogin({ usuario, senha });
+    }
+    renderBotao() {
+        if (this.props.loadingLogin) {
+            return (
+                <ActivityIndicator size="large" />
+            );
+        }
+        return (
+            <Button 
+                title='LOGIN'
+                onPress={() => this.pressLogin()}
+            />
+        );
     }
     render() {
         return (
@@ -57,10 +73,7 @@ class Login extends Component {
                     />
                 </View>
                 <View style={styles.loginBtn}>
-                    <Button 
-                        title='LOGIN'
-                        onPress={() => this.pressLogin()}
-                    />
+                    {this.renderBotao()}
                 </View>
                 <View style={styles.viewMsg}>
                     <Text style={styles.msgLogin}>
@@ -84,7 +97,8 @@ const mapStateToProps = state => (
         logConfSeparacao: state.LoginReducer.logConfSeparacao,
         logTransferencia: state.LoginReducer.logTransferencia,
         logArmazenamento: state.LoginReducer.logArmazenamento,
-        logTodos: state.LoginReducer.logTodos
+        logTodos: state.LoginReducer.logTodos,
+        loadingLogin: state.LoginReducer.loadingLogin
     }
 );
 
@@ -92,7 +106,8 @@ export default connect(mapStateToProps, {
     modificaUsuario, 
     modificaSenha,
     doLogin,
-    iniciaPermissao
+    iniciaPermissao,
+    modificaLoadingLogin
 })(Login);
 
 const styles = StyleSheet.create({

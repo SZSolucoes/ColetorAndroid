@@ -36,6 +36,11 @@ class FormConf extends Component {
         this.props.buscaNotaConferencia(usuario);
     }
     carregaNF() {
+        const nrNota = this.props.nrNotaFis;
+        console.log(nrNota);
+
+        //modificaFornec
+        //modificaQtTotal
         this.codEAN.focus();
     }
     render() {

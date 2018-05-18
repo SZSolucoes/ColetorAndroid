@@ -15,6 +15,12 @@ export const modificaSenha = (senha) => {
     };
 };
 
+export const modificaLoadingLogin = () => {
+    return {
+        type: 'modifica_loading_log'
+    };
+};
+
 export const iniciaPermissao = () => {
     return {
         type: 'inicia_permissao_log'

@@ -1,6 +1,6 @@
 const INITIAL_STATE = {
-    usuario: '',
-    senha: '',
+    usuario: 'super',
+    senha: 'super2021',
     erroLogin: '',
     logConfReceb: '',
     logEstoque: '',
@@ -9,7 +9,8 @@ const INITIAL_STATE = {
     logConfSeparacao: '',
     logTransferencia: '',
     logArmazenamento: '',
-    logTodos: ''
+    logTodos: '',
+    loadingLogin: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -24,16 +25,23 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 senha: action.payload 
             };
+        case 'modifica_loading_log':
+            return { 
+                ...state, 
+                loadingLogin: true 
+            };
         case 'login_ok_log':
             return { 
                 ...state, 
                 senha: '', 
-                erroLogin: '' 
+                erroLogin: '',
+                loadingLogin: false
             };
         case 'login_erro_log':
             return { 
                 ...state, 
-                erroLogin: action.payload 
+                erroLogin: action.payload,
+                loadingLogin: false
             };
         case 'inicia_permissao_log':
             return { 

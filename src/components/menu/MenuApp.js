@@ -7,14 +7,13 @@ import {
     TouchableHighlight
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
 
 import LogoutBtn from '../login/Logout';
 
 const imgTruck1 = require('../../../resources/imgs/truck1.png');
 const imgTruck2 = require('../../../resources/imgs/truck2.png');
 
-class MenuApp extends Component {
+export default class MenuApp extends Component {
     onPressEntrada() {
         Actions.menuEntrada();
     }
@@ -55,24 +54,6 @@ class MenuApp extends Component {
         );
     }
 }
-
-const mapStateToProps = state => {
-    console.log(state);
-    return (
-        {
-            logConfReceb: state.LoginReducer.logConfReceb,
-            logEstoque: state.LoginReducer.logEstoque,
-            logDespacho: state.LoginReducer.logDespacho,
-            logSeparacao: state.LoginReducer.logSeparacao,
-            logConfSeparacao: state.LoginReducer.logConfSeparacao,
-            logTransferencia: state.LoginReducer.logTransferencia,
-            logArmazenamento: state.LoginReducer.logArmazenamento,
-            logTodos: state.LoginReducer.logTodos
-        }
-    );
-};
-
-export default connect(mapStateToProps, null)(MenuApp);
 
 const styles = StyleSheet.create({
     viewPrinc: {
