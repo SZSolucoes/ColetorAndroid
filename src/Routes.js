@@ -14,6 +14,7 @@ import Conferencia from './components/entrada/conferencia/Conferencia';
 import Inventario from './components/entrada/inventario/Inventario';
 import Transferencia from './components/entrada/transferencia/Transferencia';
 import Estoque from './components/estoque/Estoque';
+import ListaNotaFiscal from './components/entrada/conferencia/ListaNotaFiscal';
 
 export default props => (
     <Router>
@@ -99,6 +100,14 @@ export default props => (
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"
             />
+            <Scene 
+                key='listaNFConf' 
+                component={ListaNotaFiscal} 
+                title="Nota Fiscal" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
         </Scene>
     </Router>
 );
@@ -109,7 +118,8 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontSize: 16
+        fontSize: 16,
+        textAlign: 'center'
     },
     btLeft: {
         color: 'white'

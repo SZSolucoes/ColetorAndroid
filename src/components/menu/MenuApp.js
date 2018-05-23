@@ -37,7 +37,9 @@ export default class MenuApp extends Component {
                             <Text style={styles.txtMenu}>Entrada de Mercadorias</Text>
                         </View>
                     </TouchableHighlight>
-                    <TouchableHighlight onPress={this.onPressSaida}>
+                    <TouchableHighlight 
+                        onPress={this.onPressSaida}
+                    >
                         <View style={styles.menu}>
                             <Image 
                                 style={styles.imgMenu} 

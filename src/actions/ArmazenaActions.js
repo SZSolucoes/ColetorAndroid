@@ -64,3 +64,9 @@ export const modificaLote = (lote) => {
         payload: lote    
     };
 };
+export const modificaListaItem = (listaItem) => {
+    return {
+        type: 'modifica_listaItem_arm',
+        payload: listaItem    
+    };
+};

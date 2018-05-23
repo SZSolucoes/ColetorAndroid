@@ -4,11 +4,13 @@ import ArmazenaReducer from './ArmazenaReducer';
 import ConfereReducer from './ConfereReducer';
 import VersionReducer from './VersionReducer';
 import EstoqueReducer from './EstoqueReducer';
+import TransfereReducer from './TransfereReducer';
 
 export default combineReducers({
     LoginReducer,
     ArmazenaReducer,
     ConfereReducer,
     VersionReducer,
-    EstoqueReducer
+    EstoqueReducer,
+    TransfereReducer
 });

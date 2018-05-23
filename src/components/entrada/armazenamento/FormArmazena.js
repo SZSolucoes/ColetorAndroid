@@ -7,7 +7,7 @@ import {
     TextInput,
     TouchableOpacity
 } from 'react-native';
-
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
 import ListaItem from './ListaItem';
@@ -25,7 +25,11 @@ import {
     modificaUnidMed
 } from '../../../actions/ArmazenaActions';
 
+
 class FormArmazena extends Component {
+    onPressVoltar() {
+        Actions.pop();
+    }
     render() {
         console.log(this.props);
         return (
@@ -235,7 +239,7 @@ class FormArmazena extends Component {
                                     backgroundColor: 'red'
                                 }
                             ]}
-                            onPress={this.onPress}
+                            onPress={() => { this.onPressVoltar(); }}
                         >
                             <Text style={{ color: 'white', fontSize: 14 }}> Voltar </Text>
                         </TouchableOpacity>
@@ -323,7 +327,8 @@ const styles = StyleSheet.create({
     input: {
         height: 35,
         fontSize: 18,
-        backgroundColor: 'rgba(255,255,255,0.2)',
+        //backgroundColor: 'rgba(255,255,255,0.2)',
+        backgroundColor: '#20293F',
         color: 'white',
 		borderRadius: 10
     },

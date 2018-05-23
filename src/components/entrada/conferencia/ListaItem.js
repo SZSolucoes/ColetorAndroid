@@ -1,43 +1,34 @@
 import React, { Component } from 'react';
 import { 
-    StyleSheet, 
-    Text, 
+    FlatList, 
     View, 
-    FlatList 
+    Text, 
+    StyleSheet, 
+    TouchableHighlight 
 } from 'react-native';
+
 import { connect } from 'react-redux';
+
 import { 
-    modificaListaItemConf
+    modificaListaItem,
+    modificaCodItem,
+    modificaDesItem,
+    modificaUnidMed
 } from '../../../actions/ConfereActions';
 
-const dataItem = [{ 
-    key: '1', 
-    code: '', 
-    descricao: ''
-}];
-
-const formatData = (data, numColumns) => {
-    const numberOfFullRows = Math.floor(data.length / numColumns);
-
-    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
-    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-        data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
-        numberOfElementsLastRow++;
-    }
-
-    return data;
-};
-
-const numColumns = 1;
 class ListaItem extends Component {
-    componentWillMount() {
-        console.log(this.props.listaItem);
+    onPressItem(item) {
+        const { itCode, itDesc, un } = item;
 
-        if (this.props.listaItem === undefined) {
-            this.props.modificaListaItem(dataItem);
-        }
+        this.props.modificaCodItem(itCode);
+        this.props.modificaDesItem(itDesc);
+        this.props.modificaUnidMed(un);
     }
-
+    keyExtractor(item, index) {
+        return (
+            item.seq
+        );
+    }
     renderSeparator = () => {
         return (
             <View
@@ -48,18 +39,32 @@ class ListaItem extends Component {
                 }}
             />
         );
-    };
-
+    }
+    renderItem = ({ item }) => {
+        return (
+            <TouchableHighlight
+                onPress={() => this.onPressItem(item)}
+            >
+                <View
+                    style={styles.item}
+                >
+                    <Text style={styles.itemSeq}>{item.seq}</Text>
+                    <Text style={styles.itemCode}>{item.itCode}</Text>
+                    <Text style={styles.itemDesc}>{item.itDesc}</Text>
+                </View>
+            </TouchableHighlight>            
+        );
+    }
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
-                <Text style={{ textAlign: 'center', color: '#fff', fontSize: 16, flex: 1 }}> 
+                <Text style={[styles.headerText, { flex: 1 }]}> 
                     Seq
                 </Text>
-                <Text style={{ textAlign: 'center', color: '#fff', fontSize: 16, flex: 2 }}> 
+                <Text style={[styles.headerText, { flex: 2 }]}> 
                     Código
                 </Text>
-                <Text style={{ textAlign: 'center', color: '#fff', fontSize: 16, flex: 4 }}> 
+                <Text style={[styles.headerText, { flex: 4 }]}> 
                     Descrição
                 </Text>
             </View>
@@ -67,43 +72,37 @@ class ListaItem extends Component {
 
         return headerView;
     };
-
-    renderItem = ({ item, index }) => {
-        if (item.empty === true) {
-            return <View style={[styles.item, styles.itemInvisible]} />;
-        }
-        return (
-            <View
-                style={styles.item}
-            >
-                <Text style={styles.itemSeq}>{item.key}</Text>
-                <Text style={styles.itemCode}>{item.code}</Text>
-                <Text style={styles.itemDesc}>{item.descricao}</Text>
-            </View>
-        );
-    };
-
     render() {
         return (
             <FlatList
-                data={formatData(dataItem, numColumns)}
-                ItemSeparatorComponent={this.renderSeparator}
+                data={this.props.listaItem}
                 style={styles.container}
+                ItemSeparatorComponent={this.renderSeparator}
+                keyExtractor={this.keyExtractor}
                 renderItem={this.renderItem}
-                numColumns={numColumns}
+                numColumns='1'
                 ListHeaderComponent={this.renderHeader}
             />
         );
     }
 }
 
-const mapStateToProps = state => (
-    {
-        listaItem: state.EstoqueReducer.listaItem
-    }
-);
+const mapStateToProps = state => {
+    return (
+        {
+            listaItem: state.ConfereReducer.listaItem
+        }
+    );
+};
 
-export default connect(mapStateToProps, { modificaListaItemConf })(ListaItem);
+export default connect(mapStateToProps, 
+    { 
+        modificaListaItem,
+        modificaCodItem,
+        modificaDesItem,
+        modificaUnidMed 
+    }
+)(ListaItem);
 
 const styles = StyleSheet.create({
     container: {
@@ -126,17 +125,23 @@ const styles = StyleSheet.create({
     itemSeq: {
         color: '#fff',
         flex: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 13,
+        fontFamily: 'sans-serif-medium'
     },
     itemDesc: {
         color: '#fff',
         flex: 4,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 13,
+        fontFamily: 'sans-serif-medium'
     },
     itemCode: {
         color: '#fff',
         flex: 2,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 13,
+        fontFamily: 'sans-serif-medium'
     },
     header: {
         width: '100%', 
@@ -146,5 +151,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         flex: 1
-      }
+    },
+    headerText: { 
+        textAlign: 'center', 
+        color: '#fff', 
+        fontSize: 14,
+        fontFamily: 'sans-serif-medium' 
+    }
 });

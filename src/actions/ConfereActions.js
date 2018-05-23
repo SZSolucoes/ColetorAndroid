@@ -113,7 +113,6 @@ export const buscaNotaConferencia = (usuario) => {
 };
 
 const buscaSuccess = (dispatch, response) => {
-    console.log(response);
     if (response.data.success === 'true') {
         dispatch({ type: 'modifica_listaNF_conf', payload: response.data.prioridades });
     } else {
@@ -132,6 +131,9 @@ const buscaError = () => {
 };
 
 export const imprimeEtiquetaEAM = ({ username, codEAN, qtdEtiq }) => {
+    console.log(username);
+    console.log(codEAN);
+    console.log(qtdEtiq);
     return dispatch => {
         Axios.get('/app/doPrintNew.p', {
             params: {
@@ -146,7 +148,6 @@ export const imprimeEtiquetaEAM = ({ username, codEAN, qtdEtiq }) => {
 };
 
 const imprimeSuccess = (dispatch, response) => {
-    console.log(response);
     if (response.data.success === 'true') {
         Alert.alert(
             'Impressão Etiqueta',

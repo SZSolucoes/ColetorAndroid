@@ -41,9 +41,7 @@ export const doLogin = ({ usuario, senha }) => {
 };
 
 const loginSuccess = (dispatch, response) => {
-    console.log('loginSuccess');
     if (response.data.success === 'true') {
-        console.log(response.data.parameters[0]);
         dispatch({ type: 'login_ok_log' });
         dispatch({ type: 'atualiza_permissao_log', payload: response.data.parameters[0] });
         Actions.menuApp();
@@ -55,6 +53,5 @@ const loginSuccess = (dispatch, response) => {
 };
 
 const loginError = (dispatch, error) => {
-    console.log('loginError');
     dispatch({ type: 'login_erro_log', payload: 'Erro Conexão!' });
 };

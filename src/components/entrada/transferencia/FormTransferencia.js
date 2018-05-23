@@ -7,22 +7,27 @@ import {
     TextInput,
     TouchableOpacity
 } from 'react-native';
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
-export default class FormTransferencia extends Component {
-    constructor(props) {
-        super(props);
+import { 
+    iniciaTela,
+    modificaCodEAN,
+    modificaCodItem,
+    modificaCodLocalDest,
+    modificaCodLocalOrig,
+    modificaDescItem,
+    modificaQtItem,
+    modificaUnidMed
+} from '../../../actions/TransfereActions';
 
-        this.state = { 
-            codEAN: '', 
-            codItem: '',
-            descItem: '',
-            unidMed: '',
-            codLocalOrig: '',
-            codLocalDest: '',
-            qtItem: ''
-        };
+class FormTransferencia extends Component {
+    onPressVoltar() {
+        Actions.pop();
     }
-
+    onPressTransfer() {
+        
+    }
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
@@ -33,11 +38,12 @@ export default class FormTransferencia extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
                             style={styles.input}
-                            onChangeText={(codEAN) => this.setState({ codEAN })}
-                            value={this.state.codEAN}
+                            returnKeyType="go"
+                            onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
+                            value={this.props.codEAN}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
@@ -46,11 +52,12 @@ export default class FormTransferencia extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={(codItem) => this.setState({ codItem })}
-                            value={this.state.codItem}
+                            onChangeText={codItem => this.props.modificaCodItem(codItem)}
+                            value={this.props.codItem}
                         />
                     </View>
                 </View>
@@ -61,11 +68,12 @@ export default class FormTransferencia extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={(descItem) => this.setState({ descItem })}
-                            value={this.state.descItem}
+                            onChangeText={descItem => this.props.modificaDescItem(descItem)}
+                            value={this.props.descItem}
                         />
                     </View>                    
                 </View>
@@ -76,11 +84,12 @@ export default class FormTransferencia extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={(qtItem) => this.setState({ qtItem })}
-                            value={this.state.qtItem}
+                            onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
+                            value={this.props.qtItem}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
@@ -89,11 +98,12 @@ export default class FormTransferencia extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={(unidMed) => this.setState({ unidMed })}
-                            value={this.state.unidMed}
+                            onChangeText={unidMed => this.props.modificaUnidMed(unidMed)}
+                            value={this.props.unidMed}
                         />
                     </View>
                 </View>
@@ -107,8 +117,8 @@ export default class FormTransferencia extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={(codLocalOrig) => this.setState({ codLocalOrig })}
-                            value={this.state.codLocalOrig}
+                            onChangeText={codLocalOrig => this.props.modificaCodLocalOrig(codLocalOrig)}
+                            value={this.props.codLocalOrig}
                         />
                     </View>
                 </View>
@@ -122,8 +132,8 @@ export default class FormTransferencia extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={(codLocalDest) => this.setState({ codLocalDest })}
-                            value={this.state.codLocalDest}
+                            onChangeText={codLocalDest => this.props.modificaCodLocalDest(codLocalDest)}
+                            value={this.props.codLocalDest}
                         />
                     </View>
                 </View>
@@ -136,7 +146,7 @@ export default class FormTransferencia extends Component {
                                     backgroundColor: 'green'
                                 }
                             ]}
-                            onPress={this.onPress}
+                            onPress={() => { this.onPressTransfer(); }}
                         >
                             <Text style={{ color: 'white', fontSize: 14 }}> Transferir </Text>
                         </TouchableOpacity>
@@ -147,7 +157,7 @@ export default class FormTransferencia extends Component {
                                     backgroundColor: 'red'
                                 }
                             ]}
-                            onPress={this.onPress}
+                            onPress={() => { this.onPressVoltar(); }}
                         >
                             <Text style={{ color: 'white', fontSize: 14 }}> Voltar </Text>
                         </TouchableOpacity>
@@ -157,6 +167,32 @@ export default class FormTransferencia extends Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return (
+        {
+            codEAN: state.TransfereReducer.codEAN,
+            codItem: state.TransfereReducer.codItem,
+            codLocalDest: state.TransfereReducer.codLocalDest,
+            codLocalOrig: state.TransfereReducer.codLocalOrig,
+            descItem: state.TransfereReducer.descItem,
+            qtItem: state.TransfereReducer.qtItem,
+            unidMed: state.TransfereReducer.unidMed,
+            usuario: state.LoginReducer.usuario
+        }
+    );
+};
+
+export default connect(mapStateToProps, { 
+    iniciaTela,
+    modificaCodEAN,
+    modificaCodItem,
+    modificaCodLocalDest,
+    modificaCodLocalOrig,
+    modificaDescItem,
+    modificaQtItem,
+    modificaUnidMed
+})(FormTransferencia);
 
 const styles = StyleSheet.create({
     viewPrinc: {
@@ -184,13 +220,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 10,
+        fontFamily: 'sans-serif-medium',
         fontSize: 13
     },
     input: {
         height: 35,
-        fontSize: 18,
-        backgroundColor: 'rgba(255,255,255,0.2)',
+        fontSize: 16,
+        textAlign: 'center',
+        //backgroundColor: 'rgba(255,255,255,0.2)',
+        backgroundColor: '#20293F',
         color: 'white',
+        fontFamily: 'sans-serif-medium',
 		borderRadius: 10
     },
     viewBotao: {

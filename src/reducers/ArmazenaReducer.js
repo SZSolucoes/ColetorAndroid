@@ -9,11 +9,11 @@ const INITIAL_STATE = {
     codLocal: '',
     desLocal: '',
     qtItem: '',
-    lote: ''
+    lote: '',
+    listaItem: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action.type);
     switch (action.type) {
         case 'modifica_batismo_arm':
             return { 
@@ -69,6 +69,11 @@ export default (state = INITIAL_STATE, action) => {
             return { 
                 ...state, 
                 lote: action.payload 
+            };
+        case 'modifica_listaItem_arm':
+            return { 
+                ...state, 
+                listaItem: action.payload 
             };
         default:
             return state; 

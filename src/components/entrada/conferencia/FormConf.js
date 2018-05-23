@@ -5,9 +5,12 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    Image,
+    Alert
 } from 'react-native';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 import ListaItem from './ListaItem';
 import { 
@@ -25,23 +28,48 @@ import {
     modificaUnidMed,
     iniciaTela,
     limpaTela,
-    buscaNotaConferencia
+    buscaNotaConferencia,
+    imprimeEtiquetaEAM
 } from '../../../actions/ConfereActions';
+
+const imgZoom = require('../../../../resources/imgs/zoom_nf.png');
+const imgPrinter = require('../../../../resources/imgs/impressao_etiq.png');
 
 class FormConf extends Component {
     componentWillMount() {
-        this.props.iniciaTela();
         const usuario = this.props.usuario;
-        console.log(usuario);
+
+        this.props.iniciaTela();
         this.props.buscaNotaConferencia(usuario);
+    }
+    onPressVoltar() {
+        Actions.pop();
+    }
+    onPressPrint() {
+        const { codEAN, qtEtiq, usuario } = this.props;
+
+        if (codEAN === '') {
+            Alert.alert(
+                'Impressão Etiqueta',
+                'EAN deve ser informado!'
+            );
+        } else if (qtEtiq === '' || qtEtiq === '0') {
+            Alert.alert(
+                'Impressão Etiqueta',
+                'Quantidade Etiqueta deve maior que 0!'
+            );
+        } else {
+            this.props.imprimeEtiquetaEAM(usuario, codEAN, qtEtiq);
+        }
     }
     carregaNF() {
         const nrNota = this.props.nrNotaFis;
         console.log(nrNota);
 
-        //modificaFornec
-        //modificaQtTotal
         this.codEAN.focus();
+    }
+    procuraNFLista() {
+        Actions.listaNFConf();
     }
     render() {
         return (
@@ -55,7 +83,7 @@ class FormConf extends Component {
                             autoCorrect={false}
                             keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={styles.input}
                             onChangeText={nrNotaFis => this.props.modificaNrNotaFis(nrNotaFis)}
                             value={this.props.nrNotaFis}
@@ -66,8 +94,13 @@ class FormConf extends Component {
                     <View style={styles.viewBtSearch}>
                         <TouchableOpacity
                             style={styles.btSearch}
-                            onPress={this.onPress}
-                        />
+                            onPress={this.procuraNFLista}                            
+                        >
+                            <Image
+                                source={imgZoom}
+                                style={styles.imgSearch}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Fornecedor</Text>
@@ -246,9 +279,9 @@ class FormConf extends Component {
                                     backgroundColor: 'red'
                                 }
                             ]}
-                            onPress={this.onPress}
+                            onPress={() => { this.onPressVoltar(); }}
                         >
-                            <Text style={{ color: 'white', fontSize: 14 }}> Voltar </Text>
+                            <Text style={{ color: 'white', fontSize: 14, alignItems: 'center' }}> Voltar </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
@@ -268,8 +301,13 @@ class FormConf extends Component {
                             />
                             <TouchableOpacity
                                 style={styles.btSearch}
-                                onPress={this.onPress}
-                            />
+                                onPress={() => { this.onPressPrint(); }}
+                            >
+                                <Image
+                                    source={imgPrinter}
+                                    style={styles.imgSearch}
+                                />
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -282,7 +320,6 @@ class FormConf extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
     return (
         {
             nrNotaFis: state.ConfereReducer.nrNotaFis,
@@ -317,7 +354,8 @@ export default connect(mapStateToProps, {
     modificaUnidMed,
     iniciaTela,
     limpaTela,
-    buscaNotaConferencia
+    buscaNotaConferencia,
+    imprimeEtiquetaEAM
 })(FormConf);
 
 const styles = StyleSheet.create({
@@ -342,9 +380,10 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 17,
+        fontSize: 16,
         textAlign: 'center',
-		backgroundColor: 'rgba(255,255,255,0.2)',
+        //backgroundColor: 'rgba(255,255,255,0.2)',
+        backgroundColor: '#20293F',
         color: 'white',
         fontFamily: 'sans-serif-medium',
 		borderRadius: 10
@@ -353,7 +392,8 @@ const styles = StyleSheet.create({
         height: 70,
         fontSize: 14,
         textAlign: 'left',
-        backgroundColor: 'rgba(255,255,255,0.2)',
+        //backgroundColor: 'rgba(255,255,255,0.2)',
+        backgroundColor: '#20293F',
         color: 'white',
         borderRadius: 10,
         fontFamily: 'sans-serif-medium'
@@ -367,10 +407,11 @@ const styles = StyleSheet.create({
     },
     btSearch: {
         width: 40,
-        height: 35,
-        padding: 10,
-        paddingHorizontal: 10,
-        backgroundColor: '#2a4d69'
+        height: 35
+    },
+    imgSearch: {
+        width: 35,
+        height: 35
     },
     button: {
         alignItems: 'center',

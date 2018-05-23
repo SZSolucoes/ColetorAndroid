@@ -19,7 +19,7 @@ import {
     limpaTela
 } from '../../actions/EstoqueActions';
 
-import ListaItem from './ListaItem';
+import ListaItemEstoque from './ListaItemEstoque';
 
 class FormEstoque extends Component {
     componentWillMount() {
@@ -106,7 +106,7 @@ class FormEstoque extends Component {
                     </View>                    
                 </View>
                 <View style={{ padding: 5 }} >
-                    <ListaItem />
+                    <ListaItemEstoque />
                 </View>
             </ScrollView>
         );
@@ -165,9 +165,10 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 17,
+        fontSize: 16,
         textAlign: 'center',
-        backgroundColor: 'rgba(255,255,255,0.2)',
+        //backgroundColor: 'rgba(255,255,255,0.2)',
+        backgroundColor: '#20293F',
         color: 'white',
         borderRadius: 10,
         fontFamily: 'sans-serif-medium'
@@ -176,7 +177,8 @@ const styles = StyleSheet.create({
         height: 70,
         fontSize: 14,
         textAlign: 'left',
-        backgroundColor: 'rgba(255,255,255,0.2)',
+        //backgroundColor: 'rgba(255,255,255,0.2)',
+        backgroundColor: '#20293F',
         color: 'white',
         borderRadius: 10,
         fontFamily: 'sans-serif-medium'

@@ -70,7 +70,7 @@ class ListaItem extends Component {
         return headerView;
     };
 
-    renderItem = ({ item, index }) => {
+    renderItem = ({ item }) => {
         if (item.empty === true) {
             return <View style={[styles.item, styles.itemInvisible]} />;
         }
@@ -86,7 +86,6 @@ class ListaItem extends Component {
     };
 
     render() {
-        console.log(this.props.listaItem);
         return (
             <FlatList
                 data={formatData(this.props.listaItem, numColumns)}

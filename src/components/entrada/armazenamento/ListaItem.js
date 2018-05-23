@@ -1,41 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { 
-    StyleSheet, 
-    Text, 
+    FlatList, 
     View, 
-    FlatList 
+    Text, 
+    StyleSheet 
 } from 'react-native';
 
-const data = [
-    { key: '10', code: '0001', descricao: 'Teste 1' }, 
-    { key: '20', code: '0002', descricao: 'Teste 2' }, 
-    { key: '30', code: '0003', descricao: 'Teste 3' }, 
-    { key: '40', code: '0004', descricao: 'Teste 4' }, 
-    { key: '50', code: '0005', descricao: 'Teste 5' }, 
-    { key: '60', code: '0006', descricao: 'Teste 6' }, 
-    { key: '70', code: '0007', descricao: 'Teste 7' }, 
-    { key: '80', code: '0008', descricao: 'Teste 8' },
-    { key: '90', code: '0009', descricao: 'Teste 9' }, 
-    { key: '100', code: '0010', descricao: 'Teste 10' },
-    { key: '110', code: '0011', descricao: 'Teste 11' },
-    // { key: 'L' },
-];
+import { connect } from 'react-redux';
 
-const formatData = (data, numColumns) => {
-    const numberOfFullRows = Math.floor(data.length / numColumns);
+import { 
+    modificaListaItem
+} from '../../../actions/ArmazenaActions';
 
-    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
-    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-        data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
-        numberOfElementsLastRow++;
+class ListaItem extends Component {
+    keyExtractor(item, index) {
+        return (
+            item.seq
+        );
     }
-
-    return data;
-};
-
-const numColumns = 1;
-export default class ListaItem extends React.Component {
-
     renderSeparator = () => {
         return (
             <View
@@ -46,18 +28,28 @@ export default class ListaItem extends React.Component {
                 }}
             />
         );
-    };
-
+    }
+    renderItem = ({ item }) => {
+        return (
+            <View
+                style={styles.item}
+            >
+                <Text style={styles.itemSeq}>{item.seq}</Text>
+                <Text style={styles.itemCode}>{item.itCode}</Text>
+                <Text style={styles.itemDesc}>{item.itDesc}</Text>
+            </View>
+        );
+    }
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
-                <Text style={{ textAlign: 'center', color: '#fff', fontSize: 16, flex: 1 }}> 
+                <Text style={[styles.headerText, { flex: 1 }]}> 
                     Seq
                 </Text>
-                <Text style={{ textAlign: 'center', color: '#fff', fontSize: 16, flex: 2 }}> 
+                <Text style={[styles.headerText, { flex: 2 }]}> 
                     Código
                 </Text>
-                <Text style={{ textAlign: 'center', color: '#fff', fontSize: 16, flex: 4 }}> 
+                <Text style={[styles.headerText, { flex: 4 }]}> 
                     Descrição
                 </Text>
             </View>
@@ -65,35 +57,34 @@ export default class ListaItem extends React.Component {
 
         return headerView;
     };
-
-    renderItem = ({ item, index }) => {
-        if (item.empty === true) {
-            return <View style={[styles.item, styles.itemInvisible]} />;
-        }
-        return (
-            <View
-                style={styles.item}
-            >
-                <Text style={styles.itemSeq}>{item.key}</Text>
-                <Text style={styles.itemCode}>{item.code}</Text>
-                <Text style={styles.itemDesc}>{item.descricao}</Text>
-            </View>
-        );
-    };
-
     render() {
         return (
             <FlatList
-                data={formatData(data, numColumns)}
-                ItemSeparatorComponent={this.renderSeparator}
+                data={this.props.listaItem}
                 style={styles.container}
+                ItemSeparatorComponent={this.renderSeparator}
+                keyExtractor={this.keyExtractor}
                 renderItem={this.renderItem}
-                numColumns={numColumns}
+                numColumns='1'
                 ListHeaderComponent={this.renderHeader}
             />
         );
     }
 }
+
+const mapStateToProps = state => {
+    return (
+        {
+            listaItem: state.ArmazenaReducer.listaItem
+        }
+    );
+};
+
+export default connect(mapStateToProps, 
+    { 
+        modificaListaItem
+    }
+)(ListaItem);
 
 const styles = StyleSheet.create({
     container: {
@@ -116,17 +107,23 @@ const styles = StyleSheet.create({
     itemSeq: {
         color: '#fff',
         flex: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 13,
+        fontFamily: 'sans-serif-medium'
     },
     itemDesc: {
         color: '#fff',
         flex: 4,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 13,
+        fontFamily: 'sans-serif-medium'
     },
     itemCode: {
         color: '#fff',
         flex: 2,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 13,
+        fontFamily: 'sans-serif-medium'
     },
     header: {
         width: '100%', 
@@ -136,5 +133,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         flex: 1
-      }
+    },
+    headerText: { 
+        textAlign: 'center', 
+        color: '#fff', 
+        fontSize: 14,
+        fontFamily: 'sans-serif-medium' 
+    }
 });
