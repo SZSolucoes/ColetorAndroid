@@ -5,12 +5,12 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    TouchableOpacity
+    Button,
+    Alert
 } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
-import ListaItem from './ListaItem';
+import ListaItem from './ListaItemArm';
 import { 
     modificaBatismo, 
     modificaCodEAN, 
@@ -19,16 +19,74 @@ import {
     modificaCodLocal,
     modificaDesLocal,
     modificaLote,
+    modificaUnidMed,
     modificaQtArmazenado,
     modificaQtItem,
-    modificaQtTotal,
-    modificaUnidMed
+    modificaQtTotal    
 } from '../../../actions/ArmazenaActions';
 
 
 class FormArmazena extends Component {
-    onPressVoltar() {
-        Actions.pop();
+    onPressEfetivar() {
+        const { 
+            usuario, 
+            codEAN,
+            batismo,
+            qtItem, 
+            codLocal, 
+            lote } = this.props;
+
+        if (codEAN === '' || codEAN === '0') {
+            Alert.alert(
+                'Armazenamento',
+                'EAN deve ser informado!'
+            );
+            return;
+        } 
+        if (qtItem === '' || qtItem === '0') {
+            Alert.alert(
+                'Armazenamento',
+                'Quantidade Item deve ser maior que 0!'
+            );
+            return;
+        } 
+        if (codLocal === '' || codLocal === '0') {
+            Alert.alert(
+                'Armazenamento',
+                'Local deve ser informado!'
+            );
+            return;
+        }
+        if (batismo === '' || batismo === '0') {
+            Alert.alert(
+                'Armazenamento',
+                'Batismo deve ser informado!'
+            );
+            return;
+        }
+        if (lote === '' || lote === '0') {
+            Alert.alert(
+                'Armazenamento',
+                'Lote deve ser informado!'
+            );
+            return;
+        }
+    }
+    onPressAtualizar() {
+
+    }
+    validEAN() {
+        const { codEAN } = this.props;
+
+        this.props.buscaInfoEan(codEAN);
+
+        this.txtLocal.focus();
+    }
+    validLocal() {
+        this.txtQuantidade.focus();
+    }
+    validBatismo() {
+        this.txtEAN.focus();
     }
     render() {
         console.log(this.props);
@@ -43,12 +101,12 @@ class FormArmazena extends Component {
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={styles.input}
                             onChangeText={batismo => this.props.modificaBatismo(batismo)}
                             value={this.props.batismo}
                             ref={(input) => { this.txtBatismo = input; }}
-                            onSubmitEditing={() => { this.txtEAN.focus(); }}
+                            onSubmitEditing={() => { this.validBatismo(); }}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
@@ -89,12 +147,12 @@ class FormArmazena extends Component {
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={styles.input}
                             onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
                             ref={(input) => { this.txtEAN = input; }}
-                            onSubmitEditing={() => { this.txtLocal.focus(); }}
+                            onSubmitEditing={() => { this.validEAN(); }}
                         />
                     </View>
                 </View>
@@ -139,9 +197,9 @@ class FormArmazena extends Component {
                             editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            editable={false}
                             multiline
-                            style={styles.input}
+                            numberOfLines={3}
+                            style={styles.inputDescricao}
                             onChangeText={desItem => this.props.modificaDesItem(desItem)}
                             value={this.props.desItem}
                         />
@@ -172,7 +230,7 @@ class FormArmazena extends Component {
                             onChangeText={codLocal => this.props.modificaCodLocal(codLocal)}
                             value={this.props.codLocal}
                             ref={(input) => { this.txtLocal = input; }}
-                            onSubmitEditing={() => { this.txtQuantidade.focus(); }}
+                            onSubmitEditing={() => { this.validLocal(); }}
                         />
                         <TextInput
                             placeholder=""
@@ -180,7 +238,7 @@ class FormArmazena extends Component {
                             autoCorrect={false}
                             editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={[styles.input, { width: 200 }]}
                             onChangeText={desLocal => this.props.modificaDesLocal(desLocal)}
                             value={this.props.desLocal}
@@ -196,7 +254,7 @@ class FormArmazena extends Component {
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={styles.input}
                             onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
                             value={this.props.qtItem}
@@ -221,39 +279,16 @@ class FormArmazena extends Component {
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewBotao, { flex: 1 }]}>
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                {
-                                    backgroundColor: 'green'
-                                }
-                            ]}
-                            onPress={this.onPress}
-                        >
-                            <Text style={{ color: 'white', fontSize: 13 }}> Armazenar </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                {
-                                    backgroundColor: 'red'
-                                }
-                            ]}
-                            onPress={() => { this.onPressVoltar(); }}
-                        >
-                            <Text style={{ color: 'white', fontSize: 14 }}> Voltar </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                {
-                                    backgroundColor: '#f9a602'
-                                }
-                            ]}
-                            onPress={this.onPress}
-                        >
-                            <Text style={{ color: 'white', fontSize: 14 }}> Atualizar </Text>
-                        </TouchableOpacity>
+                        <Button
+                            onPress={() => { this.onPressEfetivar(); }}
+                            title="Efetivar"
+                            color="green"
+                        />
+                        <Button
+                            onPress={() => { this.onPressAtualizar(); }}
+                            title="Atualizar"
+                            color="#f9a602"
+                        />
                     </View>
                 </View>
                 <View style={{ padding: 5 }} >
@@ -276,7 +311,8 @@ const mapStateToProps = state => (
         codLocal: state.ArmazenaReducer.codLocal,
         desLocal: state.ArmazenaReducer.desLocal,
         qtItem: state.ArmazenaReducer.qtItem,
-        lote: state.ArmazenaReducer.lote
+        lote: state.ArmazenaReducer.lote,
+        usuario: state.LoginReducer.usuario
     }
 );
 
@@ -304,7 +340,6 @@ const styles = StyleSheet.create({
     },
     viewCampo: {
         flexDirection: 'column',        
-        //flex: 1,
         paddingHorizontal: 10
     },
     viewCampoLocal: {
@@ -322,12 +357,19 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
         fontSize: 13
-        //marginBottom: 5
+    },
+    inputDescricao: {
+        height: 70,
+        fontSize: 14,
+        textAlign: 'left',
+        backgroundColor: '#20293F',
+        color: 'white',
+        borderRadius: 10,
+        fontFamily: 'sans-serif-medium'
     },
     input: {
         height: 35,
         fontSize: 18,
-        //backgroundColor: 'rgba(255,255,255,0.2)',
         backgroundColor: '#20293F',
         color: 'white',
 		borderRadius: 10
@@ -336,7 +378,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         justifyContent: 'space-between',
-        //alignItems: 'flex-end',
         marginTop: 10,
         paddingHorizontal: 10
     },

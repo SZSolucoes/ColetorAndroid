@@ -3,16 +3,31 @@ import {
     FlatList, 
     View, 
     Text, 
-    StyleSheet 
+    StyleSheet, 
+    TouchableHighlight 
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
 import { 
-    modificaListaItem
-} from '../../../actions/ArmazenaActions';
+    modificaListaItem,
+    modificaCodItem,
+    modificaDesItem,
+    modificaUnidMed,
+    modificaItemConfere,
+    modificaLocalPad
+} from '../../../actions/ConfereActions';
 
 class ListaItem extends Component {
+    onPressItem(item) {
+        const { itCode, itDesc, un, localiz } = item;
+
+        this.props.modificaCodItem(itCode);
+        this.props.modificaDesItem(itDesc);
+        this.props.modificaUnidMed(un);
+        this.props.modificaLocalPad(localiz);
+        this.props.modificaItemConfere(item);
+    }
     keyExtractor(item, index) {
         return (
             item.seq
@@ -31,13 +46,17 @@ class ListaItem extends Component {
     }
     renderItem = ({ item }) => {
         return (
-            <View
-                style={styles.item}
+            <TouchableHighlight
+                onPress={() => this.onPressItem(item)}
             >
-                <Text style={styles.itemSeq}>{item.seq}</Text>
-                <Text style={styles.itemCode}>{item.itCode}</Text>
-                <Text style={styles.itemDesc}>{item.itDesc}</Text>
-            </View>
+                <View
+                    style={styles.item}
+                >
+                    <Text style={styles.itemSeq}>{item.seq}</Text>
+                    <Text style={styles.itemCode}>{item.itCode}</Text>
+                    <Text style={styles.itemDesc}>{item.itDescAbrev}</Text>
+                </View>
+            </TouchableHighlight>            
         );
     }
     renderHeader = () => {
@@ -75,14 +94,20 @@ class ListaItem extends Component {
 const mapStateToProps = state => {
     return (
         {
-            listaItem: state.ArmazenaReducer.listaItem
+            listaItem: state.ConfereReducer.listaItem,
+            itemConfere: state.ConfereReducer.itemConfere
         }
     );
 };
 
 export default connect(mapStateToProps, 
     { 
-        modificaListaItem
+        modificaListaItem,
+        modificaCodItem,
+        modificaDesItem,
+        modificaUnidMed,
+        modificaItemConfere,
+        modificaLocalPad
     }
 )(ListaItem);
 

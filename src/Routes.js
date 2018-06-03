@@ -15,6 +15,7 @@ import Inventario from './components/entrada/inventario/Inventario';
 import Transferencia from './components/entrada/transferencia/Transferencia';
 import Estoque from './components/estoque/Estoque';
 import ListaNotaFiscal from './components/entrada/conferencia/ListaNotaFiscal';
+import ImpressaoEAN from './components/impressao/Impressao';
 
 export default props => (
     <Router>
@@ -96,6 +97,14 @@ export default props => (
                 key='estoque' 
                 component={Estoque} 
                 title="Consulta Estoque" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='impressao' 
+                component={ImpressaoEAN} 
+                title="Impressao EAN" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

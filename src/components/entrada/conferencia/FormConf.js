@@ -7,12 +7,15 @@ import {
     TextInput,
     TouchableOpacity,
     Image,
-    Alert
+    Alert,
+    Button
 } from 'react-native';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import ListaItem from './ListaItem';
+import ListaItem from './ListaItemConf';
+import InfoItemConferencia from './InfoItemConferencia';
 import { 
     modificaBatismo,
     modificaCodEAN,
@@ -29,21 +32,87 @@ import {
     iniciaTela,
     limpaTela,
     buscaNotaConferencia,
-    imprimeEtiquetaEAM
+    imprimeEtiquetaEAN,
+    efetivaConfere,
+    modificaListaItem,
+    modificaNotaConfere,
+    modificaItemConfere,
+    modificaInfoVisible
 } from '../../../actions/ConfereActions';
 
 const imgZoom = require('../../../../resources/imgs/zoom_nf.png');
 const imgPrinter = require('../../../../resources/imgs/impressao_etiq.png');
 
 class FormConf extends Component {
+    constructor() {
+        super();
+     
+        this.state = {
+            qtdDisable: true,
+            batismoDisable: true
+        };
+    }
     componentWillMount() {
         const usuario = this.props.usuario;
+
+        this.setState({ qtdDisable: true });
+        this.setState({ batismoDisable: true });
 
         this.props.iniciaTela();
         this.props.buscaNotaConferencia(usuario);
     }
-    onPressVoltar() {
-        Actions.pop();
+    onPressEfetivar() {
+        const { 
+            usuario, 
+            notaConfere, 
+            itemConfere, 
+            codEAN, 
+            qtItem, 
+            batismo,
+            pesoItem,
+            larguraItem,
+            alturaItem,
+            comprimentoItem
+            } = this.props;
+            
+        const conferencia = {
+            batismo,
+            codEAN,
+            qtItem,
+            pesoItem,
+            larguraItem,
+            alturaItem,
+            comprimentoItem
+        };
+
+        const item = this.props.itemConfere;
+
+        if (item.tpCont === '3') {
+        }
+        
+        if (codEAN === '' || codEAN === '0') {
+            Alert.alert(
+                'Conferência',
+                'EAN deve ser informado!'
+            );
+            return;
+        } 
+        if (qtItem === '' || qtItem === '0') {
+            Alert.alert(
+                'Conferência',
+                'Quantidade Item deve ser maior que 0!'
+            );
+            return;
+        } 
+        if (batismo === '' || batismo === '0') {
+            Alert.alert(
+                'Conferência',
+                'Etiqueta Batismo deve ser informada!'
+            );
+            return;
+        }
+        
+        this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });        
     }
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
@@ -53,20 +122,98 @@ class FormConf extends Component {
                 'Impressão Etiqueta',
                 'EAN deve ser informado!'
             );
-        } else if (qtEtiq === '' || qtEtiq === '0') {
+            return;
+        } 
+        if (qtEtiq === '' || qtEtiq === '0') {
             Alert.alert(
                 'Impressão Etiqueta',
                 'Quantidade Etiqueta deve maior que 0!'
             );
-        } else {
-            this.props.imprimeEtiquetaEAM(usuario, codEAN, qtEtiq);
+            return;
+        }
+        
+        this.props.imprimeEtiquetaEAN(usuario, codEAN, qtEtiq);
+    }
+    validQtdItem() {
+        const item = this.props.itemConfere;
+        const { qtItem } = this.props;
+
+        if (item.qtdItem !== qtItem) {
+            Alert.alert(
+                'Conferência',
+                'Quantidade Item Divergente! Deseja continuar?',
+                [
+                    { 
+                        text: 'Não', 
+                        onPress: () => false, 
+                        style: 'cancel' 
+                    },
+                    { 
+                        text: 'Sim', 
+                        onPress: () => this.onPressEfetivar() 
+                    },
+                ],
+                { cancelable: false }
+            );
         }
     }
     carregaNF() {
         const nrNota = this.props.nrNotaFis;
-        console.log(nrNota);
+        const listaConfere = _.values(this.props.listaNF);
+
+        const notaConf = _.filter(listaConfere, { nroDocto: nrNota });
+        
+        if (notaConf.length === 0) {
+            Alert.alert(
+                'Conferência',
+                'Nota Fiscal não Localizada!'
+            );
+            return;
+        }
+
+        const item = notaConf[0].itens[0];
+        const qtdConf = notaConf[0].itens.length;
+
+        this.props.modificaFornec(notaConf[0].nomeEmit);
+        this.props.modificaNrNotaFis(notaConf[0].nroDocto);
+        this.props.modificaQtTotal(notaConf[0].qtdItem);
+        this.props.modificaQtConferir(_.toString(qtdConf));
+        this.props.modificaListaItem(notaConf[0].itens);
+        this.props.modificaCodItem(item.itCode);
+        this.props.modificaDesItem(item.itDesc);
+        this.props.modificaLocalPad(item.localiz);
+        this.props.modificaUnidMed(item.un);
+        this.props.modificaNotaConfere(notaConf[0]);
+        this.props.modificaItemConfere(item);
 
         this.codEAN.focus();
+    }
+    validEAN() {
+        const { notaConfere, codEAN } = this.props;
+        const itensNF = _.values(notaConfere.itens);
+
+        const itemConf = _.filter(itensNF, { ean: codEAN });
+        
+        if (itemConf.length === 0) {
+            Alert.alert(
+                'Conferência',
+                'EAN Não Localizado!'
+            );
+            return;
+        }
+
+        this.setState({ qtdDisable: true });
+
+        this.qtItem.focus();
+        this.props.modificaInfoVisible(true);
+    }
+    validQtd() {
+        this.setState({ batismoDisable: true });
+        
+        this.batismo.focus();
+    }
+    validBatismo() {
+
     }
     procuraNFLista() {
         Actions.listaNFConf();
@@ -154,12 +301,12 @@ class FormConf extends Component {
                             autoCorrect={false}
                             keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={styles.input}
                             onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
                             ref={(input) => { this.codEAN = input; }}
-                            onSubmitEditing={() => { this.qtItem.focus(); }}
+                            onSubmitEditing={() => { this.validEAN(); }}
                         />
                     </View>
                 </View>
@@ -171,13 +318,14 @@ class FormConf extends Component {
                             autoCapitalize="none"
                             autoCorrect={false}
                             keyboardType="numeric"
+                            editable={this.state.qtdDisable}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={styles.input}
                             onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
                             value={this.props.qtItem}
                             ref={(input) => { this.qtItem = input; }}
-                            onSubmitEditing={() => { this.batismo.focus(); }}
+                            onSubmitEditing={() => { this.validQtd(); }}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
@@ -232,12 +380,13 @@ class FormConf extends Component {
                             autoCorrect={false}
                             keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            editable={this.state.batismoDisable}
+                            returnKeyType="go"
                             style={styles.input}
                             onChangeText={batismo => this.props.modificaBatismo(batismo)}
                             value={this.props.batismo}
                             ref={(input) => { this.batismo = input; }}
-                            onSubmitEditing={() => { this.qtEtiq.focus(); }}
+                            onSubmitEditing={() => { this.validBatismo(); }}
                         />
                     </View>
                 </View>
@@ -261,28 +410,11 @@ class FormConf extends Component {
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewBotao, { flex: 2 }]}>
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                {
-                                    backgroundColor: 'green'
-                                }
-                            ]}
-                            onPress={this.onPress}
-                        >
-                            <Text style={{ color: 'white', fontSize: 14 }}> Efetivar </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                {
-                                    backgroundColor: 'red'
-                                }
-                            ]}
-                            onPress={() => { this.onPressVoltar(); }}
-                        >
-                            <Text style={{ color: 'white', fontSize: 14, alignItems: 'center' }}> Voltar </Text>
-                        </TouchableOpacity>
+                        <Button
+                            onPress={() => { this.validQtdItem(); }}
+                            title="Efetivar"
+                            color="green"
+                        />
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
@@ -293,7 +425,8 @@ class FormConf extends Component {
                                 autoCorrect={false}
                                 keyboardType="numeric"
                                 placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
+                                editable={this.state.qtdDisable}
+                                returnKeyType="go"
                                 style={styles.input}
                                 onChangeText={qtEtiq => this.props.modificaQtEtiq(qtEtiq)}
                                 value={this.props.qtEtiq}
@@ -314,6 +447,7 @@ class FormConf extends Component {
                 <View style={{ padding: 5 }} >
                     <ListaItem />
                 </View>
+                <InfoItemConferencia />
             </ScrollView>
         );
     }
@@ -334,7 +468,14 @@ const mapStateToProps = state => {
             batismo: state.ConfereReducer.batismo,
             desItem: state.ConfereReducer.desItem,
             qtEtiq: state.ConfereReducer.qtEtiq,
-            usuario: state.LoginReducer.usuario
+            usuario: state.LoginReducer.usuario,
+            notaConfere: state.ConfereReducer.notaConfere,
+            itemConfere: state.ConfereReducer.itemConfere,
+            listaNF: state.ConfereReducer.listaNF,
+            pesoItem: state.ConfereReducer.pesoItem,
+            alturaItem: state.ConfereReducer.alturaItem,
+            comprimentoItem: state.ConfereReducer.comprimentoItem,
+            larguraItem: state.ConfereReducer.larguraItem
         }
     );
 };
@@ -355,7 +496,12 @@ export default connect(mapStateToProps, {
     iniciaTela,
     limpaTela,
     buscaNotaConferencia,
-    imprimeEtiquetaEAM
+    imprimeEtiquetaEAN,
+    efetivaConfere,
+    modificaListaItem,
+    modificaNotaConfere,
+    modificaItemConfere,
+    modificaInfoVisible
 })(FormConf);
 
 const styles = StyleSheet.create({
@@ -382,7 +528,6 @@ const styles = StyleSheet.create({
         height: 35,
         fontSize: 16,
         textAlign: 'center',
-        //backgroundColor: 'rgba(255,255,255,0.2)',
         backgroundColor: '#20293F',
         color: 'white',
         fontFamily: 'sans-serif-medium',
@@ -392,7 +537,6 @@ const styles = StyleSheet.create({
         height: 70,
         fontSize: 14,
         textAlign: 'left',
-        //backgroundColor: 'rgba(255,255,255,0.2)',
         backgroundColor: '#20293F',
         color: 'white',
         borderRadius: 10,

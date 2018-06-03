@@ -5,27 +5,51 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    Alert
+    Alert,
+    TouchableOpacity,
+    Image
 } from 'react-native';
 import { connect } from 'react-redux';
+
 import { 
     iniciaTela,
     modificaCodEAN,
     modificaCodItem,
     modificaDescItem,
     modificaUnidMed,
-    modificaListaItem,
-    buscaEstoque,
+    modificaQtEtiq,
+    imprimeEtiquetaEAN,
+    buscaInfoEAN,
     limpaTela
-} from '../../actions/EstoqueActions';
+} from '../../actions/ImpressaoActions';
 
-import ListaItemEstoque from './ListaItemEstoque';
+const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
-class FormEstoque extends Component {
+class FormImpressao extends Component {
     componentWillMount() {
         this.props.iniciaTela();
     }
-    fnBuscaEstoque() {
+    onPressPrint() {
+        const { codEAN, qtEtiq, usuario } = this.props;
+
+        if (codEAN === '') {
+            Alert.alert(
+                'Impressão Etiqueta',
+                'EAN deve ser informado!'
+            );
+            return;
+        }
+        if (qtEtiq === '' || qtEtiq === '0') {
+            Alert.alert(
+                'Impressão Etiqueta',
+                'Quantidade Etiqueta deve maior que 0!'
+            );
+            return;
+        }
+
+        this.props.imprimeEtiquetaEAN(usuario, codEAN, qtEtiq);
+    }
+    fnBuscaInfoEan() {
         const codEAN = this.props.codEAN;
         if (codEAN === '') {
             Alert.alert(
@@ -33,10 +57,10 @@ class FormEstoque extends Component {
                 'Código EAN deve ser informado!'
             );
             return;
-        } 
+        }
         
         this.props.limpaTela();
-        this.props.buscaEstoque(codEAN);
+        this.props.buscaInfoEAN(codEAN);
     }
     render() {
         return (
@@ -54,7 +78,7 @@ class FormEstoque extends Component {
                             style={styles.input}
                             onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
-                            onSubmitEditing={() => this.fnBuscaEstoque()}
+                            onSubmitEditing={() => this.fnBuscaInfoEan()}
                         />
                     </View>
                 </View>
@@ -106,8 +130,33 @@ class FormEstoque extends Component {
                         />
                     </View>                    
                 </View>
-                <View style={{ padding: 5 }} >
-                    <ListaItemEstoque />
+                <View style={styles.viewLinha}>
+                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
+                        <View style={styles.viewBtEtiq}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={styles.input}
+                                onChangeText={qtEtiq => this.props.modificaQtEtiq(qtEtiq)}
+                                value={this.props.qtEtiq}
+                                ref={(input) => { this.qtEtiq = input; }}
+                            />
+                            <TouchableOpacity
+                                style={styles.btSearch}
+                                onPress={() => { this.onPressPrint(); }}
+                            >
+                                <Image
+                                    source={imgPrinter}
+                                    style={styles.imgSearch}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -116,11 +165,13 @@ class FormEstoque extends Component {
 
 const mapStateToProps = state => (
     {
-        codEAN: state.EstoqueReducer.codEAN,
-        codItem: state.EstoqueReducer.codItem,
-        unidMed: state.EstoqueReducer.unidMed,
-        descItem: state.EstoqueReducer.descItem,
-        listaItem: state.EstoqueReducer.listaItem
+        codEAN: state.ImpressaoReducer.codEAN,
+        codItem: state.ImpressaoReducer.codItem,
+        unidMed: state.ImpressaoReducer.unidMed,
+        descItem: state.ImpressaoReducer.descItem,
+        listaItem: state.ImpressaoReducer.listaItem,
+        qtEtiq: state.ImpressaoReducer.qtEtiq,
+        usuario: state.LoginReducer.usuario
     }
 );
 
@@ -130,10 +181,11 @@ export default connect(mapStateToProps, {
     modificaCodItem,
     modificaDescItem,
     modificaUnidMed,
-    modificaListaItem,
-    buscaEstoque,
+    modificaQtEtiq,
+    imprimeEtiquetaEAN,
+    buscaInfoEAN,
     limpaTela
-})(FormEstoque);
+})(FormImpressao);
 
 const styles = StyleSheet.create({
     viewPrinc: {
@@ -168,7 +220,6 @@ const styles = StyleSheet.create({
         height: 35,
         fontSize: 16,
         textAlign: 'center',
-        //backgroundColor: 'rgba(255,255,255,0.2)',
         backgroundColor: '#20293F',
         color: 'white',
         borderRadius: 10,
@@ -178,7 +229,6 @@ const styles = StyleSheet.create({
         height: 70,
         fontSize: 14,
         textAlign: 'left',
-        //backgroundColor: 'rgba(255,255,255,0.2)',
         backgroundColor: '#20293F',
         color: 'white',
         borderRadius: 10,
@@ -188,7 +238,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         justifyContent: 'space-between',
-        //alignItems: 'flex-end',
         marginTop: 10,
         paddingHorizontal: 10
     },
@@ -198,5 +247,22 @@ const styles = StyleSheet.create({
         height: 35,
         padding: 10,
         borderRadius: 10
+    },
+    btVoltar: { 
+        color: 'white', 
+        fontSize: 14, 
+        alignItems: 'center' 
+    },
+    viewBtEtiq: {
+        justifyContent: 'flex-start',
+        flexDirection: 'row'
+    },
+    btSearch: {
+        width: 40,
+        height: 35
+    },
+    imgSearch: {
+        width: 35,
+        height: 35
     }
 });

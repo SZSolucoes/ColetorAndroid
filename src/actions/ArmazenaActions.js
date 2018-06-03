@@ -1,3 +1,6 @@
+import { Alert } from 'react-native';
+import Axios from 'axios';
+
 export const modificaBatismo = (batismo) => {
     return {
         type: 'modifica_batismo_arm',
@@ -69,4 +72,79 @@ export const modificaListaItem = (listaItem) => {
         type: 'modifica_listaItem_arm',
         payload: listaItem    
     };
+};
+export const modificaItemArmazena = (itemArmazena) => {
+    return {
+        type: 'modifica_itemArmazena_arm',
+        payload: itemArmazena    
+    };
+};
+
+export const buscaInfoEan = (codEAN) => {
+    return dispatch => {
+        Axios.get('/app/getEanInfoTransfNew.p', {
+            params: {
+                codEAN
+            }
+        })
+        .then(response => buscaEANSuccess(dispatch, response))
+        .catch(() => buscaEANError());
+    };
+};
+
+const buscaEANSuccess = (dispatch, response) => {
+    if (response.data.success === 'true') {
+        dispatch({ type: 'modifica_info_item_arm', payload: response.data.item });
+    } else {
+        Alert.alert(
+            'Erro ',
+            response.data.message
+        );
+    }
+};
+
+const buscaEANError = () => {
+    Alert.alert(
+        'Erro Armazenamento',
+        'Erro Conexão!'
+    );
+};
+
+export const efetivaArmazena = ({ usuario, codEAN, batismo, qtItem, codLocal, lote }) => {
+    return dispatch => {
+        Axios.get('/app/doStockPlacementNew.p', {
+            params: {
+                usuario,
+                batismo,
+                codEAN,
+                qtItem,
+                codLocal,
+                lote
+            }
+        })
+        .then(response => armazenaSuccess(dispatch, response))
+        .catch(() => armazenaError());
+    };
+};
+
+const armazenaSuccess = (dispatch, response) => {
+    if (response.data.success === 'true') {
+        dispatch({ type: 'modifica_listaItem_conf', payload: response.data.prioridades });
+        Alert.alert(
+            'Armazenamento',
+            response.data.message
+        );
+    } else {
+        Alert.alert(
+            'Erro Armazenamento',
+            response.data.message
+        );
+    }
+};
+
+const armazenaError = () => {
+    Alert.alert(
+        'Erro Armazenamento',
+        'Erro Conexão!'
+    );
 };

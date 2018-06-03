@@ -19,6 +19,12 @@ export const modificaDescItem = (descItem) => {
         payload: descItem    
     };
 };
+export const modificaSaldoItem = (saldoItem) => {
+    return {
+        type: 'modifica_saldoItem_trnf',
+        payload: saldoItem    
+    };
+};
 export const modificaUnidMed = (unidMed) => {
     return {
         type: 'modifica_unidMed_trnf',
@@ -45,15 +51,15 @@ export const modificaQtItem = (qtItem) => {
 };
 export const iniciaTela = () => {
     return {
-        type: 'inicia_tela_conf'
+        type: 'inicia_tela_trnf'
     };
 };
 
-export const buscaNotaConferencia = (usuario) => {
+export const buscaInfoEANTransf = (codEAN) => {
     return dispatch => {
-        Axios.get('/app/getReceptPriorNew.p', {
+        Axios.get('/app/getEanInfoTransfNew.p', {
             params: {
-                username: usuario
+                codEAN
             }
         })
         .then(response => buscaSuccess(dispatch, response))
@@ -63,10 +69,10 @@ export const buscaNotaConferencia = (usuario) => {
 
 const buscaSuccess = (dispatch, response) => {
     if (response.data.success === 'true') {
-        dispatch({ type: 'modifica_listaNF_conf', payload: response.data.prioridades });
+        dispatch({ type: 'modifica_item_trnf', payload: response.data.prioridades });
     } else {
         Alert.alert(
-            'Erro Conferência',
+            'Erro Transferência',
             response.data.message
         );
     }
@@ -74,7 +80,46 @@ const buscaSuccess = (dispatch, response) => {
 
 const buscaError = () => {
     Alert.alert(
-        'Erro Conferência',
+        'Erro Transferência',
+        'Erro Conexão!'
+    );
+};
+
+export const efetivaTransferencia = (usuario, codEAN, codLocalOrig, codLocalDest, qtItem) => {
+    return dispatch => {
+        Axios.get('/app/doTransferNew.p', {
+            params: {
+                usuario,
+                codEAN,
+                codLocalOrig,
+                codLocalDest,
+                lote: '',
+                qtItem
+            }
+        })
+        .then(response => efetivaSuccess(dispatch, response))
+        .catch(() => efetivaError());
+    };
+};
+
+const efetivaSuccess = (dispatch, response) => {
+    if (response.data.success === 'true') {
+        dispatch({ type: 'inicia_tela_trnf' });
+        Alert.alert(
+            'Transferência',
+            response.data.message
+        );
+    } else {
+        Alert.alert(
+            'Erro Transferência',
+            response.data.message
+        );
+    }
+};
+
+const efetivaError = () => {
+    Alert.alert(
+        'Erro Transferência',
         'Erro Conexão!'
     );
 };

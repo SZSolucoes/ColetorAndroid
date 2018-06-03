@@ -6,7 +6,7 @@ import {
     StyleSheet, 
     TouchableHighlight 
 } from 'react-native';
-
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { 
@@ -18,22 +18,28 @@ import {
     refreshListaItem,
     modificaCodItem,
     modificaDesItem,
-    modificaUnidMed
+    modificaUnidMed,
+    modificaNotaConfere,
+    modificaItemConfere,
+    modificaLocalPad    
 } from '../../../actions/ConfereActions';
-
 
 class ListaNotaFiscal extends Component {
     onPressItem(nota) {
         const item = nota.itens[0];
+        const qtdConf = nota.itens.length;
 
         this.props.modificaFornec(nota.nomeEmit);
         this.props.modificaNrNotaFis(nota.nroDocto);
         this.props.modificaQtTotal(nota.qtdItem);
-        this.props.modificaQtConferir(nota.qtdItem);
+        this.props.modificaQtConferir(_.toString(qtdConf));
         this.props.modificaListaItem(nota.itens);
         this.props.modificaCodItem(item.itCode);
         this.props.modificaDesItem(item.itDesc);
+        this.props.modificaLocalPad(item.localiz);
         this.props.modificaUnidMed(item.un);
+        this.props.modificaNotaConfere(nota);
+        this.props.modificaItemConfere(item);
 
         Actions.pop();
     }
@@ -113,7 +119,7 @@ const mapStateToProps = state => {
             fornec: state.ConfereReducer.fornec,
             qtTotal: state.ConfereReducer.qtTotal,
             qtConferir: state.ConfereReducer.qtConferir,
-            listaItem: state.ConfereReducer.listaItem            
+            listaItem: state.ConfereReducer.listaItem
         }
     );
 };
@@ -129,7 +135,10 @@ export default connect(
         refreshListaItem,
         modificaCodItem,
         modificaDesItem,
-        modificaUnidMed
+        modificaUnidMed,
+        modificaNotaConfere,
+        modificaItemConfere,
+        modificaLocalPad
     }
 )(ListaNotaFiscal);
 

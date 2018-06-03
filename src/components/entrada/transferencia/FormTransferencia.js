@@ -5,10 +5,10 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    TouchableOpacity
+    Button,
+    Alert
 } from 'react-native';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 
 import { 
     iniciaTela,
@@ -18,15 +18,59 @@ import {
     modificaCodLocalOrig,
     modificaDescItem,
     modificaQtItem,
-    modificaUnidMed
+    modificaUnidMed,
+    efetivaTransferencia,
+    modificaSaldoItem,
+    buscaInfoEANTransf
 } from '../../../actions/TransfereActions';
 
 class FormTransferencia extends Component {
-    onPressVoltar() {
-        Actions.pop();
+    componentWillMount() {
+        this.props.iniciaTela();
     }
     onPressTransfer() {
-        
+        const { 
+            usuario, 
+            codEAN, 
+            qtItem, 
+            codLocalDest, 
+            codLocalOrig } = this.props;
+
+        if (codEAN === '' || codEAN === '0') {
+            Alert.alert(
+                'Transferência',
+                'EAN deve ser informado!'
+            );
+            return;
+        } 
+        if (qtItem === '' || qtItem === '0') {
+            Alert.alert(
+                'Transferência',
+                'Quantidade Item deve ser maior que 0!'
+            );
+            return;
+        } 
+        if (codLocalDest === '' || codLocalDest === '0') {
+            Alert.alert(
+                'Transferência',
+                'Local Destino deve ser informado!'
+            );
+            return;
+        }
+        if (codLocalOrig === '' || codLocalOrig === '0') {
+            Alert.alert(
+                'Transferência',
+                'Local Origem deve ser informado!'
+            );
+            return;
+        }
+
+        this.props.efetivaTransferencia(usuario, codEAN, codLocalOrig, codLocalDest, qtItem);
+    }
+    buscaEAN() {
+        const codEAN = this.props.codEAN;
+
+        this.props.buscaInfoEANTransf(codEAN);
     }
     render() {
         return (
@@ -44,6 +88,7 @@ class FormTransferencia extends Component {
                             returnKeyType="go"
                             onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
+                            onSubmitEditing={() => { this.buscaEAN(); }}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
@@ -117,7 +162,7 @@ class FormTransferencia extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={codLocalOrig => this.props.modificaCodLocalOrig(codLocalOrig)}
+                            onChangeText={local => this.props.modificaCodLocalOrig(local)}
                             value={this.props.codLocalOrig}
                         />
                     </View>
@@ -132,35 +177,18 @@ class FormTransferencia extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={codLocalDest => this.props.modificaCodLocalDest(codLocalDest)}
+                            onChangeText={local => this.props.modificaCodLocalDest(local)}
                             value={this.props.codLocalDest}
                         />
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewBotao, { flex: 1 }]}>
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                {
-                                    backgroundColor: 'green'
-                                }
-                            ]}
+                        <Button
                             onPress={() => { this.onPressTransfer(); }}
-                        >
-                            <Text style={{ color: 'white', fontSize: 14 }}> Transferir </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                {
-                                    backgroundColor: 'red'
-                                }
-                            ]}
-                            onPress={() => { this.onPressVoltar(); }}
-                        >
-                            <Text style={{ color: 'white', fontSize: 14 }}> Voltar </Text>
-                        </TouchableOpacity>
+                            title="Transferir"
+                            color="green"
+                        />
                     </View>
                 </View>
             </ScrollView>
@@ -178,7 +206,8 @@ const mapStateToProps = state => {
             descItem: state.TransfereReducer.descItem,
             qtItem: state.TransfereReducer.qtItem,
             unidMed: state.TransfereReducer.unidMed,
-            usuario: state.LoginReducer.usuario
+            usuario: state.LoginReducer.usuario,
+            saldoItem: state.TransfereReducer.saldoItem
         }
     );
 };
@@ -191,7 +220,10 @@ export default connect(mapStateToProps, {
     modificaCodLocalOrig,
     modificaDescItem,
     modificaQtItem,
-    modificaUnidMed
+    modificaUnidMed,
+    efetivaTransferencia,
+    modificaSaldoItem,
+    buscaInfoEANTransf
 })(FormTransferencia);
 
 const styles = StyleSheet.create({
@@ -227,7 +259,6 @@ const styles = StyleSheet.create({
         height: 35,
         fontSize: 16,
         textAlign: 'center',
-        //backgroundColor: 'rgba(255,255,255,0.2)',
         backgroundColor: '#20293F',
         color: 'white',
         fontFamily: 'sans-serif-medium',

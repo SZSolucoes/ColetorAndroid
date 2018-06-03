@@ -13,16 +13,22 @@ import {
     modificaListaItem,
     modificaCodItem,
     modificaDesItem,
-    modificaUnidMed
-} from '../../../actions/ConfereActions';
+    modificaCodLocal,
+    modificaDesLocal,
+    modificaLote,
+    modificaUnidMed,
+    modificaItemArmazena
+} from '../../../actions/ArmazenaActions';
 
-class ListaItem extends Component {
+class ListaItemArm extends Component {
     onPressItem(item) {
-        const { itCode, itDesc, un } = item;
+        const { itCode, itDesc, un, localiz } = item;
 
         this.props.modificaCodItem(itCode);
         this.props.modificaDesItem(itDesc);
         this.props.modificaUnidMed(un);
+        this.props.modificaCodLocal(localiz);
+        this.props.modificaItemArmazena(item);
     }
     keyExtractor(item, index) {
         return (
@@ -48,9 +54,8 @@ class ListaItem extends Component {
                 <View
                     style={styles.item}
                 >
-                    <Text style={styles.itemSeq}>{item.seq}</Text>
                     <Text style={styles.itemCode}>{item.itCode}</Text>
-                    <Text style={styles.itemDesc}>{item.itDesc}</Text>
+                    <Text style={styles.itemDesc}>{item.itDescAbrev}</Text>
                 </View>
             </TouchableHighlight>            
         );
@@ -58,9 +63,6 @@ class ListaItem extends Component {
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
-                <Text style={[styles.headerText, { flex: 1 }]}> 
-                    Seq
-                </Text>
                 <Text style={[styles.headerText, { flex: 2 }]}> 
                     Código
                 </Text>
@@ -90,7 +92,8 @@ class ListaItem extends Component {
 const mapStateToProps = state => {
     return (
         {
-            listaItem: state.ConfereReducer.listaItem
+            listaItem: state.ArmazenaReducer.listaItem,
+            itemConfere: state.ArmazenaReducer.itemConfere
         }
     );
 };
@@ -100,9 +103,13 @@ export default connect(mapStateToProps,
         modificaListaItem,
         modificaCodItem,
         modificaDesItem,
-        modificaUnidMed 
+        modificaCodLocal,
+        modificaDesLocal,
+        modificaLote,
+        modificaUnidMed,
+        modificaItemArmazena
     }
-)(ListaItem);
+)(ListaItemArm);
 
 const styles = StyleSheet.create({
     container: {

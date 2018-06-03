@@ -13,12 +13,20 @@ const INITIAL_STATE = {
     qtEtiq: '',
     listaItem: '',
     listaNF: '',
-    itensNF: ''
+    itensNF: '',
+    notaConfere: '',
+    itemConfere: '',
+    pesoItem: '',
+    alturaItem: '',
+    larguraItem: '',
+    comprimentoItem: '',
+    lote: '',
+    validLote: '',
+    qtLote: '',
+    isInfoVisible: false
 };
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action.type);
-    console.log(action.payload);
     switch (action.type) {
         case 'modifica_nrNotaFis_conf':
             return { 
@@ -29,6 +37,21 @@ export default (state = INITIAL_STATE, action) => {
             return { 
                 ...state, 
                 fornec: action.payload 
+            };
+        case 'modifica_notaConfere_conf':
+            return { 
+                ...state, 
+                notaConfere: action.payload 
+            };
+        case 'modifica_itemConfere_conf':
+            return { 
+                ...state, 
+                itemConfere: action.payload 
+            };
+        case 'modifica_isInfoVisible_conf':
+            return {
+                ...state,
+                isInfoVisible: action.payload
             };
         case 'modifica_qtTotal_conf':
             return { 
@@ -80,6 +103,26 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 qtEtiq: action.payload 
             };
+        case 'modifica_pesoItem_conf':
+            return { 
+                ...state, 
+                pesoItem: action.payload 
+            };
+        case 'modifica_alturaItem_conf':
+            return { 
+                ...state, 
+                alturaItem: action.payload 
+            };
+        case 'modifica_comprimentoItem_conf':
+            return { 
+                ...state, 
+                comprimentoItem: action.payload 
+            };
+        case 'modifica_larguraItem_conf':
+            return { 
+                ...state, 
+                larguraItem: action.payload 
+            };
         case 'modifica_listaItem_conf':
             return { 
                 ...state, 
@@ -114,7 +157,13 @@ export default (state = INITIAL_STATE, action) => {
                 desItem: '',
                 qtEtiq: '',
                 listaItem: '',
-                listaNF: ''
+                listaNF: '',
+                notaConfere: '',
+                itemConfere: '',
+                lote: '',
+                validLote: '',
+                qtLote: '',
+                isLoteVisible: false
             };
         case 'limpa_tela_conf':
             return { 

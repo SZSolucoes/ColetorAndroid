@@ -8,6 +8,7 @@ import {
     TouchableHighlight
 } from 'react-native';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
 const imgConsolid = require('../../../resources/imgs/consolidacao_48.png');
@@ -16,6 +17,7 @@ const imgListSep = require('../../../resources/imgs/lista_separacao_64.png');
 const imgRelacto = require('../../../resources/imgs/relaciona_etiqueta_64.png');
 const imgConsEtiq = require('../../../resources/imgs/consulta_etiq_48.png');
 const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
+const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
 class MenuSaida extends Component {
     onPressConf() {
@@ -30,8 +32,8 @@ class MenuSaida extends Component {
         alert('Press Conferência - Volumes');
     }
 
-    onPressConsultEtiq() {
-        alert('Press Consulta Etiqueta Batismo');
+    onPressConsEstoq() {
+        Actions.estoque();
     }
 
     onPressRelacEtiq() {
@@ -44,6 +46,10 @@ class MenuSaida extends Component {
 
     onPressDespacho() {
         alert('Press Despacho');
+    }
+
+    onPressImpressao() {
+        Actions.impressao();
     }
     renderListaSep() {
         return (
@@ -136,6 +142,19 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
+    renderImpressao() {
+        return (
+            <TouchableHighlight onPress={this.onPressImpressao}>
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgPrinter}
+                    />
+                    <Text style={styles.txtMenu}>Etiqueta EAN</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
     render() {
         return (
             <ScrollView style={styles.opcao}>                
@@ -146,6 +165,7 @@ class MenuSaida extends Component {
                 {this.renderConsolid()}
                 {this.renderDespacho()}
                 {this.renderConsultaEstoq()}
+                {this.renderImpressao()}
             </ScrollView>
         );
     }
