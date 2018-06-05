@@ -5,10 +5,17 @@ import {
     Text,
     Image,
     ScrollView,
-    TouchableHighlight
+    TouchableHighlight,
+    ActivityIndicator
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import { 
+    modificaLoadingConferencia
+} from '../../actions/LoginActions';
+import {
+    buscaNotaConferencia
+} from '../../actions/ConfereActions';
 
 const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
 const imgArmazen = require('../../../resources/imgs/armazenamento.png');
@@ -19,17 +26,17 @@ const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
 class MenuEntrada extends Component {
     onPressConf() {
-        Actions.conferencia();
-    }
+        this.props.modificaLoadingConferencia();
+        const usuario = this.props.usuario;
 
+        this.props.buscaNotaConferencia(usuario);
+    }
     onPressArm() {
         Actions.armazena();
     }
-
     onPressTransferencia() {
         Actions.transferencia();
     }
-
     onPressInvent() {
         alert('Press Inventario');
         //Actions.inventario();
@@ -41,9 +48,14 @@ class MenuEntrada extends Component {
         Actions.impressao();
     }
     renderConferecia() {
+        if (this.props.loadingConf) {
+            return (
+                <ActivityIndicator size="large" />
+            );
+        }
         if (this.props.logConfReceb) {
             return (
-                <TouchableHighlight onPress={this.onPressConf} >
+                <TouchableHighlight onPress={() => { this.onPressConf(); }} >
                     <View style={styles.menu}>
                         <Image 
                             style={styles.imgMenu} 
@@ -141,7 +153,6 @@ class MenuEntrada extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
     return (
         {
             logConfReceb: state.LoginReducer.logConfReceb,
@@ -151,12 +162,17 @@ const mapStateToProps = state => {
             logConfSeparacao: state.LoginReducer.logConfSeparacao,
             logTransferencia: state.LoginReducer.logTransferencia,
             logArmazenamento: state.LoginReducer.logArmazenamento,
-            logTodos: state.LoginReducer.logTodos
+            logTodos: state.LoginReducer.logTodos,
+            loadingConf: state.LoginReducer.loadingConf,
+            usuario: state.LoginReducer.usuario,
         }
     );
 };
 
-export default connect(mapStateToProps, null)(MenuEntrada);
+export default connect(mapStateToProps, { 
+    modificaLoadingConferencia,
+    buscaNotaConferencia
+})(MenuEntrada);
 
 const styles = StyleSheet.create({
     opcao: {

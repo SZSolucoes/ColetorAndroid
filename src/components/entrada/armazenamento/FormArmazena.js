@@ -72,9 +72,6 @@ class FormArmazena extends Component {
             return;
         }
     }
-    onPressAtualizar() {
-
-    }
     validEAN() {
         const { codEAN } = this.props;
 
@@ -205,43 +202,26 @@ class FormArmazena extends Component {
                         />
                     </View>
                 </View>
-                <View style={styles.viewLinhaLocal}>
+                <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text 
                             style={[
-                                styles.txtLabel, 
-                                { 
-                                    textAlign: 'left', 
-                                    paddingLeft: 2 
-                                }
+                                styles.txtLabel
                             ]} 
                         >
                             Localização
                         </Text>
-                    </View>
-                    <View style={[styles.viewCampoLocal, { flex: 1 }]}>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={[styles.input, { width: 80 }]}
+                            style={[styles.input]}
                             onChangeText={codLocal => this.props.modificaCodLocal(codLocal)}
                             value={this.props.codLocal}
                             ref={(input) => { this.txtLocal = input; }}
                             onSubmitEditing={() => { this.validLocal(); }}
-                        />
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={[styles.input, { width: 200 }]}
-                            onChangeText={desLocal => this.props.modificaDesLocal(desLocal)}
-                            value={this.props.desLocal}
                         />
                     </View>
                 </View>
@@ -283,11 +263,6 @@ class FormArmazena extends Component {
                             onPress={() => { this.onPressEfetivar(); }}
                             title="Efetivar"
                             color="green"
-                        />
-                        <Button
-                            onPress={() => { this.onPressAtualizar(); }}
-                            title="Atualizar"
-                            color="#f9a602"
                         />
                     </View>
                 </View>

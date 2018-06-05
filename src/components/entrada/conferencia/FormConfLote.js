@@ -24,7 +24,7 @@ import {
     modificaLocalPad    
 } from '../../../actions/ConfereActions';
 
-class ListaNotaFiscal extends Component {
+class FormConfLote extends Component {
     onPressItem(nota) {
         const item = nota.itens[0];
         const qtdConf = nota.itens.length;
@@ -142,7 +142,7 @@ export default connect(
         modificaItemConfere,
         modificaLocalPad
     }
-)(ListaNotaFiscal);
+)(FormConfLote);
 
 const styles = StyleSheet.create({
     viewLista: {

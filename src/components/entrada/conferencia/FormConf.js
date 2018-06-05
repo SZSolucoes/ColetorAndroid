@@ -32,13 +32,15 @@ import {
     iniciaTela,
     limpaTela,
     buscaNotaConferencia,
-    imprimeEtiquetaEAN,
     efetivaConfere,
     modificaListaItem,
     modificaNotaConfere,
     modificaItemConfere,
     modificaInfoVisible
 } from '../../../actions/ConfereActions';
+import {
+    imprimeEtiquetaEAN
+} from '../../../actions/ImpressaoActions';
 
 const imgZoom = require('../../../../resources/imgs/zoom_nf.png');
 const imgPrinter = require('../../../../resources/imgs/impressao_etiq.png');
@@ -53,13 +55,10 @@ class FormConf extends Component {
         };
     }
     componentWillMount() {
-        const usuario = this.props.usuario;
-
         this.setState({ qtdDisable: true });
         this.setState({ batismoDisable: true });
 
         this.props.iniciaTela();
-        this.props.buscaNotaConferencia(usuario);
     }
     onPressEfetivar() {
         const { 
@@ -236,6 +235,7 @@ class FormConf extends Component {
                             value={this.props.nrNotaFis}
                             ref={(input) => { this.nrNotaFis = input; }}
                             onSubmitEditing={() => { this.carregaNF(); }}
+                            onBlur={() => { this.carregaNF(); }}
                         />
                     </View>
                     <View style={styles.viewBtSearch}>

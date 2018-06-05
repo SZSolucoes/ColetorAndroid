@@ -56,6 +56,8 @@ class ListaItemArm extends Component {
                 >
                     <Text style={styles.itemCode}>{item.itCode}</Text>
                     <Text style={styles.itemDesc}>{item.itDescAbrev}</Text>
+                    <Text style={styles.itemCode}>{item.lote}</Text>
+                    <Text style={styles.itemQtde}>{item.qtdItem}</Text>
                 </View>
             </TouchableHighlight>            
         );
@@ -68,6 +70,12 @@ class ListaItemArm extends Component {
                 </Text>
                 <Text style={[styles.headerText, { flex: 4 }]}> 
                     Descrição
+                </Text>
+                <Text style={[styles.headerText, { flex: 2 }]}> 
+                    Lote
+                </Text>
+                <Text style={[styles.headerText, { flex: 1 }]}> 
+                    Qtde
                 </Text>
             </View>
         );
@@ -129,13 +137,6 @@ const styles = StyleSheet.create({
     itemInvisible: {
         backgroundColor: 'transparent',
     },
-    itemSeq: {
-        color: '#fff',
-        flex: 1,
-        textAlign: 'center',
-        fontSize: 13,
-        fontFamily: 'sans-serif-medium'
-    },
     itemDesc: {
         color: '#fff',
         flex: 4,
@@ -146,6 +147,13 @@ const styles = StyleSheet.create({
     itemCode: {
         color: '#fff',
         flex: 2,
+        textAlign: 'center',
+        fontSize: 13,
+        fontFamily: 'sans-serif-medium'
+    },
+    itemQtde: {
+        color: '#fff',
+        flex: 1,
         textAlign: 'center',
         fontSize: 13,
         fontFamily: 'sans-serif-medium'

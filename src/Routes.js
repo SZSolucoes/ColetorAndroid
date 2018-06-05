@@ -15,6 +15,7 @@ import Inventario from './components/entrada/inventario/Inventario';
 import Transferencia from './components/entrada/transferencia/Transferencia';
 import Estoque from './components/estoque/Estoque';
 import ListaNotaFiscal from './components/entrada/conferencia/ListaNotaFiscal';
+import FormConfLote from './components/entrada/conferencia/FormConfLote';
 import ImpressaoEAN from './components/impressao/Impressao';
 
 export default props => (
@@ -113,6 +114,14 @@ export default props => (
                 key='listaNFConf' 
                 component={ListaNotaFiscal} 
                 title="Nota Fiscal" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='conferenciaLote' 
+                component={FormConfLote} 
+                title="Conf Lote" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

@@ -89,6 +89,7 @@ class FormTransferencia extends Component {
                             onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
                             onSubmitEditing={() => { this.buscaEAN(); }}
+                            ref={(input) => { this.txtEAN = input; }}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
@@ -135,6 +136,8 @@ class FormTransferencia extends Component {
                             style={styles.input}
                             onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
                             value={this.props.qtItem}
+                            ref={(input) => { this.txtQtItem = input; }}
+                            onSubmitEditing={() => { this.txtLote.focus(); }}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
@@ -154,6 +157,23 @@ class FormTransferencia extends Component {
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
+                        <Text style={styles.txtLabel}>Lote</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            onChangeText={local => this.props.modificaCodLocalOrig(local)}
+                            value={this.props.codLocalOrig}
+                            ref={(input) => { this.txtLote = input; }}
+                            onSubmitEditing={() => { this.txtLocalOrig.focus(); }}
+                        />
+                    </View>
+                </View>
+                <View style={styles.viewLinha}>
+                    <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>Local Origem</Text>
                         <TextInput
                             placeholder=""
@@ -164,6 +184,8 @@ class FormTransferencia extends Component {
                             style={styles.input}
                             onChangeText={local => this.props.modificaCodLocalOrig(local)}
                             value={this.props.codLocalOrig}
+                            ref={(input) => { this.txtLocalOrig = input; }}
+                            onSubmitEditing={() => { this.txtLocalDest.focus(); }}
                         />
                     </View>
                 </View>
@@ -179,6 +201,7 @@ class FormTransferencia extends Component {
                             style={styles.input}
                             onChangeText={local => this.props.modificaCodLocalDest(local)}
                             value={this.props.codLocalDest}
+                            ref={(input) => { this.txtLocalDest = input; }}
                         />
                     </View>
                 </View>

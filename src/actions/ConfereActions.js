@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import { Actions } from 'react-native-router-flux';
 
 export const modificaNrNotaFis = (nrNotaFis) => {
     return {
@@ -145,7 +146,7 @@ export const buscaNotaConferencia = (usuario) => {
     return dispatch => {
         Axios.get('/app/getReceptPriorNew.p', {
             params: {
-                username: usuario
+                usuario
             }
         })
         .then(response => buscaSuccess(dispatch, response))
@@ -154,8 +155,18 @@ export const buscaNotaConferencia = (usuario) => {
 };
 
 const buscaSuccess = (dispatch, response) => {
+    try {
+        const obj = JSON.parse(JSON.stringify(response.data));
+        console.log(obj);
+    } catch (ex) {
+        console.error(ex);
+    }
+    dispatch({ type: 'busca_conf_ok' });
+    console.log(response);
+    console.log(response.data);
     if (response.data.success === 'true') {
         dispatch({ type: 'modifica_listaNF_conf', payload: response.data.prioridades });
+        Actions.conferencia();
     } else {
         Alert.alert(
             'Erro Conferência',
@@ -167,41 +178,6 @@ const buscaSuccess = (dispatch, response) => {
 const buscaError = () => {
     Alert.alert(
         'Erro Conferência',
-        'Erro Conexão!'
-    );
-};
-
-export const imprimeEtiquetaEAN = ({ usuario, codEAN, qtdEtiq }) => {
-    return dispatch => {
-        Axios.get('/app/doPrintNew.p', {
-            params: {
-                usuario,
-                codEAN,
-                qtdEtiq
-            }
-        })
-        .then(response => imprimeSuccess(dispatch, response))
-        .catch(() => imprimeError());
-    };
-};
-
-const imprimeSuccess = (dispatch, response) => {
-    if (response.data.success === 'true') {
-        Alert.alert(
-            'Impressão Etiqueta',
-            response.data.message
-        );
-    } else {
-        Alert.alert(
-            'Erro Impressão Etiqueta',
-            response.data.message
-        );
-    }
-};
-
-const imprimeError = () => {
-    Alert.alert(
-        'Erro Impressão Etiqueta',
         'Erro Conexão!'
     );
 };

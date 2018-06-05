@@ -20,13 +20,11 @@ const INITIAL_STATE = {
     alturaItem: '',
     larguraItem: '',
     comprimentoItem: '',
-    lote: '',
-    validLote: '',
-    qtLote: '',
     isInfoVisible: false
 };
 
 export default (state = INITIAL_STATE, action) => {
+    console.log(action.type);
     switch (action.type) {
         case 'modifica_nrNotaFis_conf':
             return { 
@@ -157,13 +155,9 @@ export default (state = INITIAL_STATE, action) => {
                 desItem: '',
                 qtEtiq: '',
                 listaItem: '',
-                listaNF: '',
                 notaConfere: '',
                 itemConfere: '',
-                lote: '',
-                validLote: '',
-                qtLote: '',
-                isLoteVisible: false
+                isInfoVisible: false
             };
         case 'limpa_tela_conf':
             return { 
@@ -179,7 +173,8 @@ export default (state = INITIAL_STATE, action) => {
                 batismo: '',
                 desItem: '',
                 qtEtiq: '',
-                listaItem: ''
+                listaItem: '',
+                isInfoVisible: false
             };
         default:
             return state; 

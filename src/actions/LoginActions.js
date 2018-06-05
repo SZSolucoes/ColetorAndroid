@@ -21,6 +21,12 @@ export const modificaLoadingLogin = () => {
     };
 };
 
+export const modificaLoadingConferencia = () => {
+    return {
+        type: 'modifica_loading_conf'
+    };
+};
+
 export const iniciaPermissao = () => {
     return {
         type: 'inicia_permissao_log'

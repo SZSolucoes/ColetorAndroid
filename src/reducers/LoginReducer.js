@@ -10,10 +10,12 @@ const INITIAL_STATE = {
     logTransferencia: '',
     logArmazenamento: '',
     logTodos: '',
-    loadingLogin: false
+    loadingLogin: false,
+    loadingConf: false
 };
 
 export default (state = INITIAL_STATE, action) => {
+    console.log(action.type);
     switch (action.type) {
         case 'modifica_usuario_log':
             return { 
@@ -29,6 +31,16 @@ export default (state = INITIAL_STATE, action) => {
             return { 
                 ...state, 
                 loadingLogin: true 
+            };
+        case 'modifica_loading_conf':
+            return { 
+                ...state, 
+                loadingConf: true 
+            };
+        case 'busca_conf_ok':
+            return { 
+                ...state, 
+                loadingConf: false
             };
         case 'login_ok_log':
             return { 
