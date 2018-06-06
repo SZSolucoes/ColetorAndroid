@@ -9,6 +9,7 @@ import {
     Alert
 } from 'react-native';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { 
     iniciaTela,
@@ -36,28 +37,28 @@ class FormTransferencia extends Component {
             codLocalDest, 
             codLocalOrig } = this.props;
 
-        if (codEAN === '' || codEAN === '0') {
+        if (codEAN.length === 0) {
             Alert.alert(
                 'Transferência',
                 'EAN deve ser informado!'
             );
             return;
         } 
-        if (qtItem === '' || qtItem === '0') {
+        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
             Alert.alert(
                 'Transferência',
                 'Quantidade Item deve ser maior que 0!'
             );
             return;
         } 
-        if (codLocalDest === '' || codLocalDest === '0') {
+        if (codLocalDest.length === 0) {
             Alert.alert(
                 'Transferência',
                 'Local Destino deve ser informado!'
             );
             return;
         }
-        if (codLocalOrig === '' || codLocalOrig === '0') {
+        if (codLocalOrig.length === 0) {
             Alert.alert(
                 'Transferência',
                 'Local Origem deve ser informado!'

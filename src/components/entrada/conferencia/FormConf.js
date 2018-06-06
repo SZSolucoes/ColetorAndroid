@@ -61,6 +61,7 @@ class FormConf extends Component {
         this.props.iniciaTela();
     }
     onPressEfetivar() {
+        console.log('onPressEfetivar');
         const { 
             usuario, 
             notaConfere, 
@@ -89,21 +90,21 @@ class FormConf extends Component {
         if (item.tpCont === '3') {
         }
         
-        if (codEAN === '' || codEAN === '0') {
+        if (codEAN.length === 0) {
             Alert.alert(
                 'Conferência',
                 'EAN deve ser informado!'
             );
             return;
         } 
-        if (qtItem === '' || qtItem === '0') {
+        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
             Alert.alert(
                 'Conferência',
                 'Quantidade Item deve ser maior que 0!'
             );
             return;
         } 
-        if (batismo === '' || batismo === '0') {
+        if (batismo.length === 0) {
             Alert.alert(
                 'Conferência',
                 'Etiqueta Batismo deve ser informada!'
@@ -116,14 +117,14 @@ class FormConf extends Component {
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
 
-        if (codEAN === '') {
+        if (codEAN.length === 0) {
             Alert.alert(
                 'Impressão Etiqueta',
                 'EAN deve ser informado!'
             );
             return;
         } 
-        if (qtEtiq === '' || qtEtiq === '0') {
+        if (qtEtiq.length === 0 || _.toInteger(qtEtiq) < 1) {
             Alert.alert(
                 'Impressão Etiqueta',
                 'Quantidade Etiqueta deve maior que 0!'
@@ -136,6 +137,14 @@ class FormConf extends Component {
     validQtdItem() {
         const item = this.props.itemConfere;
         const { qtItem } = this.props;
+
+        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+            Alert.alert(
+                'Conferência',
+                'Quantidade Item deve ser maior que 0!'
+            );
+            return;
+        }
 
         if (item.qtdItem !== qtItem) {
             Alert.alert(
@@ -154,6 +163,8 @@ class FormConf extends Component {
                 ],
                 { cancelable: false }
             );
+        } else {
+            this.onPressEfetivar();
         }
     }
     carregaNF() {
@@ -162,30 +173,34 @@ class FormConf extends Component {
 
         const notaConf = _.filter(listaConfere, { nroDocto: nrNota });
         
-        if (notaConf.length === 0) {
-            Alert.alert(
-                'Conferência',
-                'Nota Fiscal não Localizada!'
-            );
-            return;
+        console.log(nrNota);
+
+        if (nrNota !== '') {
+            if (notaConf.length === 0) {
+                Alert.alert(
+                    'Conferência',
+                    'Nota Fiscal não Localizada!'
+                );
+                return;
+            }
+
+            const item = notaConf[0].itens[0];
+            const qtdConf = notaConf[0].itens.length;
+
+            this.props.modificaFornec(notaConf[0].nomeEmit);
+            this.props.modificaNrNotaFis(notaConf[0].nroDocto);
+            this.props.modificaQtTotal(notaConf[0].qtdItem);
+            this.props.modificaQtConferir(_.toString(qtdConf));
+            this.props.modificaListaItem(notaConf[0].itens);
+            this.props.modificaCodItem(item.itCode);
+            this.props.modificaDesItem(item.itDesc);
+            this.props.modificaLocalPad(item.localiz);
+            this.props.modificaUnidMed(item.un);
+            this.props.modificaNotaConfere(notaConf[0]);
+            this.props.modificaItemConfere(item);
+
+            this.codEAN.focus();
         }
-
-        const item = notaConf[0].itens[0];
-        const qtdConf = notaConf[0].itens.length;
-
-        this.props.modificaFornec(notaConf[0].nomeEmit);
-        this.props.modificaNrNotaFis(notaConf[0].nroDocto);
-        this.props.modificaQtTotal(notaConf[0].qtdItem);
-        this.props.modificaQtConferir(_.toString(qtdConf));
-        this.props.modificaListaItem(notaConf[0].itens);
-        this.props.modificaCodItem(item.itCode);
-        this.props.modificaDesItem(item.itDesc);
-        this.props.modificaLocalPad(item.localiz);
-        this.props.modificaUnidMed(item.un);
-        this.props.modificaNotaConfere(notaConf[0]);
-        this.props.modificaItemConfere(item);
-
-        this.codEAN.focus();
     }
     validEAN() {
         const { notaConfere, codEAN } = this.props;

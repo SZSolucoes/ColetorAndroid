@@ -27,7 +27,7 @@ class FormEstoque extends Component {
     }
     fnBuscaEstoque() {
         const codEAN = this.props.codEAN;
-        if (codEAN === '') {
+        if (codEAN.length === 0) {
             Alert.alert(
                 'Erro EAN',
                 'Código EAN deve ser informado!'

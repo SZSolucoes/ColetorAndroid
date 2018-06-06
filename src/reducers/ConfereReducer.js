@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const INITIAL_STATE = {
     nrNotaFis: '', 
     fornec: '',
@@ -26,6 +28,63 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     console.log(action.type);
     switch (action.type) {
+        case 'efetiva_conferencia': {
+            const { listaNF, listaItem } = state;
+            const { notaConfere, itemConfere } = action.payload;
+            
+            console.log(listaNF);
+            console.log(notaConfere);
+            console.log(itemConfere);
+            console.log(listaItem);
+
+            _.remove(notaConfere.itens, {
+                seq: itemConfere.seq
+            });
+            _.remove(listaItem, {
+                seq: itemConfere.seq
+            });
+
+            if (notaConfere.itens.length === 0) {
+                _.remove(listaNF, {
+                    nroDocto: notaConfere.nroDocto
+                });
+                return {
+                    ...state,
+                    listaNF,
+                    listaItem,
+                    itemConfere: '',
+                    notaConfere: '',
+                    nrNotaFis: '', 
+                    fornec: '',
+                    qtTotal: '',
+                    qtConferir: '',
+                    codEAN: '',
+                    qtItem: '',
+                    localPad: '',
+                    codItem: '',
+                    unidMed: '',
+                    batismo: '',
+                    desItem: '',
+                    qtEtiq: ''
+                };
+            }
+            return {
+                ...state,
+                listaNF,
+                listaItem,
+                itemConfere: '',
+                notaConfere,
+                qtConferir: notaConfere.itens.length,
+                codEAN: '',
+                qtItem: '',
+                localPad: '',
+                codItem: '',
+                unidMed: '',
+                batismo: '',
+                desItem: '',
+                qtEtiq: ''
+            };
+        }
         case 'modifica_nrNotaFis_conf':
             return { 
                 ...state, 

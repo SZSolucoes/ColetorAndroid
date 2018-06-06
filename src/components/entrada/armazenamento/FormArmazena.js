@@ -9,7 +9,7 @@ import {
     Alert
 } from 'react-native';
 import { connect } from 'react-redux';
-
+import _ from 'lodash';
 import ListaItem from './ListaItemArm';
 import { 
     modificaBatismo, 
@@ -36,35 +36,35 @@ class FormArmazena extends Component {
             codLocal, 
             lote } = this.props;
 
-        if (codEAN === '' || codEAN === '0') {
+        if (codEAN.length === 0) {
             Alert.alert(
                 'Armazenamento',
                 'EAN deve ser informado!'
             );
             return;
         } 
-        if (qtItem === '' || qtItem === '0') {
+        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
             Alert.alert(
                 'Armazenamento',
                 'Quantidade Item deve ser maior que 0!'
             );
             return;
         } 
-        if (codLocal === '' || codLocal === '0') {
+        if (codLocal.length === 0) {
             Alert.alert(
                 'Armazenamento',
                 'Local deve ser informado!'
             );
             return;
         }
-        if (batismo === '' || batismo === '0') {
+        if (batismo.length === 0) {
             Alert.alert(
                 'Armazenamento',
                 'Batismo deve ser informado!'
             );
             return;
         }
-        if (lote === '' || lote === '0') {
+        if (lote.length === 0) {
             Alert.alert(
                 'Armazenamento',
                 'Lote deve ser informado!'

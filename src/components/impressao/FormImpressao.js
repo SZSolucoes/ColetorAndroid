@@ -10,6 +10,7 @@ import {
     Image
 } from 'react-native';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { 
     iniciaTela,
@@ -32,14 +33,14 @@ class FormImpressao extends Component {
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
 
-        if (codEAN === '') {
+        if (codEAN.length === 0) {
             Alert.alert(
                 'Impressão Etiqueta',
                 'EAN deve ser informado!'
             );
             return;
         }
-        if (qtEtiq === '' || qtEtiq === '0') {
+        if (qtEtiq.length === 0 || _.toInteger(qtEtiq) < 1) {
             Alert.alert(
                 'Impressão Etiqueta',
                 'Quantidade Etiqueta deve maior que 0!'
@@ -51,7 +52,7 @@ class FormImpressao extends Component {
     }
     fnBuscaInfoEan() {
         const codEAN = this.props.codEAN;
-        if (codEAN === '') {
+        if (codEAN.length === 0) {
             Alert.alert(
                 'Erro EAN',
                 'Código EAN deve ser informado!'

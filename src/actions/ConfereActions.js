@@ -187,7 +187,9 @@ export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia 
     console.log(itemConfere);
 
     return dispatch => {
-        Axios.get('/app/doCheckARNew.p', {
+        confereSuccess(dispatch, notaConfere, itemConfere);
+
+        /*Axios.get('/app/doCheckARNew.p', {
             params: {
                 usuario,
                 etiqBatismo: conferencia.batismo,
@@ -206,12 +208,18 @@ export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia 
             }
         })
         .then(response => confereSuccess(dispatch, response, itemConfere))
-        .catch(() => confereError());
+        .catch(() => confereError());*/
     };
 };
 
-const confereSuccess = (dispatch, response, itemConfere) => {
-    if (response.data.success === 'true') {
+const confereSuccess = (dispatch, notaConfere, itemConfere) => {
+    const retorno = {
+        notaConfere,
+        itemConfere
+    };
+
+    dispatch({ type: 'efetiva_conferencia', payload: retorno });
+    /*if (response.data.success === 'true') {
         dispatch({ type: 'modifica_listaItem_conf', payload: response.data.prioridades });
         Alert.alert(
             'Conferência',
@@ -222,7 +230,7 @@ const confereSuccess = (dispatch, response, itemConfere) => {
             'Erro Conferência',
             response.data.message
         );
-    }
+    }*/
 };
 
 const confereError = () => {
