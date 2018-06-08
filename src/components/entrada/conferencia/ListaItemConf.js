@@ -84,6 +84,7 @@ class ListaItem extends Component {
                 ItemSeparatorComponent={this.renderSeparator}
                 keyExtractor={this.keyExtractor}
                 renderItem={this.renderItem}
+                extraData={this.props}
                 numColumns='1'
                 ListHeaderComponent={this.renderHeader}
             />

@@ -22,7 +22,8 @@ const INITIAL_STATE = {
     alturaItem: '',
     larguraItem: '',
     comprimentoItem: '',
-    isInfoVisible: false
+    isInfoVisible: false,
+    listaItemLote: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -31,19 +32,12 @@ export default (state = INITIAL_STATE, action) => {
         case 'efetiva_conferencia': {
             const { listaNF, listaItem } = state;
             const { notaConfere, itemConfere } = action.payload;
-            
-            console.log(listaNF);
-            console.log(notaConfere);
-            console.log(itemConfere);
-            console.log(listaItem);
-
             _.remove(notaConfere.itens, {
                 seq: itemConfere.seq
             });
             _.remove(listaItem, {
                 seq: itemConfere.seq
             });
-
             if (notaConfere.itens.length === 0) {
                 _.remove(listaNF, {
                     nroDocto: notaConfere.nroDocto
@@ -65,7 +59,11 @@ export default (state = INITIAL_STATE, action) => {
                     unidMed: '',
                     batismo: '',
                     desItem: '',
-                    qtEtiq: ''
+                    qtEtiq: '',
+                    pesoItem: '',
+                    alturaItem: '',
+                    larguraItem: '',
+                    comprimentoItem: ''
                 };
             }
             return {
@@ -82,7 +80,11 @@ export default (state = INITIAL_STATE, action) => {
                 unidMed: '',
                 batismo: '',
                 desItem: '',
-                qtEtiq: ''
+                qtEtiq: '',
+                pesoItem: '',
+                alturaItem: '',
+                larguraItem: '',
+                comprimentoItem: ''
             };
         }
         case 'modifica_nrNotaFis_conf':
@@ -190,6 +192,12 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 listaNF: action.payload 
             };
+        case 'modifica_listaItemLote_conf': {
+            return {
+                ...state,
+                listaItemLote: action.payload
+            };
+        }
         case 'dados_nota_conf':
             return {
                 ...state,
@@ -216,7 +224,8 @@ export default (state = INITIAL_STATE, action) => {
                 listaItem: '',
                 notaConfere: '',
                 itemConfere: '',
-                isInfoVisible: false
+                isInfoVisible: false,
+                listaItemLote: ''
             };
         case 'limpa_tela_conf':
             return { 
@@ -233,7 +242,8 @@ export default (state = INITIAL_STATE, action) => {
                 desItem: '',
                 qtEtiq: '',
                 listaItem: '',
-                isInfoVisible: false
+                isInfoVisible: false,
+                listaItemLote: ''
             };
         default:
             return state; 

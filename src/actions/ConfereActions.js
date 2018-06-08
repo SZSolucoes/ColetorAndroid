@@ -130,6 +130,13 @@ export const modificaListaNF = (listaNF) => {
     };
 };
 
+export const modificaListaItemLote = (listaItemLote) => {
+    return {
+        type: 'modifica_listaItemLote_conf',
+        payload: listaItemLote
+    };
+};
+
 export const iniciaTela = () => {
     return {
         type: 'inicia_tela_conf'
