@@ -17,6 +17,9 @@ import Estoque from './components/estoque/Estoque';
 import ListaNotaFiscal from './components/entrada/conferencia/ListaNotaFiscal';
 import FormConfLote from './components/entrada/conferencia/FormConfLote';
 import ImpressaoEAN from './components/impressao/Impressao';
+import ListaSeparacao from './components/saida/listaseparacao/ListaSeparacao';
+import ConferenciaSeparacao from './components/saida/conferencia/ConferenciaSeparacao';
+import ConferenciaVolumeSaida from './components/saida/conferencia/ConferenciaVolume';
 
 export default props => (
     <Router>
@@ -122,6 +125,30 @@ export default props => (
                 key='conferenciaLote' 
                 component={FormConfLote} 
                 title="Conf Lote" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='listaSeparacaoSaida' 
+                component={ListaSeparacao} 
+                title="Lista de Separação" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='conferenciaSeparacao' 
+                component={ConferenciaSeparacao} 
+                title="Conferência" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='conferenciaVolumeSaida' 
+                component={ConferenciaVolumeSaida} 
+                title="Conferência - Volumes" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

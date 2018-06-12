@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
+const imgConfCheck = require('../../../resources/imgs/conferencia-volume-64.png');
 const imgConsolid = require('../../../resources/imgs/consolidacao_48.png');
 const imgDespacho = require('../../../resources/imgs/despacho_64.png');
 const imgListSep = require('../../../resources/imgs/lista_separacao_64.png');
@@ -20,16 +21,17 @@ const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
 class MenuSaida extends Component {
-    onPressConf() {
-        alert('Press Conferência AR');
-    }
-
+    
     onPressListSep() {
-        alert('Press Lista de Separação');
+        Actions.listaSeparacaoSaida();
     }
-
+    
+    onPressConf() {
+        Actions.conferenciaSeparacao();
+    }
+    
     onPressConfVol() {
-        alert('Press Conferência - Volumes');
+        Actions.conferenciaVolumeSaida();
     }
 
     onPressConsEstoq() {
@@ -73,6 +75,19 @@ class MenuSaida extends Component {
                         source={imgConf}
                     />
                     <Text style={styles.txtMenu}>Conferência</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
+    renderConferenciaVolume() {
+        return (
+            <TouchableHighlight onPress={this.onPressConfVol}>
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgConfCheck}
+                    />
+                    <Text style={styles.txtMenu}>Conferência - Volumes</Text>
                 </View>
             </TouchableHighlight>
         );
@@ -160,6 +175,7 @@ class MenuSaida extends Component {
             <ScrollView style={styles.opcao}>                
                 {this.renderListaSep()}
                 {this.renderConferencia()}
+                {this.renderConferenciaVolume()}
                 {this.renderConsultaEtiq()}
                 {this.renderRelacEtiq()}
                 {this.renderConsolid()}
