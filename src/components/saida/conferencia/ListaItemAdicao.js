@@ -13,7 +13,7 @@ import {
 
 import { connect } from 'react-redux';
 
-import FormRow from '../FormRow';
+import FormRow from '../../utils/FormRow';
 
 import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
 import imgZoom from '../../../../resources/imgs/zoom_nf.png';

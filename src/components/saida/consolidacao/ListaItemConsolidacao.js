@@ -57,10 +57,10 @@ class ListaItemConsolidacao extends Component {
         const headerView = (
             <View style={styles.header}>
                 <Text style={[styles.seq, styles.sizeFldHeader]}> 
-                   Seq
+                    Seq
                 </Text>
                 <Text style={[styles.volume, styles.sizeFldHeader]}> 
-                    Etiqs. Volume
+                    Volume
                 </Text>
             </View>
         );

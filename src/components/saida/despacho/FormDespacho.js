@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import FormRow from '../FormRow';
+import FormRow from '../../utils/FormRow';
 import ListaItemDespacho from './ListaItemDespacho';
 
 class FormDespacho extends Component {

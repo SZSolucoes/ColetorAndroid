@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import FormRow from '../FormRow';
+import FormRow from '../../utils/FormRow';
 import ListaItemConsolidacao from './ListaItemConsolidacao';
 
 class FormConsolidacao extends Component {
@@ -21,7 +21,7 @@ class FormConsolidacao extends Component {
             <ScrollView style={styles.viewPrinc}>
                 <FormRow>
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Etiq. Conferência</Text>
+                        <Text style={styles.txtLabel}>Conferência</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"

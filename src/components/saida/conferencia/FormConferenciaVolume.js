@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import FormRow from '../FormRow';
+import FormRow from '../../utils/FormRow';
 import ListaItemAdicao from './ListaItemAdicao';
 
 class FormConferenciaVolume extends Component {

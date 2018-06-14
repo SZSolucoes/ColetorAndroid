@@ -38,8 +38,7 @@ class MenuEntrada extends Component {
         Actions.transferencia();
     }
     onPressInvent() {
-        alert('Press Inventario');
-        //Actions.inventario();
+        Actions.inventario();
     }
     onPressConsEstoq() {
         Actions.estoque();

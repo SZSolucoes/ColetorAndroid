@@ -13,7 +13,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import FormRow from '../FormRow';
+import FormRow from '../../utils/FormRow';
 import ListaItemSep from './ListaItemSep';
 
 import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
