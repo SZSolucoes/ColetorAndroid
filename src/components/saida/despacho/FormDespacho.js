@@ -12,16 +12,16 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import FormRow from '../FormRow';
-import ListaItemAdicao from './ListaItemAdicao';
+import ListaItemDespacho from './ListaItemDespacho';
 
-class FormConferenciaVolume extends Component {
+class FormDespacho extends Component {
 
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
                 <FormRow>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Batismo</Text>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Romaneio</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
@@ -34,45 +34,33 @@ class FormConferenciaVolume extends Component {
                             ref={(input) => { this.nrNotaFis = input; }}
                         />
                     </View>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Embarque</Text>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Volume</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            editable={false}
+                            keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={styles.input}
-                            value={this.props.fornec}
-                        />
-                    </View>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Pedido</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.fornec}
+                            value={this.props.nrNotaFis}
+                            ref={(input) => { this.nrNotaFis = input; }}
                         />
                     </View>
                 </FormRow>
-                <View>
-                    <ListaItemAdicao />
-                </View>
-                <FormRow>
-                    <View style={styles.viewBotao}>
+                <FormRow> 
+                    <View style={styles.viewBotao} >
                         <Button
                             onPress={() => false}
-                            title="Finalizar"
+                            title="Despachar"
                             color="green"
-                        />
-                    </View>  
+                        />      
+                    </View>
                 </FormRow>
+                <View style={{ padding: 5 }}>
+                    <ListaItemDespacho />
+                </View>
                 <View style={{ marginBottom: 50 }} />
             </ScrollView>
         );
@@ -89,7 +77,7 @@ const mapStateToProps = state => {
     return maps;
 };
 
-export default connect(mapStateToProps, {})(FormConferenciaVolume);
+export default connect(mapStateToProps, {})(FormDespacho);
 
 const styles = StyleSheet.create({
     viewPrinc: {
@@ -115,13 +103,7 @@ const styles = StyleSheet.create({
     },
     viewBotao: {
         flexDirection: 'row',
-        flex: 1,
-        justifyContent: 'space-between',
         marginTop: 10,
         paddingHorizontal: 10
-    },
-    viewBtEtiq: {
-        justifyContent: 'space-between',
-        flexDirection: 'row'
     }
 });

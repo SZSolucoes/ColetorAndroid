@@ -4,12 +4,22 @@ import {
     View, 
     Text, 
     StyleSheet, 
-    TouchableHighlight 
+    TouchableHighlight
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
-class ListaItemSep extends Component {
+class ListaItemConsolidacao extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { listaItens: [
+            { seq: '001', vol: '000777' },
+            { seq: '002', vol: '000122' },
+            { seq: '003', vol: '001011' },
+            { seq: '004', vol: '000011' },
+            { seq: '005', vol: '000755' }] };
+    }
     
     keyExtractor(item, index) {
         return (
@@ -32,14 +42,11 @@ class ListaItemSep extends Component {
     renderItem = ({ item }) => {
         const viewItem = (
             <TouchableHighlight
-                onPress={() => this.onPressItem(item)}
+                onPress={() => false}
             >
-                <View
-                    style={styles.item}
-                >
+                <View style={styles.item} >
                     <Text style={styles.seq}>{item.seq}</Text>
-                    <Text style={styles.itCode}>{item.itCode}</Text>
-                    <Text style={styles.itDescAbrev}>{item.itDescAbrev}</Text>
+                    <Text style={styles.volume}>{item.vol}</Text> 
                 </View>
             </TouchableHighlight>            
         );
@@ -50,13 +57,10 @@ class ListaItemSep extends Component {
         const headerView = (
             <View style={styles.header}>
                 <Text style={[styles.seq, styles.sizeFldHeader]}> 
-                    Seq
+                   Seq
                 </Text>
-                <Text style={[styles.itCode, styles.sizeFldHeader]}> 
-                    Código
-                </Text>
-                <Text style={[styles.itDescAbrev, styles.sizeFldHeader]}> 
-                    Descrição
+                <Text style={[styles.volume, styles.sizeFldHeader]}> 
+                    Etiqs. Volume
                 </Text>
             </View>
         );
@@ -64,9 +68,9 @@ class ListaItemSep extends Component {
         return headerView;
     };
     render() {
-        return (
+        return (   
             <FlatList
-                data={this.props.listaItem}
+                data={this.state.listaItens}
                 style={styles.container}
                 ItemSeparatorComponent={this.renderSeparator}
                 keyExtractor={this.keyExtractor}
@@ -74,6 +78,7 @@ class ListaItemSep extends Component {
                 extraData={this.props}
                 numColumns='1'
                 ListHeaderComponent={this.renderHeader}
+                alwaysBounceHorizontal
             />
         );
     }
@@ -82,14 +87,14 @@ class ListaItemSep extends Component {
 const mapStateToProps = state => {
     const maps = (
         {
-            
+
         }
     );
 
     return maps;
 };
 
-export default connect(mapStateToProps, {})(ListaItemSep);
+export default connect(mapStateToProps, {})(ListaItemConsolidacao);
 
 const styleField = {
     itemHeaderAndRow: {
@@ -109,7 +114,6 @@ const styles = StyleSheet.create({
     item: {
         backgroundColor: '#20293F',
         alignItems: 'center',
-        justifyContent: 'center',
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
@@ -119,11 +123,7 @@ const styles = StyleSheet.create({
         ...styleField.itemHeaderAndRow, 
         flex: 2 
     },
-    itCode: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 6 
-    },
-    itDescAbrev: { 
+    volume: { 
         ...styleField.itemHeaderAndRow, 
         flex: 6 
     },

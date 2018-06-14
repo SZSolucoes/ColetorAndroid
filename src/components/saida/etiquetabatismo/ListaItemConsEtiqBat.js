@@ -4,12 +4,23 @@ import {
     View, 
     Text, 
     StyleSheet, 
-    TouchableHighlight 
+    TouchableHighlight,
+    ScrollView 
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
-class ListaItemSep extends Component {
+class ListaItemConsEtiqBat extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { listaItens: [
+            { seq: '001', itCode: '00001', itDescAbrev: 'Descri', qtde: '1000', local: '01', lote: '01' },
+            { seq: '002', itCode: '00002', itDescAbrev: 'Descri', qtde: '200', local: '02', lote: '01' },
+            { seq: '003', itCode: '00001', itDescAbrev: 'Descri', qtde: '100', local: '03', lote: '01' },
+            { seq: '004', itCode: '00002', itDescAbrev: 'Descri', qtde: '600', local: '01', lote: '01' },
+            { seq: '005', itCode: '00003', itDescAbrev: 'Descri', qtde: '300', local: '01', lote: '01' }] };
+    }
     
     keyExtractor(item, index) {
         return (
@@ -32,7 +43,7 @@ class ListaItemSep extends Component {
     renderItem = ({ item }) => {
         const viewItem = (
             <TouchableHighlight
-                onPress={() => this.onPressItem(item)}
+                onPress={() => false}
             >
                 <View
                     style={styles.item}
@@ -40,6 +51,9 @@ class ListaItemSep extends Component {
                     <Text style={styles.seq}>{item.seq}</Text>
                     <Text style={styles.itCode}>{item.itCode}</Text>
                     <Text style={styles.itDescAbrev}>{item.itDescAbrev}</Text>
+                    <Text style={styles.qtde}>{item.qtde}</Text>
+                    <Text style={styles.local}>{item.local}</Text>
+                    <Text style={styles.lote}>{item.lote}</Text>
                 </View>
             </TouchableHighlight>            
         );
@@ -58,6 +72,15 @@ class ListaItemSep extends Component {
                 <Text style={[styles.itDescAbrev, styles.sizeFldHeader]}> 
                     Descrição
                 </Text>
+                <Text style={[styles.qtde, styles.sizeFldHeader]}> 
+                    Qtde
+                </Text>
+                <Text style={[styles.local, styles.sizeFldHeader]}> 
+                    Local
+                </Text>
+                <Text style={[styles.lote, styles.sizeFldHeader]}> 
+                    Lote
+                </Text>
             </View>
         );
 
@@ -65,16 +88,19 @@ class ListaItemSep extends Component {
     };
     render() {
         return (
-            <FlatList
-                data={this.props.listaItem}
-                style={styles.container}
-                ItemSeparatorComponent={this.renderSeparator}
-                keyExtractor={this.keyExtractor}
-                renderItem={this.renderItem}
-                extraData={this.props}
-                numColumns='1'
-                ListHeaderComponent={this.renderHeader}
-            />
+            <ScrollView horizontal >
+                <FlatList
+                    data={this.state.listaItens}
+                    style={styles.container}
+                    ItemSeparatorComponent={this.renderSeparator}
+                    keyExtractor={this.keyExtractor}
+                    renderItem={this.renderItem}
+                    extraData={this.props}
+                    numColumns='1'
+                    ListHeaderComponent={this.renderHeader}
+                    alwaysBounceHorizontal
+                />
+            </ScrollView>
         );
     }
 }
@@ -82,14 +108,14 @@ class ListaItemSep extends Component {
 const mapStateToProps = state => {
     const maps = (
         {
-            
+
         }
     );
 
     return maps;
 };
 
-export default connect(mapStateToProps, {})(ListaItemSep);
+export default connect(mapStateToProps, {})(ListaItemConsEtiqBat);
 
 const styleField = {
     itemHeaderAndRow: {
@@ -102,14 +128,13 @@ const styleField = {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         marginVertical: 20,
+        width: 500,
         backgroundColor: 'rgba(255,255,255,0.2)'
     },
     item: {
         backgroundColor: '#20293F',
         alignItems: 'center',
-        justifyContent: 'center',
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
@@ -124,6 +149,18 @@ const styles = StyleSheet.create({
         flex: 6 
     },
     itDescAbrev: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 6 
+    },
+    qtde: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 6 
+    },
+    local: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 6 
+    },
+    lote: { 
         ...styleField.itemHeaderAndRow, 
         flex: 6 
     },

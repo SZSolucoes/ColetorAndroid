@@ -322,16 +322,6 @@ const styles = StyleSheet.create({
         width: 35,
         height: 35
     },
-    button: {
-        alignItems: 'center',
-        width: 90,
-        height: 35,
-        padding: 10,
-        borderRadius: 10
-    },
-    viewBtSearch: {
-        justifyContent: 'flex-end'
-    },
     viewBtEtiq: {
         justifyContent: 'space-between',
         flexDirection: 'row'
