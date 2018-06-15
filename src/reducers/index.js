@@ -6,6 +6,7 @@ import VersionReducer from './VersionReducer';
 import EstoqueReducer from './EstoqueReducer';
 import TransfereReducer from './TransfereReducer';
 import ImpressaoReducer from './ImpressaoReducer';
+import InventarioReducer from './InventarioReducer';
 
 export default combineReducers({
     LoginReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
     VersionReducer,
     EstoqueReducer,
     TransfereReducer,
-    ImpressaoReducer
+    ImpressaoReducer,
+    InventarioReducer
 });

@@ -93,6 +93,14 @@ export default props => (
                 backButtonTintColor="white"
             />
             <Scene 
+                key='inventarioEst' 
+                component={Inventario} 
+                title="Inventário - Estorno" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
                 key='transferencia' 
                 component={Transferencia} 
                 title="Transferência" 

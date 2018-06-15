@@ -14,34 +14,68 @@ import DatePicker from 'react-native-datepicker';
 import ModalFilterPicker from 'react-native-modal-filter-picker';
 
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 
 import FormRow from '../../utils/FormRow';
 
 import imgSeta from '../../../../resources/imgs/seta.png';
 
+import {
+    modificaCodLocal,
+    modificaNrContagem,
+    modificaCodEtiq,
+    modificaDtInventario,
+    modificaQtItem,
+    modificaModalVisible,
+    cleanInventarioReducer,
+    doConfirm,
+    doConfirmEst
+} from '../../../actions/InventarioActions';
+
 class FormInventario extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = { date: '14/06/2018', visible: false, picked: '1' };
+    componentWillUnmount() {
+        this.props.cleanInventarioReducer();
     }
 
-    onPickerShow = () => {
-        this.setState({ visible: true });
+    confirmButton() {
+        const propparams = {
+            username: this.props.username,
+            codLocal: this.props.codLocal,
+            nrContagem: this.props.nrContagem,
+            codEtiq: this.props.codEtiq,
+            dtInventario: this.props.dtInventario,
+            qtItem: this.props.qtItem
+        };
+
+        if (this.props.estorno) {
+            this.props.doConfirmEst(propparams);
+        } else {
+            this.props.doConfirm(propparams);
+        }
     }
 
-    onPickerSelect = (picked) => {
-        this.setState({
-            picked,
-            visible: false
-        });
-    }
-
-    onPickerCancel = () => {
-        this.setState({
-            visible: false
-        });
+    renderQtde() {
+        if (!this.props.estorno) {
+            return (
+                <FormRow>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Qtde</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            onChangeText={this.props.modificaQtItem}
+                            value={this.props.qtItem}
+                        />
+                    </View>
+                    <View style={{ flex: 1 }} />
+                </FormRow>
+            );
+        }
     }
 
     render() {
@@ -53,9 +87,9 @@ class FormInventario extends Component {
                         <View style={{ flexDirection: 'row' }}>
                             <DatePicker
                                 style={{ flex: 1 }}
-                                date={this.state.date}
+                                date={this.props.dtInventario}
                                 mode="date"
-                                placeholder=""
+                                placeholder=" "
                                 autoCapitalize="none"
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 autoCorrect={false}
@@ -68,7 +102,7 @@ class FormInventario extends Component {
                                     dateIcon: StyleSheet.flatten(styles.dateIcon),
                                     dateText: StyleSheet.flatten(styles.dateText)
                                 }}
-                                onDateChange={(date) => { this.setState({ date }); }}
+                                onDateChange={this.props.modificaDtInventario}
                             />
                         </View>
                     </View>  
@@ -78,11 +112,11 @@ class FormInventario extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.qtTotal}
+                            value={this.props.codLocal}
+                            onChangeText={this.props.modificaCodLocal}
                         />
                     </View>
                 </FormRow>
@@ -90,7 +124,7 @@ class FormInventario extends Component {
                     <View style={{ flex: 1 }}>
                         <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Contagem</Text>
                         <TouchableOpacity 
-                            onPress={() => this.onPickerShow()}
+                            onPress={() => this.props.modificaModalVisible(true)}
                             style={{ flexDirection: 'row' }}
                         >
                             <TextInput
@@ -101,7 +135,7 @@ class FormInventario extends Component {
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="next"
                                 style={[styles.input, { flex: 1 }]}
-                                value={this.state.picked}
+                                value={this.props.nrContagem}
                             />
                             <Image
                                 source={imgSeta}
@@ -120,31 +154,17 @@ class FormInventario extends Component {
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="go"
                                 style={styles.input}
-                                value={this.props.qtItem}
+                                value={this.props.codEtiq}
                                 ref={(input) => { this.qtItem = input; }}
+                                onChangeText={this.props.modificaCodEtiq}
                             />
                     </View>
                 </FormRow>
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Qtde</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.localPad}
-                        />
-                    </View>
-                    <View style={{ flex: 1 }} />
-                </FormRow>
+                {this.renderQtde()}
                 <FormRow>
                     <View style={styles.viewBotao}>
                         <Button
-                            onPress={() => false}
+                            onPress={() => this.confirmButton()}
                             title="Confirmar"
                             color="green"
                         />
@@ -155,9 +175,9 @@ class FormInventario extends Component {
                     placeholderText="Filtro..."
                     cancelButtonText="Cancelar"
                     noResultsText="Não encontrado"
-                    visible={this.state.visible}
-                    onSelect={this.onPickerSelect}
-                    onCancel={this.onPickerCancel}
+                    visible={this.props.modalVisible}
+                    onSelect={this.props.modificaNrContagem}
+                    onCancel={() => this.props.modificaModalVisible(false)}
                     options={[
                         {
                             key: '1',
@@ -177,17 +197,29 @@ class FormInventario extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const maps = (
-        {
-             
-        }
-    );
+const mapStateToProps = state => (
+    {
+        username: state.LoginReducer.usuario,
+        codLocal: state.InventarioReducer.codLocal,
+        nrContagem: state.InventarioReducer.nrContagem,
+        codEtiq: state.InventarioReducer.codEtiq,
+        dtInventario: state.InventarioReducer.dtInventario,
+        qtItem: state.InventarioReducer.qtItem,
+        modalVisible: state.InventarioReducer.modalVisible
+    }
+);
 
-    return maps;
-};
-
-export default connect(mapStateToProps, {})(FormInventario);
+export default connect(mapStateToProps, {
+    modificaCodLocal,
+    modificaNrContagem,
+    modificaCodEtiq,
+    modificaDtInventario,
+    modificaQtItem,
+    modificaModalVisible,
+    cleanInventarioReducer,
+    doConfirm,
+    doConfirmEst
+})(FormInventario);
 
 const styles = StyleSheet.create({
     viewPrinc: {
@@ -230,8 +262,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     dateIcon: {
-        marginBottom: 5,
-        marginLeft: -1
+        marginBottom: 5
     },
     dateText: {
         textAlign: 'center',

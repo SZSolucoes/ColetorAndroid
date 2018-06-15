@@ -20,6 +20,7 @@ import {
 const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
 const imgArmazen = require('../../../resources/imgs/armazenamento.png');
 const imgInvent = require('../../../resources/imgs/inventario_64.png');
+const imgInventEst = require('../../../resources/imgs/inventarioestorno.png');
 const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
 const imgTransEnt = require('../../../resources/imgs/transf_entrada.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
@@ -38,7 +39,10 @@ class MenuEntrada extends Component {
         Actions.transferencia();
     }
     onPressInvent() {
-        Actions.inventario();
+        Actions.inventario({ estorno: false });
+    }
+    onPressInventEst() {
+        Actions.inventarioEst({ estorno: true });
     }
     onPressConsEstoq() {
         Actions.estoque();
@@ -109,6 +113,19 @@ class MenuEntrada extends Component {
             </TouchableHighlight>
         );
     }
+    renderInventarioEst() {
+        return (
+            <TouchableHighlight onPress={this.onPressInventEst}>
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgInventEst}
+                    />
+                    <Text style={styles.txtMenu}>Inventário - Estorno</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
     renderImpressao() {
         return (
             <TouchableHighlight onPress={this.onPressImpressao}>
@@ -144,6 +161,7 @@ class MenuEntrada extends Component {
                 {this.renderArmazenamento()}
                 {this.renderTransferencia()}
                 {this.renderInventario()}
+                {this.renderInventarioEst()}
                 {this.renderConsulta()}
                 {this.renderImpressao()}
             </ScrollView>
