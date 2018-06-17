@@ -1,11 +1,41 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 
+export const iniciaConfLote = () => {
+    return {
+        type: 'inicia_conf_lote'
+    };
+};
 export const modificaNrNotaFis = (nrNotaFis) => {
     return {
         type: 'modifica_nrNotaFis_conf',
         payload: nrNotaFis    
+    };
+};
+export const modificaQtdLote = (qtdLote) => {
+    return {
+        type: 'modifica_qtdLote_conf',
+        payload: qtdLote    
+    };
+};
+export const modificaSeqLote = (seqLote) => {
+    return {
+        type: 'modifica_seqLote_conf',
+        payload: seqLote    
+    };
+};
+export const modificaCodLote = (codLote) => {
+    return {
+        type: 'modifica_codLote_conf',
+        payload: codLote    
+    };
+};
+export const modificaQtdItemLote = (qtdItemLote) => {
+    return {
+        type: 'modifica_qtdItemLote_conf',
+        payload: qtdItemLote    
     };
 };
 export const modificaFornec = (fornec) => {
@@ -92,22 +122,22 @@ export const modificaPesoItem = (pesoItem) => {
         payload: pesoItem    
     };
 };
-export const modificaAlturaItem = (alturaItem) => {
+export const modificaAlturaItem = (altura) => {
     return {
         type: 'modifica_alturaItem_conf',
-        payload: alturaItem    
+        payload: altura
     };
 };
-export const modificaComprimentoItem = (comprimentoItem) => {
+export const modificaComprimentoItem = (comprimento) => {
     return {
         type: 'modifica_comprimentoItem_conf',
-        payload: comprimentoItem    
+        payload: comprimento
     };
 };
-export const modificaLarguraItem = (larguraItem) => {
+export const modificaLarguraItem = (largura) => {
     return {
         type: 'modifica_larguraItem_conf',
-        payload: larguraItem    
+        payload: largura
     };
 };
 export const modificaInfoVisible = (visible) => {
@@ -154,35 +184,31 @@ export const buscaNotaConferencia = (usuario) => {
         Axios.get('/app/getReceptPriorNew.p', {
             params: {
                 usuario
-            }
+            },
+            responseType: 'json'
         })
         .then(response => buscaSuccess(dispatch, response))
-        .catch(() => buscaError());
+        .catch(() => buscaError(dispatch));
     };
 };
 
 const buscaSuccess = (dispatch, response) => {
-    try {
-        const obj = JSON.parse(JSON.stringify(response.data));
-        console.log(obj);
-    } catch (ex) {
-        console.error(ex);
-    }
     dispatch({ type: 'busca_conf_ok' });
-    console.log(response);
-    console.log(response.data);
+    const resposta = _(response.data).value();
+
     if (response.data.success === 'true') {
-        dispatch({ type: 'modifica_listaNF_conf', payload: response.data.prioridades });
+        dispatch({ type: 'modifica_listaNF_conf', payload: resposta.prioridades });
         Actions.conferencia();
     } else {
         Alert.alert(
             'Erro Conferência',
-            response.data.message
+            resposta.message
         );
     }
 };
 
-const buscaError = () => {
+const buscaError = (dispatch) => {
+    dispatch({ type: 'busca_conf_ok' });
     Alert.alert(
         'Erro Conferência',
         'Erro Conexão!'
@@ -190,44 +216,39 @@ const buscaError = () => {
 };
 
 export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia }) => {
-    console.log(notaConfere);
-    console.log(itemConfere);
-
     return dispatch => {
-        confereSuccess(dispatch, notaConfere, itemConfere);
-
-        /*Axios.get('/app/doCheckARNew.p', {
+        Axios.get('/app/doCheckARNew.p', {
             params: {
                 usuario,
                 etiqBatismo: conferencia.batismo,
                 codEmitente: notaConfere.codEmit,
                 nroDocto: notaConfere.nroDocto,
                 serieDocto: notaConfere.serie,
-                codEAN: notaConfere.codEAN,
+                codEAN: conferencia.codEAN,
                 seqItem: itemConfere.seq,
                 itCodigo: itemConfere.itCode,
                 qtdItemNF: itemConfere.qtdItem,
                 qtdItemConf: conferencia.qtItem,
                 pesoItem: conferencia.pesoItem,
-                alturaItem: conferencia.alturaItem,
-                larguraItem: conferencia.larguraItem,
-                comprimentoItem: conferencia.comprimentoItem
+                altura: conferencia.altura,
+                largura: conferencia.largura,
+                comprimento: conferencia.comprimento,
+                listaItemLote: conferencia.listaItemLote
             }
         })
-        .then(response => confereSuccess(dispatch, response, itemConfere))
-        .catch(() => confereError());*/
+        .then(response => confereSuccess(dispatch, response, notaConfere, itemConfere))
+        .catch(() => confereError());
     };
 };
 
-const confereSuccess = (dispatch, notaConfere, itemConfere) => {
+const confereSuccess = (dispatch, response, notaConfere, itemConfere) => {
     const retorno = {
         notaConfere,
         itemConfere
     };
 
-    dispatch({ type: 'efetiva_conferencia', payload: retorno });
-    /*if (response.data.success === 'true') {
-        dispatch({ type: 'modifica_listaItem_conf', payload: response.data.prioridades });
+    if (response.data.success === 'true') {
+        dispatch({ type: 'efetiva_conferencia', payload: retorno });
         Alert.alert(
             'Conferência',
             response.data.message
@@ -237,7 +258,7 @@ const confereSuccess = (dispatch, notaConfere, itemConfere) => {
             'Erro Conferência',
             response.data.message
         );
-    }*/
+    }
 };
 
 const confereError = () => {

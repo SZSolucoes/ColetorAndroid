@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Scene } from 'react-native-router-flux';
+import { Router, Scene, Actions } from 'react-native-router-flux';
 import { 
     StyleSheet
 } from 'react-native';
@@ -17,7 +17,7 @@ import Estoque from './components/estoque/Estoque';
 import ListaNotaFiscal from './components/entrada/conferencia/ListaNotaFiscal';
 import FormConfLote from './components/entrada/conferencia/FormConfLote';
 import ImpressaoEAN from './components/impressao/Impressao';
-import ListaSeparacao from './components/saida/listaseparacao/ListaSeparacao';
+import ListaSeparacao from './components/saida/listaSeparacao/ListaSeparacao';
 import ConferenciaSeparacao from './components/saida/conferencia/ConferenciaSeparacao';
 import ConferenciaVolumeSaida from './components/saida/conferencia/ConferenciaVolume';
 
@@ -128,6 +128,7 @@ export default props => (
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"
+                //initial
             />
             <Scene 
                 key='listaSeparacaoSaida' 

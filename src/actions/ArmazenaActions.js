@@ -49,12 +49,6 @@ export const modificaCodLocal = (codLocal) => {
         payload: codLocal    
     };
 };
-export const modificaDesLocal = (desLocal) => {
-    return {
-        type: 'modifica_desLocal_arm',
-        payload: desLocal    
-    };
-};
 export const modificaQtItem = (qtItem) => {
     return {
         type: 'modifica_qtItem_arm',
@@ -79,22 +73,27 @@ export const modificaItemArmazena = (itemArmazena) => {
         payload: itemArmazena    
     };
 };
-
-export const buscaInfoEan = (codEAN) => {
+export const iniciaTela = () => {
+    return {
+        type: 'inicia_tela_arm'
+    };
+};
+export const buscaInfoBastimo = (batismo) => {
     return dispatch => {
-        Axios.get('/app/getEanInfoTransfNew.p', {
+        Axios.get('/app/getLabelItemsNew.p', {
             params: {
-                codEAN
+                codEtiqBatismo: batismo
             }
         })
-        .then(response => buscaEANSuccess(dispatch, response))
-        .catch(() => buscaEANError());
+        .then(response => buscaBatismoSuccess(dispatch, response))
+        .catch(() => buscaBatismoError());
     };
 };
 
-const buscaEANSuccess = (dispatch, response) => {
+const buscaBatismoSuccess = (dispatch, response) => {
+    console.log(response.data.etiqueta);
     if (response.data.success === 'true') {
-        dispatch({ type: 'modifica_info_item_arm', payload: response.data.item });
+        dispatch({ type: 'modifica_info_batismo_arm', payload: response.data.etiqueta });
     } else {
         Alert.alert(
             'Erro ',
@@ -103,33 +102,45 @@ const buscaEANSuccess = (dispatch, response) => {
     }
 };
 
-const buscaEANError = () => {
+const buscaBatismoError = () => {
+    console.log('buscaBatismoError');
     Alert.alert(
         'Erro Armazenamento',
         'Erro Conexão!'
     );
 };
 
-export const efetivaArmazena = ({ usuario, codEAN, batismo, qtItem, codLocal, lote }) => {
+export const efetivaArmazena = (etiquetaArmazena, itemArmazena, armazenamento) => {
     return dispatch => {
         Axios.get('/app/doStockPlacementNew.p', {
             params: {
-                usuario,
-                batismo,
-                codEAN,
-                qtItem,
-                codLocal,
-                lote
+                usuario: armazenamento.usuario,
+                batismo: armazenamento.batismo,
+                codEAN: armazenamento.codEAN,
+                qtItem: armazenamento.qtItem,
+                codLocal: armazenamento.codLocal,
+                lote: armazenamento.lote,
+                serie: itemArmazena.serie,
+                nroDocto: itemArmazena.nroDocto,
+                codEmit: itemArmazena.codEmit,
+                natOper: itemArmazena.natOper,
+                sequencia: itemArmazena.sequencia,
+                numSeq: itemArmazena.numSeq
             }
         })
-        .then(response => armazenaSuccess(dispatch, response))
+        .then(response => armazenaSuccess(dispatch, response, etiquetaArmazena, itemArmazena))
         .catch(() => armazenaError());
     };
 };
 
-const armazenaSuccess = (dispatch, response) => {
+const armazenaSuccess = (dispatch, response, etiqueta, item) => {
+    const retorno = {
+        etiqueta,
+        item
+    };
+
     if (response.data.success === 'true') {
-        dispatch({ type: 'modifica_listaItem_conf', payload: response.data.prioridades });
+        dispatch({ type: 'efetiva_armazenamento', payload: retorno });
         Alert.alert(
             'Armazenamento',
             response.data.message

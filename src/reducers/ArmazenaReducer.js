@@ -1,5 +1,6 @@
+import _ from 'lodash';
+
 const INITIAL_STATE = {
-    usuario: '',
     batismo: '', 
     qtTotal: '',
     qtArmazenado: '',
@@ -8,15 +9,63 @@ const INITIAL_STATE = {
     desItem: '',
     unidMed: '',
     codLocal: '',
-    desLocal: '',
     qtItem: '',
     lote: '',
+    etiquetaArmazena: '',
     listaItem: '',
     itemArmazena: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
+        case 'efetiva_armazenamento': {
+            const { etiquetaArmazena, listaItem, qtArmazenado } = state;
+            const { item } = action.payload;
+
+            _.remove(etiquetaArmazena.itens, {
+                sequencia: item.sequencia,
+                numSeq: item.numSeq
+            });
+
+            _.remove(listaItem, {
+                sequencia: item.sequencia,
+                numSeq: item.numSeq
+            });
+
+            if (etiquetaArmazena.itens.length === 0) {
+                return { 
+                    ...state, 
+                    batismo: '', 
+                    qtTotal: '',
+                    qtArmazenado: '',
+                    codEAN: '',
+                    codItem: '',
+                    desItem: '',
+                    unidMed: '',
+                    codLocal: '',
+                    qtItem: '',
+                    lote: '',
+                    listaItem: '',
+                    etiquetaArmazena: ''
+                };
+            }
+
+            const qtdArm = (_.toInteger(qtArmazenado) + 1); 
+
+            return { 
+                ...state, 
+                qtArmazenado: qtdArm,
+                codEAN: '',
+                codItem: '',
+                desItem: '',
+                unidMed: '',
+                codLocal: '',
+                qtItem: '',
+                lote: '',
+                listaItem,
+                etiquetaArmazena
+            };
+        }
         case 'modifica_batismo_arm':
             return { 
                 ...state, 
@@ -57,11 +106,6 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 codLocal: action.payload 
             };
-        case 'modifica_desLocal_arm':
-            return { 
-                ...state, 
-                desLocal: action.payload 
-            };
         case 'modifica_qtItem_arm':
             return { 
                 ...state, 
@@ -74,7 +118,7 @@ export default (state = INITIAL_STATE, action) => {
             };
         case 'modifica_info_item_arm':
             return {
-                ...state                
+                ...state
             };
         case 'modifica_listaItem_arm':
             return { 
@@ -86,10 +130,23 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 itemArmazena: action.payload
             };
+        case 'modifica_info_batismo_arm': {
+            const { itens } = action.payload;
+            
+            return {
+                ...state,
+                etiquetaArmazena: action.payload,
+                qtTotal: action.payload.qtdEtiqueta,
+                qtArmazenado: action.payload.qtdArmazenada,
+                listaItem: itens,
+                codItem: itens[0].itCode,
+                desItem: itens[0].itDescAbrev,
+                unidMed: itens[0].un
+            };
+        }
         case 'inicia_tela_arm':
             return { 
                 ...state, 
-                usuario: '',
                 batismo: '', 
                 qtTotal: '',
                 qtArmazenado: '',
@@ -98,10 +155,10 @@ export default (state = INITIAL_STATE, action) => {
                 desItem: '',
                 unidMed: '',
                 codLocal: '',
-                desLocal: '',
                 qtItem: '',
                 lote: '',
-                listaItem: ''
+                listaItem: '',
+                etiquetaArmazena: ''
             };
         default:
             return state; 

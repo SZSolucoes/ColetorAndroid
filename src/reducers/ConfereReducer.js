@@ -19,15 +19,18 @@ const INITIAL_STATE = {
     notaConfere: '',
     itemConfere: '',
     pesoItem: '',
-    alturaItem: '',
-    larguraItem: '',
-    comprimentoItem: '',
+    altura: '',
+    largura: '',
+    comprimento: '',
     isInfoVisible: false,
-    listaItemLote: ''
+    listaItemLote: '',
+    qtdLote: '',
+    seqLote: '',
+    codLote: '',
+    qtdItemLote: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action.type);
     switch (action.type) {
         case 'efetiva_conferencia': {
             const { listaNF, listaItem } = state;
@@ -61,9 +64,10 @@ export default (state = INITIAL_STATE, action) => {
                     desItem: '',
                     qtEtiq: '',
                     pesoItem: '',
-                    alturaItem: '',
-                    larguraItem: '',
-                    comprimentoItem: ''
+                    altura: '',
+                    largura: '',
+                    comprimento: '',
+                    listaItemLote: ''
                 };
             }
             return {
@@ -82,11 +86,32 @@ export default (state = INITIAL_STATE, action) => {
                 desItem: '',
                 qtEtiq: '',
                 pesoItem: '',
-                alturaItem: '',
-                larguraItem: '',
-                comprimentoItem: ''
+                altura: '',
+                largura: '',
+                comprimento: '',
+                listaItemLote: ''
             };
         }
+        case 'modifica_qtdLote_conf':
+            return {
+                ...state,
+                qtdLote: action.payload
+            };
+        case 'modifica_seqLote_conf':
+            return {
+                ...state,
+                seqLote: action.payload
+            };
+        case 'modifica_codLote_conf':
+            return {
+                ...state,
+                codLote: action.payload
+            };
+        case 'modifica_qtdItemLote_conf':
+            return {
+                ...state,
+                qtdItemLote: action.payload
+            };
         case 'modifica_nrNotaFis_conf':
             return { 
                 ...state, 
@@ -170,17 +195,17 @@ export default (state = INITIAL_STATE, action) => {
         case 'modifica_alturaItem_conf':
             return { 
                 ...state, 
-                alturaItem: action.payload 
+                altura: action.payload 
             };
         case 'modifica_comprimentoItem_conf':
             return { 
                 ...state, 
-                comprimentoItem: action.payload 
+                comprimento: action.payload 
             };
         case 'modifica_larguraItem_conf':
             return { 
                 ...state, 
-                larguraItem: action.payload 
+                largura: action.payload 
             };
         case 'modifica_listaItem_conf':
             return { 
@@ -245,6 +270,16 @@ export default (state = INITIAL_STATE, action) => {
                 isInfoVisible: false,
                 listaItemLote: ''
             };
+        case 'inicia_conf_lote': {
+            return {
+                ...state,
+                listaItemLote: '',
+                codLote: '',
+                qtdItemLote: '',
+                qtdLote: '',
+                seqLote: ''
+            };
+        }
         default:
             return state; 
     }

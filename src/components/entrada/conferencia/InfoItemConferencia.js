@@ -66,7 +66,7 @@ class InfoItemConferencia extends Component {
                                 returnKeyType="next"
                                 style={styles.input}
                                 onChangeText={alturaItem => this.props.modificaAlturaItem(alturaItem)}
-                                value={this.props.alturaItem}
+                                value={this.props.altura}
                                 ref={(input) => { this.alturaItem = input; }}
                                 onSubmitEditing={() => { this.larguraItem.focus(); }}
                             />
@@ -84,7 +84,7 @@ class InfoItemConferencia extends Component {
                                 returnKeyType="next"
                                 style={styles.input}
                                 onChangeText={larguraItem => this.props.modificaLarguraItem(larguraItem)}
-                                value={this.props.larguraItem}
+                                value={this.props.largura}
                                 ref={(input) => { this.larguraItem = input; }}
                                 onSubmitEditing={() => { this.comprimentoItem.focus(); }}
                             />
@@ -102,7 +102,7 @@ class InfoItemConferencia extends Component {
                                 returnKeyType="next"
                                 style={styles.input}
                                 onChangeText={comprimentoItem => this.props.modificaComprimentoItem(comprimentoItem)}
-                                value={this.props.comprimentoItem}
+                                value={this.props.comprimento}
                                 ref={(input) => { this.comprimentoItem = input; }}
                                 onSubmitEditing={(this.salvarInfoItem)}
                             />
@@ -126,9 +126,9 @@ const mapStateToProps = state => {
         {
             isInfoVisible: state.ConfereReducer.isInfoVisible,
             pesoItem: state.ConfereReducer.pesoItem,
-            alturaItem: state.ConfereReducer.alturaItem,
-            comprimentoItem: state.ConfereReducer.comprimentoItem,
-            larguraItem: state.ConfereReducer.larguraItem
+            altura: state.ConfereReducer.altura,
+            comprimento: state.ConfereReducer.comprimento,
+            largura: state.ConfereReducer.largura
         }
     );
 };

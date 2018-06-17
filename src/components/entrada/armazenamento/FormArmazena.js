@@ -17,16 +17,22 @@ import {
     modificaCodItem,
     modificaDesItem,
     modificaCodLocal,
-    modificaDesLocal,
     modificaLote,
     modificaUnidMed,
     modificaQtArmazenado,
     modificaQtItem,
-    modificaQtTotal    
+    modificaQtTotal,
+    buscaInfoBastimo,
+    iniciaTela,
+    efetivaArmazena,
+    modificaItemArmazena
 } from '../../../actions/ArmazenaActions';
 
 
 class FormArmazena extends Component {
+    componentWillMount() {
+        this.props.iniciaTela();
+    }
     onPressEfetivar() {
         const { 
             usuario, 
@@ -34,7 +40,9 @@ class FormArmazena extends Component {
             batismo,
             qtItem, 
             codLocal, 
-            lote } = this.props;
+            lote,
+            etiquetaArmazena,
+            itemArmazena } = this.props;
 
         if (codEAN.length === 0) {
             Alert.alert(
@@ -71,11 +79,33 @@ class FormArmazena extends Component {
             );
             return;
         }
+
+        const armazenamento = {
+            usuario, 
+            codEAN,
+            batismo,
+            qtItem, 
+            codLocal, 
+            lote
+        };
+
+        this.props.efetivaArmazena(etiquetaArmazena, itemArmazena, armazenamento);
     }
     validEAN() {
-        const { codEAN } = this.props;
+        const { listaItem, codEAN } = this.props;
 
-        this.props.buscaInfoEan(codEAN);
+        const itemArm = _.filter(listaItem, { ean: codEAN });
+
+        if (itemArm.length === 0) {
+            Alert.alert(
+                'Armazenamento',
+                'EAN Não Localizado!'
+            );
+            return;
+        }
+
+        this.props.modificaItemArmazena(itemArm);
+        //this.props.buscaInfoEan(codEAN);
 
         this.txtLocal.focus();
     }
@@ -83,6 +113,17 @@ class FormArmazena extends Component {
         this.txtQuantidade.focus();
     }
     validBatismo() {
+        const { batismo } = this.props;
+
+        if (batismo.length === 0) {
+            Alert.alert(
+                'Armazenamento',
+                'Etiqueta Batismo deve ser informada!'
+            );
+            return;
+        }
+
+        this.props.buscaInfoBastimo(batismo);
         this.txtEAN.focus();
     }
     render() {
@@ -284,10 +325,12 @@ const mapStateToProps = state => (
         desItem: state.ArmazenaReducer.desItem,
         unidMed: state.ArmazenaReducer.unidMed,
         codLocal: state.ArmazenaReducer.codLocal,
-        desLocal: state.ArmazenaReducer.desLocal,
         qtItem: state.ArmazenaReducer.qtItem,
         lote: state.ArmazenaReducer.lote,
-        usuario: state.LoginReducer.usuario
+        usuario: state.LoginReducer.usuario,
+        listaItem: state.ArmazenaReducer.listaItem,
+        itemArmazena: state.ArmazenaReducer.itemArmazena,
+        etiquetaArmazena: state.ArmazenaReducer.etiquetaArmazena
     }
 );
 
@@ -297,12 +340,15 @@ export default connect(mapStateToProps, {
     modificaCodItem,
     modificaDesItem,
     modificaCodLocal,
-    modificaDesLocal,
     modificaLote,
     modificaQtArmazenado,
     modificaQtItem,
     modificaQtTotal,
-    modificaUnidMed 
+    modificaUnidMed,
+    buscaInfoBastimo,
+    iniciaTela,
+    efetivaArmazena,
+    modificaItemArmazena
 })(FormArmazena);
 
 const styles = StyleSheet.create({
@@ -345,6 +391,7 @@ const styles = StyleSheet.create({
     input: {
         height: 35,
         fontSize: 18,
+        textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',
 		borderRadius: 10

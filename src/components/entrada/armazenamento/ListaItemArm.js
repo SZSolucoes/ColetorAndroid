@@ -22,17 +22,17 @@ import {
 
 class ListaItemArm extends Component {
     onPressItem(item) {
-        const { itCode, itDesc, un, localiz } = item;
+        const { itCode, itDescAbrev, un, localiz } = item;
 
         this.props.modificaCodItem(itCode);
-        this.props.modificaDesItem(itDesc);
+        this.props.modificaDesItem(itDescAbrev);
         this.props.modificaUnidMed(un);
         this.props.modificaCodLocal(localiz);
         this.props.modificaItemArmazena(item);
     }
     keyExtractor(item, index) {
         return (
-            item.seq
+            item.itCode
         );
     }
     renderSeparator = () => {
@@ -90,6 +90,7 @@ class ListaItemArm extends Component {
                 ItemSeparatorComponent={this.renderSeparator}
                 keyExtractor={this.keyExtractor}
                 renderItem={this.renderItem}
+                extraData={this.props}
                 numColumns='1'
                 ListHeaderComponent={this.renderHeader}
             />
@@ -101,7 +102,7 @@ const mapStateToProps = state => {
     return (
         {
             listaItem: state.ArmazenaReducer.listaItem,
-            itemConfere: state.ArmazenaReducer.itemConfere
+            itemArmazena: state.ArmazenaReducer.itemArmazena
         }
     );
 };

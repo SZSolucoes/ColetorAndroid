@@ -61,7 +61,6 @@ class FormConf extends Component {
         this.props.iniciaTela();
     }
     onPressEfetivar() {
-        console.log('onPressEfetivar');
         const { 
             usuario, 
             notaConfere, 
@@ -70,9 +69,10 @@ class FormConf extends Component {
             qtItem, 
             batismo,
             pesoItem,
-            larguraItem,
-            alturaItem,
-            comprimentoItem
+            largura,
+            altura,
+            comprimento,
+            listaItemLote
             } = this.props;
             
         const conferencia = {
@@ -80,30 +80,14 @@ class FormConf extends Component {
             codEAN,
             qtItem,
             pesoItem,
-            larguraItem,
-            alturaItem,
-            comprimentoItem
+            largura,
+            altura,
+            comprimento,
+            listaItemLote
         };
 
         const item = this.props.itemConfere;
 
-        if (item.tpCont === '3') {
-        }
-        
-        if (codEAN.length === 0) {
-            Alert.alert(
-                'Conferência',
-                'EAN deve ser informado!'
-            );
-            return;
-        } 
-        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
-            Alert.alert(
-                'Conferência',
-                'Quantidade Item deve ser maior que 0!'
-            );
-            return;
-        } 
         if (batismo.length === 0) {
             Alert.alert(
                 'Conferência',
@@ -111,7 +95,31 @@ class FormConf extends Component {
             );
             return;
         }
-        
+
+        if (codEAN.length === 0) {
+            Alert.alert(
+                'Conferência',
+                'EAN deve ser informado!'
+            );
+            return;
+        }
+
+        if (item.tpCont === '3') {
+            if (listaItemLote.length === 0) {
+                Alert.alert(
+                    'Conferência',
+                    'Lote deve ser informado!'
+                );
+                return;
+            }
+        } else if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+            Alert.alert(
+                'Conferência',
+                'Quantidade Item deve ser maior que 0!'
+            );
+            return;  
+        }
+
         this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });        
     }
     onPressPrint() {
@@ -173,8 +181,6 @@ class FormConf extends Component {
 
         const notaConf = _.filter(listaConfere, { nroDocto: nrNota });
         
-        console.log(nrNota);
-
         if (nrNota !== '') {
             if (notaConf.length === 0) {
                 Alert.alert(
@@ -219,15 +225,31 @@ class FormConf extends Component {
         this.setState({ qtdDisable: true });
 
         this.qtItem.focus();
-        this.props.modificaInfoVisible(true);
+
+        if (itemConf.pesoItem < 1) {
+            this.props.modificaInfoVisible(true);
+        }        
     }
     validQtd() {
         this.setState({ batismoDisable: true });
-        
-        this.batismo.focus();
-    }
-    validBatismo() {
 
+        const item = this.props.itemConfere;
+
+        const { qtItem } = this.props;
+
+        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+            Alert.alert(
+                'Conferência',
+                'Quantidade Item deve ser maior que 0!'
+            );
+            return;
+        }
+
+        if (item.tpCont === '3') {
+            Actions.conferenciaLote();
+        }
+
+        this.batismo.focus();
     }
     procuraNFLista() {
         Actions.listaNFConf();
@@ -488,9 +510,10 @@ const mapStateToProps = state => {
             itemConfere: state.ConfereReducer.itemConfere,
             listaNF: state.ConfereReducer.listaNF,
             pesoItem: state.ConfereReducer.pesoItem,
-            alturaItem: state.ConfereReducer.alturaItem,
-            comprimentoItem: state.ConfereReducer.comprimentoItem,
-            larguraItem: state.ConfereReducer.larguraItem
+            altura: state.ConfereReducer.altura,
+            comprimento: state.ConfereReducer.comprimento,
+            largura: state.ConfereReducer.largura,
+            listaItemLote: state.ConfereReducer.listaItemLote
         }
     );
 };
