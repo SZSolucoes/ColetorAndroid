@@ -15,7 +15,6 @@ const imgConfCheck = require('../../../resources/imgs/conferencia-volume-64.png'
 const imgConsolid = require('../../../resources/imgs/consolidacao_48.png');
 const imgDespacho = require('../../../resources/imgs/despacho_64.png');
 const imgListSep = require('../../../resources/imgs/lista_separacao_64.png');
-const imgRelacto = require('../../../resources/imgs/relaciona_etiqueta_64.png');
 const imgConsEtiq = require('../../../resources/imgs/consulta_etiq_48.png');
 const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
@@ -34,20 +33,20 @@ class MenuSaida extends Component {
         Actions.conferenciaVolumeSaida();
     }
 
+    onPressConsultEtiq() {
+        Actions.consultaEtiqBatismoSaida();
+    }
+
     onPressConsEstoq() {
         Actions.estoque();
     }
 
-    onPressRelacEtiq() {
-        alert('Press Relacionamento Etiqueta Batismo');
-    }
-
     onPressConsolid() {
-        alert('Press Consolidação');
+        Actions.consolidacaoSaida();
     }
 
     onPressDespacho() {
-        alert('Press Despacho');
+        Actions.despachoSaida();
     }
 
     onPressImpressao() {
@@ -101,19 +100,6 @@ class MenuSaida extends Component {
                         source={imgConsEtiq}
                     />
                     <Text style={styles.txtMenu}>Consulta Etiqueta Batismo</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderRelacEtiq() {
-        return (
-            <TouchableHighlight onPress={this.onPressRelacEtiq}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgRelacto}
-                    />
-                    <Text style={styles.txtMenu}>Relacionamento Etiqueta Batismo</Text>
                 </View>
             </TouchableHighlight>
         );
@@ -177,7 +163,6 @@ class MenuSaida extends Component {
                 {this.renderConferencia()}
                 {this.renderConferenciaVolume()}
                 {this.renderConsultaEtiq()}
-                {this.renderRelacEtiq()}
                 {this.renderConsolid()}
                 {this.renderDespacho()}
                 {this.renderConsultaEstoq()}

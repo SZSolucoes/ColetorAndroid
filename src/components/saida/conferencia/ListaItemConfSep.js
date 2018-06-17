@@ -15,11 +15,11 @@ class ListaItemConfSep extends Component {
     constructor(props) {
         super(props);
         this.state = { listaItens: [
-            { seq: '001', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2' },
-            { seq: '002', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2' },
-            { seq: '003', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2' },
-            { seq: '004', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2' },
-            { seq: '005', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2' }] };
+            { seq: '001', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' },
+            { seq: '002', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' },
+            { seq: '003', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' },
+            { seq: '004', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' },
+            { seq: '005', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' }] };
     }
     
     keyExtractor(item, index) {
@@ -48,11 +48,13 @@ class ListaItemConfSep extends Component {
                 <View
                     style={styles.item}
                 >
-                    <Text style={styles.itemSeq}>{item.seq}</Text>
-                    <Text style={styles.itemCode}>{item.itCode}</Text>
-                    <Text style={styles.itemDesc}>{item.itDescAbrev}</Text>
-                    <Text style={styles.itemDesc}>{item.num1}</Text>
-                    <Text style={styles.itemDesc}>{item.num2}</Text>
+                    <Text style={styles.seq}>{item.seq}</Text>
+                    <Text style={styles.itCode}>{item.itCode}</Text>
+                    <Text style={styles.itDescAbrev}>{item.itDescAbrev}</Text>
+                    <Text style={styles.num1}>{item.num1}</Text>
+                    <Text style={styles.num2}>{item.num2}</Text>
+                    <Text style={styles.num3}>{item.num3}</Text>
+                    <Text style={styles.num4}>{item.num4}</Text>
                 </View>
             </TouchableHighlight>            
         );
@@ -62,20 +64,26 @@ class ListaItemConfSep extends Component {
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
-                <Text style={[styles.headerText, { flex: 1 }]}> 
+                <Text style={[styles.seq, styles.sizeFldHeader]}> 
                     Seq
                 </Text>
-                <Text style={[styles.headerText, { flex: 2 }]}> 
+                <Text style={[styles.itCode, styles.sizeFldHeader]}> 
                     Código
                 </Text>
-                <Text style={[styles.headerText, { flex: 4 }]}> 
+                <Text style={[styles.itDescAbrev, styles.sizeFldHeader]}> 
                     Descrição
                 </Text>
-                <Text style={[styles.headerText, { flex: 4 }]}> 
-                    Descrição
+                <Text style={[styles.num1, styles.sizeFldHeader]}> 
+                    Qtde
                 </Text>
-                <Text style={[styles.headerText, { flex: 4 }]}> 
-                    Descrição
+                <Text style={[styles.num2, styles.sizeFldHeader]}> 
+                    Local
+                </Text>
+                <Text style={[styles.num3, styles.sizeFldHeader]}> 
+                    Lote
+                </Text>
+                <Text style={[styles.num4, styles.sizeFldHeader]}> 
+                    Batismo
                 </Text>
             </View>
         );
@@ -113,6 +121,15 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {})(ListaItemConfSep);
 
+const styleField = {
+    itemHeaderAndRow: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 13,
+        fontFamily: 'sans-serif-medium'
+    }
+};
+
 const styles = StyleSheet.create({
     container: {
         marginVertical: 20,
@@ -127,29 +144,36 @@ const styles = StyleSheet.create({
         marginVertical: 2,
         paddingHorizontal: 5
     },
-    itemInvisible: {
-        backgroundColor: 'transparent',
+    seq: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 2 
     },
-    itemSeq: {
-        color: '#fff',
-        flex: 1,
-        textAlign: 'center',
-        fontSize: 13,
-        fontFamily: 'sans-serif-medium'
+    itCode: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 6 
     },
-    itemDesc: {
-        color: '#fff',
-        flex: 4,
-        textAlign: 'center',
-        fontSize: 13,
-        fontFamily: 'sans-serif-medium'
+    itDescAbrev: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 6 
     },
-    itemCode: {
-        color: '#fff',
-        flex: 2,
-        textAlign: 'center',
-        fontSize: 13,
-        fontFamily: 'sans-serif-medium'
+    num1: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 6 
+    },
+    num2: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 6 
+    },
+    num3: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 6 
+    },
+    num4: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 6 
+    },
+    sizeFldHeader: {
+        fontSize: 14
     },
     header: {
         width: '100%', 
@@ -159,11 +183,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         flex: 1
-    },
-    headerText: { 
-        textAlign: 'center', 
-        color: '#fff', 
-        fontSize: 14,
-        fontFamily: 'sans-serif-medium' 
     }
 });

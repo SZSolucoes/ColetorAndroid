@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import FormRow from '../FormRow';
+import FormRow from '../../utils/FormRow';
 import ListaItemConfSep from './ListaItemConfSep';
 
 class FormConferenciaSeparacao extends Component {
@@ -230,6 +230,7 @@ class FormConferenciaSeparacao extends Component {
                 <View style={{ padding: 5 }}>
                     <ListaItemConfSep />
                 </View>
+                <View style={{ marginBottom: 50 }} />
             </ScrollView>
         );
     }
@@ -284,27 +285,5 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginTop: 10,
         paddingHorizontal: 10
-    },
-    btSearch: {
-        width: 40,
-        height: 35
-    },
-    imgSearch: {
-        width: 35,
-        height: 35
-    },
-    button: {
-        alignItems: 'center',
-        width: 90,
-        height: 35,
-        padding: 10,
-        borderRadius: 10
-    },
-    viewBtSearch: {
-        justifyContent: 'flex-end'
-    },
-    viewBtEtiq: {
-        justifyContent: 'space-between',
-        flexDirection: 'row'
     }
 });

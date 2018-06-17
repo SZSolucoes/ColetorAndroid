@@ -5,113 +5,109 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    TouchableOpacity
+    Button,
+    TouchableOpacity,
+    Image
 } from 'react-native';
 
-export default class FormInventario extends Component {
-    constructor(props) {
-        super(props);
+import DatePicker from 'react-native-datepicker';
+import ModalFilterPicker from 'react-native-modal-filter-picker';
 
-        this.state = { 
-            nrFicha: '', 
-            dtInventario: ''
-        };
+import { connect } from 'react-redux';
+
+import FormRow from '../../utils/FormRow';
+
+import imgSeta from '../../../../resources/imgs/seta.png';
+
+import {
+    modificaCodLocal,
+    modificaNrContagem,
+    modificaCodEtiq,
+    modificaDtInventario,
+    modificaQtItem,
+    modificaModalVisible,
+    cleanInventarioReducer,
+    doConfirm,
+    doConfirmEst
+} from '../../../actions/InventarioActions';
+
+class FormInventario extends Component {
+
+    componentWillUnmount() {
+        this.props.cleanInventarioReducer();
     }
 
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={styles.txtLabel}>Nota Fiscal</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={(nrNotaFis) => this.setState({ nrNotaFis })}
-                            value={this.state.nrNotaFis}
-                        />
-                    </View>
-                    <View style={styles.viewBtSearch}>
-                        <TouchableOpacity
-                            style={styles.btSearch}
-                            onPress={this.onPress}
-                        />
-                    </View>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={styles.txtLabel}>Fornecedor</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={(fornec) => this.setState({ fornec })}
-                            value={this.state.fornec}
-                        />
-                    </View>
-                </View>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={styles.txtLabel}>Total</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={(qtTotal) => this.setState({ qtTotal })}
-                            value={this.state.qtTotal}
-                        />
-                    </View>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={styles.txtLabel}>Conferir</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={(qtConferir) => this.setState({ qtConferir })}
-                            value={this.state.qtConferir}
-                        />
-                    </View>
-                    <View style={[styles.viewCampo, { flex: 3 }]}>
-                        <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={(codEAN) => this.setState({ codEAN })}
-                            value={this.state.codEAN}
-                        />
-                    </View>
-                </View>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
+    confirmButton() {
+        const propparams = {
+            username: this.props.username,
+            codLocal: this.props.codLocal,
+            nrContagem: this.props.nrContagem,
+            codEtiq: this.props.codEtiq,
+            dtInventario: this.props.dtInventario,
+            qtItem: this.props.qtItem
+        };
+
+        if (this.props.estorno) {
+            this.props.doConfirmEst(propparams);
+        } else {
+            this.props.doConfirm(propparams);
+        }
+    }
+
+    renderQtde() {
+        if (!this.props.estorno) {
+            return (
+                <FormRow>
+                    <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Qtde</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={(qtItem) => this.setState({ qtItem })}
-                            value={this.state.qtItem}
+                            onChangeText={this.props.modificaQtItem}
+                            value={this.props.qtItem}
                         />
                     </View>
-                    <View style={[styles.viewCampo, { flex: 3 }]}>
-                        <Text style={styles.txtLabel}>Localização Padrão</Text>
+                    <View style={{ flex: 1 }} />
+                </FormRow>
+            );
+        }
+    }
+
+    render() {
+        return (
+            <ScrollView style={styles.viewPrinc}>
+                <FormRow>
+                    <View style={{ flex: 2 }}>
+                        <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Data</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <DatePicker
+                                style={{ flex: 1 }}
+                                date={this.props.dtInventario}
+                                mode="date"
+                                placeholder=" "
+                                autoCapitalize="none"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                autoCorrect={false}
+                                returnKeyType="go"
+                                format="DD/MM/YYYY"
+                                confirmBtnText="Ok"
+                                cancelBtnText="Cancelar"
+                                customStyles={{     
+                                    dateInput: StyleSheet.flatten(styles.dateInput),
+                                    dateIcon: StyleSheet.flatten(styles.dateIcon),
+                                    dateText: StyleSheet.flatten(styles.dateText)
+                                }}
+                                onDateChange={this.props.modificaDtInventario}
+                            />
+                        </View>
+                    </View>  
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Localização</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
@@ -119,171 +115,159 @@ export default class FormInventario extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={(localPad) => this.setState({ localPad })}
-                            value={this.state.localPad}
+                            value={this.props.codLocal}
+                            onChangeText={this.props.modificaCodLocal}
                         />
                     </View>
-                </View>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 5 }]}>
-                        <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={(codItem) => this.setState({ codItem })}
-                            value={this.state.codItem}
-                        />
-                    </View>
-                    <View style={[styles.viewCampo, { flex: 2 }]}>
-                        <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={(unidMed) => this.setState({ unidMed })}
-                            value={this.state.unidMed}
-                        />
-                    </View>
-                    <View style={[styles.viewCampo, { flex: 3 }]}>
-                        <Text style={styles.txtLabel}>Batismo</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={(batismo) => this.setState({ batismo })}
-                            value={this.state.batismo}
-                        />
-                    </View>
-                </View>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={styles.txtLabel}>Descrição</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={(descricao) => this.setState({ descricao })}
-                            value={this.state.descricao}
-                        />
-                    </View>
-                </View>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewBotao, { flex: 2 }]}>
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                {
-                                    backgroundColor: 'green'
-                                }
-                            ]}
-                            onPress={this.onPress}
+                </FormRow>
+                <FormRow>
+                    <View style={{ flex: 1 }}>
+                        <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Contagem</Text>
+                        <TouchableOpacity 
+                            onPress={() => this.props.modificaModalVisible(true)}
+                            style={{ flexDirection: 'row' }}
                         >
-                            <Text style={{ color: 'white', fontSize: 14 }}> Efetivar </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[
-                                styles.button,
-                                {
-                                    backgroundColor: 'red'
-                                }
-                            ]}
-                            onPress={this.onPress}
-                        >
-                            <Text style={{ color: 'white', fontSize: 14 }}> Voltar </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={styles.txtLabel}>Qtde Etiq</Text>
-                        <View style={styles.viewBtEtiq}>
                             <TextInput
                                 placeholder=""
                                 autoCapitalize="none"
                                 autoCorrect={false}
+                                editable={false}
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="next"
-                                style={styles.input}
-                                onChangeText={(qtEtiq) => this.setState({ qtEtiq })}
-                                value={this.state.qtEtiq}
+                                style={[styles.input, { flex: 1 }]}
+                                value={this.props.nrContagem}
                             />
-                            <TouchableOpacity
-                                style={styles.btSearch}
-                                onPress={this.onPress}
+                            <Image
+                                source={imgSeta}
+                                style={styles.imgSeta}
                             />
-                        </View>
+                        </TouchableOpacity>
                     </View>
-                </View>
-                <View style={{ padding: 5 }} >
-                    <ListaItem />
-                </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>EAN</Text>
+                            <TextInput
+                                onc
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={styles.input}
+                                value={this.props.codEtiq}
+                                ref={(input) => { this.qtItem = input; }}
+                                onChangeText={this.props.modificaCodEtiq}
+                            />
+                    </View>
+                </FormRow>
+                {this.renderQtde()}
+                <FormRow>
+                    <View style={styles.viewBotao}>
+                        <Button
+                            onPress={() => this.confirmButton()}
+                            title="Confirmar"
+                            color="green"
+                        />
+                    </View>
+                </FormRow>
+                <View style={{ marginBottom: 50 }} />
+                <ModalFilterPicker
+                    placeholderText="Filtro..."
+                    cancelButtonText="Cancelar"
+                    noResultsText="Não encontrado"
+                    visible={this.props.modalVisible}
+                    onSelect={this.props.modificaNrContagem}
+                    onCancel={() => this.props.modificaModalVisible(false)}
+                    options={[
+                        {
+                            key: '1',
+                            label: '1',
+                        },
+                        {
+                            key: '2',
+                            label: '2',
+                        },
+                        {
+                            key: '3',
+                            label: '3',
+                        }]}
+                />
             </ScrollView>
         );
     }
 }
+
+const mapStateToProps = state => (
+    {
+        username: state.LoginReducer.usuario,
+        codLocal: state.InventarioReducer.codLocal,
+        nrContagem: state.InventarioReducer.nrContagem,
+        codEtiq: state.InventarioReducer.codEtiq,
+        dtInventario: state.InventarioReducer.dtInventario,
+        qtItem: state.InventarioReducer.qtItem,
+        modalVisible: state.InventarioReducer.modalVisible
+    }
+);
+
+export default connect(mapStateToProps, {
+    modificaCodLocal,
+    modificaNrContagem,
+    modificaCodEtiq,
+    modificaDtInventario,
+    modificaQtItem,
+    modificaModalVisible,
+    cleanInventarioReducer,
+    doConfirm,
+    doConfirmEst
+})(FormInventario);
 
 const styles = StyleSheet.create({
     viewPrinc: {
         flex: 1,
         backgroundColor: '#4b86b4'
     },
-    viewLinha: {
-        flexDirection: 'row'
-    },
-    viewCampo: {
-        flexDirection: 'column',
-        paddingHorizontal: 10
+    imgSeta: {
+        width: 35,
+        height: 35
     },
     txtLabel: {
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
         marginTop: 10,
+        fontFamily: 'sans-serif-medium',
         fontSize: 13
     },
     input: {
         height: 35,
-        fontSize: 18,
-		backgroundColor: 'rgba(255,255,255,0.2)',
-		color: 'white',
+        fontSize: 16,
+        textAlign: 'center',
+        backgroundColor: '#20293F',
+        color: 'white',
+        fontFamily: 'sans-serif-medium',
 		borderRadius: 10
     },
     viewBotao: {
         flexDirection: 'row',
-        flex: 2,
+        flex: 1,
         justifyContent: 'space-between',
-        alignItems: 'flex-end',
+        marginTop: 10,
         paddingHorizontal: 10
     },
-    btSearch: {
-        width: 40,
+    dateInput: {
         height: 35,
-        padding: 10,
-        backgroundColor: '#2a4d69'
+        borderWidth: 0,
+        backgroundColor: '#20293F',    
+        borderRadius: 10,
+        marginBottom: 5,
     },
-    button: {
-        alignItems: 'center',
-        width: 90,
-        height: 35,
-        padding: 10,
-        borderRadius: 10
+    dateIcon: {
+        marginBottom: 5
     },
-    viewBtSearch: {
-        justifyContent: 'flex-end'
-    },
-    viewBtEtiq: {
-        justifyContent: 'space-between',
-        flexDirection: 'row'
+    dateText: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 16,
+        fontFamily: 'sans-serif-medium'       
     }
 });

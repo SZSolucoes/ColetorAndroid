@@ -5,7 +5,7 @@ import FormInventario from './FormInventario';
 export default class Inventario extends Component {
     render() {
         return (
-            <FormInventario />
+            <FormInventario {...this.props} />
         );
     }
 }

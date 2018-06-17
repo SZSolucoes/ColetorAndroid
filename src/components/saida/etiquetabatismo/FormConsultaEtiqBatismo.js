@@ -4,17 +4,16 @@ import {
     View,
     StyleSheet,
     Text,
-    TextInput,
-    Button
+    TextInput
 } from 'react-native';
 
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import FormRow from '../../utils/FormRow';
-import ListaItemAdicao from './ListaItemAdicao';
+import ListaItemConsEtiqBat from './ListaItemConsEtiqBat';
 
-class FormConferenciaVolume extends Component {
+class FormConsultaEtiqBatismo extends Component {
 
     render() {
         return (
@@ -61,18 +60,9 @@ class FormConferenciaVolume extends Component {
                         />
                     </View>
                 </FormRow>
-                <View>
-                    <ListaItemAdicao />
+                <View style={{ padding: 5 }}>
+                    <ListaItemConsEtiqBat />
                 </View>
-                <FormRow>
-                    <View style={styles.viewBotao}>
-                        <Button
-                            onPress={() => false}
-                            title="Finalizar"
-                            color="green"
-                        />
-                    </View>  
-                </FormRow>
                 <View style={{ marginBottom: 50 }} />
             </ScrollView>
         );
@@ -89,7 +79,7 @@ const mapStateToProps = state => {
     return maps;
 };
 
-export default connect(mapStateToProps, {})(FormConferenciaVolume);
+export default connect(mapStateToProps, {})(FormConsultaEtiqBatismo);
 
 const styles = StyleSheet.create({
     viewPrinc: {
@@ -112,16 +102,5 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'sans-serif-medium',
 		borderRadius: 10
-    },
-    viewBotao: {
-        flexDirection: 'row',
-        flex: 1,
-        justifyContent: 'space-between',
-        marginTop: 10,
-        paddingHorizontal: 10
-    },
-    viewBtEtiq: {
-        justifyContent: 'space-between',
-        flexDirection: 'row'
     }
 });

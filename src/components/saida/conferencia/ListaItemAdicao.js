@@ -6,13 +6,14 @@ import {
     StyleSheet,
     Button,
     TouchableOpacity,
+    TouchableHighlight,
     Image,
     TextInput
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
-import FormRow from '../FormRow';
+import FormRow from '../../utils/FormRow';
 
 import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
 import imgZoom from '../../../../resources/imgs/zoom_nf.png';
@@ -24,11 +25,16 @@ class ListaItemAdicao extends Component {
     constructor(props) {
         super(props);
         this.state = { listaItens: [
-            { seq: '001', itCode: '00001' },
-            { seq: '002', itCode: '00001' },
-            { seq: '003', itCode: '00001' },
-            { seq: '004', itCode: '00001' },
-            { seq: '005', itCode: '00001' }] };
+            { seq: '001', itCode: '0000155', itCo: '00001' },
+            { seq: '002', itCode: '00001', itCo: '00001' },
+            { seq: '003', itCode: '00001', itCo: '00001' },
+            { seq: '004', itCode: '00001', itCo: '00001' },
+            { seq: '005', itCode: '00001', itCo: '00001' },
+            { seq: '006', itCode: '00001', itCo: '00001' },
+            { seq: '007', itCode: '00001', itCo: '00001' },
+            { seq: '008', itCode: '00001', itCo: '00001' },
+            { seq: '009', itCode: '00001', itCo: '00001' },
+            { seq: '010', itCode: '00001', itCo: '00001' }] };
     }
     
     keyExtractor(item, index) {
@@ -51,31 +57,33 @@ class ListaItemAdicao extends Component {
     }
     renderItem = ({ item }) => {
         const viewItem = (
-            
-            <View style={styles.item} >
-                <Text style={styles.itemSeq}>{item.seq}</Text>
-                <View style={styles.viewBtSearch}>
+            <TouchableHighlight onPress={() => false} >
+                <View style={styles.item} >
+                    <Text style={styles.seq}>{item.seq}</Text>
+                    <Text style={styles.embalagem}>{item.itCode}</Text>
+                    <View style={styles.viewBtSearch}>
+                        <TouchableOpacity
+                            style={styles.btSearch}
+                            onPress={this.procuraNFLista}                            
+                        >
+                            <Image
+                                source={imgZoom}
+                                style={styles.imgSearch}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={styles.volume}>{item.itCo}</Text>
                     <TouchableOpacity
                         style={styles.btSearch}
-                        onPress={this.procuraNFLista}                            
+                        onPress={() => false}
                     >
                         <Image
-                            source={imgZoom}
+                            source={imgRemove}
                             style={styles.imgSearch}
                         />
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.itemCode}>{item.itCode}</Text>
-                <TouchableOpacity
-                    style={styles.btSearch}
-                    onPress={() => false}
-                >
-                    <Image
-                        source={imgRemove}
-                        style={styles.imgSearch}
-                    />
-                </TouchableOpacity>
-            </View>
+            </TouchableHighlight>
                       
         );
 
@@ -84,13 +92,16 @@ class ListaItemAdicao extends Component {
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
-                <Text style={[styles.headerText, { flex: 2 }]}> 
+                <Text style={[styles.seq, styles.sizeFldHeader]}> 
+                    Seq
+                </Text>
+                <Text style={[styles.embalagem, styles.sizeFldHeader]}> 
                     Embalagem
                 </Text>
-                <Text style={[styles.headerText, { flex: 3 }]}> 
+                <Text style={[styles.volume, styles.sizeFldHeader]}> 
                     Volume
                 </Text>
-                <Text style={[styles.headerText, { flex: 1 }]} />
+                <Text style={[styles.remove, styles.sizeFldHeader]} />
             </View>
         );
 
@@ -163,6 +174,15 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {})(ListaItemAdicao);
 
+const styleField = {
+    itemHeaderAndRow: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 13,
+        fontFamily: 'sans-serif-medium'
+    }
+};
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -191,8 +211,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         justifyContent: 'space-between',
-        marginTop: 10,
-        paddingHorizontal: 10
+        marginTop: 10
     },
     txtLabel: {
         color: 'white',
@@ -210,29 +229,24 @@ const styles = StyleSheet.create({
         width: 35,
         height: 35
     },
-    itemInvisible: {
-        backgroundColor: 'transparent',
+    seq: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 2 
     },
-    itemSeq: {
-        color: '#fff',
-        flex: 1,
-        textAlign: 'center',
-        fontSize: 13,
-        fontFamily: 'sans-serif-medium'
+    embalagem: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 4 
     },
-    itemDesc: {
-        color: '#fff',
-        flex: 4,
-        textAlign: 'center',
-        fontSize: 13,
-        fontFamily: 'sans-serif-medium'
+    volume: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 4 
     },
-    itemCode: {
-        color: '#fff',
-        flex: 2,
-        textAlign: 'center',
-        fontSize: 13,
-        fontFamily: 'sans-serif-medium'
+    remove: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 1 
+    },
+    sizeFldHeader: {
+        fontSize: 14
     },
     header: {
         width: '100%', 
@@ -242,12 +256,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         flex: 1
-    },
-    headerText: { 
-        textAlign: 'center', 
-        color: '#fff', 
-        fontSize: 14,
-        fontFamily: 'sans-serif-medium' 
     },
     viewBtSearch: {
         justifyContent: 'flex-end'

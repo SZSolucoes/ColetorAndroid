@@ -20,6 +20,9 @@ import ImpressaoEAN from './components/impressao/Impressao';
 import ListaSeparacao from './components/saida/listaSeparacao/ListaSeparacao';
 import ConferenciaSeparacao from './components/saida/conferencia/ConferenciaSeparacao';
 import ConferenciaVolumeSaida from './components/saida/conferencia/ConferenciaVolume';
+import ConsultaEtiqBatismoSaida from './components/saida/etiquetabatismo/ConsultaEtiqBatismoSaida';
+import Consolidacao from './components/saida/consolidacao/Consolidacao';
+import Despacho from './components/saida/despacho/Despacho';
 
 export default props => (
     <Router>
@@ -90,6 +93,14 @@ export default props => (
                 backButtonTintColor="white"
             />
             <Scene 
+                key='inventarioEst' 
+                component={Inventario} 
+                title="Inventário - Estorno" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
                 key='transferencia' 
                 component={Transferencia} 
                 title="Transferência" 
@@ -150,6 +161,30 @@ export default props => (
                 key='conferenciaVolumeSaida' 
                 component={ConferenciaVolumeSaida} 
                 title="Conferência - Volumes" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='consultaEtiqBatismoSaida' 
+                component={ConsultaEtiqBatismoSaida} 
+                title="Consulta Etiqueta Batismo" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='consolidacaoSaida' 
+                component={Consolidacao} 
+                title="Consolidação" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='despachoSaida' 
+                component={Despacho} 
+                title="Despacho" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

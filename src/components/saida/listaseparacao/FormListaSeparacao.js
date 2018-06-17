@@ -13,7 +13,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import FormRow from '../FormRow';
+import FormRow from '../../utils/FormRow';
 import ListaItemSep from './ListaItemSep';
 
 import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
@@ -321,16 +321,6 @@ const styles = StyleSheet.create({
     imgSearch: {
         width: 35,
         height: 35
-    },
-    button: {
-        alignItems: 'center',
-        width: 90,
-        height: 35,
-        padding: 10,
-        borderRadius: 10
-    },
-    viewBtSearch: {
-        justifyContent: 'flex-end'
     },
     viewBtEtiq: {
         justifyContent: 'space-between',
