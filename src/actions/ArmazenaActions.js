@@ -120,23 +120,24 @@ export const efetivaArmazena = (etiquetaArmazena, itemArmazena, armazenamento) =
                 qtItem: armazenamento.qtItem,
                 codLocal: armazenamento.codLocal,
                 lote: armazenamento.lote,
-                serie: itemArmazena.serie,
-                nroDocto: itemArmazena.nroDocto,
-                codEmit: itemArmazena.codEmit,
-                natOper: itemArmazena.natOper,
-                sequencia: itemArmazena.sequencia,
-                numSeq: itemArmazena.numSeq
+                serie: itemArmazena[0].serie,
+                nroDocto: itemArmazena[0].nroDocto,
+                codEmit: itemArmazena[0].codEmit,
+                natOper: itemArmazena[0].natOper,
+                sequencia: itemArmazena[0].sequencia,
+                numSeq: itemArmazena[0].numSeq
             }
         })
-        .then(response => armazenaSuccess(dispatch, response, etiquetaArmazena, itemArmazena))
+        .then(response => armazenaSuccess(dispatch, response, etiquetaArmazena, itemArmazena, armazenamento.qtItem))
         .catch(() => armazenaError());
     };
 };
 
-const armazenaSuccess = (dispatch, response, etiqueta, item) => {
+const armazenaSuccess = (dispatch, response, etiqueta, item, qtItem) => {
     const retorno = {
         etiqueta,
-        item
+        item,
+        qtItem
     };
 
     if (response.data.success === 'true') {

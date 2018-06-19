@@ -14,10 +14,11 @@ import {
     modificaCodItem,
     modificaDesItem,
     modificaCodLocal,
-    modificaDesLocal,
     modificaLote,
     modificaUnidMed,
-    modificaItemArmazena
+    modificaItemArmazena,
+    modificaCodEAN,
+    modificaQtItem
 } from '../../../actions/ArmazenaActions';
 
 class ListaItemArm extends Component {
@@ -29,6 +30,10 @@ class ListaItemArm extends Component {
         this.props.modificaUnidMed(un);
         this.props.modificaCodLocal(localiz);
         this.props.modificaItemArmazena(item);
+        this.props.modificaCodEAN();
+        this.props.modificaQtItem();
+        this.props.modificaLote();
+        this.props.modificaCodLocal();
     }
     keyExtractor(item, index) {
         return (
@@ -113,10 +118,11 @@ export default connect(mapStateToProps,
         modificaCodItem,
         modificaDesItem,
         modificaCodLocal,
-        modificaDesLocal,
         modificaLote,
         modificaUnidMed,
-        modificaItemArmazena
+        modificaItemArmazena,
+        modificaCodEAN,
+        modificaQtItem
     }
 )(ListaItemArm);
 

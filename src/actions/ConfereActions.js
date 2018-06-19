@@ -229,7 +229,7 @@ export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia 
                 itCodigo: itemConfere.itCode,
                 qtdItemNF: itemConfere.qtdItem,
                 qtdItemConf: conferencia.qtItem,
-                pesoItem: conferencia.pesoItem,
+                pesoItem: conferencia.peso,
                 altura: conferencia.altura,
                 largura: conferencia.largura,
                 comprimento: conferencia.comprimento,

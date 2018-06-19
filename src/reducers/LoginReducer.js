@@ -1,6 +1,6 @@
 const INITIAL_STATE = {
-    usuario: 'super',
-    senha: 'super2021',
+    usuario: '',
+    senha: '',
     erroLogin: '',
     logConfReceb: '',
     logEstoque: '',

@@ -72,14 +72,15 @@ class FormArmazena extends Component {
             );
             return;
         }
-        if (lote.length === 0) {
-            Alert.alert(
-                'Armazenamento',
-                'Lote deve ser informado!'
-            );
-            return;
+        if (itemArmazena.tpCont === '3') {
+            if (lote.length === 0) {
+                Alert.alert(
+                    'Armazenamento',
+                    'Lote deve ser informado!'
+                );
+                return;
+            }
         }
-
         const armazenamento = {
             usuario, 
             codEAN,
@@ -104,8 +105,13 @@ class FormArmazena extends Component {
             return;
         }
 
+        const { itCode, itDescAbrev, un, localiz } = itemArm;
+
+        this.props.modificaCodItem(itCode);
+        this.props.modificaDesItem(itDescAbrev);
+        this.props.modificaUnidMed(un);
+        this.props.modificaCodLocal(localiz);
         this.props.modificaItemArmazena(itemArm);
-        //this.props.buscaInfoEan(codEAN);
 
         this.txtLocal.focus();
     }

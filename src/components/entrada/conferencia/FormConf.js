@@ -112,7 +112,9 @@ class FormConf extends Component {
                 );
                 return;
             }
-        } else if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+        } 
+        
+        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
             Alert.alert(
                 'Conferência',
                 'Quantidade Item deve ser maior que 0!'
@@ -222,11 +224,17 @@ class FormConf extends Component {
             return;
         }
 
+        this.props.modificaCodItem(itemConf.itCode);
+        this.props.modificaDesItem(itemConf.itDesc);
+        this.props.modificaLocalPad(itemConf.localiz);
+        this.props.modificaUnidMed(itemConf.un);
+        this.props.modificaItemConfere(itemConf);
+
         this.setState({ qtdDisable: true });
 
         this.qtItem.focus();
 
-        if (itemConf.pesoItem < 1) {
+        if (itemConf.peso < 1) {
             this.props.modificaInfoVisible(true);
         }        
     }
@@ -423,7 +431,7 @@ class FormConf extends Component {
                             onChangeText={batismo => this.props.modificaBatismo(batismo)}
                             value={this.props.batismo}
                             ref={(input) => { this.batismo = input; }}
-                            onSubmitEditing={() => { this.validBatismo(); }}
+                            onSubmitEditing={() => { this.onPressEfetivar(); }}
                         />
                     </View>
                 </View>

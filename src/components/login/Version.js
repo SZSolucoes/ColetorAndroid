@@ -20,7 +20,7 @@ class Version extends Component {
     componentWillMount() {
         this.props.iniciaTela();
 
-        const version = '1.0.1 (Homologação)';
+        const version = '1.0.2 (Homologação)';
         
         this.props.modificaVersao(version);
         this.props.verificaConexao();

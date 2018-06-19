@@ -20,7 +20,7 @@ export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case 'efetiva_armazenamento': {
             const { etiquetaArmazena, listaItem, qtArmazenado } = state;
-            const { item } = action.payload;
+            const { item, qtItem } = action.payload;
 
             _.remove(etiquetaArmazena.itens, {
                 sequencia: item.sequencia,
@@ -50,11 +50,11 @@ export default (state = INITIAL_STATE, action) => {
                 };
             }
 
-            const qtdArm = (_.toInteger(qtArmazenado) + 1); 
+            const qtdArm = (_.toInteger(qtItem) + _.toInteger(qtArmazenado)); 
 
             return { 
                 ...state, 
-                qtArmazenado: qtdArm,
+                qtArmazenado: _.toString(qtdArm),
                 codEAN: '',
                 codItem: '',
                 desItem: '',

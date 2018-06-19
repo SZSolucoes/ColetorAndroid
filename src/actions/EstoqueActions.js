@@ -61,6 +61,7 @@ export const buscaEstoque = (codEAN) => {
 };
 
 const buscaSuccess = (dispatch, response) => {
+    console.log(response);
     if (response.data.success === 'true') {
         dispatch({ type: 'busca_ok_est', payload: response.data.item });
     } else {
