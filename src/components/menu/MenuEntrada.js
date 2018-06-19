@@ -22,6 +22,7 @@ const imgArmazen = require('../../../resources/imgs/armazenamento.png');
 const imgInvent = require('../../../resources/imgs/inventario_64.png');
 const imgInventEst = require('../../../resources/imgs/inventarioestorno.png');
 const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
+const imgRelEan = require('../../../resources/imgs/relacionaean.png');
 const imgTransEnt = require('../../../resources/imgs/transf_entrada.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
@@ -46,6 +47,9 @@ class MenuEntrada extends Component {
     }
     onPressConsEstoq() {
         Actions.estoque();
+    }
+    onPressRelEan() {
+        Actions.relacionaEan();
     }
     onPressImpressao() {
         Actions.impressao();
@@ -126,19 +130,6 @@ class MenuEntrada extends Component {
             </TouchableHighlight>
         );
     }
-    renderImpressao() {
-        return (
-            <TouchableHighlight onPress={this.onPressImpressao}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgPrinter}
-                    />
-                    <Text style={styles.txtMenu}>Etiqueta EAN</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
     renderConsulta() {
         if (this.props.logEstoque) {
             return (
@@ -154,6 +145,32 @@ class MenuEntrada extends Component {
             );
         }
     }
+    renderRelacionaEan() {
+        return (
+            <TouchableHighlight onPress={this.onPressRelEan}>
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgRelEan}
+                    />
+                    <Text style={styles.txtMenu}>Relaciona EAN</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
+    renderImpressao() {
+        return (
+            <TouchableHighlight onPress={this.onPressImpressao}>
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgPrinter}
+                    />
+                    <Text style={styles.txtMenu}>Etiqueta EAN</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
     render() {
         return (
             <ScrollView style={styles.opcao}>
@@ -163,6 +180,7 @@ class MenuEntrada extends Component {
                 {this.renderInventario()}
                 {this.renderInventarioEst()}
                 {this.renderConsulta()}
+                {this.renderRelacionaEan()}
                 {this.renderImpressao()}
             </ScrollView>
         );

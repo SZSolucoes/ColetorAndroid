@@ -17,6 +17,7 @@ const imgDespacho = require('../../../resources/imgs/despacho_64.png');
 const imgListSep = require('../../../resources/imgs/lista_separacao_64.png');
 const imgConsEtiq = require('../../../resources/imgs/consulta_etiq_48.png');
 const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
+const imgRelEan = require('../../../resources/imgs/relacionaean.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
 class MenuSaida extends Component {
@@ -24,31 +25,27 @@ class MenuSaida extends Component {
     onPressListSep() {
         Actions.listaSeparacaoSaida();
     }
-    
     onPressConf() {
         Actions.conferenciaSeparacao();
-    }
-    
+    } 
     onPressConfVol() {
         Actions.conferenciaVolumeSaida();
     }
-
     onPressConsultEtiq() {
         Actions.consultaEtiqBatismoSaida();
     }
-
     onPressConsEstoq() {
         Actions.estoque();
+    }    
+    onPressRelEan() {
+        Actions.relacionaEan();
     }
-
     onPressConsolid() {
         Actions.consolidacaoSaida();
     }
-
     onPressDespacho() {
         Actions.despachoSaida();
     }
-
     onPressImpressao() {
         Actions.impressao();
     }
@@ -143,6 +140,19 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
+    renderRelacionaEan() {
+        return (
+            <TouchableHighlight onPress={this.onPressRelEan}>
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgRelEan}
+                    />
+                    <Text style={styles.txtMenu}>Relaciona EAN</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
     renderImpressao() {
         return (
             <TouchableHighlight onPress={this.onPressImpressao}>
@@ -166,6 +176,7 @@ class MenuSaida extends Component {
                 {this.renderConsolid()}
                 {this.renderDespacho()}
                 {this.renderConsultaEstoq()}
+                {this.renderRelacionaEan()}
                 {this.renderImpressao()}
             </ScrollView>
         );

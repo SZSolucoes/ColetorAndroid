@@ -17,12 +17,13 @@ import Estoque from './components/estoque/Estoque';
 import ListaNotaFiscal from './components/entrada/conferencia/ListaNotaFiscal';
 import FormConfLote from './components/entrada/conferencia/FormConfLote';
 import ImpressaoEAN from './components/impressao/Impressao';
-import ListaSeparacao from './components/saida/listaSeparacao/ListaSeparacao';
+import ListaSeparacao from './components/saida/listaseparacao/ListaSeparacao';
 import ConferenciaSeparacao from './components/saida/conferencia/ConferenciaSeparacao';
 import ConferenciaVolumeSaida from './components/saida/conferencia/ConferenciaVolume';
 import ConsultaEtiqBatismoSaida from './components/saida/etiquetabatismo/ConsultaEtiqBatismoSaida';
 import Consolidacao from './components/saida/consolidacao/Consolidacao';
 import Despacho from './components/saida/despacho/Despacho';
+import RelacionaEan from './components/relacionaean/RelacionaEan';
 
 export default props => (
     <Router>
@@ -185,6 +186,14 @@ export default props => (
                 key='despachoSaida' 
                 component={Despacho} 
                 title="Despacho" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='relacionaEan' 
+                component={RelacionaEan} 
+                title="Relaciona EAN" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

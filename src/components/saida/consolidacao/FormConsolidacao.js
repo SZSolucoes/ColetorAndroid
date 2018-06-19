@@ -9,12 +9,28 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 
 import FormRow from '../../utils/FormRow';
 import ListaItemConsolidacao from './ListaItemConsolidacao';
 
+import {
+    modificaConf,
+    modificaEmb,
+    modificaVol,
+    addList,
+    modificaClean
+} from '../../../actions/ConsolidacaoActions';
+
 class FormConsolidacao extends Component {
+
+    componentWillUnmount() {
+        this.props.modificaClean();
+    }
+
+    addVolumes() {
+        const volume = this.props.codVol;
+        this.props.addList(volume);
+    }
 
     render() {
         return (
@@ -28,10 +44,13 @@ class FormConsolidacao extends Component {
                             autoCorrect={false}
                             keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
+                            returnKeyType="next"
+                            blurOnSubmit={false}
                             style={styles.input}
-                            value={this.props.nrNotaFis}
-                            ref={(input) => { this.nrNotaFis = input; }}
+                            value={this.props.codConf}
+                            onChangeText={this.props.modificaConf}
+                            ref={(input) => { this.confInput = input; }}
+                            onSubmitEditing={() => this.embInput.focus()}
                         />
                     </View>
                     <View style={{ flex: 1 }}>
@@ -40,11 +59,14 @@ class FormConsolidacao extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
+                            blurOnSubmit={false}
                             style={styles.input}
-                            value={this.props.fornec}
+                            value={this.props.codEmb}
+                            onChangeText={this.props.modificaEmb}
+                            ref={(input) => { this.embInput = input; }}
+                            onSubmitEditing={() => this.volInput.focus()}
                         />
                     </View>
                 </FormRow>
@@ -57,10 +79,13 @@ class FormConsolidacao extends Component {
                             autoCorrect={false}
                             keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
+                            returnKeyType="next"
+                            blurOnSubmit={false}
                             style={styles.input}
-                            value={this.props.nrNotaFis}
-                            ref={(input) => { this.nrNotaFis = input; }}
+                            value={this.props.codVol}
+                            ref={(input) => { this.volInput = input; }}
+                            onChangeText={this.props.modificaVol}
+                            onSubmitEditing={() => this.addVolumes()}
                         />
                     </View>
                     <View style={styles.viewBotao} >
@@ -83,14 +108,22 @@ class FormConsolidacao extends Component {
 const mapStateToProps = state => {
     const maps = (
         {
-             
+             codConf: state.ConsolidacaoReducer.codConf,
+             codEmb: state.ConsolidacaoReducer.codEmb,
+             codVol: state.ConsolidacaoReducer.codVol
         }
     );
 
     return maps;
 };
 
-export default connect(mapStateToProps, {})(FormConsolidacao);
+export default connect(mapStateToProps, {
+    modificaConf,
+    modificaEmb,
+    modificaVol,
+    addList,
+    modificaClean
+})(FormConsolidacao);
 
 const styles = StyleSheet.create({
     viewPrinc: {

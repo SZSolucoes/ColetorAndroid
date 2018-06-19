@@ -8,22 +8,13 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import { leftStr } from '../../utils/StrComplex';
 
 class ListaItemDespacho extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = { listaItens: [
-            { seq: '001', volume: '000102' },
-            { seq: '002', volume: '000102' },
-            { seq: '003', volume: '000102' },
-            { seq: '004', volume: '000102' },
-            { seq: '005', volume: '000102' }] };
-    }
-    
     keyExtractor(item, index) {
         return (
-            item.seq
+            leftStr(item.seq)
         );
     }
     renderSeparator = () => {
@@ -47,8 +38,8 @@ class ListaItemDespacho extends Component {
                 <View
                     style={styles.item}
                 >
-                    <Text style={styles.seq}>{item.seq}</Text>
-                    <Text style={styles.volume}>{item.seq}</Text>
+                    <Text style={styles.seq}>{leftStr(item.seq)}</Text>
+                    <Text style={styles.volume}>{item.vol}</Text>
                 </View>
             </TouchableHighlight>            
         );
@@ -72,7 +63,7 @@ class ListaItemDespacho extends Component {
     render() {
         return (   
             <FlatList
-                data={this.state.listaItens}
+                data={this.props.listaItens}
                 style={styles.container}
                 ItemSeparatorComponent={this.renderSeparator}
                 keyExtractor={this.keyExtractor}
@@ -89,7 +80,7 @@ class ListaItemDespacho extends Component {
 const mapStateToProps = state => {
     const maps = (
         {
-
+            listaItens: state.DespachoReducer.listaItens
         }
     );
 

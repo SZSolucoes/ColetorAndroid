@@ -10,57 +10,32 @@ import {
 
 import { connect } from 'react-redux';
 
-import FormRow from '../../utils/FormRow';
-import ListaItemDespacho from './ListaItemDespacho';
-import {
-    modificaRom,
-    modificaVol,
-    removeItem,
-    modificaClean
-} from '../../../actions/DespachoActions';
+import FormRow from '../utils/FormRow';
+import { 
+    modificaCodEan,
+    modificaCodItem,
+    cleanRelEanReducer,
+    doConfirm
+} from '../../actions/RelEanActions';
 
 class FormDespacho extends Component {
 
     componentWillUnmount() {
-        this.props.modificaClean();
+        this.props.cleanRelEanReducer();
     }
-
-    removeItem() {
-        const codVol = this.props.codVol;
-        const listaItens = this.props.listaItens;
-        const index = listaItens.findIndex((value) => value.vol === codVol);
-
-        console.log(index);
-
-        if (index !== -1) {
-            listaItens.splice(index, 1);
-            this.props.removeItem(listaItens);
-        }
+    confirmButton() {   
+        const propparams = {
+            codEAN: this.props.codEAN,
+            codItem: this.props.codItem
+        }; 
+        this.props.doConfirm(propparams);     
     }
-
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
                 <FormRow>
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Romaneio</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            blurOnSubmit={false}
-                            style={styles.input}
-                            value={this.props.codRom}
-                            onChangeText={this.props.modificaRom}
-                            ref={(input) => { this.romInput = input; }}
-                            onSubmitEditing={() => this.volInput.focus()}
-                        />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Volume</Text>
+                        <Text style={styles.txtLabel}>EAN</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
@@ -69,25 +44,36 @@ class FormDespacho extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            value={this.props.codVol}
-                            onChangeText={this.props.modificaVol}
-                            onSubmitEditing={() => this.removeItem()}
-                            ref={(input) => { this.volInput = input; }}
+                            value={this.props.codEAN}
+                            onChangeText={this.props.modificaCodEan}
+                            ref={(input) => { this.nrNotaFis = input; }}
+                        />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Item</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={styles.input}
+                            value={this.props.codItem}
+                            onChangeText={this.props.modificaCodItem}
+                            ref={(input) => { this.nrNotaFis = input; }}
                         />
                     </View>
                 </FormRow>
                 <FormRow> 
                     <View style={styles.viewBotao} >
                         <Button
-                            onPress={() => false}
-                            title="Despachar"
+                            onPress={() => this.confirmButton()}
+                            title="Confirmar"
                             color="green"
                         />      
                     </View>
                 </FormRow>
-                <View style={{ padding: 5 }}>
-                    <ListaItemDespacho />
-                </View>
                 <View style={{ marginBottom: 50 }} />
             </ScrollView>
         );
@@ -97,20 +83,19 @@ class FormDespacho extends Component {
 const mapStateToProps = state => {
     const maps = (
         {
-             codRom: state.DespachoReducer.codRom,
-             codVol: state.DespachoReducer.codVol,
-             listaItens: state.DespachoReducer.listaItens
+             codEAN: state.RelEanReducer.codEAN,
+             codItem: state.RelEanReducer.codItem
         }
     );
 
     return maps;
 };
 
-export default connect(mapStateToProps, {
-    modificaRom,
-    modificaVol,
-    removeItem,
-    modificaClean
+export default connect(mapStateToProps, { 
+    modificaCodEan,
+    modificaCodItem,
+    cleanRelEanReducer,
+    doConfirm
 })(FormDespacho);
 
 const styles = StyleSheet.create({

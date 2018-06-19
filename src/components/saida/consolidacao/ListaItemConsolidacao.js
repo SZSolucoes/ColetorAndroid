@@ -8,22 +8,13 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import { leftStr } from '../../utils/StrComplex';
 
 class ListaItemConsolidacao extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = { listaItens: [
-            { seq: '001', vol: '000777' },
-            { seq: '002', vol: '000122' },
-            { seq: '003', vol: '001011' },
-            { seq: '004', vol: '000011' },
-            { seq: '005', vol: '000755' }] };
-    }
-    
     keyExtractor(item, index) {
         return (
-            item.seq
+            leftStr(item.seq)
         );
     }
     renderSeparator = () => {
@@ -45,7 +36,7 @@ class ListaItemConsolidacao extends Component {
                 onPress={() => false}
             >
                 <View style={styles.item} >
-                    <Text style={styles.seq}>{item.seq}</Text>
+                    <Text style={styles.seq}>{leftStr(item.seq)}</Text>
                     <Text style={styles.volume}>{item.vol}</Text> 
                 </View>
             </TouchableHighlight>            
@@ -70,7 +61,7 @@ class ListaItemConsolidacao extends Component {
     render() {
         return (   
             <FlatList
-                data={this.state.listaItens}
+                data={this.props.listaItens}
                 style={styles.container}
                 ItemSeparatorComponent={this.renderSeparator}
                 keyExtractor={this.keyExtractor}
@@ -87,7 +78,7 @@ class ListaItemConsolidacao extends Component {
 const mapStateToProps = state => {
     const maps = (
         {
-
+            listaItens: state.ConsolidacaoReducer.listaItens
         }
     );
 
