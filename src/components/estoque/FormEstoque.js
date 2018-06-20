@@ -31,14 +31,21 @@ class FormEstoque extends Component {
     }
     fnBuscaEstoque() {
         const codEAN = this.props.codEAN;
-        if (codEAN.length === 0) {
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Erro EAN',
+                    'Código EAN deve ser informado!'
+                );
+                return;
+            } 
+        } else {
             Alert.alert(
                 'Erro EAN',
                 'Código EAN deve ser informado!'
             );
             return;
-        } 
-        
+        }
         this.props.limpaTela();
         this.props.buscaEstoque(codEAN);
     }

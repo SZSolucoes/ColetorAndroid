@@ -33,26 +33,50 @@ class FormImpressao extends Component {
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
 
-        if (codEAN.length === 0) {
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Impressão Etiqueta',
+                    'EAN deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Impressão Etiqueta',
                 'EAN deve ser informado!'
             );
             return;
         }
-        if (qtEtiq.length === 0 || _.toInteger(qtEtiq) < 1) {
+        if (qtEtiq) {
+            if (qtEtiq.length === 0 || _.toInteger(qtEtiq) < 1) {
+                Alert.alert(
+                    'Impressão Etiqueta',
+                    'Quantidade Etiqueta deve maior que 0!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Impressão Etiqueta',
                 'Quantidade Etiqueta deve maior que 0!'
             );
             return;
         }
-
+        
         this.props.imprimeEtiquetaEAN(usuario, codEAN, qtEtiq);
     }
     fnBuscaInfoEan() {
         const codEAN = this.props.codEAN;
-        if (codEAN.length === 0) {
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Erro EAN',
+                    'Código EAN deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Erro EAN',
                 'Código EAN deve ser informado!'

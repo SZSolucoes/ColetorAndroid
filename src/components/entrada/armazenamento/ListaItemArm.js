@@ -14,6 +14,7 @@ import {
     modificaCodItem,
     modificaDesItem,
     modificaCodLocal,
+    modificaCodDepos,
     modificaLote,
     modificaUnidMed,
     modificaItemArmazena,
@@ -23,7 +24,7 @@ import {
 
 class ListaItemArm extends Component {
     onPressItem(item) {
-        const { itCode, itDescAbrev, un, localiz } = item;
+        const { itCode, itDescAbrev, un, localiz, codDepos } = item;
 
         this.props.modificaCodItem(itCode);
         this.props.modificaDesItem(itDescAbrev);
@@ -33,7 +34,7 @@ class ListaItemArm extends Component {
         this.props.modificaCodEAN();
         this.props.modificaQtItem();
         this.props.modificaLote();
-        this.props.modificaCodLocal();
+        this.props.modificaCodDepos(codDepos);
     }
     keyExtractor(item, index) {
         return (
@@ -118,6 +119,7 @@ export default connect(mapStateToProps,
         modificaCodItem,
         modificaDesItem,
         modificaCodLocal,
+        modificaCodDepos,
         modificaLote,
         modificaUnidMed,
         modificaItemArmazena,

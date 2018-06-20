@@ -13,7 +13,8 @@ const INITIAL_STATE = {
     lote: '',
     etiquetaArmazena: '',
     listaItem: '',
-    itemArmazena: ''
+    itemArmazena: '',
+    codDepos: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -22,15 +23,27 @@ export default (state = INITIAL_STATE, action) => {
             const { etiquetaArmazena, listaItem, qtArmazenado } = state;
             const { item, qtItem } = action.payload;
 
-            _.remove(etiquetaArmazena.itens, {
-                sequencia: item.sequencia,
-                numSeq: item.numSeq
+            console.log(etiquetaArmazena.itens);
+            _.remove(etiquetaArmazena.itens, function(itemObj) {
+                return (itemObj.sequencia === item.sequencia && itemObj.numSeq === item.numSeq);
             });
 
-            _.remove(listaItem, {
+            /*_.remove(etiquetaArmazena.itens, {
                 sequencia: item.sequencia,
                 numSeq: item.numSeq
+            });*/
+
+            console.log(etiquetaArmazena.itens);
+            console.log(listaItem);
+            _.remove(listaItem, function(itemObj) {
+                return (itemObj.sequencia === item.sequencia && itemObj.numSeq === item.numSeq);
             });
+            
+            /*_.remove(listaItem, {
+                sequencia: item.sequencia,
+                numSeq: item.numSeq
+            });*/
+            console.log(listaItem);
 
             if (etiquetaArmazena.itens.length === 0) {
                 return { 
@@ -43,6 +56,7 @@ export default (state = INITIAL_STATE, action) => {
                     desItem: '',
                     unidMed: '',
                     codLocal: '',
+                    codDepos: '',
                     qtItem: '',
                     lote: '',
                     listaItem: '',
@@ -60,6 +74,7 @@ export default (state = INITIAL_STATE, action) => {
                 desItem: '',
                 unidMed: '',
                 codLocal: '',
+                codDepos: '',
                 qtItem: '',
                 lote: '',
                 listaItem,
@@ -106,6 +121,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 codLocal: action.payload 
             };
+        case 'modifica_codDepos_arm':
+            return { 
+                ...state, 
+                codDepos: action.payload 
+            };
         case 'modifica_qtItem_arm':
             return { 
                 ...state, 
@@ -141,7 +161,9 @@ export default (state = INITIAL_STATE, action) => {
                 listaItem: itens,
                 codItem: itens[0].itCode,
                 desItem: itens[0].itDescAbrev,
-                unidMed: itens[0].un
+                unidMed: itens[0].un,
+                codLocal: itens[0].codLocal,
+                codDepos: itens[0].codDepos
             };
         }
         case 'inicia_tela_arm':
@@ -155,6 +177,7 @@ export default (state = INITIAL_STATE, action) => {
                 desItem: '',
                 unidMed: '',
                 codLocal: '',
+                codDepos: '',
                 qtItem: '',
                 lote: '',
                 listaItem: '',

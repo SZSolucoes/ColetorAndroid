@@ -25,7 +25,8 @@ import {
     buscaInfoBastimo,
     iniciaTela,
     efetivaArmazena,
-    modificaItemArmazena
+    modificaItemArmazena,
+    modificaCodDepos
 } from '../../../actions/ArmazenaActions';
 
 
@@ -44,28 +45,60 @@ class FormArmazena extends Component {
             etiquetaArmazena,
             itemArmazena } = this.props;
 
-        if (codEAN.length === 0) {
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Armazenamento',
+                    'EAN deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Armazenamento',
                 'EAN deve ser informado!'
             );
             return;
-        } 
-        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+        }
+        if (qtItem) {       
+            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+                Alert.alert(
+                    'Armazenamento',
+                    'Quantidade Item deve ser maior que 0!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Armazenamento',
                 'Quantidade Item deve ser maior que 0!'
             );
             return;
-        } 
-        if (codLocal.length === 0) {
+        }
+        if (codLocal) {
+            if (codLocal.length === 0) {
+                Alert.alert(
+                    'Armazenamento',
+                    'Local deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Armazenamento',
                 'Local deve ser informado!'
             );
             return;
         }
-        if (batismo.length === 0) {
+        if (batismo) {
+            if (batismo.length === 0) {
+                Alert.alert(
+                    'Armazenamento',
+                    'Batismo deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Armazenamento',
                 'Batismo deve ser informado!'
@@ -97,7 +130,16 @@ class FormArmazena extends Component {
 
         const itemArm = _.filter(listaItem, { ean: codEAN });
 
-        if (itemArm.length === 0) {
+        console.log(itemArm[0]);
+        if (itemArm[0]) {
+            if (itemArm[0].length === 0) {
+                Alert.alert(
+                    'Armazenamento',
+                    'EAN Não Localizado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Armazenamento',
                 'EAN Não Localizado!'
@@ -105,12 +147,13 @@ class FormArmazena extends Component {
             return;
         }
 
-        const { itCode, itDescAbrev, un, localiz } = itemArm;
+        const { itCode, itDescAbrev, un, localiz, codDepos } = itemArm[0];
 
         this.props.modificaCodItem(itCode);
         this.props.modificaDesItem(itDescAbrev);
         this.props.modificaUnidMed(un);
         this.props.modificaCodLocal(localiz);
+        this.props.modificaCodDepos(codDepos);
         this.props.modificaItemArmazena(itemArm);
 
         this.txtLocal.focus();
@@ -121,7 +164,15 @@ class FormArmazena extends Component {
     validBatismo() {
         const { batismo } = this.props;
 
-        if (batismo.length === 0) {
+        if (batismo) {
+            if (batismo.length === 0) {
+                Alert.alert(
+                    'Armazenamento',
+                    'Etiqueta Batismo deve ser informada!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Armazenamento',
                 'Etiqueta Batismo deve ser informada!'
@@ -250,7 +301,7 @@ class FormArmazena extends Component {
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                    <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text 
                             style={[
                                 styles.txtLabel
@@ -269,6 +320,27 @@ class FormArmazena extends Component {
                             value={this.props.codLocal}
                             ref={(input) => { this.txtLocal = input; }}
                             onSubmitEditing={() => { this.validLocal(); }}
+                        />
+                    </View>
+                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <Text 
+                            style={[
+                                styles.txtLabel
+                            ]} 
+                        >
+                            Deposito
+                        </Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            editable={false}
+                            style={[styles.input]}
+                            onChangeText={codDepos => this.props.modificaCodDepos(codDepos)}
+                            value={this.props.codDepos}
+                            ref={(input) => { this.txtDepos = input; }}
                         />
                     </View>
                 </View>
@@ -331,6 +403,7 @@ const mapStateToProps = state => (
         desItem: state.ArmazenaReducer.desItem,
         unidMed: state.ArmazenaReducer.unidMed,
         codLocal: state.ArmazenaReducer.codLocal,
+        codDepos: state.ArmazenaReducer.codDepos,
         qtItem: state.ArmazenaReducer.qtItem,
         lote: state.ArmazenaReducer.lote,
         usuario: state.LoginReducer.usuario,
@@ -354,7 +427,8 @@ export default connect(mapStateToProps, {
     buscaInfoBastimo,
     iniciaTela,
     efetivaArmazena,
-    modificaItemArmazena
+    modificaItemArmazena,
+    modificaCodDepos
 })(FormArmazena);
 
 const styles = StyleSheet.create({

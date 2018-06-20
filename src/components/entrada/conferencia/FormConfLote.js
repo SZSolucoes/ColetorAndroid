@@ -42,7 +42,15 @@ class FormConfLote extends Component {
 
         let qtConferida = 0;
 
-        if (listaItemLote.length === 0) {
+        if (listaItemLote) {
+            if (listaItemLote.length === 0) {
+                Alert.alert(
+                    'Conferência',
+                    'Lote deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Conferência',
                 'Lote deve ser informado!'

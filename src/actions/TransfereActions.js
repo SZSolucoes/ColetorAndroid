@@ -49,6 +49,12 @@ export const modificaQtItem = (qtItem) => {
         payload: qtItem    
     };
 };
+export const modificaCodLote = (codLote) => {
+    return {
+        type: 'modifica_codLote_trnf',
+        payload: codLote
+    };
+};
 export const iniciaTela = () => {
     return {
         type: 'inicia_tela_trnf'
@@ -68,8 +74,9 @@ export const buscaInfoEANTransf = (codEAN) => {
 };
 
 const buscaSuccess = (dispatch, response) => {
+    console.log(response);
     if (response.data.success === 'true') {
-        dispatch({ type: 'modifica_item_trnf', payload: response.data.prioridades });
+        dispatch({ type: 'modifica_item_trnf', payload: response.data.item });
     } else {
         Alert.alert(
             'Erro Transferência',

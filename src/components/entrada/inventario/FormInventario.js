@@ -64,7 +64,6 @@ class FormInventario extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
@@ -82,7 +81,7 @@ class FormInventario extends Component {
         return (
             <ScrollView style={styles.viewPrinc}>
                 <FormRow>
-                    <View style={{ flex: 2 }}>
+                    <View style={{ flex: 3 }}>
                         <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Data</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <DatePicker
@@ -106,7 +105,7 @@ class FormInventario extends Component {
                             />
                         </View>
                     </View>  
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 2 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
                         <TextInput
                             placeholder=""
@@ -121,7 +120,7 @@ class FormInventario extends Component {
                     </View>
                 </FormRow>
                 <FormRow>
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 2 }}>
                         <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Contagem</Text>
                         <TouchableOpacity 
                             onPress={() => this.props.modificaModalVisible(true)}
@@ -143,7 +142,7 @@ class FormInventario extends Component {
                             />
                         </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 3 }}>
                         <Text style={styles.txtLabel}>EAN</Text>
                             <TextInput
                                 onc

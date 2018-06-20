@@ -22,7 +22,8 @@ import {
     modificaUnidMed,
     efetivaTransferencia,
     modificaSaldoItem,
-    buscaInfoEANTransf
+    buscaInfoEANTransf,
+    modificaCodLote
 } from '../../../actions/TransfereActions';
 
 class FormTransferencia extends Component {
@@ -35,30 +36,84 @@ class FormTransferencia extends Component {
             codEAN, 
             qtItem, 
             codLocalDest, 
-            codLocalOrig } = this.props;
+            codLocalOrig,
+            codLote,
+            tpCont
+        } = this.props;
 
-        if (codEAN.length === 0) {
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Transferência',
+                    'EAN deve ser informado!'
+                );
+                return;
+            } 
+        } else {
             Alert.alert(
                 'Transferência',
                 'EAN deve ser informado!'
             );
             return;
-        } 
-        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+        }
+
+        if (tpCont === '3') {
+            if (codLote) {
+                if (codLote.length === 0) {
+                    Alert.alert(
+                        'Transferência',
+                        'Lote deve ser informado!'
+                    );
+                    return;
+                } 
+            } else {
+                Alert.alert(
+                    'Transferência',
+                    'Lote deve ser informado!'
+                );
+                return;
+            }
+        }
+
+        if (qtItem) {
+            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+                Alert.alert(
+                    'Transferência',
+                    'Quantidade Item deve ser maior que 0!'
+                );
+                return;
+            } 
+        } else {
             Alert.alert(
                 'Transferência',
                 'Quantidade Item deve ser maior que 0!'
             );
             return;
-        } 
-        if (codLocalDest.length === 0) {
+        }
+        if (codLocalDest) {
+            if (codLocalDest.length === 0) {
+                Alert.alert(
+                    'Transferência',
+                    'Local Destino deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Transferência',
                 'Local Destino deve ser informado!'
             );
             return;
         }
-        if (codLocalOrig.length === 0) {
+        if (codLocalOrig) {
+            if (codLocalOrig.length === 0) {
+                Alert.alert(
+                    'Transferência',
+                    'Local Origem deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Transferência',
                 'Local Origem deve ser informado!'
@@ -77,7 +132,7 @@ class FormTransferencia extends Component {
         return (
             <ScrollView style={styles.viewPrinc}>
                 <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 3 }]}>
+                    <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>EAN</Text>
                         <TextInput
                             placeholder=""
@@ -93,7 +148,7 @@ class FormTransferencia extends Component {
                             ref={(input) => { this.txtEAN = input; }}
                         />
                     </View>
-                    <View style={[styles.viewCampo, { flex: 2 }]}>
+                    <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={styles.txtLabel}>Item</Text>
                         <TextInput
                             placeholder=""
@@ -116,13 +171,15 @@ class FormTransferencia extends Component {
                             autoCapitalize="none"
                             autoCorrect={false}
                             editable={false}
+                            multiline
+                            numberOfLines={3}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.input}
+                            style={styles.inputDescricao}
                             onChangeText={descItem => this.props.modificaDescItem(descItem)}
                             value={this.props.descItem}
                         />
-                    </View>                    
+                    </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
@@ -166,8 +223,8 @@ class FormTransferencia extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={local => this.props.modificaCodLocalOrig(local)}
-                            value={this.props.codLocalOrig}
+                            onChangeText={codLote => this.props.modificaCodLote(codLote)}
+                            value={this.props.codLote}
                             ref={(input) => { this.txtLote = input; }}
                             onSubmitEditing={() => { this.txtLocalOrig.focus(); }}
                         />
@@ -247,7 +304,8 @@ export default connect(mapStateToProps, {
     modificaUnidMed,
     efetivaTransferencia,
     modificaSaldoItem,
-    buscaInfoEANTransf
+    buscaInfoEANTransf,
+    modificaCodLote
 })(FormTransferencia);
 
 const styles = StyleSheet.create({
@@ -301,5 +359,14 @@ const styles = StyleSheet.create({
         height: 35,
         padding: 10,
         borderRadius: 10
+    },
+    inputDescricao: {
+        height: 70,
+        fontSize: 14,
+        textAlign: 'left',
+        backgroundColor: '#20293F',
+        color: 'white',
+        borderRadius: 10,
+        fontFamily: 'sans-serif-medium'
     }
 });

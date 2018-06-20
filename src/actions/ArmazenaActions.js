@@ -31,6 +31,12 @@ export const modificaCodItem = (codItem) => {
         payload: codItem    
     };
 };
+export const modificaCodDepos = (codDepos) => {
+    return {
+        type: 'modifica_codDepos_arm',
+        payload: codDepos    
+    };
+};
 export const modificaDesItem = (desItem) => {
     return {
         type: 'modifica_desItem_arm',

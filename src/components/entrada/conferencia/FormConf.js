@@ -88,7 +88,15 @@ class FormConf extends Component {
 
         const item = this.props.itemConfere;
 
-        if (batismo.length === 0) {
+        if (batismo) {
+            if (batismo.length === 0) {
+                Alert.alert(
+                    'Conferência',
+                    'Etiqueta Batismo deve ser informada!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Conferência',
                 'Etiqueta Batismo deve ser informada!'
@@ -96,7 +104,15 @@ class FormConf extends Component {
             return;
         }
 
-        if (codEAN.length === 0) {
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Conferência',
+                    'EAN deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Conferência',
                 'EAN deve ser informado!'
@@ -114,12 +130,20 @@ class FormConf extends Component {
             }
         } 
         
-        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+        if (qtItem) {
+            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+                Alert.alert(
+                    'Conferência',
+                    'Quantidade Item deve ser maior que 0!'
+                );
+                return;  
+            }
+        } else {
             Alert.alert(
                 'Conferência',
                 'Quantidade Item deve ser maior que 0!'
             );
-            return;  
+            return; 
         }
 
         this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });        
@@ -127,28 +151,51 @@ class FormConf extends Component {
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
 
-        if (codEAN.length === 0) {
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Impressão Etiqueta',
+                    'EAN deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Impressão Etiqueta',
                 'EAN deve ser informado!'
             );
             return;
-        } 
-        if (qtEtiq.length === 0 || _.toInteger(qtEtiq) < 1) {
+        }
+        if (qtEtiq) {
+            if (qtEtiq.length === 0 || _.toInteger(qtEtiq) < 1) {
+                Alert.alert(
+                    'Impressão Etiqueta',
+                    'Quantidade Etiqueta deve maior que 0!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Impressão Etiqueta',
                 'Quantidade Etiqueta deve maior que 0!'
             );
             return;
         }
-        
         this.props.imprimeEtiquetaEAN(usuario, codEAN, qtEtiq);
     }
     validQtdItem() {
         const item = this.props.itemConfere;
         const { qtItem } = this.props;
 
-        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+        if (qtItem) {
+            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+                Alert.alert(
+                    'Conferência',
+                    'Quantidade Item deve ser maior que 0!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Conferência',
                 'Quantidade Item deve ser maior que 0!'
@@ -216,7 +263,17 @@ class FormConf extends Component {
 
         const itemConf = _.filter(itensNF, { ean: codEAN });
         
-        if (itemConf.length === 0) {
+        console.log(itemConf[0]);
+
+        if (itemConf) {
+            if (itemConf.length === 0) {
+                Alert.alert(
+                    'Conferência',
+                    'EAN Não Localizado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Conferência',
                 'EAN Não Localizado!'
@@ -224,17 +281,20 @@ class FormConf extends Component {
             return;
         }
 
-        this.props.modificaCodItem(itemConf.itCode);
-        this.props.modificaDesItem(itemConf.itDesc);
-        this.props.modificaLocalPad(itemConf.localiz);
-        this.props.modificaUnidMed(itemConf.un);
-        this.props.modificaItemConfere(itemConf);
+        this.props.modificaCodItem(itemConf[0].itCode);
+        this.props.modificaDesItem(itemConf[0].itDesc);
+        this.props.modificaLocalPad(itemConf[0].localiz);
+        this.props.modificaUnidMed(itemConf[0].un);
+        this.props.modificaItemConfere(itemConf[0]);
+        this.props.modificaQtItem();
+        this.props.modificaBatismo();
 
         this.setState({ qtdDisable: true });
 
         this.qtItem.focus();
 
-        if (itemConf.peso < 1) {
+        console.log(_.toInteger(itemConf.peso));
+        if (_.toInteger(itemConf.peso) < 1) {
             this.props.modificaInfoVisible(true);
         }        
     }
@@ -245,10 +305,18 @@ class FormConf extends Component {
 
         const { qtItem } = this.props;
 
-        if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+        if (qtItem) {
+            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+                Alert.alert(
+                    'Conferência',
+                    'Quantidade Item deve ser maior que 0!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Conferência',
-                'Quantidade Item deve ser maior que 0!'
+                'Quantidade Item deve ser informada!'
             );
             return;
         }
@@ -266,7 +334,7 @@ class FormConf extends Component {
         return (
             <ScrollView style={styles.viewPrinc}>
                 <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                    <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Nota Fiscal</Text>
                         <TextInput
                             placeholder=""
@@ -294,7 +362,7 @@ class FormConf extends Component {
                             />
                         </TouchableOpacity>
                     </View>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                    <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={styles.txtLabel}>Fornecedor</Text>
                         <TextInput
                             placeholder=""

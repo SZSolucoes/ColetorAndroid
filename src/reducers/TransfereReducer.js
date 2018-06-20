@@ -7,8 +7,9 @@ const INITIAL_STATE = {
     codLocalDest: '',
     qtItem: '',
     usuario: '',
-    lote: '',
-    saldoItem: ''
+    codLote: '',
+    saldoItem: '',
+    tpCont: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -48,6 +49,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 qtItem: action.payload 
             };
+        case 'modifica_codLote_trnf':
+            return { 
+                ...state, 
+                codLote: action.payload 
+            };
         case 'modifica_saldoItem_trnf':
             return { 
                 ...state, 
@@ -62,6 +68,8 @@ export default (state = INITIAL_STATE, action) => {
                 unidMed: '',
                 codLocalOrig: '',
                 codLocalDest: '',
+                codLote: '',
+                tpCont: '',
                 qtItem: '',
                 saldo: ''
             };
@@ -71,7 +79,9 @@ export default (state = INITIAL_STATE, action) => {
                 codItem: action.payload.itCode,
                 descItem: action.payload.itDesc,
                 unidMed: action.payload.un,
-                saldoItem: action.payload.saldo
+                saldoItem: action.payload.saldo,
+                codLote: action.payload.codLote,
+                tpCont: action.payload.tpCont
             };
         default:
             return state;
