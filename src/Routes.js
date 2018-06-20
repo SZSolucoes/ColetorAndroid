@@ -17,7 +17,7 @@ import Estoque from './components/estoque/Estoque';
 import ListaNotaFiscal from './components/entrada/conferencia/ListaNotaFiscal';
 import FormConfLote from './components/entrada/conferencia/FormConfLote';
 import ImpressaoEAN from './components/impressao/Impressao';
-import ListaSeparacao from './components/saida/listaseparacao/ListaSeparacao';
+import ListaSeparacao from './components/saida/listaSeparacao/ListaSeparacao';
 import ConferenciaSeparacao from './components/saida/conferencia/ConferenciaSeparacao';
 import ConferenciaVolumeSaida from './components/saida/conferencia/ConferenciaVolume';
 import ConsultaEtiqBatismoSaida from './components/saida/etiquetabatismo/ConsultaEtiqBatismoSaida';
