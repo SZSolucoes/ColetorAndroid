@@ -52,8 +52,7 @@ const statusConexao = (dispatch, isConnected) => {
 
 const infoConexao = (dispatch, isConnected, connectionInfo) => {
     const connected = (isConnected ? 'Online' : 'Offline');
-    const effectiveType = `(${connectionInfo.effectiveType})`;
-    const desConexao = `${connected}  ${effectiveType}`;
+    const desConexao = `${connected}`;
     
     dispatch({ type: 'modifica_conexao_vers', payload: desConexao });
 };

@@ -76,7 +76,7 @@ export default (state = INITIAL_STATE, action) => {
                 listaItem,
                 itemConfere: '',
                 notaConfere,
-                qtConferir: notaConfere.itens.length,
+                qtConferir: _.toString(notaConfere.itens.length),
                 codEAN: '',
                 qtItem: '',
                 localPad: '',

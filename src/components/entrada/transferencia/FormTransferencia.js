@@ -41,6 +41,8 @@ class FormTransferencia extends Component {
             tpCont
         } = this.props;
 
+        console.log(codLote);
+
         if (codEAN) {
             if (codEAN.length === 0) {
                 Alert.alert(
@@ -121,7 +123,7 @@ class FormTransferencia extends Component {
             return;
         }
 
-        this.props.efetivaTransferencia(usuario, codEAN, codLocalOrig, codLocalDest, qtItem);
+        this.props.efetivaTransferencia(usuario, codEAN, codLocalOrig, codLocalDest, qtItem, codLote);
     }
     buscaEAN() {
         const codEAN = this.props.codEAN;
@@ -282,6 +284,7 @@ const mapStateToProps = state => {
         {
             codEAN: state.TransfereReducer.codEAN,
             codItem: state.TransfereReducer.codItem,
+            codLote: state.TransfereReducer.codLote,
             codLocalDest: state.TransfereReducer.codLocalDest,
             codLocalOrig: state.TransfereReducer.codLocalOrig,
             descItem: state.TransfereReducer.descItem,
@@ -339,7 +342,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',

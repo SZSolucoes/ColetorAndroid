@@ -92,7 +92,8 @@ const buscaError = () => {
     );
 };
 
-export const efetivaTransferencia = (usuario, codEAN, codLocalOrig, codLocalDest, qtItem) => {
+export const efetivaTransferencia = (usuario, codEAN, codLocalOrig, codLocalDest, qtItem, codLote) => {
+    console.log(codLote);
     return dispatch => {
         Axios.get('/app/doTransferNew.p', {
             params: {
@@ -100,7 +101,7 @@ export const efetivaTransferencia = (usuario, codEAN, codLocalOrig, codLocalDest
                 codEAN,
                 codLocalOrig,
                 codLocalDest,
-                lote: '',
+                codLote,
                 qtItem
             }
         })

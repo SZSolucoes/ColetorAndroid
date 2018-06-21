@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         //backgroundColor: 'rgba(255,255,255,0.2)',
         backgroundColor: '#20293F',

@@ -28,9 +28,9 @@ class FormConfLote extends Component {
     componentWillMount() {
         this.props.iniciaConfLote();
         Actions.refresh({ right: this._renderRightButton });
-   }
+    }
 
-   _renderRightButton = () => {
+    _renderRightButton = () => {
         return (
             <TouchableOpacity onPress={() => this._onPressSalvar() } >
                 <Text style={{ color: 'white', marginRight: 10, fontSize: 16 }}>Salvar</Text>

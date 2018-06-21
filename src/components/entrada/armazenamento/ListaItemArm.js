@@ -37,8 +37,9 @@ class ListaItemArm extends Component {
         this.props.modificaCodDepos(codDepos);
     }
     keyExtractor(item, index) {
+        const chave = item.sequencia + item.numSeq + item.itCode;
         return (
-            item.itCode
+            chave
         );
     }
     renderSeparator = () => {
@@ -99,6 +100,7 @@ class ListaItemArm extends Component {
                 extraData={this.props}
                 numColumns='1'
                 ListHeaderComponent={this.renderHeader}
+                removeClippedSubviews={false}
             />
         );
     }

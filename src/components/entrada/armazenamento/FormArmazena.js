@@ -43,13 +43,33 @@ class FormArmazena extends Component {
             codLocal, 
             lote,
             etiquetaArmazena,
-            itemArmazena } = this.props;
+            itemArmazena,
+            listaItem 
+        } = this.props;
 
         if (codEAN) {
             if (codEAN.length === 0) {
                 Alert.alert(
                     'Armazenamento',
                     'EAN deve ser informado!'
+                );
+                return;
+            }
+
+            const itemArm = _.filter(listaItem, { ean: codEAN });
+
+            if (itemArm[0]) {
+                if (itemArm[0].length === 0) {
+                    Alert.alert(
+                        'Armazenamento',
+                        'EAN Não Localizado!'
+                    );
+                    return;
+                }
+            } else {
+                Alert.alert(
+                    'Armazenamento',
+                    'EAN Não Localizado!'
                 );
                 return;
             }
@@ -130,7 +150,6 @@ class FormArmazena extends Component {
 
         const itemArm = _.filter(listaItem, { ean: codEAN });
 
-        console.log(itemArm[0]);
         if (itemArm[0]) {
             if (itemArm[0].length === 0) {
                 Alert.alert(
@@ -192,7 +211,7 @@ class FormArmazena extends Component {
                         <Text style={styles.txtLabel}>Batismo</Text>
                         <TextInput
                             placeholder=""
-                            keyboardType="numeric"
+                            //keyboardType="numeric"
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
@@ -353,7 +372,7 @@ class FormArmazena extends Component {
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
+                            returnKeyType="next"
                             style={styles.input}
                             onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
                             value={this.props.qtItem}
@@ -368,11 +387,12 @@ class FormArmazena extends Component {
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={styles.input}
                             onChangeText={lote => this.props.modificaLote(lote)}
                             value={this.props.lote}
                             ref={(input) => { this.txtLote = input; }}
+                            onSubmitEditing={() => { this.onPressEfetivar(); }}
                         />
                     </View>
                 </View>
@@ -470,7 +490,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 18,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',

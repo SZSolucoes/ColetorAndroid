@@ -216,6 +216,7 @@ const buscaError = (dispatch) => {
 };
 
 export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia }) => {
+    console.log(JSON.stringify(conferencia.listaItemLote));
     return dispatch => {
         Axios.get('/app/doCheckARNew.p', {
             params: {
@@ -233,7 +234,7 @@ export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia 
                 altura: conferencia.altura,
                 largura: conferencia.largura,
                 comprimento: conferencia.comprimento,
-                listaItemLote: conferencia.listaItemLote
+                listaItemLote: JSON.stringify(conferencia.listaItemLote)
             }
         })
         .then(response => confereSuccess(dispatch, response, notaConfere, itemConfere))

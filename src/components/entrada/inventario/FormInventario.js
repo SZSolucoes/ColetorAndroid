@@ -7,12 +7,13 @@ import {
     TextInput,
     Button,
     TouchableOpacity,
-    Image
+    Image,
+    Alert
 } from 'react-native';
-
+import _ from 'lodash';
 import DatePicker from 'react-native-datepicker';
 import ModalFilterPicker from 'react-native-modal-filter-picker';
-
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
 import FormRow from '../../utils/FormRow';
@@ -31,25 +32,133 @@ import {
     doConfirmEst
 } from '../../../actions/InventarioActions';
 
-class FormInventario extends Component {
+const imgClear = require('../../../../resources/imgs/limpa_tela.png');
 
+class FormInventario extends Component {
+    componentWillMount() {
+        Actions.refresh({ right: this._renderRightButton });
+    }
     componentWillUnmount() {
         this.props.cleanInventarioReducer();
     }
-
+    limpaTela() {
+        this.props.cleanInventarioReducer();
+    }
+    _renderRightButton = () => {
+        return (
+            <TouchableOpacity 
+                onPress={() => this.limpaTela()}
+                style={styles.btClear}
+            >
+                <Image
+                    source={imgClear}
+                    style={styles.imgClear}
+                />
+            </TouchableOpacity>
+        );
+    };
     confirmButton() {
+        const {
+            username,
+            codLocal,
+            nrContagem,
+            codEtiq,
+            dtInventario,
+            qtItem
+        } = this.props;
+
+        if (codLocal) {
+            if (codLocal.length === 0) {
+                Alert.alert(
+                    'Inventário',
+                    'Local deve ser informado!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Inventário',
+                'Local deve ser informado!'
+            );
+            return;
+        }
+        
+        if (nrContagem) {
+            if (nrContagem.length === 0) {
+                Alert.alert(
+                    'Inventário',
+                    'Contagem deve ser informada!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Inventário',
+                'Contagem deve ser informada!'
+            );
+            return;
+        }
+
+        if (codEtiq) {
+            if (codEtiq.length === 0) {
+                Alert.alert(
+                    'Inventário',
+                    'EAN deve ser informado!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Inventário',
+                'EAN deve ser informado!'
+            );
+            return;
+        }
+
+        if (dtInventario) {
+            if (dtInventario.length === 0) {
+                Alert.alert(
+                    'Inventário',
+                    'Data Inventário deve ser informada!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Inventário',
+                'Data Inventário deve ser informada!'
+            );
+            return;
+        }
+
         const propparams = {
-            username: this.props.username,
-            codLocal: this.props.codLocal,
-            nrContagem: this.props.nrContagem,
-            codEtiq: this.props.codEtiq,
-            dtInventario: this.props.dtInventario,
-            qtItem: this.props.qtItem
+            username,
+            codLocal,
+            nrContagem,
+            codEtiq,
+            dtInventario,
+            qtItem
         };
 
         if (this.props.estorno) {
             this.props.doConfirmEst(propparams);
         } else {
+            if (qtItem) {
+                if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+                    Alert.alert(
+                        'Conferência',
+                        'Quantidade Item deve ser maior que 0!'
+                    );
+                    return;  
+                }
+            } else {
+                Alert.alert(
+                    'Conferência',
+                    'Quantidade Item deve ser maior que 0!'
+                );
+                return; 
+            }
+
             this.props.doConfirm(propparams);
         }
     }
@@ -65,13 +174,15 @@ class FormInventario extends Component {
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
+                            keyboardType="numeric"
                             style={styles.input}
                             onChangeText={this.props.modificaQtItem}
                             value={this.props.qtItem}
+                            onSubmitEditing={() => { this.confirmButton(); }}
                         />
                     </View>
-                    <View style={{ flex: 1 }} />
+                    
                 </FormRow>
             );
         }
@@ -105,6 +216,8 @@ class FormInventario extends Component {
                             />
                         </View>
                     </View>  
+                </FormRow>
+                <FormRow>
                     <View style={{ flex: 2 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
                         <TextInput
@@ -116,6 +229,26 @@ class FormInventario extends Component {
                             style={styles.input}
                             value={this.props.codLocal}
                             onChangeText={this.props.modificaCodLocal}
+                            onSubmitEditing={() => { this.txtEAN.focus(); }}
+                        />
+                    </View>
+                </FormRow>
+                <FormRow>
+                <View style={{ flex: 3 }}>
+                    <Text style={styles.txtLabel}>EAN</Text>
+                        <TextInput
+                            onc
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            value={this.props.codEtiq}
+                            ref={(input) => { this.qtItem = input; }}
+                            onChangeText={this.props.modificaCodEtiq}
+                            ref={(input) => { this.txtEAN = input; }}
                         />
                     </View>
                 </FormRow>
@@ -141,22 +274,6 @@ class FormInventario extends Component {
                                 style={styles.imgSeta}
                             />
                         </TouchableOpacity>
-                    </View>
-                    <View style={{ flex: 3 }}>
-                        <Text style={styles.txtLabel}>EAN</Text>
-                            <TextInput
-                                onc
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={styles.input}
-                                value={this.props.codEtiq}
-                                ref={(input) => { this.qtItem = input; }}
-                                onChangeText={this.props.modificaCodEtiq}
-                            />
                     </View>
                 </FormRow>
                 {this.renderQtde()}
@@ -239,7 +356,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',
@@ -268,5 +385,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontFamily: 'sans-serif-medium'       
+    },
+    btClear: {
+        width: 40,
+        height: 35
+    },
+    imgClear: {
+        width: 35,
+        height: 35
     }
 });

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { connect } from 'react-redux';
-
+import _ from 'lodash';
 import { 
     modificaInfoVisible,
     modificaPesoItem,
@@ -22,7 +22,15 @@ class InfoItemConferencia extends Component {
     salvarInfoItem = () => {
         const { pesoItem } = this.props;
 
-        if (pesoItem === '' || pesoItem === '0') {
+        if (pesoItem) {
+            if (_.toInteger(pesoItem) <= 0) {
+                Alert.alert(
+                    'Conferência',
+                    'Peso deve ser informado!'
+                );
+                return;
+            }
+        } else {
             Alert.alert(
                 'Conferência',
                 'Peso deve ser informado!'

@@ -44,6 +44,7 @@ import {
 
 const imgZoom = require('../../../../resources/imgs/zoom_nf.png');
 const imgPrinter = require('../../../../resources/imgs/impressao_etiq.png');
+const imgClear = require('../../../../resources/imgs/limpa_tela.png');
 
 class FormConf extends Component {
     constructor() {
@@ -73,8 +74,8 @@ class FormConf extends Component {
             altura,
             comprimento,
             listaItemLote
-            } = this.props;
-            
+        } = this.props;
+
         const conferencia = {
             batismo,
             codEAN,
@@ -109,6 +110,26 @@ class FormConf extends Component {
                 Alert.alert(
                     'Conferência',
                     'EAN deve ser informado!'
+                );
+                return;
+            } 
+            
+            const itensNF = _.values(notaConfere.itens);
+
+            const itemConf = _.filter(itensNF, { ean: codEAN });
+            
+            if (itemConf) {
+                if (itemConf.length === 0) {
+                    Alert.alert(
+                        'Conferência',
+                        'EAN Não Localizado!'
+                    );
+                    return;
+                }
+            } else {
+                Alert.alert(
+                    'Conferência',
+                    'EAN Não Localizado!'
                 );
                 return;
             }
@@ -293,8 +314,7 @@ class FormConf extends Component {
 
         this.qtItem.focus();
 
-        console.log(_.toInteger(itemConf.peso));
-        if (_.toInteger(itemConf.peso) < 1) {
+        if (_.toInteger(itemConf.peso) <= 0) {
             this.props.modificaInfoVisible(true);
         }        
     }
@@ -378,7 +398,7 @@ class FormConf extends Component {
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                    <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Total</Text>
                         <TextInput
                             placeholder=""
@@ -392,7 +412,7 @@ class FormConf extends Component {
                             value={this.props.qtTotal}
                         />
                     </View>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                    <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Conferir</Text>
                         <TextInput
                             placeholder=""
@@ -406,21 +426,32 @@ class FormConf extends Component {
                             value={this.props.qtConferir}
                         />
                     </View>
-                    <View style={[styles.viewCampo, { flex: 3 }]}>
+                    <View style={[styles.viewCampo, { flex: 6 }]}>
                         <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
-                            value={this.props.codEAN}
-                            ref={(input) => { this.codEAN = input; }}
-                            onSubmitEditing={() => { this.validEAN(); }}
-                        />
+                        <View style={{ flexDirection: 'row' }}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={[styles.input, { flex: 6 }]}
+                                onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
+                                value={this.props.codEAN}
+                                ref={(input) => { this.codEAN = input; }}
+                                onSubmitEditing={() => { this.validEAN(); }}
+                            />
+                            <TouchableOpacity
+                                style={styles.btClear}
+                                onPress={() => { this.props.modificaCodEAN(); }}
+                            >
+                                <Image
+                                    source={imgClear}
+                                    style={styles.imgClear}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -640,7 +671,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',
@@ -684,5 +715,13 @@ const styles = StyleSheet.create({
     viewBtEtiq: {
         justifyContent: 'space-between',
         flexDirection: 'row'
+    },
+    btClear: {
+        width: 30,
+        height: 35
+    },
+    imgClear: {
+        width: 30,
+        height: 35
     }
 });

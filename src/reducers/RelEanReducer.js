@@ -17,8 +17,8 @@ export default (state = INITIAL_STATE, action) => {
             };
         case 'modifica_clean_relean':
             return { 
-                username: '',
-                codLocal: ''
+                codEAN: '',
+                codItem: ''
             };
         default:
             return state;

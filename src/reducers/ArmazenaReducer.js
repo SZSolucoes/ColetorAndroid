@@ -24,8 +24,11 @@ export default (state = INITIAL_STATE, action) => {
             const { item, qtItem } = action.payload;
 
             console.log(etiquetaArmazena.itens);
-            _.remove(etiquetaArmazena.itens, function(itemObj) {
-                return (itemObj.sequencia === item.sequencia && itemObj.numSeq === item.numSeq);
+            _.remove(etiquetaArmazena.itens, function (itemObj) {
+                console.log(itemObj);
+                console.log(item[0]);
+                console.log((itemObj.sequencia === item[0].sequencia && itemObj.numSeq === item[0].numSeq));
+                return (itemObj.sequencia === item[0].sequencia && itemObj.numSeq === item[0].numSeq);
             });
 
             /*_.remove(etiquetaArmazena.itens, {
@@ -35,8 +38,11 @@ export default (state = INITIAL_STATE, action) => {
 
             console.log(etiquetaArmazena.itens);
             console.log(listaItem);
-            _.remove(listaItem, function(itemObj) {
-                return (itemObj.sequencia === item.sequencia && itemObj.numSeq === item.numSeq);
+            _.remove(listaItem, function (itemObj) {
+                console.log(itemObj);
+                console.log(item[0]);
+                console.log((itemObj.sequencia === item[0].sequencia && itemObj.numSeq === item[0].numSeq));
+                return (itemObj.sequencia === item[0].sequencia && itemObj.numSeq === item[0].numSeq);
             });
             
             /*_.remove(listaItem, {

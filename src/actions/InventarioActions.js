@@ -43,18 +43,18 @@ export const doConfirm = (propparams) => dispatch => {
         .catch(error => alertConfError(dispatch, error));
     };
 export const doConfirmEst = (propparams) => dispatch => {
-        Axios.get('/app/undoInventoryCountingNew.p', {
-            params: {
-                username: propparams.username,
-                codLocal: propparams.codLocal,
-                nrContagem: propparams.nrContagem,
-                codEtiq: propparams.codEtiq,
-                dtInventario: propparams.dtInventario
-            }
-        })
-        .then(response => onConfSuccess(dispatch, response))
-        .catch(error => alertConfError(dispatch, error));
-    };
+    Axios.get('/app/undoInventoryCountingNew.p', {
+        params: {
+            username: propparams.username,
+            codLocal: propparams.codLocal,
+            nrContagem: propparams.nrContagem,
+            codEtiq: propparams.codEtiq,
+            dtInventario: propparams.dtInventario
+        }
+    })
+    .then(response => onConfSuccess(dispatch, response))
+    .catch(error => alertConfError(dispatch, error));
+};
 
 const alertConfError = (dispatch, error) => {
     Alert.alert('Erro', 'Erro ao Confirmar');
@@ -62,8 +62,6 @@ const alertConfError = (dispatch, error) => {
 
 const onConfSuccess = (dispatch, response) => {
     if (response.data.success === 'true') {
-        Alert.alert('Aviso', 'Success');
-    } else if (response.data.message !== undefined) {
         Alert.alert('Aviso', response.data.message);
     } else {
         Alert.alert('Erro', 'Erro ao Confirmar');

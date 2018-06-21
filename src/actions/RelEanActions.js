@@ -25,11 +25,8 @@ export const doConfirm = (propparams) => dispatch => {
 const alertRelError = () => {
     Alert.alert('Erro', 'Erro ao Confirmar');
 };
-
 const onRelSuccess = (dispatch, response) => {
     if (response.data.success === 'true') {
-        Alert.alert('Aviso', 'Success');
-    } else if (response.data.message !== undefined) {
         Alert.alert('Aviso', response.data.message);
     } else {
         Alert.alert('Erro', 'Erro ao Confirmar');
