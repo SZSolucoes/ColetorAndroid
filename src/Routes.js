@@ -20,10 +20,11 @@ import ImpressaoEAN from './components/impressao/Impressao';
 import ListaSeparacao from './components/saida/listaSeparacao/ListaSeparacao';
 import ConferenciaSeparacao from './components/saida/conferencia/ConferenciaSeparacao';
 import ConferenciaVolumeSaida from './components/saida/conferencia/ConferenciaVolume';
-import ConsultaEtiqBatismoSaida from './components/saida/etiquetabatismo/ConsultaEtiqBatismoSaida';
+import ConsultaEtiqBatismoSaida from './components/saida/etiquetaBatismo/ConsultaEtiqBatismoSaida';
 import Consolidacao from './components/saida/consolidacao/Consolidacao';
 import Despacho from './components/saida/despacho/Despacho';
 import RelacionaEan from './components/relacionaean/RelacionaEan';
+import ConsultaEtiqBatismoEntrada from './components/entrada/consulta/ConsultaBatismoEntrada';
 
 export default props => (
     <Router>
@@ -194,6 +195,14 @@ export default props => (
                 key='relacionaEan' 
                 component={RelacionaEan} 
                 title="Relaciona EAN" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='consultaBatismoEntrada' 
+                component={ConsultaEtiqBatismoEntrada} 
+                title="Consulta Etiqueta Batismo" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

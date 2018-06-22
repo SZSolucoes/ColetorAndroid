@@ -10,6 +10,7 @@ import InventarioReducer from './InventarioReducer';
 import RelEanReducer from './RelEanReducer';
 import ConsolidacaoReducer from './ConsolidacaoReducer';
 import DespachoReducer from './DespachoReducer';
+import ConsEtiqBatEntradaReducer from './ConsEtiqBatEntradaReducer';
 
 export default combineReducers({
     LoginReducer,
@@ -22,5 +23,6 @@ export default combineReducers({
     InventarioReducer,
     RelEanReducer,
     ConsolidacaoReducer,
-    DespachoReducer
+    DespachoReducer,
+    ConsEtiqBatEntradaReducer
 });
