@@ -10,6 +10,7 @@ import {
     Image
 } from 'react-native';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import { 
     iniciaTela,
     modificaCodEAN,
@@ -28,6 +29,23 @@ const imgClear = require('../../../resources/imgs/limpa_tela.png');
 class FormEstoque extends Component {
     componentWillMount() {
         this.props.iniciaTela();
+        Actions.refresh({ right: this._renderRightButton });
+    }
+    limpaTela() {
+        this.props.iniciaTela();
+    }
+    _renderRightButton = () => {
+        return (
+            <TouchableOpacity 
+                onPress={() => this.limpaTela()}
+                style={styles.btClear}
+            >
+                <Image
+                    source={imgClear}
+                    style={styles.imgClear}
+                />
+            </TouchableOpacity>
+        );
     }
     fnBuscaEstoque() {
         const codEAN = this.props.codEAN;
@@ -68,15 +86,6 @@ class FormEstoque extends Component {
                                 value={this.props.codEAN}
                                 onSubmitEditing={() => this.fnBuscaEstoque()}
                             />
-                            <TouchableOpacity
-                                style={styles.btClear}
-                                onPress={() => { this.props.iniciaTela(); }}
-                            >
-                                <Image
-                                    source={imgClear}
-                                    style={styles.imgClear}
-                                />
-                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>

@@ -1,5 +1,4 @@
 const INITIAL_STATE = {
-    username: '',
     codLocal: '',
     nrContagem: '',
     codEtiq: '',
@@ -43,7 +42,6 @@ export default (state = INITIAL_STATE, action) => {
             };
         case 'modifica_clean_invent':
             return { 
-                username: '',
                 codLocal: '',
                 nrContagem: '',
                 codEtiq: '',

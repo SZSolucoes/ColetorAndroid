@@ -6,7 +6,8 @@ import {
     Text,
     TextInput,
     Button,
-    Alert
+    Alert,
+    ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -23,7 +24,8 @@ import {
     efetivaTransferencia,
     modificaSaldoItem,
     buscaInfoEANTransf,
-    modificaCodLote
+    modificaCodLote,
+    modificaOnTransferencia
 } from '../../../actions/TransfereActions';
 
 class FormTransferencia extends Component {
@@ -123,12 +125,30 @@ class FormTransferencia extends Component {
             return;
         }
 
+        this.props.modificaOnTransferencia(true);
         this.props.efetivaTransferencia(usuario, codEAN, codLocalOrig, codLocalDest, qtItem, codLote);
     }
     buscaEAN() {
         const codEAN = this.props.codEAN;
 
         this.props.buscaInfoEANTransf(codEAN);
+    }
+    renderBtEfetivar() {
+        if (this.props.onTransferencia) {
+            return (
+                <ActivityIndicator size="large" />
+            );
+        }
+
+        return (
+            <View style={[styles.viewBotao, { flex: 1 }]}>
+                <Button
+                    onPress={() => { this.onPressTransfer(); }}
+                    title="Transferir"
+                    color="green"
+                />
+            </View>
+        );
     }
     render() {
         return (
@@ -266,13 +286,7 @@ class FormTransferencia extends Component {
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
-                    <View style={[styles.viewBotao, { flex: 1 }]}>
-                        <Button
-                            onPress={() => { this.onPressTransfer(); }}
-                            title="Transferir"
-                            color="green"
-                        />
-                    </View>
+                    {this.renderBtEfetivar()}
                 </View>
             </ScrollView>
         );
@@ -291,7 +305,8 @@ const mapStateToProps = state => {
             qtItem: state.TransfereReducer.qtItem,
             unidMed: state.TransfereReducer.unidMed,
             usuario: state.LoginReducer.usuario,
-            saldoItem: state.TransfereReducer.saldoItem
+            saldoItem: state.TransfereReducer.saldoItem,
+            onTransferencia: state.TransfereReducer.onTransferencia
         }
     );
 };
@@ -308,7 +323,8 @@ export default connect(mapStateToProps, {
     efetivaTransferencia,
     modificaSaldoItem,
     buscaInfoEANTransf,
-    modificaCodLote
+    modificaCodLote,
+    modificaOnTransferencia
 })(FormTransferencia);
 
 const styles = StyleSheet.create({

@@ -9,11 +9,17 @@ const INITIAL_STATE = {
     usuario: '',
     codLote: '',
     saldoItem: '',
-    tpCont: ''
+    tpCont: '',
+    onTransferencia: false
 };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
+        case 'modifica_onTransferencia_trnf':
+            return { 
+                ...state, 
+                onTransferencia: action.payload 
+            };
         case 'modifica_codEAN_trnf':
             return { 
                 ...state, 
@@ -71,7 +77,8 @@ export default (state = INITIAL_STATE, action) => {
                 codLote: '',
                 tpCont: '',
                 qtItem: '',
-                saldo: ''
+                saldo: '',
+                onTransferencia: false
             };
         case 'modifica_item_trnf':
             return {

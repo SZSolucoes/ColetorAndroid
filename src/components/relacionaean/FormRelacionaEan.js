@@ -5,10 +5,14 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    Button
+    Button,
+    TouchableOpacity,
+    Image,
+    Alert
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 import FormRow from '../utils/FormRow';
 import { 
@@ -18,16 +22,71 @@ import {
     doConfirm
 } from '../../actions/RelEanActions';
 
-class FormDespacho extends Component {
+const imgClear = require('../../../resources/imgs/limpa_tela.png');
 
+class FormDespacho extends Component {
+    componentWillMount() {
+        Actions.refresh({ right: this._renderRightButton });
+    }
     componentWillUnmount() {
         this.props.cleanRelEanReducer();
     }
-    confirmButton() {   
+    limpaTela() {
+        this.props.cleanRelEanReducer();
+    }
+    _renderRightButton = () => {
+        return (
+            <TouchableOpacity 
+                onPress={() => this.limpaTela()}
+                style={styles.btClear}
+            >
+                <Image
+                    source={imgClear}
+                    style={styles.imgClear}
+                />
+            </TouchableOpacity>
+        );
+    }
+    confirmButton() {
+        const { codEAN, codItem } = this.props;
+
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Relaciona EAN',
+                    'EAN deve ser informado!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Relaciona EAN',
+                'EAN deve ser informado!'
+            );
+            return;
+        }
+
+        if (codItem) {
+            if (codItem.length === 0) {
+                Alert.alert(
+                    'Relaciona EAN',
+                    'Código Item deve ser informado!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Relaciona EAN',
+                'Código Item deve ser informado!'
+            );
+            return;
+        }
+
         const propparams = {
-            codEAN: this.props.codEAN,
-            codItem: this.props.codItem
+            codEAN,
+            codItem
         }; 
+        
         this.props.doConfirm(propparams);     
     }
     render() {
@@ -42,13 +101,16 @@ class FormDespacho extends Component {
                             autoCorrect={false}
                             keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
+                            returnKeyType="next"
                             style={styles.input}
                             value={this.props.codEAN}
                             onChangeText={this.props.modificaCodEan}
-                            ref={(input) => { this.nrNotaFis = input; }}
+                            ref={(input) => { this.txtEAN = input; }}
+                            onSubmitEditing={() => { this.txtItem.focus(); }}
                         />
                     </View>
+                </FormRow>
+                <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Item</Text>
                         <TextInput
@@ -61,7 +123,8 @@ class FormDespacho extends Component {
                             style={styles.input}
                             value={this.props.codItem}
                             onChangeText={this.props.modificaCodItem}
-                            ref={(input) => { this.nrNotaFis = input; }}
+                            ref={(input) => { this.txtItem = input; }}
+                            onSubmitEditing={() => { this.confirmButton(); }}
                         />
                     </View>
                 </FormRow>
@@ -124,5 +187,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 10,
         paddingHorizontal: 10
+    },
+    btClear: {
+        width: 40,
+        height: 35
+    },
+    imgClear: {
+        width: 35,
+        height: 35
     }
 });

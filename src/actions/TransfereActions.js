@@ -1,6 +1,12 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
 
+export const modificaOnTransferencia = (ativo) => {
+    return {
+        type: 'modifica_onTransferencia_trnf',
+        payload: ativo    
+    };
+};
 export const modificaCodEAN = (codEAN) => {
     return {
         type: 'modifica_codEAN_trnf',
@@ -106,11 +112,13 @@ export const efetivaTransferencia = (usuario, codEAN, codLocalOrig, codLocalDest
             }
         })
         .then(response => efetivaSuccess(dispatch, response))
-        .catch(() => efetivaError());
+        .catch(() => efetivaError(dispatch));
     };
 };
 
 const efetivaSuccess = (dispatch, response) => {
+    dispatch({ type: 'modifica_onTransferencia_trnf', payload: false });
+
     if (response.data.success === 'true') {
         dispatch({ type: 'inicia_tela_trnf' });
         Alert.alert(
@@ -125,7 +133,8 @@ const efetivaSuccess = (dispatch, response) => {
     }
 };
 
-const efetivaError = () => {
+const efetivaError = (dispatch) => {
+    dispatch({ type: 'modifica_onTransferencia_trnf', payload: false });
     Alert.alert(
         'Erro Transferência',
         'Erro Conexão!'

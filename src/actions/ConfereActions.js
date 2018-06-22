@@ -8,6 +8,12 @@ export const iniciaConfLote = () => {
         type: 'inicia_conf_lote'
     };
 };
+export const modificaOnEfetivar = (ativo) => {
+    return {
+        type: 'modifica_onEfetivar_conf',
+        payload: ativo
+    };
+};
 export const modificaNrNotaFis = (nrNotaFis) => {
     return {
         type: 'modifica_nrNotaFis_conf',
@@ -216,7 +222,6 @@ const buscaError = (dispatch) => {
 };
 
 export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia }) => {
-    console.log(JSON.stringify(conferencia.listaItemLote));
     return dispatch => {
         Axios.get('/app/doCheckARNew.p', {
             params: {
@@ -238,7 +243,7 @@ export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia 
             }
         })
         .then(response => confereSuccess(dispatch, response, notaConfere, itemConfere))
-        .catch(() => confereError());
+        .catch(() => confereError(dispatch));
     };
 };
 
@@ -247,6 +252,8 @@ const confereSuccess = (dispatch, response, notaConfere, itemConfere) => {
         notaConfere,
         itemConfere
     };
+
+    dispatch({ type: 'modifica_onEfetivar_conf', payload: false });
 
     if (response.data.success === 'true') {
         dispatch({ type: 'efetiva_conferencia', payload: retorno });
@@ -262,7 +269,9 @@ const confereSuccess = (dispatch, response, notaConfere, itemConfere) => {
     }
 };
 
-const confereError = () => {
+const confereError = (dispatch) => {
+    dispatch({ type: 'modifica_onEfetivar_conf', payload: false });
+
     Alert.alert(
         'Erro Conferência',
         'Erro Conexão!'

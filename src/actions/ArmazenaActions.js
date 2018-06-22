@@ -1,6 +1,12 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
 
+export const modificaOnEfetivar = (ativo) => {
+    return {
+        type: 'modifica_onArmazena_arm',
+        payload: ativo
+    };
+};
 export const modificaBatismo = (batismo) => {
     return {
         type: 'modifica_batismo_arm',
@@ -135,7 +141,7 @@ export const efetivaArmazena = (etiquetaArmazena, itemArmazena, armazenamento) =
             }
         })
         .then(response => armazenaSuccess(dispatch, response, etiquetaArmazena, itemArmazena, armazenamento.qtItem))
-        .catch(() => armazenaError());
+        .catch(() => armazenaError(dispatch));
     };
 };
 
@@ -145,6 +151,8 @@ const armazenaSuccess = (dispatch, response, etiqueta, item, qtItem) => {
         item,
         qtItem
     };
+
+    dispatch({ type: 'modifica_onArmazena_arm', payload: false });
 
     if (response.data.success === 'true') {
         dispatch({ type: 'efetiva_armazenamento', payload: retorno });
@@ -160,7 +168,9 @@ const armazenaSuccess = (dispatch, response, etiqueta, item, qtItem) => {
     }
 };
 
-const armazenaError = () => {
+const armazenaError = (dispatch) => {
+    dispatch({ type: 'modifica_onArmazena_arm', payload: false });
+
     Alert.alert(
         'Erro Armazenamento',
         'Erro Conexão!'

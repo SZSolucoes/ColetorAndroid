@@ -27,7 +27,8 @@ const INITIAL_STATE = {
     qtdLote: '',
     seqLote: '',
     codLote: '',
-    qtdItemLote: ''
+    qtdItemLote: '',
+    onEfetivar: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -35,12 +36,15 @@ export default (state = INITIAL_STATE, action) => {
         case 'efetiva_conferencia': {
             const { listaNF, listaItem } = state;
             const { notaConfere, itemConfere } = action.payload;
+
             _.remove(notaConfere.itens, {
                 seq: itemConfere.seq
             });
+
             _.remove(listaItem, {
                 seq: itemConfere.seq
             });
+            
             if (notaConfere.itens.length === 0) {
                 _.remove(listaNF, {
                     nroDocto: notaConfere.nroDocto
@@ -96,6 +100,11 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 qtdLote: action.payload
+            };
+        case 'modifica_onEfetivar_conf':
+            return {
+                ...state,
+                onEfetivar: action.payload
             };
         case 'modifica_seqLote_conf':
             return {
@@ -220,7 +229,7 @@ export default (state = INITIAL_STATE, action) => {
         case 'modifica_listaItemLote_conf': {
             return {
                 ...state,
-                listaItemLote: action.payload
+                listaItemLote: [...action.payload]
             };
         }
         case 'dados_nota_conf':
@@ -250,7 +259,8 @@ export default (state = INITIAL_STATE, action) => {
                 notaConfere: '',
                 itemConfere: '',
                 isInfoVisible: false,
-                listaItemLote: ''
+                listaItemLote: '',
+                onEfetivar: false
             };
         case 'limpa_tela_conf':
             return { 
@@ -268,7 +278,8 @@ export default (state = INITIAL_STATE, action) => {
                 qtEtiq: '',
                 listaItem: '',
                 isInfoVisible: false,
-                listaItemLote: ''
+                listaItemLote: '',
+                onEfetivar: false
             };
         case 'inicia_conf_lote': {
             return {

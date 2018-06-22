@@ -8,7 +8,8 @@ import {
     TouchableOpacity,
     Image,
     Alert,
-    Button
+    Button,
+    ActivityIndicator
 } from 'react-native';
 import _ from 'lodash';
 import { connect } from 'react-redux';
@@ -36,7 +37,8 @@ import {
     modificaListaItem,
     modificaNotaConfere,
     modificaItemConfere,
-    modificaInfoVisible
+    modificaInfoVisible,
+    modificaOnEfetivar
 } from '../../../actions/ConfereActions';
 import {
     imprimeEtiquetaEAN
@@ -60,7 +62,7 @@ class FormConf extends Component {
         this.setState({ batismoDisable: true });
 
         this.props.iniciaTela();
-    }
+    }    
     onPressEfetivar() {
         const { 
             usuario, 
@@ -167,6 +169,7 @@ class FormConf extends Component {
             return; 
         }
 
+        this.props.modificaOnEfetivar(true);
         this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });        
     }
     onPressPrint() {
@@ -349,6 +352,22 @@ class FormConf extends Component {
     }
     procuraNFLista() {
         Actions.listaNFConf();
+    }
+    renderBtEfetiva() {
+        if (this.props.onEfetivar) {
+            return (
+                <ActivityIndicator size="large" />
+            );
+        }
+        return (
+            <View style={[styles.viewBotao, { flex: 2 }]}>
+                <Button
+                    onPress={() => { this.validQtdItem(); }}
+                    title="Efetivar"
+                    color="green"
+                />
+            </View>
+        );
     }
     render() {
         return (
@@ -553,13 +572,7 @@ class FormConf extends Component {
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
-                    <View style={[styles.viewBotao, { flex: 2 }]}>
-                        <Button
-                            onPress={() => { this.validQtdItem(); }}
-                            title="Efetivar"
-                            color="green"
-                        />
-                    </View>
+                    {this.renderBtEfetiva()}
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
                         <View style={styles.viewBtEtiq}>
@@ -620,7 +633,8 @@ const mapStateToProps = state => {
             altura: state.ConfereReducer.altura,
             comprimento: state.ConfereReducer.comprimento,
             largura: state.ConfereReducer.largura,
-            listaItemLote: state.ConfereReducer.listaItemLote
+            listaItemLote: state.ConfereReducer.listaItemLote,
+            onEfetivar: state.ConfereReducer.onEfetivar
         }
     );
 };
@@ -646,7 +660,8 @@ export default connect(mapStateToProps, {
     modificaListaItem,
     modificaNotaConfere,
     modificaItemConfere,
-    modificaInfoVisible
+    modificaInfoVisible,
+    modificaOnEfetivar
 })(FormConf);
 
 const styles = StyleSheet.create({

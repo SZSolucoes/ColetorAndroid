@@ -14,7 +14,8 @@ const INITIAL_STATE = {
     etiquetaArmazena: '',
     listaItem: '',
     itemArmazena: '',
-    codDepos: ''
+    codDepos: '',
+    onArmazenar: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -23,34 +24,14 @@ export default (state = INITIAL_STATE, action) => {
             const { etiquetaArmazena, listaItem, qtArmazenado } = state;
             const { item, qtItem } = action.payload;
 
-            console.log(etiquetaArmazena.itens);
             _.remove(etiquetaArmazena.itens, function (itemObj) {
-                console.log(itemObj);
-                console.log(item[0]);
-                console.log((itemObj.sequencia === item[0].sequencia && itemObj.numSeq === item[0].numSeq));
                 return (itemObj.sequencia === item[0].sequencia && itemObj.numSeq === item[0].numSeq);
             });
 
-            /*_.remove(etiquetaArmazena.itens, {
-                sequencia: item.sequencia,
-                numSeq: item.numSeq
-            });*/
-
-            console.log(etiquetaArmazena.itens);
-            console.log(listaItem);
             _.remove(listaItem, function (itemObj) {
-                console.log(itemObj);
-                console.log(item[0]);
-                console.log((itemObj.sequencia === item[0].sequencia && itemObj.numSeq === item[0].numSeq));
                 return (itemObj.sequencia === item[0].sequencia && itemObj.numSeq === item[0].numSeq);
             });
             
-            /*_.remove(listaItem, {
-                sequencia: item.sequencia,
-                numSeq: item.numSeq
-            });*/
-            console.log(listaItem);
-
             if (etiquetaArmazena.itens.length === 0) {
                 return { 
                     ...state, 
@@ -83,10 +64,15 @@ export default (state = INITIAL_STATE, action) => {
                 codDepos: '',
                 qtItem: '',
                 lote: '',
-                listaItem,
+                listaItem: [...listaItem],
                 etiquetaArmazena
             };
         }
+        case 'modifica_onArmazena_arm':
+            return {
+                ...state,
+                onArmazenar: action.payload
+            };
         case 'modifica_batismo_arm':
             return { 
                 ...state, 
@@ -149,7 +135,7 @@ export default (state = INITIAL_STATE, action) => {
         case 'modifica_listaItem_arm':
             return { 
                 ...state, 
-                listaItem: action.payload 
+                listaItem: [...action.payload] 
             };
         case 'modifica_itemArmazena_arm':
             return {
@@ -164,7 +150,7 @@ export default (state = INITIAL_STATE, action) => {
                 etiquetaArmazena: action.payload,
                 qtTotal: action.payload.qtdEtiqueta,
                 qtArmazenado: action.payload.qtdArmazenada,
-                listaItem: itens,
+                listaItem: [...itens],
                 codItem: itens[0].itCode,
                 desItem: itens[0].itDescAbrev,
                 unidMed: itens[0].un,
@@ -187,7 +173,8 @@ export default (state = INITIAL_STATE, action) => {
                 qtItem: '',
                 lote: '',
                 listaItem: '',
-                etiquetaArmazena: ''
+                etiquetaArmazena: '',
+                onArmazenar: false
             };
         default:
             return state; 

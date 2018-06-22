@@ -6,8 +6,12 @@ import {
     Text,
     TextInput,
     Button,
-    Alert
+    Alert,
+    TouchableOpacity,
+    Image,
+    ActivityIndicator
 } from 'react-native';
+
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import ListaItem from './ListaItemArm';
@@ -26,9 +30,11 @@ import {
     iniciaTela,
     efetivaArmazena,
     modificaItemArmazena,
-    modificaCodDepos
+    modificaCodDepos,
+    modificaOnEfetivar
 } from '../../../actions/ArmazenaActions';
 
+const imgClear = require('../../../../resources/imgs/limpa_tela.png');
 
 class FormArmazena extends Component {
     componentWillMount() {
@@ -143,6 +149,7 @@ class FormArmazena extends Component {
             lote
         };
 
+        this.props.modificaOnEfetivar(true);
         this.props.efetivaArmazena(etiquetaArmazena, itemArmazena, armazenamento);
     }
     validEAN() {
@@ -202,26 +209,52 @@ class FormArmazena extends Component {
         this.props.buscaInfoBastimo(batismo);
         this.txtEAN.focus();
     }
+    renderBtEfetivar() {
+        if (this.props.onArmazena) {
+            return (
+                <ActivityIndicator size="large" />
+            );
+        }
+        return (
+            <View style={[styles.viewBotao, { flex: 1 }]}>
+                <Button
+                    onPress={() => { this.onPressEfetivar(); }}
+                    title="Efetivar"
+                    color="green"
+                />
+            </View>
+        );
+    }
     render() {
-        console.log(this.props);
         return (
             <ScrollView style={styles.viewPrinc}>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>Batismo</Text>
-                        <TextInput
-                            placeholder=""
-                            //keyboardType="numeric"
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            onChangeText={batismo => this.props.modificaBatismo(batismo)}
-                            value={this.props.batismo}
-                            ref={(input) => { this.txtBatismo = input; }}
-                            onSubmitEditing={() => { this.validBatismo(); }}
-                        />
+                        <View style={{ flexDirection: 'row' }}>
+                            <TextInput
+                                placeholder=""
+                                //keyboardType="numeric"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={[styles.input, { flex: 1 }]}
+                                onChangeText={batismo => this.props.modificaBatismo(batismo)}
+                                value={this.props.batismo}
+                                ref={(input) => { this.txtBatismo = input; }}
+                                onSubmitEditing={() => { this.validBatismo(); }}
+                            />
+                            <TouchableOpacity 
+                                onPress={() => this.props.modificaBatismo()}
+                                style={styles.btClear}
+                            >
+                                <Image
+                                    source={imgClear}
+                                    style={styles.imgClear}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Total</Text>
@@ -255,19 +288,30 @@ class FormArmazena extends Component {
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            placeholder=""
-                            keyboardType="numeric"
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
-                            value={this.props.codEAN}
-                            ref={(input) => { this.txtEAN = input; }}
-                            onSubmitEditing={() => { this.validEAN(); }}
-                        />
+                        <View style={{ flexDirection: 'row' }}>
+                            <TextInput
+                                placeholder=""
+                                keyboardType="numeric"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={[styles.input, { flex: 1 }]}
+                                onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
+                                value={this.props.codEAN}
+                                ref={(input) => { this.txtEAN = input; }}
+                                onSubmitEditing={() => { this.validEAN(); }}
+                            />
+                            <TouchableOpacity 
+                                onPress={() => this.props.modificaCodEAN()}
+                                style={styles.btClear}
+                            >
+                                <Image
+                                    source={imgClear}
+                                    style={styles.imgClear}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -321,25 +365,30 @@ class FormArmazena extends Component {
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
-                        <Text 
-                            style={[
-                                styles.txtLabel
-                            ]} 
-                        >
-                            Localização
-                        </Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={[styles.input]}
-                            onChangeText={codLocal => this.props.modificaCodLocal(codLocal)}
-                            value={this.props.codLocal}
-                            ref={(input) => { this.txtLocal = input; }}
-                            onSubmitEditing={() => { this.validLocal(); }}
-                        />
+                        <Text style={styles.txtLabel}>Localização</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={[styles.input, { flex: 1 }]}
+                                onChangeText={codLocal => this.props.modificaCodLocal(codLocal)}
+                                value={this.props.codLocal}
+                                ref={(input) => { this.txtLocal = input; }}
+                                onSubmitEditing={() => { this.validLocal(); }}
+                            />
+                            <TouchableOpacity 
+                                onPress={() => this.props.modificaBatismo()}
+                                style={styles.btClear}
+                            >
+                                <Image
+                                    source={imgClear}
+                                    style={styles.imgClear}
+                                />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text 
@@ -397,13 +446,7 @@ class FormArmazena extends Component {
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
-                    <View style={[styles.viewBotao, { flex: 1 }]}>
-                        <Button
-                            onPress={() => { this.onPressEfetivar(); }}
-                            title="Efetivar"
-                            color="green"
-                        />
-                    </View>
+                    {this.renderBtEfetivar()}
                 </View>
                 <View style={{ padding: 5 }} >
                     <ListaItem />
@@ -429,7 +472,8 @@ const mapStateToProps = state => (
         usuario: state.LoginReducer.usuario,
         listaItem: state.ArmazenaReducer.listaItem,
         itemArmazena: state.ArmazenaReducer.itemArmazena,
-        etiquetaArmazena: state.ArmazenaReducer.etiquetaArmazena
+        etiquetaArmazena: state.ArmazenaReducer.etiquetaArmazena,
+        onArmazena: state.ArmazenaReducer.onArmazena
     }
 );
 
@@ -448,7 +492,8 @@ export default connect(mapStateToProps, {
     iniciaTela,
     efetivaArmazena,
     modificaItemArmazena,
-    modificaCodDepos
+    modificaCodDepos,
+    modificaOnEfetivar
 })(FormArmazena);
 
 const styles = StyleSheet.create({
@@ -509,5 +554,13 @@ const styles = StyleSheet.create({
         height: 35,
         padding: 10,
         borderRadius: 10
+    },
+    btClear: {
+        width: 30,
+        height: 35
+    },
+    imgClear: {
+        width: 30,
+        height: 35
     }
 });
