@@ -25,6 +25,7 @@ const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
 const imgRelEan = require('../../../resources/imgs/relacionaean.png');
 const imgTransEnt = require('../../../resources/imgs/transf_entrada.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
+const imgConsBatismo = require('../../../resources/imgs/consulta_etiq_48.png');
 
 class MenuEntrada extends Component {
     onPressConf() {
@@ -47,6 +48,9 @@ class MenuEntrada extends Component {
     }
     onPressConsEstoq() {
         Actions.estoque();
+    }
+    onPressConsBatismo() {
+        Actions.consultaBatismoEntrada();
     }
     onPressRelEan() {
         Actions.relacionaEan();
@@ -145,6 +149,21 @@ class MenuEntrada extends Component {
             );
         }
     }
+    renderConsultaBatismo() {
+        if (this.props.logEstoque) {
+            return (
+                <TouchableHighlight onPress={this.onPressConsBatismo}>
+                    <View style={styles.menu}>
+                        <Image 
+                            style={styles.imgMenu} 
+                            source={imgConsBatismo}
+                        />
+                        <Text style={styles.txtMenu}>Consulta Etiqueta Batismo</Text>
+                    </View>
+                </TouchableHighlight>
+            );
+        }
+    }
     renderRelacionaEan() {
         return (
             <TouchableHighlight onPress={this.onPressRelEan}>
@@ -180,6 +199,7 @@ class MenuEntrada extends Component {
                 {this.renderInventario()}
                 {this.renderInventarioEst()}
                 {this.renderConsulta()}
+                {this.renderConsultaBatismo()}
                 {this.renderRelacionaEan()}
                 {this.renderImpressao()}
             </ScrollView>
