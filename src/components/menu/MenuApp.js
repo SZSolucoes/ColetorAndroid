@@ -4,7 +4,8 @@ import {
     StyleSheet,
     Text,
     Image,
-    TouchableHighlight
+    TouchableHighlight,
+    Alert
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
@@ -19,7 +20,12 @@ export default class MenuApp extends Component {
     }
 
     onPressSaida() {
-        Actions.menuSaida();
+        Alert.alert(
+            'Saída',
+            'Em Desenvolvimento'
+        );
+        return;
+        //Actions.menuSaida();
     }
     render() {
         console.log(this.props);

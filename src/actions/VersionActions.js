@@ -8,25 +8,35 @@ export const iniciaTela = () => {
         type: 'inicia_tela_vers'
     };
 };
-
 export const modificaVersao = (versao) => {
     return {
         type: 'modifica_versao_vers',
         payload: versao    
     };
 };
-
 export const modificaConexao = (conexao) => {
     return {
         type: 'modifica_conexao_vers',
         payload: conexao    
     };
 };
-
 export const modificaServico = (servico) => {
     return {
         type: 'modifica_servico_vers',
         payload: servico    
+    };
+};
+export const modificaAmbiente = (ambiente) => {
+    console.log(ambiente);
+    return {
+        type: 'modifica_ambiente_log',
+        payload: ambiente    
+    };
+};
+export const modificaModalVisible = (modalVisible) => {
+    return {
+        type: 'modifica_modalvisible_log', 
+        payload: modalVisible
     };
 };
 

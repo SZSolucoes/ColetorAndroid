@@ -44,7 +44,6 @@ class ListaNotaFiscal extends Component {
     }
     keyExtractor(item, index) {
         const chave = item.nroDocto + item.codEmit;
-        console.log(chave);
         return (
             chave
         );

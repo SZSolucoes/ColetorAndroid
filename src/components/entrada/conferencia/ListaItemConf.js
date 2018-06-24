@@ -45,6 +45,23 @@ class ListaItem extends Component {
         );
     }
     renderItem = ({ item }) => {
+        console.log(item.ean);
+        if (item.ean.length < 1) {
+            return (
+                <TouchableHighlight
+                    onPress={() => this.onPressItem(item)}
+                >
+                    <View
+                        style={styles.itemErro}
+                    >
+                        <Text style={styles.itemSeq}>{item.seq}</Text>
+                        <Text style={styles.itemCode}>{item.itCode}</Text>
+                        <Text style={styles.itemDesc}>{item.itDescAbrev}</Text>
+                    </View>
+                </TouchableHighlight>            
+            );
+        }
+
         return (
             <TouchableHighlight
                 onPress={() => this.onPressItem(item)}
@@ -120,6 +137,15 @@ const styles = StyleSheet.create({
     },
     item: {
         backgroundColor: '#20293F',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        marginVertical: 2,
+        paddingHorizontal: 5
+    },
+    itemErro: {
+        backgroundColor: '#9C0305',
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,

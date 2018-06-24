@@ -26,6 +26,7 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 senha: action.payload 
             };
+        
         case 'modifica_loading_log':
             return { 
                 ...state, 
@@ -64,7 +65,7 @@ export default (state = INITIAL_STATE, action) => {
                 logConfSeparacao: false,
                 logTransferencia: false,
                 logArmazenamento: false,
-                logTodos: false
+                logTodos: false                
             };
         case 'atualiza_permissao_log': {
             if (action.payload.logTodos === true) {
@@ -79,19 +80,18 @@ export default (state = INITIAL_STATE, action) => {
                     logArmazenamento: true,
                     logTodos: true
                 };
-            } else {
-                return { 
-                    ...state, 
-                    logConfReceb: action.payload.logConfReceb,
-                    logEstoque: action.payload.logEstoque,
-                    logDespacho: action.payload.logDespacho,
-                    logSeparacao: action.payload.logSeparacao,
-                    logConfSeparacao: action.payload.logConfSeparacao,
-                    logTransferencia: action.payload.logTransferencia,
-                    logArmazenamento: action.payload.logArmazenamento,
-                    logTodos: action.payload.logTodos
-                };
-            }
+            } 
+            return { 
+                ...state, 
+                logConfReceb: action.payload.logConfReceb,
+                logEstoque: action.payload.logEstoque,
+                logDespacho: action.payload.logDespacho,
+                logSeparacao: action.payload.logSeparacao,
+                logConfSeparacao: action.payload.logConfSeparacao,
+                logTransferencia: action.payload.logTransferencia,
+                logArmazenamento: action.payload.logArmazenamento,
+                logTodos: action.payload.logTodos
+            };
         }
         default:
             return state;

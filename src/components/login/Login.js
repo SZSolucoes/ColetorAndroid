@@ -6,10 +6,12 @@ import {
     TextInput,
     Text,
     Keyboard,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import Axios from 'axios';
 import { 
     modificaUsuario, 
     modificaSenha,
@@ -23,8 +25,18 @@ class Login extends Component {
         this.props.iniciaPermissao();
     }
     pressLogin() {
-        const { usuario, senha } = this.props;
+        const { usuario, senha, ambiente } = this.props;
 
+        console.log(ambiente);
+        if (ambiente === '2') {
+            Alert.alert(
+                'HOMOLOGAÇÃO',
+                'LOGIN NO AMBIENTE DE HOMOLOGAÇÃO'
+            );
+            Axios.defaults.baseURL = 'http://10.4.0.35/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
+        } else {
+            Axios.defaults.baseURL = 'http://192.168.50.219/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
+        }
         Keyboard.dismiss();
 
         this.props.modificaLoadingLogin();
@@ -98,7 +110,8 @@ const mapStateToProps = state => (
         logTransferencia: state.LoginReducer.logTransferencia,
         logArmazenamento: state.LoginReducer.logArmazenamento,
         logTodos: state.LoginReducer.logTodos,
-        loadingLogin: state.LoginReducer.loadingLogin
+        loadingLogin: state.LoginReducer.loadingLogin,
+        ambiente: state.VersionReducer.ambiente
     }
 );
 

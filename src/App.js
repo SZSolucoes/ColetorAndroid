@@ -13,7 +13,7 @@ import reducers from './reducers';
 
 class App extends Component {
     componentWillMount() {
-        Axios.defaults.baseURL = 'http://10.4.0.35/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
+        Axios.defaults.baseURL = 'http://192.168.50.219/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
     }
     render() {
         return (

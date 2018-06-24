@@ -92,7 +92,7 @@ export const iniciaTela = () => {
 };
 export const buscaInfoBastimo = (batismo) => {
     return dispatch => {
-        Axios.get('/app/getLabelItemsNew.p', {
+        Axios.get('/app/getLabelItems.p', {
             params: {
                 codEtiqBatismo: batismo
             }
@@ -124,7 +124,7 @@ const buscaBatismoError = () => {
 
 export const efetivaArmazena = (etiquetaArmazena, itemArmazena, armazenamento) => {
     return dispatch => {
-        Axios.get('/app/doStockPlacementNew.p', {
+        Axios.get('/app/doStockPlacement.p', {
             params: {
                 usuario: armazenamento.usuario,
                 batismo: armazenamento.batismo,

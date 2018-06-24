@@ -29,7 +29,7 @@ export const cleanInventarioReducer = () => ({
         type: 'modifica_clean_invent'
     });
 export const doConfirm = (propparams) => dispatch => {
-        Axios.get('/app/doInventoryCountingNew.p', {
+        Axios.get('/app/doInventoryCounting.p', {
             params: {
                 username: propparams.username,
                 codLocal: propparams.codLocal,
@@ -43,7 +43,7 @@ export const doConfirm = (propparams) => dispatch => {
         .catch(error => alertConfError(dispatch, error));
     };
 export const doConfirmEst = (propparams) => dispatch => {
-    Axios.get('/app/undoInventoryCountingNew.p', {
+    Axios.get('/app/undoInventoryCounting.p', {
         params: {
             username: propparams.username,
             codLocal: propparams.codLocal,

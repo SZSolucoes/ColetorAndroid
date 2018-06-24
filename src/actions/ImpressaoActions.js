@@ -53,7 +53,7 @@ export const imprimeEtiquetaEAN = (usuario, codEAN, qtdEtiq) => {
     console.log(codEAN);
     console.log(qtdEtiq);
     return dispatch => {
-        Axios.get('/app/doPrintNew.p', {
+        Axios.get('/app/doPrint.p', {
             params: {
                 usuario,
                 codEAN,
@@ -88,7 +88,7 @@ const imprimeError = () => {
 
 export const buscaInfoEAN = (codEAN) => {
     return dispatch => {
-        Axios.get('/app/getStockInfoByEanNew.p', {
+        Axios.get('/app/getStockInfoByEan.p', {
             params: {
                 cod_ean: codEAN
             }
