@@ -4,16 +4,18 @@ import {
     View, 
     Text, 
     StyleSheet, 
-    TouchableHighlight 
+    TouchableHighlight,
+    Dimensions,
+    ScrollView
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
 class ListaItemSep extends Component {
-    
+ 
     keyExtractor(item, index) {
         return (
-            item.seq
+            index
         );
     }
     renderSeparator = () => {
@@ -35,11 +37,12 @@ class ListaItemSep extends Component {
                 onPress={() => this.onPressItem(item)}
             >
                 <View
-                    style={styles.item}
+                    style={styles.item} 
                 >
-                    <Text style={styles.seq}>{item.seq}</Text>
                     <Text style={styles.itCode}>{item.itCode}</Text>
-                    <Text style={styles.itDescAbrev}>{item.itDescAbrev}</Text>
+                    <Text style={styles.itDesc}>{item.itDescAbrev}</Text>
+                    <Text style={styles.itLocal}>{item.itDescAbrev}</Text>
+                    <Text style={styles.itQtde}>{item.itDescAbrev}</Text>
                 </View>
             </TouchableHighlight>            
         );
@@ -49,14 +52,17 @@ class ListaItemSep extends Component {
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
-                <Text style={[styles.seq, styles.sizeFldHeader]}> 
-                    Seq
-                </Text>
                 <Text style={[styles.itCode, styles.sizeFldHeader]}> 
                     Código
                 </Text>
-                <Text style={[styles.itDescAbrev, styles.sizeFldHeader]}> 
+                <Text style={[styles.itDesc, styles.sizeFldHeader]}> 
                     Descrição
+                </Text>
+                <Text style={[styles.itLocal, styles.sizeFldHeader]}> 
+                    Local
+                </Text>
+                <Text style={[styles.itQtde, styles.sizeFldHeader]}> 
+                    Qtde
                 </Text>
             </View>
         );
@@ -65,16 +71,18 @@ class ListaItemSep extends Component {
     };
     render() {
         return (
-            <FlatList
-                data={this.props.listaItem}
-                style={styles.container}
-                ItemSeparatorComponent={this.renderSeparator}
-                keyExtractor={this.keyExtractor}
-                renderItem={this.renderItem}
-                extraData={this.props}
-                numColumns='1'
-                ListHeaderComponent={this.renderHeader}
-            />
+            <ScrollView horizontal >
+                <FlatList
+                    data={this.props.listaItem}
+                    style={styles.container}
+                    ItemSeparatorComponent={this.renderSeparator}
+                    keyExtractor={this.keyExtractor}
+                    renderItem={this.renderItem}
+                    extraData={this.props}
+                    numColumns='1'
+                    ListHeaderComponent={this.renderHeader}
+                />
+            </ScrollView>
         );
     }
 }
@@ -103,6 +111,8 @@ const styleField = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: Dimensions.get('window').width > Dimensions.get('window').height ? 
+                Dimensions.get('window').width : Dimensions.get('window').height,
         marginVertical: 20,
         backgroundColor: 'rgba(255,255,255,0.2)'
     },
@@ -115,23 +125,26 @@ const styles = StyleSheet.create({
         marginVertical: 2,
         paddingHorizontal: 5
     },
-    seq: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 2 
-    },
     itCode: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 6 
+        flex: 4 
     },
-    itDescAbrev: { 
+    itDesc: { 
         ...styleField.itemHeaderAndRow, 
         flex: 6 
+    },
+    itLocal: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 4 
+    },
+    itQtde: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 4 
     },
     sizeFldHeader: {
         fontSize: 14
     },
-    header: {
-        width: '100%', 
+    header: { 
         height: 25, 
         backgroundColor: '#63ace5', 
         alignItems: 'center', 

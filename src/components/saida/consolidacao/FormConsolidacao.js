@@ -88,6 +88,63 @@ class FormConsolidacao extends Component {
                             onSubmitEditing={() => this.addVolumes()}
                         />
                     </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Volume Total</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            blurOnSubmit={false}
+                            style={styles.input}
+                            value={this.props.codVol}
+                            ref={(input) => { this.volInput = input; }}
+                            onChangeText={this.props.modificaVol}
+                            onSubmitEditing={() => this.addVolumes()}
+                        />
+                    </View>
+                </FormRow>
+                <FormRow>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Qtde Total</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            blurOnSubmit={false}
+                            style={styles.input}
+                            value={this.props.codVol}
+                            ref={(input) => { this.volInput = input; }}
+                            onChangeText={this.props.modificaVol}
+                            onSubmitEditing={() => this.addVolumes()}
+                        />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Qtde Consolidada</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            blurOnSubmit={false}
+                            style={styles.input}
+                            value={this.props.codVol}
+                            ref={(input) => { this.volInput = input; }}
+                            onChangeText={this.props.modificaVol}
+                            onSubmitEditing={() => this.addVolumes()}
+                        />
+                    </View>
+                </FormRow>
+                <FormRow>
                     <View style={styles.viewBotao} >
                         <Button
                             onPress={() => false}
@@ -95,6 +152,7 @@ class FormConsolidacao extends Component {
                             color="green"
                         />      
                     </View>
+                    <View style={{ flex: 1 }} />
                 </FormRow>
                 <View style={{ padding: 5 }}>
                     <ListaItemConsolidacao />

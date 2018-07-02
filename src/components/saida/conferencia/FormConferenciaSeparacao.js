@@ -62,7 +62,7 @@ class FormConferenciaSeparacao extends Component {
                     </View>
                 </FormRow>
                 <FormRow>
-                    <View style={{ flex: 5 }}>
+                    <View style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Prioridade</Text>
                         <TextInput
                             placeholder=""
@@ -76,7 +76,7 @@ class FormConferenciaSeparacao extends Component {
                         />
                     </View>
                     <View style={{ flex: 3 }}>
-                        <Text style={styles.txtLabel}>Qtde Total</Text>
+                        <Text style={styles.txtLabel}>Total Itens</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
@@ -88,8 +88,8 @@ class FormConferenciaSeparacao extends Component {
                             value={this.props.qtConferir}
                         />
                     </View>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Qtde Conferida</Text>
+                    <View style={{ flex: 3 }}>
+                        <Text style={styles.txtLabel}>Itens Conf</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
@@ -131,19 +131,6 @@ class FormConferenciaSeparacao extends Component {
                             value={this.props.localPad}
                         />
                     </View>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.localPad}
-                        />
-                    </View>
                 </FormRow>
                 <FormRow>
                     <View>
@@ -163,6 +150,19 @@ class FormConferenciaSeparacao extends Component {
                     </View>
                 </FormRow>
                 <FormRow>
+                    <View style={{ flex: 4 }}>
+                        <Text style={styles.txtLabel}>Item</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            value={this.props.localPad}
+                        />
+                    </View>
                     <View style={{ flex: 2 }}>
                         <Text style={styles.txtLabel}>UM</Text>
                         <TextInput
@@ -177,6 +177,22 @@ class FormConferenciaSeparacao extends Component {
                         />
                     </View>
                     <View style={{ flex: 4 }}>
+                        <Text style={styles.txtLabel}>Lote</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={styles.input}
+                            value={this.props.batismo}
+                            ref={(input) => { this.batismo = input; }}
+                        />
+                    </View>
+                </FormRow>
+                <FormRow>
+                <View style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Separador</Text>
                         <TextInput
                             placeholder=""
@@ -191,20 +207,6 @@ class FormConferenciaSeparacao extends Component {
                     </View>
                     <View style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.batismo}
-                            ref={(input) => { this.batismo = input; }}
-                        />
-                    </View>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Lote</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
