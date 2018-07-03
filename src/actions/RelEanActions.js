@@ -28,6 +28,8 @@ const alertRelError = () => {
 const onRelSuccess = (dispatch, response) => {
     if (response.data.success === 'true') {
         Alert.alert('Aviso', response.data.message);
+    } else if (response.data.message) {
+        Alert.alert('Aviso', response.data.message); 
     } else {
         Alert.alert('Erro', 'Erro ao Confirmar');
     }
