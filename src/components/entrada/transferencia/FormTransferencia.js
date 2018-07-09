@@ -43,8 +43,6 @@ class FormTransferencia extends Component {
             tpCont
         } = this.props;
 
-        console.log(codLote);
-
         if (codEAN) {
             if (codEAN.length === 0) {
                 Alert.alert(
@@ -109,7 +107,7 @@ class FormTransferencia extends Component {
             );
             return;
         }
-        if (codLocalOrig) {
+        /*if (codLocalOrig) {
             if (codLocalOrig.length === 0) {
                 Alert.alert(
                     'Transferência',
@@ -123,7 +121,7 @@ class FormTransferencia extends Component {
                 'Local Origem deve ser informado!'
             );
             return;
-        }
+        }*/
 
         this.props.modificaOnTransferencia(true);
         this.props.efetivaTransferencia(usuario, codEAN, codLocalOrig, codLocalDest, qtItem, codLote);

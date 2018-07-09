@@ -20,11 +20,11 @@ export default class MenuApp extends Component {
     }
 
     onPressSaida() {
-        /*Alert.alert(
+        Alert.alert(
             'Saída',
             'Em Desenvolvimento'
         );
-        return;*/
+        return;
         Actions.menuSaida();
     }
     render() {
