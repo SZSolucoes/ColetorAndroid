@@ -5,7 +5,8 @@ import {
     Text, 
     StyleSheet, 
     TouchableHighlight,
-    ScrollView 
+    ScrollView,
+    Dimensions 
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -48,7 +49,6 @@ class ListaItemConfSep extends Component {
                 <View
                     style={styles.item}
                 >
-                    <Text style={styles.seq}>{item.seq}</Text>
                     <Text style={styles.itCode}>{item.itCode}</Text>
                     <Text style={styles.itDescAbrev}>{item.itDescAbrev}</Text>
                     <Text style={styles.num1}>{item.num1}</Text>
@@ -64,9 +64,6 @@ class ListaItemConfSep extends Component {
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
-                <Text style={[styles.seq, styles.sizeFldHeader]}> 
-                    Seq
-                </Text>
                 <Text style={[styles.itCode, styles.sizeFldHeader]}> 
                     Código
                 </Text>
@@ -133,7 +130,8 @@ const styleField = {
 const styles = StyleSheet.create({
     container: {
         marginVertical: 20,
-        width: 500,
+        width: Dimensions.get('window').width > Dimensions.get('window').height ? 
+                Dimensions.get('window').width : Dimensions.get('window').height,
         backgroundColor: 'rgba(255,255,255,0.2)'
     },
     item: {
@@ -143,10 +141,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginVertical: 2,
         paddingHorizontal: 5
-    },
-    seq: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 2 
     },
     itCode: { 
         ...styleField.itemHeaderAndRow, 

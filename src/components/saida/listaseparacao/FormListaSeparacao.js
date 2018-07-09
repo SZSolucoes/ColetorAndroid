@@ -24,7 +24,49 @@ class FormListaSeparacao extends Component {
         return (
             <ScrollView style={styles.viewPrinc}>
                 <FormRow>
-                    <View style={{ flex: 4 }}>
+                    <View>
+                        <Text style={styles.txtLabel}>Embarque</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            value={this.props.codItem}
+                        />
+                    </View>
+                    <View>
+                        <Text style={styles.txtLabel}>Pedido</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            value={this.props.unidMed}
+                        />
+                    </View>
+                    <View>
+                        <Text style={styles.txtLabel}>Prioridade</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={styles.input}
+                            value={this.props.batismo}
+                            ref={(input) => { this.batismo = input; }}
+                        />
+                    </View>
+                </FormRow>
+                <FormRow>
+                    <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>
                         <TextInput
                             placeholder=""
@@ -38,21 +80,8 @@ class FormListaSeparacao extends Component {
                             ref={(input) => { this.nrNotaFis = input; }}
                         />
                     </View>
-                    <View style={{ flex: 6 }}>
+                    <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.fornec}
-                        />
-                    </View>
-                    <View style={{ flex: 2 }}>
-                        <Text style={styles.txtLabel}>Box</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
@@ -177,48 +206,6 @@ class FormListaSeparacao extends Component {
                             returnKeyType="next"
                             style={styles.inputDescricao}
                             value={this.props.desItem}
-                        />
-                    </View>
-                </FormRow>
-                <FormRow>
-                    <View>
-                        <Text style={styles.txtLabel}>Embarque</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codItem}
-                        />
-                    </View>
-                    <View>
-                        <Text style={styles.txtLabel}>Pedido</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.unidMed}
-                        />
-                    </View>
-                    <View>
-                        <Text style={styles.txtLabel}>Prioridade</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.batismo}
-                            ref={(input) => { this.batismo = input; }}
                         />
                     </View>
                 </FormRow>
