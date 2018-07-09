@@ -191,7 +191,16 @@ export const buscaNotaConferencia = (usuario) => {
             params: {
                 usuario
             },
-            responseType: 'json'
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            transformResponse: [(data) => {
+                try {
+                    return JSON.parse(decodeURIComponent(data));
+                } catch (e) {
+                    return data;
+                }
+            }]
         })
         .then(response => buscaSuccess(dispatch, response))
         .catch(() => buscaError(dispatch));

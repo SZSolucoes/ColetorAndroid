@@ -53,6 +53,22 @@ class FormArmazena extends Component {
             listaItem 
         } = this.props;
 
+        if (qtItem) {       
+            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+                Alert.alert(
+                    'Armazenamento',
+                    'Quantidade Item deve ser maior que 0!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Armazenamento',
+                'Quantidade Item deve ser maior que 0!'
+            );
+            return;
+        }
+
         if (codEAN) {
             if (codEAN.length === 0) {
                 Alert.alert(
@@ -72,6 +88,13 @@ class FormArmazena extends Component {
                     );
                     return;
                 }
+                if (itemArm[0].qtdItem !== qtItem) {
+                    Alert.alert(
+                        'Armazenamento',
+                        'Quantidade Item Diferente da Conferida!'
+                    );
+                    return;
+                }
             } else {
                 Alert.alert(
                     'Armazenamento',
@@ -86,21 +109,7 @@ class FormArmazena extends Component {
             );
             return;
         }
-        if (qtItem) {       
-            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
-                Alert.alert(
-                    'Armazenamento',
-                    'Quantidade Item deve ser maior que 0!'
-                );
-                return;
-            }
-        } else {
-            Alert.alert(
-                'Armazenamento',
-                'Quantidade Item deve ser maior que 0!'
-            );
-            return;
-        }
+        
         if (codLocal) {
             if (codLocal.length === 0) {
                 Alert.alert(

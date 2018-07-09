@@ -1,13 +1,6 @@
 const INITIAL_STATE = {
     codEtiqBatismo: '',
-    listaItens: [
-        { itCode: '001', itDesc: 'plastico', nroDocto: 'NF00001', situacao: 'Conferência finalizada' },
-        { itCode: '002', itDesc: 'cabo 2x2', nroDocto: 'NF00001', situacao: 'Conferência finalizada' },
-        { itCode: '003', itDesc: 'rj-45', nroDocto: 'NF00001', situacao: 'Em Armazenamento' },
-        { itCode: '004', itDesc: 'coaxial', nroDocto: 'NF00001', situacao: 'Em Armazenamento' },
-        { itCode: '005', itDesc: 'parafuso 12p', nroDocto: 'NF00001', situacao: 'Em Armazenamento' },
-        { itCode: '006', itDesc: 'rosca 5mm', nroDocto: 'NF00001', situacao: 'Em Armazenamento' }
-    ]
+    listaItens: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
