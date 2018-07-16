@@ -117,8 +117,14 @@ class FormConf extends Component {
             } 
             
             const itensNF = _.values(notaConfere.itens);
-
-            const itemConf = _.filter(itensNF, { ean: codEAN });
+   
+            const itemConf = [_.find(itensNF, (itemCheck) => (
+                itemCheck.ean1 === codEAN ||
+                itemCheck.ean2 === codEAN ||
+                itemCheck.ean3 === codEAN ||
+                itemCheck.ean4 === codEAN ||
+                itemCheck.ean5 === codEAN
+            ))];
             
             if (itemConf) {
                 if (itemConf.length === 0) {
@@ -285,11 +291,15 @@ class FormConf extends Component {
         const { notaConfere, codEAN } = this.props;
         const itensNF = _.values(notaConfere.itens);
 
-        const itemConf = _.filter(itensNF, { ean: codEAN });
+        const itemConf = [_.find(itensNF, (itemCheck) => (
+                itemCheck.ean1 === codEAN ||
+                itemCheck.ean2 === codEAN ||
+                itemCheck.ean3 === codEAN ||
+                itemCheck.ean4 === codEAN ||
+                itemCheck.ean5 === codEAN
+        ))];
         
-        console.log(itemConf[0]);
-
-        if (itemConf) {
+        if (itemConf[0]) {
             if (itemConf.length === 0) {
                 Alert.alert(
                     'Conferência',
@@ -446,7 +456,7 @@ class FormConf extends Component {
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 6 }]}>
-                        <Text style={styles.txtLabel}>EAN</Text>
+                        <Text style={[styles.txtLabel, { marginLeft: -30 }]}>EAN</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
                                 placeholder=""
@@ -610,8 +620,7 @@ class FormConf extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return (
+const mapStateToProps = state => (
         {
             nrNotaFis: state.ConfereReducer.nrNotaFis,
             fornec: state.ConfereReducer.fornec,
@@ -637,7 +646,6 @@ const mapStateToProps = state => {
             onEfetivar: state.ConfereReducer.onEfetivar
         }
     );
-};
 
 export default connect(mapStateToProps, { 
     modificaBatismo,

@@ -46,7 +46,27 @@ class ListaItem extends Component {
     }
     renderItem = ({ item }) => {
         console.log(item.ean);
-        if (item.ean.length < 1) {
+        // Se pelo menos um ean estiver disponivel entao não possue erro 
+        if (item.ean1.length > 0 ||
+            item.ean2.length > 0 ||
+            item.ean3.length > 0 ||
+            item.ean4.length > 0 ||
+            item.ean5.length > 0) {
+                return (
+                    <TouchableHighlight
+                        onPress={() => this.onPressItem(item)}
+                    >
+                        <View
+                            style={styles.item}
+                        >
+                            <Text style={styles.itemSeq}>{item.seq}</Text>
+                            <Text style={styles.itemCode}>{item.itCode}</Text>
+                            <Text style={styles.itemDesc}>{item.itDescAbrev}</Text>
+                        </View>
+                    </TouchableHighlight>            
+                );
+            }
+            
             return (
                 <TouchableHighlight
                     onPress={() => this.onPressItem(item)}
@@ -60,21 +80,6 @@ class ListaItem extends Component {
                     </View>
                 </TouchableHighlight>            
             );
-        }
-
-        return (
-            <TouchableHighlight
-                onPress={() => this.onPressItem(item)}
-            >
-                <View
-                    style={styles.item}
-                >
-                    <Text style={styles.itemSeq}>{item.seq}</Text>
-                    <Text style={styles.itemCode}>{item.itCode}</Text>
-                    <Text style={styles.itemDesc}>{item.itDescAbrev}</Text>
-                </View>
-            </TouchableHighlight>            
-        );
     }
     renderHeader = () => {
         const headerView = (

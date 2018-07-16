@@ -217,7 +217,7 @@ const buscaSuccess = (dispatch, response) => {
     } else {
         Alert.alert(
             'Erro Conferência',
-            resposta.message
+            resposta.data.message
         );
     }
 };

@@ -78,7 +78,13 @@ class FormArmazena extends Component {
                 return;
             }
 
-            const itemArm = _.filter(listaItem, { ean: codEAN });
+            const itemArm = [_.find(listaItem, (itemCheck) => (
+                itemCheck.ean1 === codEAN ||
+                itemCheck.ean2 === codEAN ||
+                itemCheck.ean3 === codEAN ||
+                itemCheck.ean4 === codEAN ||
+                itemCheck.ean5 === codEAN
+            ))];
 
             if (itemArm[0]) {
                 if (itemArm[0].length === 0) {
@@ -164,7 +170,13 @@ class FormArmazena extends Component {
     validEAN() {
         const { listaItem, codEAN } = this.props;
 
-        const itemArm = _.filter(listaItem, { ean: codEAN });
+        const itemArm = [_.find(listaItem, (itemCheck) => (
+            itemCheck.ean1 === codEAN ||
+            itemCheck.ean2 === codEAN ||
+            itemCheck.ean3 === codEAN ||
+            itemCheck.ean4 === codEAN ||
+            itemCheck.ean5 === codEAN
+        ))];
 
         if (itemArm[0]) {
             if (itemArm[0].length === 0) {
@@ -239,7 +251,7 @@ class FormArmazena extends Component {
             <ScrollView style={styles.viewPrinc}>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
-                        <Text style={styles.txtLabel}>Batismo</Text>
+                        <Text style={[styles.txtLabel, { marginLeft: -30 }]}>Batismo</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
                                 placeholder=""
@@ -289,14 +301,16 @@ class FormArmazena extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={[styles.input, { width: 60 }]}
-                            onChangeText={qtArmazenado => this.props.modificaQtArmazenado(qtArmazenado)}
+                            onChangeText={
+                                qtArmazenado => this.props.modificaQtArmazenado(qtArmazenado)
+                            }
                             value={this.props.qtArmazenado}
                         />
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={styles.txtLabel}>EAN</Text>
+                        <Text style={[styles.txtLabel, { marginLeft: -30 }]}>EAN</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
                                 placeholder=""
@@ -374,7 +388,7 @@ class FormArmazena extends Component {
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
-                        <Text style={styles.txtLabel}>Localização</Text>
+                        <Text style={[styles.txtLabel, { marginLeft: -30 }]}>Localização</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
                                 placeholder=""
@@ -389,7 +403,7 @@ class FormArmazena extends Component {
                                 onSubmitEditing={() => { this.validLocal(); }}
                             />
                             <TouchableOpacity 
-                                onPress={() => this.props.modificaBatismo()}
+                                onPress={() => this.props.modificaCodLocal()}
                                 style={styles.btClear}
                             >
                                 <Image
