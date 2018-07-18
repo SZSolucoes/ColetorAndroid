@@ -98,6 +98,12 @@ class FormConf extends Component {
                     'Etiqueta Batismo deve ser informada!'
                 );
                 return;
+            } else if (batismo.toLowerCase().charAt(0) !== 'b') {
+                Alert.alert(
+                    'Conferência',
+                    'Etiqueta Batismo inválida!'
+                );
+                return;   
             }
         } else {
             Alert.alert(
@@ -551,7 +557,6 @@ class FormConf extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             editable={this.state.batismoDisable}
                             returnKeyType="go"

@@ -28,7 +28,7 @@ class Version extends Component {
     componentWillMount() {
         this.props.iniciaTela();
 
-        const version = '1.1.3';
+        const version = '1.1.4';
         
         this.props.modificaVersao(version);
         this.props.verificaConexao();
