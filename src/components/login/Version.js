@@ -83,23 +83,28 @@ class Version extends Component {
         this.props.modificaModalVisible(true);
     }
 
-    onSelectModal(value) { 
+    onSelectModal(value) {
+        let empresa = '';
+        let ambiente = ''; 
         switch (this.props.inputSelected) {
             case 'ambiente':
+                ambiente = value;
+                empresa = this.props.empresa;
                 AsyncStorage.setItem('ambiente', value);
-                this.props.modificaAmbiente(value);
+                this.props.modificaAmbiente(value, empresa);
                 break;
             case 'empresa':
+                empresa = value;
+                ambiente = this.props.ambiente;
                 AsyncStorage.setItem('empresa', value);
-                this.props.modificaEmpresa(value);
+                this.props.modificaEmpresa(value, empresa);
                 break;
             default:     
         }
-        this.setUrlService();   
+        this.setUrlService(empresa, ambiente);   
     }
 
-    setUrlService() {
-        const { empresa, ambiente } = this.props;
+    setUrlService(empresa, ambiente) {
         doChangeUrlService(empresa, ambiente); // Atualiza a baseURL com base na empresa e ambiente
         this.props.verificaConexao();
         this.props.verificaServico();
