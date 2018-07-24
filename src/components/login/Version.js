@@ -41,7 +41,7 @@ class Version extends Component {
     componentDidMount() {
         this.props.iniciaTela();
 
-        const version = '1.1.4';
+        const version = '1.1.5';
         
         this.props.modificaVersao(version);
         this.props.verificaConexao();
@@ -114,21 +114,33 @@ class Version extends Component {
         return (
             <ScrollView style={styles.viewPrinc}>
                 <View style={styles.viewLinha}>
-                    <Text style={styles.txtInfo}>Versão App: {this.props.versao}</Text>
-                </View>
-                <View style={styles.viewLinha}>
-                    <Text style={styles.txtInfo}>Conexão: {this.props.conexao}</Text>
-                </View>
-                <View style={styles.viewLinha}>
-                    <Text style={styles.txtInfo}>Serviço: {this.props.servico}</Text>
-                </View>
-                <View style={[styles.viewLinha, { marginTop: 10 }]}>
                     <View style={{ flex: 1 }}>
-                        <Text style={[styles.txtInfo]}>Empresa</Text>
+                        <Text style={styles.txtInfo}>Versão App: {this.props.versao}</Text>
+                    </View>
+                </View>
+                <View style={styles.viewLinha}>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtInfo}>Conexão: {this.props.conexao}</Text>
+                    </View>
+                </View>
+                <View style={styles.viewLinha}>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtInfo}>Serviço: {this.props.servico}</Text>
+                    </View>
+                </View>
+                <View style={[styles.viewLinha, { marginTop: 15 }]}>
+                    <View style={{ flex: 1 }}>
+                        <Text 
+                            style={[styles.txtInfo]}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                        >
+                            Empresa:
+                        </Text>
                     </View>
                     <TouchableOpacity 
                         onPress={() => this.onShowModal('empresa')}
-                        style={{ flexDirection: 'row', flex: 3 }}
+                        style={{ flexDirection: 'row', flex: 2 }}
                     >
                         <TextInput
                             placeholder=""
@@ -147,12 +159,18 @@ class Version extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.viewLinha, { marginTop: 10 }]}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={[styles.txtInfo]}>Ambiente</Text>
+                    <View style={{ flex: 1 }}>    
+                        <Text 
+                            style={[styles.txtInfo]}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit
+                        >
+                            Ambiente:
+                        </Text>
                     </View>
                     <TouchableOpacity 
                         onPress={() => this.onShowModal('ambiente')}
-                        style={{ flexDirection: 'row', flex: 3 }}
+                        style={{ flexDirection: 'row', flex: 2 }}
                     >
                         <TextInput
                             placeholder=""
@@ -224,7 +242,7 @@ const styles = StyleSheet.create({
     txtInfo: {
         color: 'white',
         fontWeight: 'bold',
-        textAlign: 'center',
+        textAlign: 'left',
         paddingHorizontal: 10,
         marginTop: 10,
         fontSize: 16

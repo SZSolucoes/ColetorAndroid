@@ -88,6 +88,25 @@ class LoginApp extends Component {
         }
     }
 
+    renderTextVersion() {
+        switch (this.props.empresa) {
+            case '1': // Centelha
+                return (
+                    <Text style={styles.infoBot}>
+                        Coletor de Dados Centelha
+                    </Text>
+                );
+            case '2': // Dw
+                return (
+                    <Text style={styles.infoBot}>
+                        Coletor de Dados DW
+                    </Text>
+                );
+            default:
+                return (<View />);
+        }
+    }
+
     render() {
         return (
             <KeyboardAvoidingView
@@ -105,9 +124,7 @@ class LoginApp extends Component {
                             onPress={this.onPressVersion}
                             underlayColor={'#2a4d69'}
                         >
-                            <Text style={styles.infoBot}>
-                                Coletor de Dados Centelha
-                            </Text>
+                            {this.renderTextVersion()}
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -135,8 +152,7 @@ const styles = StyleSheet.create({
     },
     logoDw: {
         height: '100%',
-        width: '100%',
-        resizeMode: 'stretch'
+        width: '100%'
     },
     viewBot: {
         flex: 1,
