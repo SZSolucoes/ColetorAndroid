@@ -27,7 +27,7 @@ import ListaItemEstoque from './ListaItemEstoque';
 const imgClear = require('../../../resources/imgs/limpa_tela.png');
 
 class FormEstoque extends Component {
-    componentWillMount() {
+    componentDidMount() {
         this.props.iniciaTela();
         Actions.refresh({ right: this._renderRightButton });
     }

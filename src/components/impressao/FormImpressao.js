@@ -27,7 +27,7 @@ import {
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
 class FormImpressao extends Component {
-    componentWillMount() {
+    componentDidMount() {
         this.props.iniciaTela();
     }
     onPressPrint() {

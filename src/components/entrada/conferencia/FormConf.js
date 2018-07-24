@@ -57,7 +57,7 @@ class FormConf extends Component {
             batismoDisable: true
         };
     }
-    componentWillMount() {
+    componentDidMount() {
         this.setState({ qtdDisable: true });
         this.setState({ batismoDisable: true });
 

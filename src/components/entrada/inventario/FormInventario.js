@@ -35,7 +35,7 @@ import {
 const imgClear = require('../../../../resources/imgs/limpa_tela.png');
 
 class FormInventario extends Component {
-    componentWillMount() {
+    componentDidMount() {
         Actions.refresh({ right: this._renderRightButton });
     }
     componentWillUnmount() {

@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import Axios from 'axios';
 import { 
     modificaUsuario, 
     modificaSenha,
@@ -21,27 +20,34 @@ import {
 } from '../../actions/LoginActions';
 
 class Login extends Component {
-    componentWillMount() {
+
+    componentDidMount() {
         this.props.iniciaPermissao();
     }
-    pressLogin() {
-        const { usuario, senha, ambiente } = this.props;
 
-        console.log(ambiente);
+    pressLogin() {
+        const { usuario, senha, empresa, ambiente } = this.props;
+
+        if (empresa === '2') {
+            Alert.alert(
+                'Aviso',
+                'Em Desenvolvimento.'
+            );
+            return;
+        }
+
         if (ambiente === '2') {
             Alert.alert(
                 'HOMOLOGAÇÃO',
                 'LOGIN NO AMBIENTE DE HOMOLOGAÇÃO'
             );
-            Axios.defaults.baseURL = 'http://10.4.0.35/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
-        } else {
-            Axios.defaults.baseURL = 'http://192.168.50.219/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
         }
         Keyboard.dismiss();
-
+        
         this.props.modificaLoadingLogin();
         this.props.doLogin({ usuario, senha });
     }
+
     renderBotao() {
         if (this.props.loadingLogin) {
             return (
@@ -69,6 +75,7 @@ class Login extends Component {
                         onChangeText={usuario => this.props.modificaUsuario(usuario)}
                         value={this.props.usuario}
                         onSubmitEditing={() => { this.txtSenha.focus(); }}
+                        blurOnSubmit={false}
                     />
                     <TextInput 
                         ref={(input) => { this.txtSenha = input; }}
@@ -111,7 +118,8 @@ const mapStateToProps = state => (
         logArmazenamento: state.LoginReducer.logArmazenamento,
         logTodos: state.LoginReducer.logTodos,
         loadingLogin: state.LoginReducer.loadingLogin,
-        ambiente: state.VersionReducer.ambiente
+        ambiente: state.VersionReducer.ambiente,
+        empresa: state.VersionReducer.empresa
     }
 );
 

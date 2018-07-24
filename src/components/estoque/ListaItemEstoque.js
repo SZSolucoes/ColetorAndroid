@@ -32,7 +32,7 @@ const dataItem = [{
 }];
 
 class ListaItem extends Component {
-    componentWillMount() {
+    componentDidMount() {
         console.log(this.props.listaItem);
 
         if (this.props.listaItem === undefined) {

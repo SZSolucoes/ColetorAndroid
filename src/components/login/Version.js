@@ -6,7 +6,8 @@ import {
     ScrollView,
     TouchableOpacity,
     TextInput,
-    Image
+    Image,
+    AsyncStorage
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -19,13 +20,25 @@ import {
     verificaServico,
     iniciaTela,
     modificaModalVisible,
-    modificaAmbiente
+    modificaAmbiente,
+    modificaEmpresa,
+    modificaInputSelected,
+    modificaModalOptions
 } from '../../actions/VersionActions';
+import { doChangeUrlService } from '../utils/AxiosAux';
 
 import imgSeta from '../../../resources/imgs/seta.png';
 
 class Version extends Component {
-    componentWillMount() {
+
+    constructor(props) {
+        super(props);
+
+        this.onShowModal = this.onShowModal.bind(this);
+        this.onSelectModal = this.onSelectModal.bind(this);
+    }
+
+    componentDidMount() {
         this.props.iniciaTela();
 
         const version = '1.1.4';
@@ -34,6 +47,64 @@ class Version extends Component {
         this.props.verificaConexao();
         this.props.verificaServico();
     }
+
+    onShowModal(input) {   
+        const optionsAmbiente = [
+            {
+                key: '1',
+                label: 'Produção',
+            },
+            {
+                key: '2',
+                label: 'Homologação',
+            }];
+        const optionsEmpresa = [
+            {
+                key: '1',
+                label: 'Centelha',
+            },
+            {
+                key: '2',
+                label: 'DW',
+            }];
+
+        switch (input) {
+            case 'ambiente':
+                this.props.modificaModalOptions(optionsAmbiente);
+                this.props.modificaInputSelected('ambiente');
+                break;
+            case 'empresa':
+                this.props.modificaModalOptions(optionsEmpresa);
+                this.props.modificaInputSelected('empresa');
+                break;
+            default:
+        }
+
+        this.props.modificaModalVisible(true);
+    }
+
+    onSelectModal(value) { 
+        switch (this.props.inputSelected) {
+            case 'ambiente':
+                AsyncStorage.setItem('ambiente', value);
+                this.props.modificaAmbiente(value);
+                break;
+            case 'empresa':
+                AsyncStorage.setItem('empresa', value);
+                this.props.modificaEmpresa(value);
+                break;
+            default:     
+        }
+        this.setUrlService();   
+    }
+
+    setUrlService() {
+        const { empresa, ambiente } = this.props;
+        doChangeUrlService(empresa, ambiente); // Atualiza a baseURL com base na empresa e ambiente
+        this.props.verificaConexao();
+        this.props.verificaServico();
+    }
+    
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
@@ -46,11 +117,37 @@ class Version extends Component {
                 <View style={styles.viewLinha}>
                     <Text style={styles.txtInfo}>Serviço: {this.props.servico}</Text>
                 </View>
-                <View style={styles.viewLinha}>
-                    <Text style={[styles.txtInfo]}>Ambiente</Text>
+                <View style={[styles.viewLinha, { marginTop: 10 }]}>
+                    <View style={{ flex: 1 }}>
+                        <Text style={[styles.txtInfo]}>Empresa</Text>
+                    </View>
                     <TouchableOpacity 
-                        onPress={() => this.props.modificaModalVisible(true)}
-                        style={{ flexDirection: 'row', flex: 1 }}
+                        onPress={() => this.onShowModal('empresa')}
+                        style={{ flexDirection: 'row', flex: 3 }}
+                    >
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={[styles.input, { flex: 1 }]}
+                            value={this.props.desEmpresa}
+                        />
+                        <Image
+                            source={imgSeta}
+                            style={styles.imgSeta}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <View style={[styles.viewLinha, { marginTop: 10 }]}>
+                    <View style={{ flex: 1 }}>
+                        <Text style={[styles.txtInfo]}>Ambiente</Text>
+                    </View>
+                    <TouchableOpacity 
+                        onPress={() => this.onShowModal('ambiente')}
+                        style={{ flexDirection: 'row', flex: 3 }}
                     >
                         <TextInput
                             placeholder=""
@@ -73,17 +170,9 @@ class Version extends Component {
                     cancelButtonText="Cancelar"
                     noResultsText="Não encontrado"
                     visible={this.props.modalVisible}
-                    onSelect={this.props.modificaAmbiente}
+                    onSelect={this.onSelectModal}
                     onCancel={() => this.props.modificaModalVisible(false)}
-                    options={[
-                        {
-                            key: '1',
-                            label: 'Produção',
-                        },
-                        {
-                            key: '2',
-                            label: 'Homologação',
-                        }]}
+                    options={this.props.modalOptions}
                 />
             </ScrollView>
         );
@@ -97,7 +186,11 @@ const mapStateToProps = state => (
         conexao: state.VersionReducer.conexao,
         ambiente: state.VersionReducer.ambiente,
         desAmbiente: state.VersionReducer.desAmbiente,
-        modalVisible: state.VersionReducer.modalVisible
+        modalVisible: state.VersionReducer.modalVisible,
+        modalOptions: state.VersionReducer.modalOptions,
+        empresa: state.VersionReducer.empresa,
+        desEmpresa: state.VersionReducer.desEmpresa,
+        inputSelected: state.VersionReducer.inputSelected
     }
 );
 
@@ -109,7 +202,10 @@ export default connect(mapStateToProps, {
     verificaServico,
     iniciaTela,
     modificaAmbiente,
-    modificaModalVisible
+    modificaModalVisible,
+    modificaEmpresa,
+    modificaInputSelected,
+    modificaModalOptions
 })(Version);
 
 const styles = StyleSheet.create({

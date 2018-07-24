@@ -4,7 +4,11 @@ const INITIAL_STATE = {
     servico: '',
     modalVisible: false,
     ambiente: '1',
-    desAmbiente: 'Produção'
+    empresa: '1',
+    desAmbiente: 'Produção',
+    desEmpresa: 'Centelha',
+    inputSelected: '',
+    modalOptions: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -40,6 +44,33 @@ export default (state = INITIAL_STATE, action) => {
                 desAmbiente: desc
             };
         }
+        case 'modifica_empresa_log': {
+            let desc = '';
+
+            if (action.payload === '1') {
+                desc = 'Centelha';
+            } else {
+                desc = 'DW';
+            }
+            return { 
+                ...state, 
+                empresa: action.payload,
+                modalVisible: false,
+                desEmpresa: desc
+            };
+        }
+        case 'modifica_inputselected_log': {
+            return { 
+                ...state, 
+                inputSelected: action.payload
+            };
+        }
+        case 'modifica_modaloptions_log': {
+            return { 
+                ...state, 
+                modalOptions: [...action.payload]
+            };
+        }
         case 'modifica_modalvisible_log':
             return { 
                 ...state, 
@@ -50,7 +81,7 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 versao: '', 
                 conexao: '', 
-                servico: ''
+                servico: '',
             };
         default:
             return state;

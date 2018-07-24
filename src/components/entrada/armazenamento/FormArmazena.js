@@ -37,7 +37,7 @@ import {
 const imgClear = require('../../../../resources/imgs/limpa_tela.png');
 
 class FormArmazena extends Component {
-    componentWillMount() {
+    componentDidMount() {
         this.props.iniciaTela();
     }
     onPressEfetivar() {

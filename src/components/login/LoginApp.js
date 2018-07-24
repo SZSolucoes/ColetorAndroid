@@ -5,30 +5,100 @@ import {
     Image,
     Text,
     TouchableHighlight,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    Keyboard,
+    AsyncStorage
 } from 'react-native';
+
+import { connect } from 'react-redux';
 
 import { Actions } from 'react-native-router-flux';
 import Login from './Login';
 
-const imgLogo = require('../../../resources/imgs/centelhaLogo.jpg');
+import {
+    modificaAmbiente,
+    modificaEmpresa
+} from '../../actions/VersionActions';
 
-export default class LoginApp extends Component {
+const imgCentelha = require('../../../resources/imgs/centelhaLogo.jpg');
+const imgDw = require('../../../resources/imgs/dwLogo.jpg');
+
+class LoginApp extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.keyboardShow = this.keyboardShow.bind(this);
+        this.keyboardHide = this.keyboardHide.bind(this);
+        this.state = { showImg: true };
+    }
+
+    componentDidMount() {
+        AsyncStorage.getItem('empresa')
+            .then((value) => {
+                if (value) {
+                    this.props.modificaEmpresa(value);
+                }
+            });
+        AsyncStorage.getItem('ambiente')
+            .then((value) => {
+                if (value) {
+                    this.props.modificaAmbiente(value);
+                }
+            });
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardHide);
+    }
+
+    componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+
     onPressVersion() {
         Actions.versionApp();
     }
+
+    keyboardShow() {
+        this.setState({ showImg: false });
+    }
+    
+    keyboardHide() {
+        this.setState({ showImg: true });
+    }
+
+    renderImgLogo() {
+        switch (this.props.empresa) {
+            case '1': // Centelha
+                return (
+                    <Image 
+                        style={styles.logoCentelha}
+                        source={imgCentelha}
+                    />
+                );
+            case '2': // Dw
+                return (
+                    <Image 
+                        style={styles.logoDw}
+                        source={imgDw}
+                    />
+                );
+            default:
+                return (<View />);
+        }
+    }
+
     render() {
         return (
             <KeyboardAvoidingView
                 style={styles.container}
             >
                 <View style={styles.viewPrinc}>
-                    <View style={styles.viewTop}>
-                        <Image 
-                            style={styles.logo}
-                            source={imgLogo}
-                        />
-                    </View>
+                    { this.state.showImg && 
+                        <View style={styles.viewTop}>
+                            {this.renderImgLogo()}
+                        </View> 
+                    }
                     <Login />
                     <View style={styles.viewBot}>
                         <TouchableHighlight 
@@ -52,11 +122,21 @@ const styles = StyleSheet.create({
     },
     viewTop: {
         flex: 2,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        paddingBottom: 0.5,
+        borderBottomColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    logo: {
-        width: 318,
-        height: 120
+    logoCentelha: {
+        height: '95%',
+        width: '85%',
+        resizeMode: 'stretch'
+    },
+    logoDw: {
+        height: '100%',
+        width: '100%',
+        resizeMode: 'stretch'
     },
     viewBot: {
         flex: 1,
@@ -73,3 +153,12 @@ const styles = StyleSheet.create({
         flex: 1
     }
 });
+
+const mapStateToProps = (state) => ({
+    empresa: state.VersionReducer.empresa
+});
+
+export default connect(mapStateToProps, {
+    modificaAmbiente,
+    modificaEmpresa
+})(LoginApp);

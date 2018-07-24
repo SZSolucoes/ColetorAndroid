@@ -25,7 +25,7 @@ import {
 
 
 class FormConfLote extends Component {
-    componentWillMount() {
+    componentDidMount() {
         this.props.iniciaConfLote();
         Actions.refresh({ right: this._renderRightButton });
     }

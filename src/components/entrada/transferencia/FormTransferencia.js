@@ -29,7 +29,7 @@ import {
 } from '../../../actions/TransfereActions';
 
 class FormTransferencia extends Component {
-    componentWillMount() {
+    componentDidMount() {
         this.props.iniciaTela();
     }
     onPressTransfer() {

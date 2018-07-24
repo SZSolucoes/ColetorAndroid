@@ -25,7 +25,7 @@ import imgClear from '../../../../resources/imgs/limpa_tela.png';
 
 class FormConsultaBatismo extends Component {
 
-    componentWillMount() {
+    componentDidMount() {
         Actions.refresh({ right: this.renderRightButtonBar });
     }
     
