@@ -6,7 +6,8 @@ import {
     Image,
     ScrollView,
     TouchableHighlight,
-    ActivityIndicator
+    ActivityIndicator,
+    Platform
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -58,15 +59,15 @@ class MenuEntrada extends Component {
     onPressImpressao() {
         Actions.impressao();
     }
-    renderConferecia() {
+    renderConferecia(key) {
         if (this.props.loadingConf) {
             return (
-                <ActivityIndicator size="large" />
+                <ActivityIndicator key={key} size="large" />
             );
         }
         if (this.props.logConfReceb) {
             return (
-                <TouchableHighlight onPress={() => { this.onPressConf(); }} >
+                <TouchableHighlight key={key} onPress={() => { this.onPressConf(); }} >
                     <View style={styles.menu}>
                         <Image 
                             style={styles.imgMenu} 
@@ -78,10 +79,10 @@ class MenuEntrada extends Component {
             );
         }
     }
-    renderArmazenamento() {
+    renderArmazenamento(key) {
         if (this.props.logArmazenamento) {
             return (
-                <TouchableHighlight onPress={this.onPressArm}>
+                <TouchableHighlight key={key} onPress={this.onPressArm}>
                     <View style={styles.menu}>
                         <Image 
                             style={styles.imgMenu} 
@@ -93,10 +94,10 @@ class MenuEntrada extends Component {
             );
         }
     }
-    renderTransferencia() {
+    renderTransferencia(key) {
         if (this.props.logTransferencia) {
             return (
-                <TouchableHighlight onPress={this.onPressTransferencia}>
+                <TouchableHighlight key={key} onPress={this.onPressTransferencia}>
                     <View style={styles.menu}>
                         <Image 
                             style={styles.imgMenu} 
@@ -108,9 +109,9 @@ class MenuEntrada extends Component {
             );
         }
     }
-    renderInventario() {
+    renderInventario(key) {
         return (
-            <TouchableHighlight onPress={this.onPressInvent}>
+            <TouchableHighlight key={key} onPress={this.onPressInvent}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -121,9 +122,9 @@ class MenuEntrada extends Component {
             </TouchableHighlight>
         );
     }
-    renderInventarioEst() {
+    renderInventarioEst(key) {
         return (
-            <TouchableHighlight onPress={this.onPressInventEst}>
+            <TouchableHighlight key={key} onPress={this.onPressInventEst}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -134,10 +135,10 @@ class MenuEntrada extends Component {
             </TouchableHighlight>
         );
     }
-    renderConsulta() {
+    renderConsulta(key) {
         if (this.props.logEstoque) {
             return (
-                <TouchableHighlight onPress={this.onPressConsEstoq}>
+                <TouchableHighlight key={key} onPress={this.onPressConsEstoq}>
                     <View style={styles.menu}>
                         <Image 
                             style={styles.imgMenu} 
@@ -149,10 +150,10 @@ class MenuEntrada extends Component {
             );
         }
     }
-    renderConsultaBatismo() {
+    renderConsultaBatismo(key) {
         if (this.props.logEstoque) {
             return (
-                <TouchableHighlight onPress={this.onPressConsBatismo}>
+                <TouchableHighlight key={key} onPress={this.onPressConsBatismo}>
                     <View style={styles.menu}>
                         <Image 
                             style={styles.imgMenu} 
@@ -164,9 +165,9 @@ class MenuEntrada extends Component {
             );
         }
     }
-    renderRelacionaEan() {
+    renderRelacionaEan(key) {
         return (
-            <TouchableHighlight onPress={this.onPressRelEan}>
+            <TouchableHighlight key={key} onPress={this.onPressRelEan}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -177,9 +178,9 @@ class MenuEntrada extends Component {
             </TouchableHighlight>
         );
     }
-    renderImpressao() {
+    renderImpressao(key) {
         return (
-            <TouchableHighlight onPress={this.onPressImpressao}>
+            <TouchableHighlight key={key} onPress={this.onPressImpressao}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -193,22 +194,27 @@ class MenuEntrada extends Component {
     render() {
         return (
             <ScrollView style={styles.opcao}>
-                {this.renderConferecia()}
-                {this.renderArmazenamento()}
-                {this.renderTransferencia()}
-                {this.renderInventario()}
-                {this.renderInventarioEst()}
-                {this.renderConsulta()}
-                {this.renderConsultaBatismo()}
-                {this.renderRelacionaEan()}
-                {this.renderImpressao()}
+                { Platform.OS !== 'windows' ? (
+                    [
+                        this.renderConferecia('1'),
+                        this.renderArmazenamento('2'),
+                        this.renderTransferencia('3'),
+                        this.renderInventario('4'),
+                        this.renderInventarioEst('5'),
+                        this.renderConsulta('6'),
+                        this.renderConsultaBatismo('7'),
+                        this.renderRelacionaEan('8'),
+                        this.renderImpressao('9') 
+                    ]
+                ) : (
+                    this.renderConferecia()
+                )}
             </ScrollView>
         );
     }
 }
 
-const mapStateToProps = state => {
-    return (
+const mapStateToProps = state => (
         {
             logConfReceb: state.LoginReducer.logConfReceb,
             logEstoque: state.LoginReducer.logEstoque,
@@ -221,8 +227,7 @@ const mapStateToProps = state => {
             loadingConf: state.LoginReducer.loadingConf,
             usuario: state.LoginReducer.usuario,
         }
-    );
-};
+);
 
 export default connect(mapStateToProps, { 
     modificaLoadingConferencia,

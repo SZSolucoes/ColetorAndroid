@@ -1,8 +1,6 @@
 import React from 'react';
-import { Router, Scene, Actions } from 'react-native-router-flux';
-import { 
-    StyleSheet
-} from 'react-native';
+import { StyleSheet, Platform, View } from 'react-native';
+import { Router, Scene } from 'react-native-router-flux';
 
 import LoginApp from './components/login/LoginApp';
 import Version from './components/login/Version';
@@ -11,6 +9,7 @@ import MenuEntrada from './components/menu/MenuEntrada';
 import MenuSaida from './components/menu/MenuSaida';
 import Armazena from './components/entrada/armazenamento/Armazenamento';
 import Conferencia from './components/entrada/conferencia/Conferencia';
+import WinInfoItemConf from './components/entrada/conferencia/WinInfoItemConf';
 import Inventario from './components/entrada/inventario/Inventario';
 import Transferencia from './components/entrada/transferencia/Transferencia';
 import Estoque from './components/estoque/Estoque';
@@ -26,7 +25,7 @@ import Despacho from './components/saida/despacho/Despacho';
 import RelacionaEan from './components/relacionaean/RelacionaEan';
 import ConsultaEtiqBatismoEntrada from './components/entrada/consulta/ConsultaBatismoEntrada';
 
-export default props => (
+export default () => (
     <Router>
         <Scene 
             key="root"
@@ -85,7 +84,16 @@ export default props => (
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"
                 //initial
-            />
+            /> 
+            <Scene 
+                key='winInfoItemConf' 
+                component={WinInfoItemConf} 
+                title="Item Conferência" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+                hideNavBar
+            />          
             <Scene 
                 key='inventario' 
                 component={Inventario} 

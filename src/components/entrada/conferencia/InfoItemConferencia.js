@@ -73,7 +73,10 @@ class InfoItemConferencia extends Component {
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="next"
                                 style={styles.input}
-                                onChangeText={alturaItem => this.props.modificaAlturaItem(alturaItem)}
+                                onChangeText={
+                                    alturaItem => 
+                                    this.props.modificaAlturaItem(alturaItem)
+                                }
                                 value={this.props.altura}
                                 ref={(input) => { this.alturaItem = input; }}
                                 onSubmitEditing={() => { this.larguraItem.focus(); }}
@@ -91,7 +94,10 @@ class InfoItemConferencia extends Component {
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="next"
                                 style={styles.input}
-                                onChangeText={larguraItem => this.props.modificaLarguraItem(larguraItem)}
+                                onChangeText={
+                                    larguraItem => 
+                                    this.props.modificaLarguraItem(larguraItem)
+                                }
                                 value={this.props.largura}
                                 ref={(input) => { this.larguraItem = input; }}
                                 onSubmitEditing={() => { this.comprimentoItem.focus(); }}
@@ -109,7 +115,10 @@ class InfoItemConferencia extends Component {
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="next"
                                 style={styles.input}
-                                onChangeText={comprimentoItem => this.props.modificaComprimentoItem(comprimentoItem)}
+                                onChangeText={
+                                    comprimentoItem => 
+                                    this.props.modificaComprimentoItem(comprimentoItem)
+                                }
                                 value={this.props.comprimento}
                                 ref={(input) => { this.comprimentoItem = input; }}
                                 onSubmitEditing={(this.salvarInfoItem)}
@@ -129,8 +138,7 @@ class InfoItemConferencia extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return (
+const mapStateToProps = state => (
         {
             isInfoVisible: state.ConfereReducer.isInfoVisible,
             pesoItem: state.ConfereReducer.pesoItem,
@@ -138,8 +146,7 @@ const mapStateToProps = state => {
             comprimento: state.ConfereReducer.comprimento,
             largura: state.ConfereReducer.largura
         }
-    );
-};
+);
 
 export default connect(mapStateToProps, 
     { 

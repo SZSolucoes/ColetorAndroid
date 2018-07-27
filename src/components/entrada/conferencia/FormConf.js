@@ -9,7 +9,8 @@ import {
     Image,
     Alert,
     Button,
-    ActivityIndicator
+    ActivityIndicator,
+    Platform
 } from 'react-native';
 import _ from 'lodash';
 import { connect } from 'react-redux';
@@ -58,9 +59,7 @@ class FormConf extends Component {
         };
     }
     componentDidMount() {
-        this.setState({ qtdDisable: true });
-        this.setState({ batismoDisable: true });
-
+        this.setState({ ...this.state, qtdDisable: true, batismoDisable: true });
         this.props.iniciaTela();
     }    
     onPressEfetivar() {
@@ -329,16 +328,20 @@ class FormConf extends Component {
         this.props.modificaQtItem();
         this.props.modificaBatismo();
 
-        this.setState({ qtdDisable: true });
+        this.setState({ ...this.state, qtdDisable: true });
 
         this.qtItem.focus();
 
         if (_.toInteger(itemConf.peso) <= 0) {
-            this.props.modificaInfoVisible(true);
+            if (Platform.OS === 'windows') {
+                Actions.winInfoItemConf();
+            } else {
+                this.props.modificaInfoVisible(true);
+            }
         }        
     }
     validQtd() {
-        this.setState({ batismoDisable: true });
+        this.setState({ ...this.state, batismoDisable: true });
 
         const item = this.props.itemConfere;
 
@@ -375,6 +378,21 @@ class FormConf extends Component {
                 <ActivityIndicator size="large" />
             );
         }
+
+        if (Platform.OS === 'windows') {
+            return (
+                <View style={styles.viewBotao}>
+                    <View style={{ width: 150 }}>
+                        <Button
+                            onPress={() => { this.validQtdItem(); }}
+                            title="Efetivar"
+                            color="black"
+                        />
+                    </View>
+                </View>
+            );
+        }
+
         return (
             <View style={[styles.viewBotao, { flex: 2 }]}>
                 <Button
@@ -586,24 +604,69 @@ class FormConf extends Component {
                         />
                     </View>
                 </View>
-                <View style={styles.viewLinha}>
-                    {this.renderBtEfetiva()}
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
-                        <View style={styles.viewBtEtiq}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                editable={this.state.qtdDisable}
-                                returnKeyType="go"
-                                style={styles.input}
-                                onChangeText={qtEtiq => this.props.modificaQtEtiq(qtEtiq)}
-                                value={this.props.qtEtiq}
-                                ref={(input) => { this.qtEtiq = input; }}
-                            />
+                { Platform.OS !== 'windows' ? (
+                    <View style={styles.viewLinha}>
+                        {this.renderBtEfetiva()}
+                        <View style={[styles.viewCampo, { flex: 1 }]}>
+                            <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
+                            <View style={styles.viewBtEtiq}>
+                                <TextInput
+                                    placeholder=""
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    keyboardType="numeric"
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    editable={this.state.qtdDisable}
+                                    returnKeyType="go"
+                                    style={styles.input}
+                                    onChangeText={qtEtiq => this.props.modificaQtEtiq(qtEtiq)}
+                                    value={this.props.qtEtiq}
+                                    ref={(input) => { this.qtEtiq = input; }}
+                                />
+                                <TouchableOpacity
+                                    style={styles.btSearch}
+                                    onPress={() => { this.onPressPrint(); }}
+                                >
+                                    <Image
+                                        source={imgPrinter}
+                                        style={styles.imgSearch}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                ) : (
+                    // WINDOWS RENDER
+                    <View style={styles.viewLinha}>
+                        <View style={{ flex: 2 }}>
+                            {this.renderBtEfetiva()}
+                        </View>
+                        <View style={[styles.viewCampo, { flex: 1 }]}>
+                            <Text style={styles.txtLabel}>Qtde Etiq</Text>
+                            <View style={styles.viewBtEtiq}>
+                                <TextInput
+                                    placeholder=""
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    keyboardType="numeric"
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    editable={this.state.qtdDisable}
+                                    returnKeyType="go"
+                                    style={styles.input}
+                                    onChangeText={qtEtiq => this.props.modificaQtEtiq(qtEtiq)}
+                                    value={this.props.qtEtiq}
+                                    ref={(input) => { this.qtEtiq = input; }}
+                                />
+                            </View>
+                        </View>
+                        <View 
+                            style={{
+                                justifyContent: 'center', 
+                                alignItems: 'center',
+                                marginTop: 15,
+                                marginRight: 5 
+                            }}
+                        >
                             <TouchableOpacity
                                 style={styles.btSearch}
                                 onPress={() => { this.onPressPrint(); }}
@@ -615,7 +678,7 @@ class FormConf extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </View>
+                ) }
                 <View style={{ padding: 5 }} >
                     <ListaItem />
                 </View>

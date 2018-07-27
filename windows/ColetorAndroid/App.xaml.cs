@@ -3,7 +3,9 @@ using ReactNative.Modules.Launch;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Foundation;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -24,10 +26,14 @@ namespace ColetorAndroid
         public App()
         {
             this.InitializeComponent();
+
             this.Suspending += OnSuspending;
             this.Resuming += OnResuming;
             this.EnteredBackground += OnEnteredBackground;
             this.LeavingBackground += OnLeavingBackground;
+
+            //ApplicationView.PreferredLaunchViewSize = new Size(1000, 1000);
+            //ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
         }
 
         /// <summary>
@@ -83,7 +89,7 @@ namespace ColetorAndroid
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
                 AppViewBackButtonVisibility.Visible;
 #endif
-
+            
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -111,6 +117,7 @@ namespace ColetorAndroid
             }
 
             // Ensure the current window is active
+            //ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 1500, Height = 800 });
             Window.Current.Activate();
         }
 
@@ -165,5 +172,6 @@ namespace ColetorAndroid
         {
             _host.OnLeavingBackground();
         }
+
     }
 }

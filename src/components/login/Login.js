@@ -7,7 +7,8 @@ import {
     Text,
     Keyboard,
     ActivityIndicator,
-    Alert
+    Alert,
+    Platform
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -21,8 +22,20 @@ import {
 
 class Login extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.usuarioKeyPress = this.usuarioKeyPress.bind(this);
+    }
+
     componentDidMount() {
         this.props.iniciaPermissao();
+    }
+
+    usuarioKeyPress(e) {
+        if (e.nativeEvent.key.toLowerCase() === 'tab') {
+            this.txtSenha.focus();
+        }
     }
 
     pressLogin() {
@@ -61,35 +74,68 @@ class Login extends Component {
             />
         );
     }
+
     render() {
         return (
             <View style={styles.viewLogin}>
                 <View>
-                    <TextInput
-                        placeholder="Usuário"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        placeholderTextColor='rgba(255,255,255,0.7)'
-                        returnKeyType="next"
-                        style={styles.input}
-                        onChangeText={usuario => this.props.modificaUsuario(usuario)}
-                        value={this.props.usuario}
-                        onSubmitEditing={() => { this.txtSenha.focus(); }}
-                        blurOnSubmit={false}
-                    />
-                    <TextInput 
-                        ref={(input) => { this.txtSenha = input; }}
-                        placeholder="Senha"
-                        placeholderTextColor='rgba(255,255,255,0.7)'
-                        returnKeyType="go"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        secureTextEntry
-                        style={styles.input}
-                        onChangeText={senha => this.props.modificaSenha(senha)}
-                        value={this.props.senha}
-                        onSubmitEditing={() => { this.pressLogin(); }}
-                    />
+                    { Platform.OS !== 'windows' ? (
+                        <View>
+                            <TextInput
+                                placeholder="Usuário"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={styles.input}
+                                onChangeText={usuario => this.props.modificaUsuario(usuario)}
+                                value={this.props.usuario}
+                                onSubmitEditing={() => { this.txtSenha.focus(); }}
+                                blurOnSubmit={false}
+                            />
+                            <TextInput 
+                                ref={(input) => { this.txtSenha = input; }}
+                                placeholder="Senha"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                secureTextEntry
+                                style={styles.input}
+                                onChangeText={senha => this.props.modificaSenha(senha)}
+                                value={this.props.senha}
+                                onSubmitEditing={() => { this.pressLogin(); }}
+                            />
+                        </View>
+                    ) : (
+                        <View>
+                            <TextInput
+                                placeholder="Usuário"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={styles.input}
+                                onKeyPress={(e) => this.usuarioKeyPress(e)}
+                                onChangeText={usuario => this.props.modificaUsuario(usuario)}
+                                value={this.props.usuario}
+                                onSubmitEditing={() => { this.txtSenha.focus(); }}
+                                blurOnSubmit={false}
+                            />
+                            <TextInput 
+                                ref={(input) => { this.txtSenha = input; }}
+                                placeholder="Senha"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                autoCorrect={false}
+                                secureTextEntry
+                                style={styles.input}
+                                onChangeText={senha => this.props.modificaSenha(senha)}
+                                value={this.props.senha}
+                                onSubmitEditing={() => { this.pressLogin(); }}
+                            />
+                        </View>
+                    ) }
                 </View>
                 <View style={styles.loginBtn}>
                     {this.renderBotao()}
