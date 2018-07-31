@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Platform, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Router, Scene } from 'react-native-router-flux';
 
 import LoginApp from './components/login/LoginApp';
@@ -24,6 +24,8 @@ import Consolidacao from './components/saida/consolidacao/Consolidacao';
 import Despacho from './components/saida/despacho/Despacho';
 import RelacionaEan from './components/relacionaean/RelacionaEan';
 import ConsultaEtiqBatismoEntrada from './components/entrada/consulta/ConsultaBatismoEntrada';
+import ConsultaNF from './components/entrada/consulta/ConsultaNF';
+import ConsultaNFPush from './components/entrada/consulta/ConsultaNFPush';
 
 export default () => (
     <Router>
@@ -211,6 +213,22 @@ export default () => (
                 key='consultaBatismoEntrada' 
                 component={ConsultaEtiqBatismoEntrada} 
                 title="Consulta Etiqueta Batismo" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='consultaNF' 
+                component={ConsultaNF} 
+                title="Consulta Nota Fiscal" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='consultaNFPush' 
+                component={ConsultaNFPush} 
+                title="Notas Fiscais" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

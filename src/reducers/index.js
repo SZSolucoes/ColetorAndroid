@@ -11,6 +11,7 @@ import RelEanReducer from './RelEanReducer';
 import ConsolidacaoReducer from './ConsolidacaoReducer';
 import DespachoReducer from './DespachoReducer';
 import ConsEtiqBatEntradaReducer from './ConsEtiqBatEntradaReducer';
+import ConsultaNFReducer from './ConsultaNFReducer';
 
 export default combineReducers({
     LoginReducer,
@@ -24,5 +25,6 @@ export default combineReducers({
     RelEanReducer,
     ConsolidacaoReducer,
     DespachoReducer,
-    ConsEtiqBatEntradaReducer
+    ConsEtiqBatEntradaReducer,
+    ConsultaNFReducer
 });

@@ -27,6 +27,7 @@ const imgRelEan = require('../../../resources/imgs/relacionaean.png');
 const imgTransEnt = require('../../../resources/imgs/transf_entrada.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 const imgConsBatismo = require('../../../resources/imgs/consulta_etiq_48.png');
+const imgConsultaNF = require('../../../resources/imgs/consultanf.png');
 
 class MenuEntrada extends Component {
     onPressConf() {
@@ -58,6 +59,9 @@ class MenuEntrada extends Component {
     }
     onPressImpressao() {
         Actions.impressao();
+    }
+    onPressConsultaNF() {
+        Actions.consultaNF();
     }
     renderConferecia(key) {
         if (this.props.loadingConf) {
@@ -191,6 +195,19 @@ class MenuEntrada extends Component {
             </TouchableHighlight>
         );
     }
+    renderConsultaNF(key) {
+        return (
+            <TouchableHighlight key={key} onPress={this.onPressConsultaNF}>
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgConsultaNF}
+                    />
+                    <Text style={styles.txtMenu}>Consulta Nota Fiscal</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
     render() {
         return (
             <ScrollView style={styles.opcao}>
@@ -204,7 +221,8 @@ class MenuEntrada extends Component {
                         this.renderConsulta('6'),
                         this.renderConsultaBatismo('7'),
                         this.renderRelacionaEan('8'),
-                        this.renderImpressao('9') 
+                        this.renderImpressao('9'), 
+                        this.renderConsultaNF('10') 
                     ]
                 ) : (
                     this.renderConferecia()
