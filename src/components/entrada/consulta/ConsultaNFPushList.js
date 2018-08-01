@@ -82,10 +82,6 @@ class ConsultaNFPushList extends Component {
                         renderItem={this.renderItem}
                         ListHeaderComponent={this.renderHeader}
                         initialNumToRender={10}
-                        onEndReachedThreshold={50}
-                        getItemLayout={(data, index) => (
-                            { length: 40, offset: 40 * index, index }
-                        )}
                     />
                 </ScrollView>
             </View>
