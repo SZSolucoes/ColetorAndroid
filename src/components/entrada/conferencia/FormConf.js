@@ -90,6 +90,8 @@ class FormConf extends Component {
 
         const item = this.props.itemConfere;
 
+        let qtConferida = 0;
+
         if (batismo) {
             if (batismo.length === 0) {
                 Alert.alert(
@@ -154,11 +156,25 @@ class FormConf extends Component {
             return;
         }
 
+        console.log(listaItemLote);
+
         if (item.tpCont === '3') {
             if (listaItemLote.length === 0) {
                 Alert.alert(
                     'Conferência',
                     'Lote deve ser informado!'
+                );
+                return;
+            }
+
+            for (let i = 0; i < listaItemLote.length; i++) {
+                qtConferida += _.toInteger(listaItemLote[i].qtdItemLote);
+            }
+    
+            if (_.toInteger(qtConferida) !== _.toInteger(qtItem)) {
+                Alert.alert(
+                    'Conferência',
+                    'Quantidade Inválida!'
                 );
                 return;
             }
@@ -180,8 +196,8 @@ class FormConf extends Component {
             return; 
         }
 
-        this.props.modificaOnEfetivar(true);
-        this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });        
+        //this.props.modificaOnEfetivar(true);
+        //this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });        
     }
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
