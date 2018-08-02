@@ -217,7 +217,7 @@ const buscaSuccess = (dispatch, response) => {
     } else {
         Alert.alert(
             'Erro Conferência',
-            resposta.data.message
+            resposta.message
         );
     }
 };
@@ -244,7 +244,7 @@ export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia 
                 itCodigo: itemConfere.itCode,
                 qtdItemNF: itemConfere.qtdItem,
                 qtdItemConf: conferencia.qtItem,
-                pesoItem: conferencia.peso,
+                pesoItem: conferencia.pesoItem,
                 altura: conferencia.altura,
                 largura: conferencia.largura,
                 comprimento: conferencia.comprimento,
