@@ -20,7 +20,7 @@ export const doChangeUrlService = (empresa, ambiente) => {
                     Axios.defaults.baseURL = 'http://192.168.50.219/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
                     break;
                 case '2': // Ambiente de homologação
-                    Axios.defaults.baseURL = 'http://10.4.0.35/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
+                    Axios.defaults.baseURL = 'http://10.4.0.35/cgi-bin/coletorDW.sh/WService=coletorDW';
                     break;
                 default:
             }
