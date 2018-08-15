@@ -41,24 +41,17 @@ class Login extends Component {
     pressLogin() {
         const { usuario, senha, empresa, ambiente } = this.props;
 
-        if (empresa === '2') {
+        if (empresa === '2' && ambiente === '1') {
             Alert.alert(
                 'Aviso',
-                'Em Desenvolvimento.'
+                'Ambiente disponível apenas em fase de homologação.'
             );
             return;
-        }
-
-        if (ambiente === '2') {
-            Alert.alert(
-                'HOMOLOGAÇÃO',
-                'LOGIN NO AMBIENTE DE HOMOLOGAÇÃO'
-            );
         }
         Keyboard.dismiss();
         
         this.props.modificaLoadingLogin();
-        this.props.doLogin({ usuario, senha });
+        this.props.doLogin({ usuario, senha, ambiente });
     }
 
     renderBotao() {

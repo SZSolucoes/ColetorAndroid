@@ -25,7 +25,7 @@ export default class MenuApp extends Component {
             'Em Desenvolvimento'
         );
         return;
-        Actions.menuSaida();
+        //Actions.menuSaida();
     }
     render() {
         console.log(this.props);
