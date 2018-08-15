@@ -5,10 +5,13 @@ import {
     Text,
     Image,
     ScrollView,
-    TouchableHighlight
+    TouchableHighlight,
+    ActivityIndicator
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import { store } from '../../App';
+import { fetchListItensSep } from '../../actions/ListaSeparacaoActions';
 
 const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
 const imgConfCheck = require('../../../resources/imgs/conferencia-volume-64.png');
@@ -21,9 +24,24 @@ const imgRelEan = require('../../../resources/imgs/relacionaean.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
 class MenuSaida extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.onPressListSep = this.onPressListSep.bind(this);
+        this.onPressConf = this.onPressConf.bind(this);
+        this.onPressConfVol = this.onPressConfVol.bind(this);
+        this.onPressConsultEtiq = this.onPressConsultEtiq.bind(this);
+        this.onPressConsEstoq = this.onPressConsEstoq.bind(this);
+        this.onPressRelEan = this.onPressRelEan.bind(this);
+        this.onPressConsolid = this.onPressConsolid.bind(this);
+        this.onPressDespacho = this.onPressDespacho.bind(this);
+        this.onPressImpressao = this.onPressImpressao.bind(this);
+    }
     
     onPressListSep() {
-        Actions.listaSeparacaoSaida();
+        const userName = store.getState().LoginReducer.usuario;
+        this.props.fetchListItensSep(userName);
     }
     onPressConf() {
         Actions.conferenciaSeparacao();
@@ -52,13 +70,25 @@ class MenuSaida extends Component {
     renderListaSep() {
         return (
             <TouchableHighlight onPress={this.onPressListSep}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgListSep}
-                    />
-                    <Text style={styles.txtMenu}>Lista de Separação</Text>
-                </View>
+                
+                    { this.props.loadingListSep ?
+                        (   
+                            <View style={[styles.menu, { justifyContent: 'center' }]}>
+                                <View style={{ marginVertical: 6 }}>
+                                    <ActivityIndicator size={'large'} />
+                                </View>
+                            </View>
+                        ) : (
+                                <View style={styles.menu}>
+                                    <Image 
+                                        style={styles.imgMenu} 
+                                        source={imgListSep}
+                                    />
+                                    <Text style={styles.txtMenu}>Lista de Separação</Text>
+                                </View> 
+                            )
+                    }
+                
             </TouchableHighlight>
         );
     }
@@ -184,7 +214,6 @@ class MenuSaida extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
     return (
         {
             logConfReceb: state.LoginReducer.logConfReceb,
@@ -194,12 +223,15 @@ const mapStateToProps = state => {
             logConfSeparacao: state.LoginReducer.logConfSeparacao,
             logTransferencia: state.LoginReducer.logTransferencia,
             logArmazenamento: state.LoginReducer.logArmazenamento,
-            logTodos: state.LoginReducer.logTodos
+            logTodos: state.LoginReducer.logTodos,
+            loadingListSep: state.ListaSeparacaoReducer.loadingListSep
         }
     );
 };
 
-export default connect(mapStateToProps, null)(MenuSaida);
+export default connect(mapStateToProps, {
+    fetchListItensSep
+})(MenuSaida);
 
 const styles = StyleSheet.create({
     opcao: {

@@ -80,7 +80,6 @@ export const buscaInfoEANTransf = (codEAN) => {
 };
 
 const buscaSuccess = (dispatch, response) => {
-    console.log(response);
     if (response.data.success === 'true') {
         dispatch({ type: 'modifica_item_trnf', payload: response.data.item });
     } else {
@@ -99,7 +98,6 @@ const buscaError = () => {
 };
 
 export const efetivaTransferencia = (usuario, codEAN, codLocalOrig, codLocalDest, qtItem, codLote) => {
-    console.log(codLote);
     return dispatch => {
         Axios.get('/app/doTransfer.p', {
             params: {

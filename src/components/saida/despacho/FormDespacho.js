@@ -30,8 +30,6 @@ class FormDespacho extends Component {
         const listaItens = this.props.listaItens;
         const index = listaItens.findIndex((value) => value.vol === codVol);
 
-        console.log(index);
-
         if (index !== -1) {
             listaItens.splice(index, 1);
             this.props.removeItem(listaItens);

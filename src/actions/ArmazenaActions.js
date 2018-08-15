@@ -103,7 +103,6 @@ export const buscaInfoBastimo = (batismo) => {
 };
 
 const buscaBatismoSuccess = (dispatch, response) => {
-    console.log(response.data.etiqueta);
     if (response.data.success === 'true') {
         dispatch({ type: 'modifica_info_batismo_arm', payload: response.data.etiqueta });
     } else {
@@ -115,7 +114,6 @@ const buscaBatismoSuccess = (dispatch, response) => {
 };
 
 const buscaBatismoError = () => {
-    console.log('buscaBatismoError');
     Alert.alert(
         'Erro Armazenamento',
         'Erro Conexão!'

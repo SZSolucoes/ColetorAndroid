@@ -19,7 +19,6 @@ export const doConsBatismo = codEtiqBatismo => dispatch => {
     };
 
 const buscaSuccess = (dispatch, response) => {
-    console.log(response);
     if (response.data.success === 'true') {
         dispatch({ type: 'modifica_listitem_consbatentrada', payload: response.data.item });
     } else {

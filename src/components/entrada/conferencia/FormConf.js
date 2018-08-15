@@ -156,8 +156,6 @@ class FormConf extends Component {
             return;
         }
 
-        console.log(listaItemLote);
-
         if (item.tpCont === '3') {
             if (listaItemLote.length === 0) {
                 Alert.alert(

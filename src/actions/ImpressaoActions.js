@@ -49,9 +49,6 @@ export const modificaDescItem = (descItem) => {
 };
 
 export const imprimeEtiquetaEAN = (usuario, codEAN, qtdEtiq) => {
-    console.log(usuario);
-    console.log(codEAN);
-    console.log(qtdEtiq);
     return dispatch => {
         Axios.get('/app/doPrint.p', {
             params: {

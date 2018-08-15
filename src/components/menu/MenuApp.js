@@ -28,7 +28,6 @@ export default class MenuApp extends Component {
         //Actions.menuSaida();
     }
     render() {
-        console.log(this.props);
         return (
             <View style={styles.viewPrinc}>
                 <View style={styles.opcao}>

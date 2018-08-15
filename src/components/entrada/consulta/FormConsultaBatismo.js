@@ -35,7 +35,6 @@ class FormConsultaBatismo extends Component {
 
     doConsultBatismo() {
         const codEtiqBatismo = this.props.codEtiqBatismo;
-        console.log(codEtiqBatismo);
         this.props.doConsBatismo(codEtiqBatismo);
     }
 

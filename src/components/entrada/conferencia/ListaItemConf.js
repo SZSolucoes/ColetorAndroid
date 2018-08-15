@@ -45,7 +45,6 @@ class ListaItem extends Component {
         );
     }
     renderItem = ({ item }) => {
-        console.log(item.ean);
         // Se pelo menos um ean estiver disponivel entao não possue erro 
         if (item.ean1.length > 0 ||
             item.ean2.length > 0 ||

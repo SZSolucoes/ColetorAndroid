@@ -33,8 +33,6 @@ const dataItem = [{
 
 class ListaItem extends Component {
     componentDidMount() {
-        console.log(this.props.listaItem);
-
         if (this.props.listaItem === undefined) {
             this.props.modificaListaItem(dataItem);
         }
