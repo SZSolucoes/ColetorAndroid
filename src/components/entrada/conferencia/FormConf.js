@@ -179,7 +179,7 @@ class FormConf extends Component {
         } 
         
         if (qtItem) {
-            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+            if (qtItem.length === 0 || _.toInteger(qtItem) < 0) {
                 Alert.alert(
                     'Conferência',
                     'Quantidade Item deve ser maior que 0!'
@@ -194,8 +194,8 @@ class FormConf extends Component {
             return; 
         }
 
-        //this.props.modificaOnEfetivar(true);
-        //this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });        
+        this.props.modificaOnEfetivar(true);
+        this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });        
     }
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
@@ -237,7 +237,7 @@ class FormConf extends Component {
         const { qtItem } = this.props;
 
         if (qtItem) {
-            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+            if (qtItem.length === 0 || _.toInteger(qtItem) < 0) {
                 Alert.alert(
                     'Conferência',
                     'Quantidade Item deve ser maior que 0!'
@@ -362,7 +362,7 @@ class FormConf extends Component {
         const { qtItem } = this.props;
 
         if (qtItem) {
-            if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
+            if (qtItem.length === 0 || _.toInteger(qtItem) < 0) {
                 Alert.alert(
                     'Conferência',
                     'Quantidade Item deve ser maior que 0!'
