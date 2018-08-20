@@ -119,14 +119,16 @@ class LoginApp extends Component {
                         </View> 
                     }
                     <Login />
-                    <View style={styles.viewBot}>
-                        <TouchableHighlight 
-                            onPress={this.onPressVersion}
-                            underlayColor={'#2a4d69'}
-                        >
-                            {this.renderTextVersion()}
-                        </TouchableHighlight>
-                    </View>
+                    { this.state.showImg && 
+                        <View style={styles.viewBot}>
+                            <TouchableHighlight 
+                                onPress={this.onPressVersion}
+                                underlayColor={'#2a4d69'}
+                            >
+                                {this.renderTextVersion()}
+                            </TouchableHighlight>
+                        </View>
+                    }
                 </View>
             </KeyboardAvoidingView>
         );
