@@ -25,7 +25,7 @@ export const modificaClean = () => (
 );
 
 export const buscaItemsNF = (usuario, codNF) => dispatch => {
-        Axios.get('/app/getInvoiceInfo.p', {
+        Axios.get('/coletor/getInvoiceInfo.p', {
             params: {
                 nrodocto: codNF
             },

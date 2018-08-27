@@ -69,7 +69,7 @@ export const iniciaTela = () => {
 
 export const buscaInfoEANTransf = (codEAN) => {
     return dispatch => {
-        Axios.get('/app/getEanInfoTransf.p', {
+        Axios.get('/coletor/getEanInfoTransf.p', {
             params: {
                 codEAN
             }
@@ -99,7 +99,7 @@ const buscaError = () => {
 
 export const efetivaTransferencia = (usuario, codEAN, codLocalOrig, codLocalDest, qtItem, codLote) => {
     return dispatch => {
-        Axios.get('/app/doTransfer.p', {
+        Axios.get('/coletor/doTransfer.p', {
             params: {
                 usuario,
                 codEAN,

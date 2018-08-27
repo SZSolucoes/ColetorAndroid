@@ -187,7 +187,7 @@ export const limpaTela = () => {
 
 export const buscaNotaConferencia = (usuario) => {
     return dispatch => {
-        Axios.get('/app/getReceptPrior.p', {
+        Axios.get('/coletor/getReceptPrior.p', {
             params: {
                 usuario
             },
@@ -232,7 +232,7 @@ const buscaError = (dispatch) => {
 
 export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia }) => {
     return dispatch => {
-        Axios.get('/app/doCheckAR.p', {
+        Axios.get('/coletor/doCheckAR.p', {
             params: {
                 usuario,
                 etiqBatismo: conferencia.batismo,

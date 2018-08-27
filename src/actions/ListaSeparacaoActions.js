@@ -98,7 +98,7 @@ export const fetchListItensSep = (userName) => dispatch => {
         payload: true
     });
 
-    Axios.get('/app/getPickingPriorNew.p', {
+    Axios.get('/coletor/getPickingPriorNew.p', {
         params: {
             userName
         },
@@ -152,7 +152,7 @@ const onFetchError = (dispatch) => {
 };
 
 export const doSep = (params, newItemList) => dispatch => {
-    Axios.get('/app/doPickingNew.p', { params })
+    Axios.get('/coletor/doPickingNew.p', { params })
         .then((res) => onSepSuccess(dispatch, res, newItemList))
         .catch(() => onSepError()); 
 };

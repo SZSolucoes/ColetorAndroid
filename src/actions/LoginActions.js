@@ -20,7 +20,7 @@ export const iniciaPermissao = () => ({
         type: 'inicia_permissao_log'
 });
 export const doLogin = ({ usuario, senha, ambiente }) => dispatch => {
-        Axios.get('/app/doLogin.p', {
+        Axios.get('/coletor/doLogin.p', {
             params: {
                 username: usuario,
                 password: senha

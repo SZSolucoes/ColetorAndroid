@@ -41,7 +41,7 @@ export const modificaModalVisible = (modalVisible) => ({
 });
 
 export const verificaServico = () => dispatch => {
-        Axios.get('/app/getService.p')
+        Axios.get('/coletor/getService.p')
         .then(response => serviceSuccess(dispatch, response))
         .catch(error => serviceError(dispatch, error));
 };

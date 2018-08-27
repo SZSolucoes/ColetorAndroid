@@ -50,7 +50,7 @@ export const modificaListaItem = (listaItem) => {
 
 export const buscaEstoque = (codEAN) => {
     return dispatch => {
-        Axios.get('/app/getStockInfoByEan.p', {
+        Axios.get('/coletor/getStockInfoByEan.p', {
             params: {
                 cod_ean: codEAN
             }
