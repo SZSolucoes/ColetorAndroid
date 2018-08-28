@@ -187,7 +187,7 @@ export const limpaTela = () => {
 
 export const buscaNotaConferencia = (usuario) => {
     return dispatch => {
-        Axios.get('/app/getReceptPrior.p', {
+        Axios.get('/coletor/getReceptPrior.p', {
             params: {
                 usuario
             },
@@ -232,7 +232,7 @@ const buscaError = (dispatch) => {
 
 export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia }) => {
     return dispatch => {
-        Axios.get('/app/doCheckAR.p', {
+        Axios.get('/coletor/doCheckAR.p', {
             params: {
                 usuario,
                 etiqBatismo: conferencia.batismo,
@@ -266,18 +266,26 @@ const confereSuccess = (dispatch, response, notaConfere, itemConfere) => {
 
     dispatch({ type: 'modifica_onEfetivar_conf', payload: false });
 
-    if (response.data.success === 'true') {
-        dispatch({ type: 'efetiva_conferencia', payload: retorno });
-        Alert.alert(
-            'Conferência',
-            response.data.message
-        );
+    if (response && response.data && typeof response.data === 'object') {
+        if (response.data.success === 'true') {
+            dispatch({ type: 'efetiva_conferencia', payload: retorno });
+            Alert.alert(
+                'Conferência',
+                response.data.message
+            );
+        } else {
+            Alert.alert(
+                'Erro Conferência',
+                response.data.message
+            );
+        }
     } else {
         Alert.alert(
-            'Erro Conferência',
-            response.data.message
+            'Conferência',
+            'Ocorreu uma falha interna no servidor, verifique a conexão'
         );
     }
+
 };
 
 const confereError = (dispatch) => {

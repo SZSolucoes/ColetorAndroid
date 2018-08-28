@@ -9,7 +9,7 @@ export const modificaBatismo = codEtiqBatismo => ({
 export const doConsBatismo = codEtiqBatismo => dispatch => {
         dispatch({ type: 'modifica_clean_consbatentrada' });
 
-        Axios.get('/app/getConsEtiqBatismo.p', {
+        Axios.get('/coletor/getConsEtiqBatismo.p', {
             params: {
                 codEtiqBatismo
             }
@@ -19,7 +19,6 @@ export const doConsBatismo = codEtiqBatismo => dispatch => {
     };
 
 const buscaSuccess = (dispatch, response) => {
-    console.log(response);
     if (response.data.success === 'true') {
         dispatch({ type: 'modifica_listitem_consbatentrada', payload: response.data.item });
     } else {

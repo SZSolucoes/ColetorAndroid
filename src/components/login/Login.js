@@ -8,7 +8,8 @@ import {
     Keyboard,
     ActivityIndicator,
     Alert,
-    Platform
+    Platform,
+    TouchableWithoutFeedback
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -41,13 +42,6 @@ class Login extends Component {
     pressLogin() {
         const { usuario, senha, empresa, ambiente } = this.props;
 
-        if (empresa === '2' && ambiente === '1') {
-            Alert.alert(
-                'Aviso',
-                'Ambiente disponível apenas em fase de homologação.'
-            );
-            return;
-        }
         Keyboard.dismiss();
         
         this.props.modificaLoadingLogin();
@@ -70,75 +64,79 @@ class Login extends Component {
 
     render() {
         return (
-            <View style={styles.viewLogin}>
-                <View>
-                    { Platform.OS !== 'windows' ? (
-                        <View>
-                            <TextInput
-                                placeholder="Usuário"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={styles.input}
-                                onChangeText={usuario => this.props.modificaUsuario(usuario)}
-                                value={this.props.usuario}
-                                onSubmitEditing={() => { this.txtSenha.focus(); }}
-                                blurOnSubmit={false}
-                            />
-                            <TextInput 
-                                ref={(input) => { this.txtSenha = input; }}
-                                placeholder="Senha"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                secureTextEntry
-                                style={styles.input}
-                                onChangeText={senha => this.props.modificaSenha(senha)}
-                                value={this.props.senha}
-                                onSubmitEditing={() => { this.pressLogin(); }}
-                            />
-                        </View>
-                    ) : (
-                        <View>
-                            <TextInput
-                                placeholder="Usuário"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={styles.input}
-                                onKeyPress={(e) => this.usuarioKeyPress(e)}
-                                onChangeText={usuario => this.props.modificaUsuario(usuario)}
-                                value={this.props.usuario}
-                                onSubmitEditing={() => { this.txtSenha.focus(); }}
-                                blurOnSubmit={false}
-                            />
-                            <TextInput 
-                                ref={(input) => { this.txtSenha = input; }}
-                                placeholder="Senha"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                autoCorrect={false}
-                                secureTextEntry
-                                style={styles.input}
-                                onChangeText={senha => this.props.modificaSenha(senha)}
-                                value={this.props.senha}
-                                onSubmitEditing={() => { this.pressLogin(); }}
-                            />
-                        </View>
-                    ) }
+            <TouchableWithoutFeedback
+                onPress={() => Keyboard.dismiss()}
+            >
+                <View style={styles.viewLogin}>
+                    <View>
+                        { Platform.OS !== 'windows' ? (
+                            <View>
+                                <TextInput
+                                    placeholder="Usuário"
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="next"
+                                    style={styles.input}
+                                    onChangeText={usuario => this.props.modificaUsuario(usuario)}
+                                    value={this.props.usuario}
+                                    onSubmitEditing={() => { this.txtSenha.focus(); }}
+                                    blurOnSubmit={false}
+                                />
+                                <TextInput 
+                                    ref={(input) => { this.txtSenha = input; }}
+                                    placeholder="Senha"
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="next"
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    secureTextEntry
+                                    style={styles.input}
+                                    onChangeText={senha => this.props.modificaSenha(senha)}
+                                    value={this.props.senha}
+                                    onSubmitEditing={() => { this.pressLogin(); }}
+                                />
+                            </View>
+                        ) : (
+                            <View>
+                                <TextInput
+                                    placeholder="Usuário"
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="next"
+                                    style={styles.input}
+                                    onKeyPress={(e) => this.usuarioKeyPress(e)}
+                                    onChangeText={usuario => this.props.modificaUsuario(usuario)}
+                                    value={this.props.usuario}
+                                    onSubmitEditing={() => { this.txtSenha.focus(); }}
+                                    blurOnSubmit={false}
+                                />
+                                <TextInput 
+                                    ref={(input) => { this.txtSenha = input; }}
+                                    placeholder="Senha"
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="go"
+                                    autoCorrect={false}
+                                    secureTextEntry
+                                    style={styles.input}
+                                    onChangeText={senha => this.props.modificaSenha(senha)}
+                                    value={this.props.senha}
+                                    onSubmitEditing={() => { this.pressLogin(); }}
+                                />
+                            </View>
+                        ) }
+                    </View>
+                    <View style={styles.loginBtn}>
+                        {this.renderBotao()}
+                    </View>
+                    <View style={styles.viewMsg}>
+                        <Text style={styles.msgLogin}>
+                            {this.props.erroLogin}
+                        </Text>
+                    </View>
                 </View>
-                <View style={styles.loginBtn}>
-                    {this.renderBotao()}
-                </View>
-                <View style={styles.viewMsg}>
-                    <Text style={styles.msgLogin}>
-                        {this.props.erroLogin}
-                    </Text>
-                </View>
-            </View>
+            </TouchableWithoutFeedback>
         );
     }
 }

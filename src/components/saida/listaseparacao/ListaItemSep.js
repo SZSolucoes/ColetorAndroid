@@ -3,23 +3,75 @@ import {
     FlatList, 
     View, 
     Text, 
-    StyleSheet, 
-    TouchableHighlight,
-    Dimensions,
-    ScrollView
+    StyleSheet,
+    ScrollView,
+    Dimensions
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import ListaItemSepPc from './ListaItemSepPc';
+
+import {
+    modificaUm, 
+    modificaQtdSep,
+    modificaCodItem,
+    modificaDesItem,
+    modificaLocalizacao,
+    modificaLote,
+    modificaQuantidade,
+    modificaCodEAN,
+    modificaItemSelected 
+} from '../../../actions/ListaSeparacaoActions';
 
 class ListaItemSep extends Component {
+
+    constructor(props) { 
+        super(props);
+
+        this.state = { width: Dimensions.get('window').width };
+        this.changedOrientation = this.changedOrientation.bind(this);
+        this.onPressItem = this.onPressItem.bind(this);
+        this.renderItem = this.renderItem.bind(this);
+    }
+
+    componentDidMount() {
+        Dimensions.addEventListener('change', this.changedOrientation);
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.changedOrientation);
+    }
+
+    onPressItem(item, index) {
+        const {
+            un,
+            qtdItem,
+            itCode,
+            itDesc,
+            local,
+            lote
+        } = item;
+        this.props.modificaUm(un);
+        this.props.modificaQtdSep(qtdItem);
+        this.props.modificaCodItem(itCode);
+        this.props.modificaDesItem(itDesc);
+        this.props.modificaLocalizacao(local);
+        this.props.modificaLote(lote);
+        this.props.modificaQuantidade('');
+        this.props.modificaCodEAN('');
+        this.props.modificaItemSelected(index);
+        return false;
+    }
+
+    changedOrientation(e) {
+        this.setState({ width: e.window.width });
+    }
  
     keyExtractor(item, index) {
-        return (
-            index
-        );
+        return index.toString();
     }
-    renderSeparator = () => {
-        const viewSep = (
+    renderSeparator() {
+        return (
             <View
                 style={{
                 height: 1,
@@ -28,41 +80,43 @@ class ListaItemSep extends Component {
                 }}
             />
         );
-
-        return viewSep;
     }
-    renderItem = ({ item }) => {
-        const viewItem = (
-            <TouchableHighlight
-                onPress={() => this.onPressItem(item)}
-            >
-                <View
-                    style={styles.item} 
-                >
-                    <Text style={styles.itCode}>{item.itCode}</Text>
-                    <Text style={styles.itDesc}>{item.itDescAbrev}</Text>
-                    <Text style={styles.itLocal}>{item.itDescAbrev}</Text>
-                    <Text style={styles.itQtde}>{item.itDescAbrev}</Text>
-                </View>
-            </TouchableHighlight>            
+    renderItem({ item, index }) {
+        let itemSelected = false;
+        if (index === this.props.itemSelected) {
+            itemSelected = true;
+        }
+        return (
+            <ListaItemSepPc 
+                key={index} 
+                index={index} 
+                item={item} 
+                onPressItem={this.onPressItem}
+                itemSelected={itemSelected}
+            />
         );
-
-        return viewItem;
     }
+ 
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
-                <Text style={[styles.itCode, styles.sizeFldHeader]}> 
+                <Text style={[styles.codigo, styles.sizeFldHeader]}> 
                     Código
                 </Text>
-                <Text style={[styles.itDesc, styles.sizeFldHeader]}> 
+                <Text style={[styles.descricao, styles.sizeFldHeader]}> 
                     Descrição
                 </Text>
-                <Text style={[styles.itLocal, styles.sizeFldHeader]}> 
-                    Local
+                <Text style={[styles.qtdASep, styles.sizeFldHeader]}> 
+                    Qtd Sep
                 </Text>
-                <Text style={[styles.itQtde, styles.sizeFldHeader]}> 
-                    Qtde
+                <Text style={[styles.localizacao, styles.sizeFldHeader]}> 
+                    Localização
+                </Text>
+                <Text style={[styles.lote, styles.sizeFldHeader]}> 
+                    Lote
+                </Text>
+                <Text style={[styles.seq, styles.sizeFldHeader]}> 
+                    Seq
                 </Text>
             </View>
         );
@@ -71,33 +125,41 @@ class ListaItemSep extends Component {
     };
     render() {
         return (
-            <ScrollView horizontal >
-                <FlatList
-                    data={this.props.listaItem}
-                    style={styles.container}
-                    ItemSeparatorComponent={this.renderSeparator}
-                    keyExtractor={this.keyExtractor}
-                    renderItem={this.renderItem}
-                    extraData={this.props}
-                    numColumns='1'
-                    ListHeaderComponent={this.renderHeader}
-                />
-            </ScrollView>
+            <View {...this.props} >
+                <ScrollView horizontal>
+                    <FlatList
+                        stickyHeaderIndices={[0]}
+                        data={this.props.listaItensSepPc}
+                        extraData={this.state}
+                        style={[styles.container, { width: this.state.width + 300 }]}
+                        ItemSeparatorComponent={this.renderSeparator}
+                        keyExtractor={this.keyExtractor}
+                        renderItem={this.renderItem}
+                        ListHeaderComponent={this.renderHeader}
+                        initialNumToRender={10}
+                    />
+                </ScrollView>
+            </View>
         );
     }
 }
 
-const mapStateToProps = state => {
-    const maps = (
-        {
-            
-        }
-    );
+const mapStateToProps = (state) => ({
+    listaItensSepPc: state.ListaSeparacaoReducer.listaItensSepPc,
+    itemSelected: state.ListaSeparacaoReducer.itemSelected
+});
 
-    return maps;
-};
-
-export default connect(mapStateToProps, {})(ListaItemSep);
+export default connect(mapStateToProps, {
+    modificaUm, 
+    modificaQtdSep,
+    modificaCodItem,
+    modificaDesItem,
+    modificaLocalizacao,
+    modificaLote,
+    modificaQuantidade,
+    modificaCodEAN,
+    modificaItemSelected
+})(ListaItemSep);
 
 const styleField = {
     itemHeaderAndRow: {
@@ -111,40 +173,38 @@ const styleField = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: Dimensions.get('window').width > Dimensions.get('window').height ? 
-                Dimensions.get('window').width : Dimensions.get('window').height,
         marginVertical: 20,
         backgroundColor: 'rgba(255,255,255,0.2)'
     },
-    item: {
-        backgroundColor: '#20293F',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 1,
-        flexDirection: 'row',
-        marginVertical: 2,
-        paddingHorizontal: 5
-    },
-    itCode: { 
+    codigo: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 4 
+        flex: 1.5 
     },
-    itDesc: { 
+    descricao: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 6 
+        flex: 2.5 
     },
-    itLocal: { 
+    qtdASep: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 4 
+        flex: 1 
     },
-    itQtde: { 
+    localizacao: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 4 
+        flex: 2 
+    },
+    lote: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 2 
+    },
+    seq: { 
+        ...styleField.itemHeaderAndRow, 
+        flex: 1 
     },
     sizeFldHeader: {
         fontSize: 14
     },
-    header: { 
+    header: {
+        width: '100%', 
         height: 25, 
         backgroundColor: '#63ace5', 
         alignItems: 'center', 

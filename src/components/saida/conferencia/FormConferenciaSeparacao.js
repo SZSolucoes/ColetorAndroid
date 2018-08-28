@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 
 import FormRow from '../../utils/FormRow';
 import ListaItemConfSep from './ListaItemConfSep';
@@ -30,8 +29,8 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            value={this.props.nrNotaFis}
-                            ref={(input) => { this.nrNotaFis = input; }}
+                            value={this.props.batismo}
+                            ref={(input) => { this.batismo = input; }}
                         />
                     </View>
                     <View style={{ flex: 4 }}>
@@ -44,7 +43,7 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.fornec}
+                            value={this.props.embarque}
                         />
                     </View>
                     <View style={{ flex: 4 }}>
@@ -57,7 +56,7 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.fornec}
+                            value={this.props.pedido}
                         />
                     </View>
                 </FormRow>
@@ -72,7 +71,7 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.qtTotal}
+                            value={this.props.prioridade}
                         />
                     </View>
                     <View style={{ flex: 3 }}>
@@ -85,7 +84,7 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.qtConferir}
+                            value={this.props.qtItensTotal}
                         />
                     </View>
                     <View style={{ flex: 3 }}>
@@ -98,8 +97,8 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            value={this.props.codEAN}
-                            ref={(input) => { this.codEAN = input; }}
+                            value={this.props.itensConf}
+                            ref={(input) => { this.itensConf = input; }}
                         />
                     </View>
                 </FormRow>
@@ -114,8 +113,8 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            value={this.props.qtItem}
-                            ref={(input) => { this.qtItem = input; }}
+                            value={this.props.codEAN}
+                            ref={(input) => { this.codEAN = input; }}
                         />
                     </View>
                     <View style={{ flex: 3 }}>
@@ -128,7 +127,7 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.localPad}
+                            value={this.props.qtde}
                         />
                     </View>
                 </FormRow>
@@ -145,7 +144,7 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.inputDescricao}
-                            value={this.props.desItem}
+                            value={this.props.descricao}
                         />
                     </View>
                 </FormRow>
@@ -160,7 +159,7 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.localPad}
+                            value={this.props.codItem}
                         />
                     </View>
                     <View style={{ flex: 2 }}>
@@ -173,7 +172,7 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.codItem}
+                            value={this.props.um}
                         />
                     </View>
                     <View style={{ flex: 4 }}>
@@ -186,8 +185,8 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            value={this.props.batismo}
-                            ref={(input) => { this.batismo = input; }}
+                            value={this.props.lote}
+                            ref={(input) => { this.lote = input; }}
                         />
                     </View>
                 </FormRow>
@@ -202,7 +201,7 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.unidMed}
+                            value={this.props.separador}
                         />
                     </View>
                     <View style={{ flex: 4 }}>
@@ -215,8 +214,8 @@ class FormConferenciaSeparacao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            value={this.props.batismo}
-                            ref={(input) => { this.batismo = input; }}
+                            value={this.props.localizacao}
+                            ref={(input) => { this.localizacao = input; }}
                         />
                     </View>
                 </FormRow>
@@ -238,15 +237,8 @@ class FormConferenciaSeparacao extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const maps = (
-        {
-             
-        }
-    );
-
-    return maps;
-};
+const mapStateToProps = () => ({
+});
 
 export default connect(mapStateToProps, {})(FormConferenciaSeparacao);
 

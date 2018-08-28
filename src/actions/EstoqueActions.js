@@ -50,7 +50,7 @@ export const modificaListaItem = (listaItem) => {
 
 export const buscaEstoque = (codEAN) => {
     return dispatch => {
-        Axios.get('/app/getStockInfoByEan.p', {
+        Axios.get('/coletor/getStockInfoByEan.p', {
             params: {
                 cod_ean: codEAN
             }
@@ -61,7 +61,6 @@ export const buscaEstoque = (codEAN) => {
 };
 
 const buscaSuccess = (dispatch, response) => {
-    console.log(response);
     if (response.data.success === 'true') {
         dispatch({ type: 'busca_ok_est', payload: response.data.item });
     } else {

@@ -12,7 +12,6 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action.type);
     switch (action.type) {
         case 'modifica_versao_vers':
             return { 

@@ -92,7 +92,7 @@ export const iniciaTela = () => {
 };
 export const buscaInfoBastimo = (batismo) => {
     return dispatch => {
-        Axios.get('/app/getLabelItems.p', {
+        Axios.get('/coletor/getLabelItems.p', {
             params: {
                 codEtiqBatismo: batismo
             }
@@ -103,7 +103,6 @@ export const buscaInfoBastimo = (batismo) => {
 };
 
 const buscaBatismoSuccess = (dispatch, response) => {
-    console.log(response.data.etiqueta);
     if (response.data.success === 'true') {
         dispatch({ type: 'modifica_info_batismo_arm', payload: response.data.etiqueta });
     } else {
@@ -115,7 +114,6 @@ const buscaBatismoSuccess = (dispatch, response) => {
 };
 
 const buscaBatismoError = () => {
-    console.log('buscaBatismoError');
     Alert.alert(
         'Erro Armazenamento',
         'Erro Conexão!'
@@ -124,7 +122,7 @@ const buscaBatismoError = () => {
 
 export const efetivaArmazena = (etiquetaArmazena, itemArmazena, armazenamento) => {
     return dispatch => {
-        Axios.get('/app/doStockPlacement.p', {
+        Axios.get('/coletor/doStockPlacement.p', {
             params: {
                 usuario: armazenamento.usuario,
                 batismo: armazenamento.batismo,

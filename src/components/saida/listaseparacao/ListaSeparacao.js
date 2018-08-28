@@ -5,7 +5,7 @@ import FormListaSeparacao from './FormListaSeparacao';
 export default class ListaSeparacao extends Component {
     render() {
         return (
-            <FormListaSeparacao />
+            <FormListaSeparacao isUrgent={this.props.isUrgent} />
         );
     }
 }
