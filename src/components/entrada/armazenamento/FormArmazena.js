@@ -427,7 +427,7 @@ class FormArmazena extends Component {
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            editable={false}
+                            //editable={false}
                             style={[styles.input]}
                             onChangeText={codDepos => this.props.modificaCodDepos(codDepos)}
                             value={this.props.codDepos}

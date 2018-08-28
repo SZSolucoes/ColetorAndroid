@@ -262,6 +262,8 @@ const confereSuccess = (dispatch, response, notaConfere, itemConfere) => {
         itemConfere
     };
 
+    console.log(response);
+
     dispatch({ type: 'modifica_onEfetivar_conf', payload: false });
 
     if (response.data.success === 'true') {
