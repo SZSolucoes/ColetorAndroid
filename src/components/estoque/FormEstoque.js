@@ -85,6 +85,8 @@ class FormEstoque extends Component {
                                 onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                                 value={this.props.codEAN}
                                 onSubmitEditing={() => this.fnBuscaEstoque()}
+                                onBlur={() => this.props.codEAN && this.fnBuscaEstoque()}
+                                blurOnSubmit={false}
                             />
                         </View>
                     </View>

@@ -104,6 +104,8 @@ class FormImpressao extends Component {
                             onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
                             onSubmitEditing={() => this.fnBuscaInfoEan()}
+                            onBlur={() => this.props.codEAN && this.fnBuscaInfoEan()}
+                            blurOnSubmit={false}
                         />
                     </View>
                 </View>

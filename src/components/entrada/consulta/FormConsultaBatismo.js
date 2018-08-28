@@ -62,7 +62,6 @@ class FormConsultaBatismo extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
@@ -70,6 +69,8 @@ class FormConsultaBatismo extends Component {
                             ref={(input) => { this.batInput = input; }}
                             onChangeText={this.props.modificaBatismo}
                             onSubmitEditing={() => this.doConsultBatismo()}
+                            onBlur={() => this.props.codEtiqBatismo && this.doConsultBatismo()}
+                            blurOnSubmit={false}
                         />
                     </View>
                 </FormRow>
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',

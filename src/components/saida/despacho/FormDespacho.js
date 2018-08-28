@@ -70,6 +70,8 @@ class FormDespacho extends Component {
                             value={this.props.codVol}
                             onChangeText={this.props.modificaVol}
                             onSubmitEditing={() => this.removeItem()}
+                            onBlur={() => this.props.codVol && this.removeItem()}
+                            blurOnSubmit={false}
                             ref={(input) => { this.volInput = input; }}
                         />
                     </View>
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',

@@ -25,7 +25,6 @@ class FormConsultaEtiqBatismo extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',

@@ -165,6 +165,8 @@ class FormTransferencia extends Component {
                             onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
                             onSubmitEditing={() => { this.buscaEAN(); }}
+                            onBlur={() => this.props.codEAN && this.buscaEAN()}
+                            blurOnSubmit={false}
                             ref={(input) => { this.txtEAN = input; }}
                         />
                     </View>

@@ -18,8 +18,6 @@ const imgConfCheck = require('../../../resources/imgs/conferencia-volume-64.png'
 const imgConsolid = require('../../../resources/imgs/consolidacao_48.png');
 const imgDespacho = require('../../../resources/imgs/despacho_64.png');
 const imgListSep = require('../../../resources/imgs/lista_separacao_64.png');
-const imgConsEtiq = require('../../../resources/imgs/consulta_etiq_48.png');
-const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
 const imgRelEan = require('../../../resources/imgs/relacionaean.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
@@ -31,8 +29,6 @@ class MenuSaida extends Component {
         this.onPressListSep = this.onPressListSep.bind(this);
         this.onPressConf = this.onPressConf.bind(this);
         this.onPressConfVol = this.onPressConfVol.bind(this);
-        this.onPressConsultEtiq = this.onPressConsultEtiq.bind(this);
-        this.onPressConsEstoq = this.onPressConsEstoq.bind(this);
         this.onPressRelEan = this.onPressRelEan.bind(this);
         this.onPressConsolid = this.onPressConsolid.bind(this);
         this.onPressDespacho = this.onPressDespacho.bind(this);
@@ -48,13 +44,7 @@ class MenuSaida extends Component {
     } 
     onPressConfVol() {
         Actions.conferenciaVolumeSaida();
-    }
-    onPressConsultEtiq() {
-        Actions.consultaEtiqBatismoSaida();
-    }
-    onPressConsEstoq() {
-        Actions.estoque();
-    }    
+    } 
     onPressRelEan() {
         Actions.relacionaEan();
     }
@@ -118,19 +108,6 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
-    renderConsultaEtiq() {
-        return (
-            <TouchableHighlight onPress={this.onPressConsultEtiq}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgConsEtiq}
-                    />
-                    <Text style={styles.txtMenu}>Consulta Etiqueta Batismo</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
     renderConsolid() {
         return (
             <TouchableHighlight onPress={this.onPressConsolid}>
@@ -153,19 +130,6 @@ class MenuSaida extends Component {
                         source={imgDespacho}
                     />
                     <Text style={styles.txtMenu}>Despacho</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderConsultaEstoq() {
-        return (
-            <TouchableHighlight onPress={this.onPressConsEstoq}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgConsulta}
-                    />
-                    <Text style={styles.txtMenu}>Consulta Estoque</Text>
                 </View>
             </TouchableHighlight>
         );
@@ -202,10 +166,8 @@ class MenuSaida extends Component {
                 {this.renderListaSep()}
                 {this.renderConferencia()}
                 {this.renderConferenciaVolume()}
-                {this.renderConsultaEtiq()}
                 {this.renderConsolid()}
                 {this.renderDespacho()}
-                {this.renderConsultaEstoq()}
                 {this.renderRelacionaEan()}
                 {this.renderImpressao()}
             </ScrollView>
@@ -213,8 +175,7 @@ class MenuSaida extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return (
+const mapStateToProps = state => (
         {
             logConfReceb: state.LoginReducer.logConfReceb,
             logEstoque: state.LoginReducer.logEstoque,
@@ -226,8 +187,8 @@ const mapStateToProps = state => {
             logTodos: state.LoginReducer.logTodos,
             loadingListSep: state.ListaSeparacaoReducer.loadingListSep
         }
-    );
-};
+);
+
 
 export default connect(mapStateToProps, {
     fetchListItensSep

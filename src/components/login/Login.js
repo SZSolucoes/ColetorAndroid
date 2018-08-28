@@ -7,7 +7,6 @@ import {
     Text,
     Keyboard,
     ActivityIndicator,
-    Alert,
     Platform,
     TouchableWithoutFeedback
 } from 'react-native';
@@ -40,7 +39,7 @@ class Login extends Component {
     }
 
     pressLogin() {
-        const { usuario, senha, empresa, ambiente } = this.props;
+        const { usuario, senha, ambiente } = this.props;
 
         Keyboard.dismiss();
         
@@ -172,7 +171,8 @@ const styles = StyleSheet.create({
     viewLogin: {
         flex: 5,
         backgroundColor: '#4b86b4',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        paddingTop: 30
     },
     viewMsg: {
         backgroundColor: '#4b86b4',

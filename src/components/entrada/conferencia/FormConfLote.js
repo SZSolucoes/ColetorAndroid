@@ -135,6 +135,8 @@ class FormConfLote extends Component {
                             value={this.props.qtdLote}
                             ref={(input) => { this.qtdLote = input; }}
                             onSubmitEditing={() => { this.criaVolumesLote(); }}
+                            onBlur={() => this.props.qtdLote && this.criaVolumesLote()}
+                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={styles.viewBtOk}>
@@ -190,6 +192,8 @@ class FormConfLote extends Component {
                             value={this.props.qtdItemLote}
                             ref={(input) => { this.qtdItemLote = input; }}
                             onSubmitEditing={() => { this.salvaQtdLote(); }}
+                            onBlur={() => this.props.qtdItemLote && this.salvaQtdLote()}
+                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={styles.viewBtOk}>
@@ -254,7 +258,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',

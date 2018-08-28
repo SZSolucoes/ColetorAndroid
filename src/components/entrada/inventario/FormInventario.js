@@ -180,6 +180,8 @@ class FormInventario extends Component {
                             onChangeText={this.props.modificaQtItem}
                             value={this.props.qtItem}
                             onSubmitEditing={() => { this.confirmButton(); }}
+                            onBlur={() => this.props.qtItem && this.confirmButton()}
+                            blurOnSubmit={false}
                         />
                     </View>
                     
@@ -383,7 +385,7 @@ const styles = StyleSheet.create({
     dateText: {
         textAlign: 'center',
         color: 'white',
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: 'sans-serif-medium'       
     },
     btClear: {

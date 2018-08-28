@@ -86,6 +86,8 @@ class FormConsolidacao extends Component {
                             ref={(input) => { this.volInput = input; }}
                             onChangeText={this.props.modificaVol}
                             onSubmitEditing={() => this.addVolumes()}
+                            onBlur={() => this.props.codVol && this.addVolumes()}
+                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={{ flex: 1 }}>
@@ -104,6 +106,8 @@ class FormConsolidacao extends Component {
                             ref={(input) => { this.volInput = input; }}
                             onChangeText={this.props.modificaVol}
                             onSubmitEditing={() => this.addVolumes()}
+                            onBlur={() => this.props.codVol && this.addVolumes()}
+                            blurOnSubmit={false}
                         />
                     </View>
                 </FormRow>
@@ -123,6 +127,8 @@ class FormConsolidacao extends Component {
                             ref={(input) => { this.volInput = input; }}
                             onChangeText={this.props.modificaVol}
                             onSubmitEditing={() => this.addVolumes()}
+                            onBlur={() => this.props.codVol && this.addVolumes()}
+                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={{ flex: 1 }}>
@@ -141,6 +147,8 @@ class FormConsolidacao extends Component {
                             ref={(input) => { this.volInput = input; }}
                             onChangeText={this.props.modificaVol}
                             onSubmitEditing={() => this.addVolumes()}
+                            onBlur={() => this.props.codVol && this.addVolumes()}
+                            blurOnSubmit={false}
                         />
                     </View>
                 </FormRow>
@@ -198,7 +206,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',

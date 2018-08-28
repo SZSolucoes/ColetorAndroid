@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { 
     modificaListaItem,
@@ -18,7 +19,16 @@ import {
     modificaLocalPad
 } from '../../../actions/ConfereActions';
 
+
 class ListaItem extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.renderItem = this.renderItem.bind(this);
+    }
+
+
     onPressItem(item) {
         const { itCode, itDesc, un, localiz } = item;
 
@@ -28,12 +38,12 @@ class ListaItem extends Component {
         this.props.modificaLocalPad(localiz);
         this.props.modificaItemConfere(item);
     }
-    keyExtractor(item, index) {
+    keyExtractor(item) {
         return (
             item.seq
         );
     }
-    renderSeparator = () => {
+    renderSeparator() {
         return (
             <View
                 style={{
@@ -45,12 +55,29 @@ class ListaItem extends Component {
         );
     }
     renderItem = ({ item }) => {
+        const listaItem = this.props.listaItem;
         // Se pelo menos um ean estiver disponivel entao não possue erro 
         if (item.ean1.length > 0 ||
             item.ean2.length > 0 ||
             item.ean3.length > 0 ||
             item.ean4.length > 0 ||
             item.ean5.length > 0) {
+                const itemsFound = _.filter(listaItem, (o) => o.itCode === item.itCode).length;
+                if (itemsFound > 1) {
+                    return (
+                        <TouchableHighlight
+                            onPress={() => this.onPressItem(item)}
+                        >
+                            <View
+                                style={styles.itemClone}
+                            >
+                                <Text style={styles.itemSeq}>{item.seq}</Text>
+                                <Text style={styles.itemCode}>{item.itCode}</Text>
+                                <Text style={styles.itemDesc}>{item.itDescAbrev}</Text>
+                            </View>
+                        </TouchableHighlight>            
+                    ); 
+                }
                 return (
                     <TouchableHighlight
                         onPress={() => this.onPressItem(item)}
@@ -113,14 +140,12 @@ class ListaItem extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return (
-        {
-            listaItem: state.ConfereReducer.listaItem,
-            itemConfere: state.ConfereReducer.itemConfere
-        }
-    );
-};
+const mapStateToProps = state => (
+    {
+        listaItem: state.ConfereReducer.listaItem,
+        itemConfere: state.ConfereReducer.itemConfere
+    }
+);
 
 export default connect(mapStateToProps, 
     { 
@@ -141,6 +166,15 @@ const styles = StyleSheet.create({
     },
     item: {
         backgroundColor: '#20293F',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        marginVertical: 2,
+        paddingHorizontal: 5
+    },
+    itemClone: {
+        backgroundColor: '#EEC863',
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,

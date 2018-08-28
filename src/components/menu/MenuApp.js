@@ -13,6 +13,7 @@ import LogoutBtn from '../login/Logout';
 
 const imgTruck1 = require('../../../resources/imgs/truck1.png');
 const imgTruck2 = require('../../../resources/imgs/truck2.png');
+const imgConsulta = require('../../../resources/imgs/menuConsulta.png');
 
 export default class MenuApp extends Component {
     onPressEntrada() {
@@ -26,6 +27,9 @@ export default class MenuApp extends Component {
         );
         return;
         //Actions.menuSaida();
+    }
+    onPressConsulta() {
+        Actions.menuConsulta();
     }
     render() {
         return (
@@ -51,6 +55,17 @@ export default class MenuApp extends Component {
                                 source={imgTruck1}
                             />
                             <Text style={styles.txtMenu}>Saída de Mercadorias</Text>
+                        </View>
+                    </TouchableHighlight>
+                    <TouchableHighlight 
+                        onPress={this.onPressConsulta}
+                    >
+                        <View style={styles.menu}>
+                            <Image 
+                                style={styles.imgMenu} 
+                                source={imgConsulta}
+                            />
+                            <Text style={styles.txtMenu}>Consulta</Text>
                         </View>
                     </TouchableHighlight>
                 </View>

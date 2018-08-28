@@ -191,6 +191,7 @@ export const buscaNotaConferencia = (usuario) => {
             params: {
                 usuario
             },
+            timeout: 30000,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -280,7 +281,7 @@ const confereSuccess = (dispatch, response, notaConfere, itemConfere) => {
     } else {
         Alert.alert(
             'Conferência',
-            'Ocorreu uma falha interna no servidor, verifique a conexão'
+            'Ocorreu uma falha interna no servidor, verifique a conexão!'
         );
     }
 

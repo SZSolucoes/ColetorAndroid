@@ -381,6 +381,7 @@ class FormListaSeparacao extends Component {
                             value={this.props.codEAN}
                             ref={(input) => { this.codEAN = input; }}
                             onSubmitEditing={() => this.findItemEAN()}
+                            onBlur={() => this.props.codEAN && this.findItemEAN()}
                             onChangeText={(value) => this.props.modificaCodEAN(value)}
                             blurOnSubmit={false}
                         />
@@ -418,6 +419,7 @@ class FormListaSeparacao extends Component {
                             value={this.props.quantidade}
                             ref={(input) => { this.quantidade = input; }}
                             onSubmitEditing={() => this.onSubmitQtd(true)}
+                            onBlur={() => this.props.quantidade && this.onSubmitQtd(true)}
                             onChangeText={(value) => this.onChangeQtdText(value)}
                             blurOnSubmit={false}
                         />
@@ -587,7 +589,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 35,
-        fontSize: 16,
+        fontSize: 14,
         textAlign: 'center',
         backgroundColor: '#20293F',
         color: 'white',

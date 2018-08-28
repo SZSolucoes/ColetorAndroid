@@ -66,7 +66,6 @@ class FormConf extends Component {
         const { 
             usuario, 
             notaConfere, 
-            itemConfere, 
             codEAN, 
             qtItem, 
             batismo,
@@ -88,7 +87,7 @@ class FormConf extends Component {
             listaItemLote
         };
 
-        const item = this.props.itemConfere;
+        let itemConfere = this.props.itemConfere;
 
         let qtConferida = 0;
 
@@ -132,8 +131,8 @@ class FormConf extends Component {
                 itemCheck.ean4 === codEAN ||
                 itemCheck.ean5 === codEAN
             ))];
-            
-            if (itemConf) {
+
+            if (itemConf[0]) {
                 if (itemConf.length === 0) {
                     Alert.alert(
                         'Conferência',
@@ -148,6 +147,8 @@ class FormConf extends Component {
                 );
                 return;
             }
+            
+            itemConfere = itemConf[0];
         } else {
             Alert.alert(
                 'Conferência',
@@ -156,7 +157,7 @@ class FormConf extends Component {
             return;
         }
 
-        if (item.tpCont === '3') {
+        if (itemConfere.tpCont === '3') {
             if (listaItemLote.length === 0) {
                 Alert.alert(
                     'Conferência',
@@ -195,7 +196,7 @@ class FormConf extends Component {
         }
 
         this.props.modificaOnEfetivar(true);
-        this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });        
+        this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });
     }
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
@@ -435,7 +436,8 @@ class FormConf extends Component {
                             value={this.props.nrNotaFis}
                             ref={(input) => { this.nrNotaFis = input; }}
                             onSubmitEditing={() => { this.carregaNF(); }}
-                            onBlur={() => { this.carregaNF(); }}
+                            onBlur={() => this.props.nrNotaFis && this.carregaNF()}
+                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={styles.viewBtSearch}>
@@ -508,6 +510,8 @@ class FormConf extends Component {
                                 value={this.props.codEAN}
                                 ref={(input) => { this.codEAN = input; }}
                                 onSubmitEditing={() => { this.validEAN(); }}
+                                onBlur={() => this.props.codEAN && this.validEAN()}
+                                blurOnSubmit={false}
                             />
                             <TouchableOpacity
                                 style={styles.btClear}
@@ -537,6 +541,8 @@ class FormConf extends Component {
                             value={this.props.qtItem}
                             ref={(input) => { this.qtItem = input; }}
                             onSubmitEditing={() => { this.validQtd(); }}
+                            onBlur={() => this.props.qtItem && this.validQtd()}
+                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
@@ -597,6 +603,8 @@ class FormConf extends Component {
                             value={this.props.batismo}
                             ref={(input) => { this.batismo = input; }}
                             onSubmitEditing={() => { this.onPressEfetivar(); }}
+                            onBlur={() => this.props.batismo && this.onPressEfetivar()}
+                            blurOnSubmit={false}
                         />
                     </View>
                 </View>

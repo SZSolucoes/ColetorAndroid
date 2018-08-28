@@ -22,12 +22,9 @@ const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
 const imgArmazen = require('../../../resources/imgs/armazenamento.png');
 const imgInvent = require('../../../resources/imgs/inventario_64.png');
 const imgInventEst = require('../../../resources/imgs/inventarioestorno.png');
-const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
 const imgRelEan = require('../../../resources/imgs/relacionaean.png');
 const imgTransEnt = require('../../../resources/imgs/transf_entrada.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
-const imgConsBatismo = require('../../../resources/imgs/consulta_etiq_48.png');
-const imgConsultaNF = require('../../../resources/imgs/consultanf.png');
 
 class MenuEntrada extends Component {
     onPressConf() {
@@ -48,20 +45,11 @@ class MenuEntrada extends Component {
     onPressInventEst() {
         Actions.inventarioEst({ estorno: true });
     }
-    onPressConsEstoq() {
-        Actions.estoque();
-    }
-    onPressConsBatismo() {
-        Actions.consultaBatismoEntrada();
-    }
     onPressRelEan() {
         Actions.relacionaEan();
     }
     onPressImpressao() {
         Actions.impressao();
-    }
-    onPressConsultaNF() {
-        Actions.consultaNF();
     }
     renderConferecia(key) {
         if (this.props.loadingConf) {
@@ -139,36 +127,6 @@ class MenuEntrada extends Component {
             </TouchableHighlight>
         );
     }
-    renderConsulta(key) {
-        if (this.props.logEstoque) {
-            return (
-                <TouchableHighlight key={key} onPress={this.onPressConsEstoq}>
-                    <View style={styles.menu}>
-                        <Image 
-                            style={styles.imgMenu} 
-                            source={imgConsulta}
-                        />
-                        <Text style={styles.txtMenu}>Consulta Estoque</Text>
-                    </View>
-                </TouchableHighlight>
-            );
-        }
-    }
-    renderConsultaBatismo(key) {
-        if (this.props.logEstoque) {
-            return (
-                <TouchableHighlight key={key} onPress={this.onPressConsBatismo}>
-                    <View style={styles.menu}>
-                        <Image 
-                            style={styles.imgMenu} 
-                            source={imgConsBatismo}
-                        />
-                        <Text style={styles.txtMenu}>Consulta Etiqueta Batismo</Text>
-                    </View>
-                </TouchableHighlight>
-            );
-        }
-    }
     renderRelacionaEan(key) {
         return (
             <TouchableHighlight key={key} onPress={this.onPressRelEan}>
@@ -195,19 +153,6 @@ class MenuEntrada extends Component {
             </TouchableHighlight>
         );
     }
-    renderConsultaNF(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressConsultaNF}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgConsultaNF}
-                    />
-                    <Text style={styles.txtMenu}>Consulta Nota Fiscal</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
     render() {
         return (
             <ScrollView style={styles.opcao}>
@@ -218,11 +163,8 @@ class MenuEntrada extends Component {
                         this.renderTransferencia('3'),
                         this.renderInventario('4'),
                         this.renderInventarioEst('5'),
-                        this.renderConsulta('6'),
-                        this.renderConsultaBatismo('7'),
-                        this.renderRelacionaEan('8'),
-                        this.renderImpressao('9'), 
-                        this.renderConsultaNF('10') 
+                        this.renderRelacionaEan('6'),
+                        this.renderImpressao('7')
                     ]
                 ) : (
                     this.renderConferecia()

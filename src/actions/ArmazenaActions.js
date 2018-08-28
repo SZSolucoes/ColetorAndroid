@@ -152,16 +152,21 @@ const armazenaSuccess = (dispatch, response, etiqueta, item, qtItem) => {
 
     dispatch({ type: 'modifica_onArmazena_arm', payload: false });
 
-    if (response.data.success === 'true') {
+    if (response && response.data && response.data.success === 'true') {
         dispatch({ type: 'efetiva_armazenamento', payload: retorno });
         Alert.alert(
             'Armazenamento',
             response.data.message
         );
-    } else {
+    } else if (response && response.data && response.data.message) {
         Alert.alert(
             'Erro Armazenamento',
             response.data.message
+        );
+    } else {
+        Alert.alert(
+            'Erro Armazenamento',
+            'Ocorreu uma falha interna no servidor, verifique a conexão!'
         );
     }
 };

@@ -255,7 +255,6 @@ class FormArmazena extends Component {
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
                                 placeholder=""
-                                //keyboardType="numeric"
                                 autoCapitalize="none"
                                 autoCorrect={false}
                                 placeholderTextColor='rgba(255,255,255,0.7)'
@@ -265,6 +264,8 @@ class FormArmazena extends Component {
                                 value={this.props.batismo}
                                 ref={(input) => { this.txtBatismo = input; }}
                                 onSubmitEditing={() => { this.validBatismo(); }}
+                                onBlur={() => this.props.batismo && this.validBatismo()}
+                                blurOnSubmit={false}
                             />
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaBatismo()}
@@ -324,6 +325,8 @@ class FormArmazena extends Component {
                                 value={this.props.codEAN}
                                 ref={(input) => { this.txtEAN = input; }}
                                 onSubmitEditing={() => { this.validEAN(); }}
+                                onBlur={() => this.props.codEAN && this.validEAN()}
+                                blurOnSubmit={false}
                             />
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaCodEAN()}
@@ -401,6 +404,8 @@ class FormArmazena extends Component {
                                 value={this.props.codLocal}
                                 ref={(input) => { this.txtLocal = input; }}
                                 onSubmitEditing={() => { this.validLocal(); }}
+                                onBlur={() => this.props.codLocal && this.validLocal()}
+                                blurOnSubmit={false}
                             />
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaCodLocal()}
@@ -427,7 +432,7 @@ class FormArmazena extends Component {
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            editable={false}
+                            //editable={false}
                             style={[styles.input]}
                             onChangeText={codDepos => this.props.modificaCodDepos(codDepos)}
                             value={this.props.codDepos}
@@ -465,6 +470,8 @@ class FormArmazena extends Component {
                             value={this.props.lote}
                             ref={(input) => { this.txtLote = input; }}
                             onSubmitEditing={() => { this.onPressEfetivar(); }}
+                            onBlur={() => this.props.lote && this.onPressEfetivar()}
+                            blurOnSubmit={false}
                         />
                     </View>
                 </View>

@@ -7,6 +7,7 @@ import Version from './components/login/Version';
 import MenuApp from './components/menu/MenuApp';
 import MenuEntrada from './components/menu/MenuEntrada';
 import MenuSaida from './components/menu/MenuSaida';
+import MenuConsulta from './components/menu/MenuConsulta';
 import Armazena from './components/entrada/armazenamento/Armazenamento';
 import Conferencia from './components/entrada/conferencia/Conferencia';
 import WinInfoItemConf from './components/entrada/conferencia/WinInfoItemConf';
@@ -65,6 +66,14 @@ export default () => (
                 key='menuSaida' 
                 component={MenuSaida} 
                 title="Saída"
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='menuConsulta' 
+                component={MenuConsulta} 
+                title="Consulta"
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

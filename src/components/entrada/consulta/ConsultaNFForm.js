@@ -84,6 +84,8 @@ class ConsultaNFForm extends Component {
                             value={this.props.codNF}
                             ref={(input) => { this.nrNotaFis = input; }}
                             onSubmitEditing={() => this.carregaItemNF()}
+                            onBlur={() => this.props.codNF && this.carregaItemNF()}
+                            blurOnSubmit={false}
                         />
                     </View>
                 </View>

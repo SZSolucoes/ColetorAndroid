@@ -19,6 +19,7 @@ class App extends Component {
     componentDidMount() {
         // Url base padrão
         Axios.defaults.baseURL = 'http://192.168.50.219/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
+        Axios.defaults.timeout = 10000; // Timeout 10s
         AsyncStorage.getItem('empresa')
             .then((empresa) => {
                 if (empresa) {
