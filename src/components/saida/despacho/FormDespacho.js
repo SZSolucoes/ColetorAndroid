@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    Button
+    Button,
+    Keyboard
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -29,6 +30,8 @@ class FormDespacho extends Component {
         const codVol = this.props.codVol;
         const listaItens = this.props.listaItens;
         const index = listaItens.findIndex((value) => value.vol === codVol);
+
+        Keyboard.dismiss();
 
         if (index !== -1) {
             listaItens.splice(index, 1);
@@ -69,9 +72,7 @@ class FormDespacho extends Component {
                             style={styles.input}
                             value={this.props.codVol}
                             onChangeText={this.props.modificaVol}
-                            onSubmitEditing={() => this.removeItem()}
                             onBlur={() => this.props.codVol && this.removeItem()}
-                            blurOnSubmit={false}
                             ref={(input) => { this.volInput = input; }}
                         />
                     </View>

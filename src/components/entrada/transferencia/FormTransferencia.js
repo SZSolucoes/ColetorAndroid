@@ -7,7 +7,8 @@ import {
     TextInput,
     Button,
     Alert,
-    ActivityIndicator
+    ActivityIndicator,
+    Keyboard
 } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -129,6 +130,8 @@ class FormTransferencia extends Component {
     buscaEAN() {
         const codEAN = this.props.codEAN;
 
+        Keyboard.dismiss();
+
         this.props.buscaInfoEANTransf(codEAN);
     }
     renderBtEfetivar() {
@@ -164,9 +167,7 @@ class FormTransferencia extends Component {
                             returnKeyType="go"
                             onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
-                            onSubmitEditing={() => { this.buscaEAN(); }}
                             onBlur={() => this.props.codEAN && this.buscaEAN()}
-                            blurOnSubmit={false}
                             ref={(input) => { this.txtEAN = input; }}
                         />
                     </View>

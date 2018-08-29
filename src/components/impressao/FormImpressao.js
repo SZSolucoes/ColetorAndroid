@@ -7,7 +7,8 @@ import {
     TextInput,
     Alert,
     TouchableOpacity,
-    Image
+    Image,
+    Keyboard
 } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -15,9 +16,6 @@ import _ from 'lodash';
 import { 
     iniciaTela,
     modificaCodEAN,
-    modificaCodItem,
-    modificaDescItem,
-    modificaUnidMed,
     modificaQtEtiq,
     imprimeEtiquetaEAN,
     buscaInfoEAN,
@@ -68,6 +66,9 @@ class FormImpressao extends Component {
     }
     fnBuscaInfoEan() {
         const codEAN = this.props.codEAN;
+
+        Keyboard.dismiss();
+
         if (codEAN) {
             if (codEAN.length === 0) {
                 Alert.alert(
@@ -103,9 +104,7 @@ class FormImpressao extends Component {
                             style={styles.input}
                             onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
-                            onSubmitEditing={() => this.fnBuscaInfoEan()}
                             onBlur={() => this.props.codEAN && this.fnBuscaInfoEan()}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </View>
@@ -120,7 +119,6 @@ class FormImpressao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={codItem => this.props.modificaCodItem(codItem)}
                             value={this.props.codItem}
                         />
                     </View>
@@ -134,7 +132,6 @@ class FormImpressao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={unidMed => this.props.modificaUnidMed(unidMed)}
                             value={this.props.unidMed}
                         />
                     </View>
@@ -152,7 +149,6 @@ class FormImpressao extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.inputDescricao}
-                            onChangeText={descItem => this.props.modificaDescItem(descItem)}
                             value={this.props.descItem}
                         />
                     </View>                    
@@ -205,9 +201,6 @@ const mapStateToProps = state => (
 export default connect(mapStateToProps, { 
     iniciaTela,
     modificaCodEAN,
-    modificaCodItem,
-    modificaDescItem,
-    modificaUnidMed,
     modificaQtEtiq,
     imprimeEtiquetaEAN,
     buscaInfoEAN,

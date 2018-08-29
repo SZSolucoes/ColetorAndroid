@@ -6,7 +6,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    Image
+    Image,
+    Keyboard
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -35,6 +36,9 @@ class FormConsultaBatismo extends Component {
 
     doConsultBatismo() {
         const codEtiqBatismo = this.props.codEtiqBatismo;
+
+        Keyboard.dismiss();
+
         this.props.doConsBatismo(codEtiqBatismo);
     }
 
@@ -68,9 +72,7 @@ class FormConsultaBatismo extends Component {
                             value={this.props.codEtiqBatismo}
                             ref={(input) => { this.batInput = input; }}
                             onChangeText={this.props.modificaBatismo}
-                            onSubmitEditing={() => this.doConsultBatismo()}
                             onBlur={() => this.props.codEtiqBatismo && this.doConsultBatismo()}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </FormRow>

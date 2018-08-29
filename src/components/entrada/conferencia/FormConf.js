@@ -10,7 +10,8 @@ import {
     Alert,
     Button,
     ActivityIndicator,
-    Platform
+    Platform,
+    Keyboard
 } from 'react-native';
 import _ from 'lodash';
 import { connect } from 'react-redux';
@@ -90,6 +91,8 @@ class FormConf extends Component {
         let itemConfere = this.props.itemConfere;
 
         let qtConferida = 0;
+
+        Keyboard.dismiss();
 
         if (batismo) {
             if (batismo.length === 0) {
@@ -237,6 +240,8 @@ class FormConf extends Component {
         const item = this.props.itemConfere;
         const { qtItem } = this.props;
 
+        Keyboard.dismiss();
+
         if (qtItem) {
             if (qtItem.length === 0 || _.toInteger(qtItem) < 0) {
                 Alert.alert(
@@ -279,6 +284,8 @@ class FormConf extends Component {
         const listaConfere = _.values(this.props.listaNF);
 
         const notaConf = _.filter(listaConfere, { nroDocto: nrNota });
+
+        Keyboard.dismiss();
         
         if (nrNota !== '') {
             if (notaConf.length === 0) {
@@ -318,6 +325,8 @@ class FormConf extends Component {
                 itemCheck.ean4 === codEAN ||
                 itemCheck.ean5 === codEAN
         ))];
+
+        Keyboard.dismiss();
         
         if (itemConf[0]) {
             if (itemConf.length === 0) {
@@ -425,6 +434,7 @@ class FormConf extends Component {
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Nota Fiscal</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -435,9 +445,7 @@ class FormConf extends Component {
                             onChangeText={nrNotaFis => this.props.modificaNrNotaFis(nrNotaFis)}
                             value={this.props.nrNotaFis}
                             ref={(input) => { this.nrNotaFis = input; }}
-                            onSubmitEditing={() => { this.carregaNF(); }}
                             onBlur={() => this.props.nrNotaFis && this.carregaNF()}
-                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={styles.viewBtSearch}>
@@ -499,6 +507,7 @@ class FormConf extends Component {
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>EAN</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
+                                selectTextOnFocus
                                 placeholder=""
                                 autoCapitalize="none"
                                 autoCorrect={false}
@@ -509,9 +518,7 @@ class FormConf extends Component {
                                 onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                                 value={this.props.codEAN}
                                 ref={(input) => { this.codEAN = input; }}
-                                onSubmitEditing={() => { this.validEAN(); }}
                                 onBlur={() => this.props.codEAN && this.validEAN()}
-                                blurOnSubmit={false}
                             />
                             <TouchableOpacity
                                 style={styles.btClear}
@@ -529,6 +536,7 @@ class FormConf extends Component {
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Qtde</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -540,9 +548,7 @@ class FormConf extends Component {
                             onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
                             value={this.props.qtItem}
                             ref={(input) => { this.qtItem = input; }}
-                            onSubmitEditing={() => { this.validQtd(); }}
                             onBlur={() => this.props.qtItem && this.validQtd()}
-                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
@@ -592,6 +598,7 @@ class FormConf extends Component {
                     <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={styles.txtLabel}>Batismo</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -602,9 +609,7 @@ class FormConf extends Component {
                             onChangeText={batismo => this.props.modificaBatismo(batismo)}
                             value={this.props.batismo}
                             ref={(input) => { this.batismo = input; }}
-                            onSubmitEditing={() => { this.onPressEfetivar(); }}
                             onBlur={() => this.props.batismo && this.onPressEfetivar()}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </View>
@@ -633,6 +638,7 @@ class FormConf extends Component {
                             <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
                             <View style={styles.viewBtEtiq}>
                                 <TextInput
+                                    selectTextOnFocus
                                     placeholder=""
                                     autoCapitalize="none"
                                     autoCorrect={false}

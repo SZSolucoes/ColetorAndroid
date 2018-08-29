@@ -8,7 +8,8 @@ import {
     Button,
     TouchableOpacity,
     Image,
-    Alert
+    Alert,
+    Keyboard
 } from 'react-native';
 import _ from 'lodash';
 import DatePicker from 'react-native-datepicker';
@@ -23,49 +24,88 @@ import imgSeta from '../../../../resources/imgs/seta.png';
 import {
     modificaCodLocal,
     modificaNrContagem,
-    modificaCodEtiq,
+    modificaCodEAN,
     modificaDtInventario,
+    modificaCodLote,
     modificaQtItem,
     modificaModalVisible,
     cleanInventarioReducer,
+    cleanInventarioReducerWDT,
     doConfirm,
-    doConfirmEst
+    doConfirmEst,
+    buscaInfoEAN
 } from '../../../actions/InventarioActions';
 
 const imgClear = require('../../../../resources/imgs/limpa_tela.png');
 
 class FormInventario extends Component {
-    componentDidMount() {
-        Actions.refresh({ right: this._renderRightButton });
+
+    constructor(props) {
+        super(props);
+
+        this.limpaTela = this.limpaTela.bind(this);
+        this.renderRightButton = this.renderRightButton.bind(this);
+        this.fnBuscaInfoEan = this.fnBuscaInfoEan.bind(this);
+        this.confirmButton = this.confirmButton.bind(this);
+        this.renderQtde = this.renderQtde.bind(this);
+        this.onChangeQtdText = this.onChangeQtdText.bind(this);
     }
+
+
+    componentDidMount() {
+        Actions.refresh({ right: this.renderRightButton });
+    }
+    
     componentWillUnmount() {
         this.props.cleanInventarioReducer();
     }
-    limpaTela() {
-        this.props.cleanInventarioReducer();
+
+    onChangeQtdText(value) {
+        const txtParsed = value.replace(/[^0-9]/g, '');
+        this.props.modificaQtItem(txtParsed);
     }
-    _renderRightButton = () => {
-        return (
-            <TouchableOpacity 
-                onPress={() => this.limpaTela()}
-                style={styles.btClear}
-            >
-                <Image
-                    source={imgClear}
-                    style={styles.imgClear}
-                />
-            </TouchableOpacity>
-        );
-    };
+    
+    limpaTela() {
+        this.props.cleanInventarioReducerWDT();
+    }
+    
+    fnBuscaInfoEan() {
+        const codEAN = this.props.codEAN;
+
+        Keyboard.dismiss();
+
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Erro EAN',
+                    'Código EAN deve ser informado!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Erro EAN',
+                'Código EAN deve ser informado!'
+            );
+            return;
+        }
+        
+        this.props.buscaInfoEAN(codEAN);
+    }
+
     confirmButton() {
         const {
             username,
             codLocal,
             nrContagem,
-            codEtiq,
+            codEAN,
             dtInventario,
-            qtItem
+            qtItem,
+            tpCont,
+            codLote
         } = this.props;
+
+        Keyboard.dismiss();
 
         if (codLocal) {
             if (codLocal.length === 0) {
@@ -99,8 +139,8 @@ class FormInventario extends Component {
             return;
         }
 
-        if (codEtiq) {
-            if (codEtiq.length === 0) {
+        if (codEAN) {
+            if (codEAN.length === 0) {
                 Alert.alert(
                     'Inventário',
                     'EAN deve ser informado!'
@@ -131,13 +171,24 @@ class FormInventario extends Component {
             return;
         }
 
+        if (tpCont === '3') {
+            if (!codLote) {
+                Alert.alert(
+                    'Conferência',
+                    'Lote deve ser informado!'
+                );
+                return;
+            }
+        } 
+
         const propparams = {
             username,
             codLocal,
             nrContagem,
-            codEtiq,
+            codEAN,
             dtInventario,
-            qtItem
+            qtItem,
+            codLote
         };
 
         if (this.props.estorno) {
@@ -163,31 +214,44 @@ class FormInventario extends Component {
         }
     }
 
+    renderRightButton() {
+        return (
+            <TouchableOpacity 
+                onPress={() => this.limpaTela()}
+                style={styles.btClear}
+            >
+                <Image
+                    source={imgClear}
+                    style={styles.imgClear}
+                />
+            </TouchableOpacity>
+        );
+    }
+
     renderQtde() {
         if (!this.props.estorno) {
             return (
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Qtde</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            keyboardType="numeric"
-                            style={styles.input}
-                            onChangeText={this.props.modificaQtItem}
-                            value={this.props.qtItem}
-                            onSubmitEditing={() => { this.confirmButton(); }}
-                            onBlur={() => this.props.qtItem && this.confirmButton()}
-                            blurOnSubmit={false}
-                        />
-                    </View>
-                    
-                </FormRow>
-            );
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Qtde</Text>
+                    <TextInput
+                        selectTextOnFocus
+                        placeholder=""
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        placeholderTextColor='rgba(255,255,255,0.7)'
+                        returnKeyType="go"
+                        keyboardType="numeric"
+                        style={styles.input}
+                        onChangeText={value => this.onChangeQtdText(value)}
+                        value={this.props.qtItem}
+                        onBlur={() => this.props.qtItem && this.confirmButton()}
+                        ref={(input) => { this.txtQtde = input; }}
+                    />
+                </View>
+            );       
         }
+
+        return (<View />);
     }
 
     render() {
@@ -223,6 +287,7 @@ class FormInventario extends Component {
                     <View style={{ flex: 2 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -236,26 +301,71 @@ class FormInventario extends Component {
                     </View>
                 </FormRow>
                 <FormRow>
-                <View style={{ flex: 3 }}>
-                    <Text style={styles.txtLabel}>EAN</Text>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>EAN</Text>
                         <TextInput
-                            onc
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
-                            autoCorrect={false}
                             keyboardType="numeric"
+                            autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
+                            returnKeyType="go"
                             style={styles.input}
-                            value={this.props.codEtiq}
-                            ref={(input) => { this.qtItem = input; }}
-                            onChangeText={this.props.modificaCodEtiq}
+                            onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
+                            value={this.props.codEAN}
+                            onBlur={() => this.props.codEAN && this.fnBuscaInfoEan()}
                             ref={(input) => { this.txtEAN = input; }}
                         />
                     </View>
                 </FormRow>
                 <FormRow>
-                    <View style={{ flex: 2 }}>
+                    <View style={{ flex: 4 }}>
+                        <Text style={styles.txtLabel}>Item</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            value={this.props.codItem}
+                        />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>UM</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            value={this.props.unidMed}
+                        />
+                    </View>
+                </FormRow>
+                <FormRow>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Descrição</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            multiline
+                            numberOfLines={3}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.inputDescricao}
+                            value={this.props.descItem}
+                        />
+                    </View>                    
+                </FormRow>
+                <FormRow>
+                    <View style={{ flex: 1 }}>
                         <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Contagem</Text>
                         <TouchableOpacity 
                             onPress={() => this.props.modificaModalVisible(true)}
@@ -277,8 +387,27 @@ class FormInventario extends Component {
                             />
                         </TouchableOpacity>
                     </View>
+                    <View style={{ flex: 2 }}>
+                        <Text style={styles.txtLabel}>Lote</Text>
+                        <TextInput
+                            selectTextOnFocus
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            value={this.props.codLote}
+                            onChangeText={codLote => this.props.modificaCodLote(codLote)}
+                            onSubmitEditing={() => {
+                                if (!this.props.estorno) { this.txtQtde.focus(); } 
+                            }}
+                        />
+                    </View>
                 </FormRow>
-                {this.renderQtde()}
+                <FormRow>
+                    {this.renderQtde()}
+                </FormRow>
                 <FormRow>
                     <View style={styles.viewBotao}>
                         <Button
@@ -320,7 +449,11 @@ const mapStateToProps = state => (
         username: state.LoginReducer.usuario,
         codLocal: state.InventarioReducer.codLocal,
         nrContagem: state.InventarioReducer.nrContagem,
-        codEtiq: state.InventarioReducer.codEtiq,
+        codEAN: state.InventarioReducer.codEAN,
+        codItem: state.InventarioReducer.codItem,
+        unidMed: state.InventarioReducer.unidMed,
+        descItem: state.InventarioReducer.descItem,
+        codLote: state.InventarioReducer.codLote,
         dtInventario: state.InventarioReducer.dtInventario,
         qtItem: state.InventarioReducer.qtItem,
         modalVisible: state.InventarioReducer.modalVisible
@@ -330,13 +463,16 @@ const mapStateToProps = state => (
 export default connect(mapStateToProps, {
     modificaCodLocal,
     modificaNrContagem,
-    modificaCodEtiq,
+    modificaCodEAN,
     modificaDtInventario,
+    modificaCodLote,
     modificaQtItem,
     modificaModalVisible,
     cleanInventarioReducer,
+    cleanInventarioReducerWDT,
     doConfirm,
-    doConfirmEst
+    doConfirmEst,
+    buscaInfoEAN
 })(FormInventario);
 
 const styles = StyleSheet.create({
@@ -364,6 +500,15 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'sans-serif-medium',
 		borderRadius: 10
+    },
+    inputDescricao: {
+        height: 70,
+        fontSize: 14,
+        textAlign: 'left',
+        backgroundColor: '#20293F',
+        color: 'white',
+        borderRadius: 10,
+        fontFamily: 'sans-serif-medium'
     },
     viewBotao: {
         flexDirection: 'row',

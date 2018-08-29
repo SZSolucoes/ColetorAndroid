@@ -380,10 +380,8 @@ class FormListaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.codEAN}
                             ref={(input) => { this.codEAN = input; }}
-                            onSubmitEditing={() => this.findItemEAN()}
                             onBlur={() => this.props.codEAN && this.findItemEAN()}
                             onChangeText={(value) => this.props.modificaCodEAN(value)}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </FormRow>
@@ -418,10 +416,8 @@ class FormListaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.quantidade}
                             ref={(input) => { this.quantidade = input; }}
-                            onSubmitEditing={() => this.onSubmitQtd(true)}
                             onBlur={() => this.props.quantidade && this.onSubmitQtd(true)}
                             onChangeText={(value) => this.onChangeQtdText(value)}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </FormRow>

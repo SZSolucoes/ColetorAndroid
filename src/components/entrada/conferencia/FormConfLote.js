@@ -6,7 +6,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    Alert
+    Alert,
+    Keyboard
 } from 'react-native';
 import _ from 'lodash';
 import { connect } from 'react-redux';
@@ -76,6 +77,8 @@ class FormConfLote extends Component {
         const { qtdLote } = this.props;
         let arrLote = [];
 
+        Keyboard.dismiss();
+
         this.props.modificaSeqLote();
         this.props.modificaCodLote();
         this.props.modificaQtdItemLote();
@@ -113,6 +116,8 @@ class FormConfLote extends Component {
             qtdItemLote
         };
 
+        Keyboard.dismiss();
+
         this.props.modificaListaItemLote(listaItemLote);
         
         Actions.refresh();
@@ -134,9 +139,7 @@ class FormConfLote extends Component {
                             onChangeText={qtdLote => this.props.modificaQtdLote(qtdLote)}
                             value={this.props.qtdLote}
                             ref={(input) => { this.qtdLote = input; }}
-                            onSubmitEditing={() => { this.criaVolumesLote(); }}
                             onBlur={() => this.props.qtdLote && this.criaVolumesLote()}
-                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={styles.viewBtOk}>
@@ -191,9 +194,7 @@ class FormConfLote extends Component {
                             onChangeText={qtdItemLote => this.props.modificaQtdItemLote(qtdItemLote)}
                             value={this.props.qtdItemLote}
                             ref={(input) => { this.qtdItemLote = input; }}
-                            onSubmitEditing={() => { this.salvaQtdLote(); }}
                             onBlur={() => this.props.qtdItemLote && this.salvaQtdLote()}
-                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={styles.viewBtOk}>

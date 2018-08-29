@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    Button
+    Button,
+    Keyboard
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -29,6 +30,9 @@ class FormConsolidacao extends Component {
 
     addVolumes() {
         const volume = this.props.codVol;
+
+        Keyboard.dismiss();
+
         this.props.addList(volume);
     }
 
@@ -85,9 +89,7 @@ class FormConsolidacao extends Component {
                             value={this.props.codVol}
                             ref={(input) => { this.volInput = input; }}
                             onChangeText={this.props.modificaVol}
-                            onSubmitEditing={() => this.addVolumes()}
                             onBlur={() => this.props.codVol && this.addVolumes()}
-                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={{ flex: 1 }}>
@@ -105,9 +107,7 @@ class FormConsolidacao extends Component {
                             value={this.props.codVol}
                             ref={(input) => { this.volInput = input; }}
                             onChangeText={this.props.modificaVol}
-                            onSubmitEditing={() => this.addVolumes()}
                             onBlur={() => this.props.codVol && this.addVolumes()}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </FormRow>
@@ -126,9 +126,7 @@ class FormConsolidacao extends Component {
                             value={this.props.codVol}
                             ref={(input) => { this.volInput = input; }}
                             onChangeText={this.props.modificaVol}
-                            onSubmitEditing={() => this.addVolumes()}
                             onBlur={() => this.props.codVol && this.addVolumes()}
-                            blurOnSubmit={false}
                         />
                     </View>
                     <View style={{ flex: 1 }}>
@@ -146,9 +144,7 @@ class FormConsolidacao extends Component {
                             value={this.props.codVol}
                             ref={(input) => { this.volInput = input; }}
                             onChangeText={this.props.modificaVol}
-                            onSubmitEditing={() => this.addVolumes()}
                             onBlur={() => this.props.codVol && this.addVolumes()}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </FormRow>

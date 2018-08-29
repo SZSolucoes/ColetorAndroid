@@ -8,7 +8,8 @@ import {
     Button,
     TouchableOpacity,
     Image,
-    Alert
+    Alert,
+    Keyboard
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -49,6 +50,8 @@ class FormDespacho extends Component {
     }
     confirmButton() {
         const { codEAN, codItem } = this.props;
+
+        Keyboard.dismiss();
 
         if (codEAN) {
             if (codEAN.length === 0) {
@@ -124,9 +127,7 @@ class FormDespacho extends Component {
                             value={this.props.codItem}
                             onChangeText={this.props.modificaCodItem}
                             ref={(input) => { this.txtItem = input; }}
-                            onSubmitEditing={() => { this.confirmButton(); }}
                             onBlur={() => this.props.codItem && this.confirmButton()}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </FormRow>

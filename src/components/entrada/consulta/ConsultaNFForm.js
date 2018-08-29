@@ -6,7 +6,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    Image
+    Image,
+    Keyboard
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -45,6 +46,9 @@ class ConsultaNFForm extends Component {
 
     carregaItemNF() {
         const { usuario, codNF } = this.props;
+
+        Keyboard.dismiss();
+
         this.props.buscaItemsNF(usuario, codNF);
     }
 
@@ -83,9 +87,7 @@ class ConsultaNFForm extends Component {
                             onChangeText={nrNotaFis => this.changeCodNF(nrNotaFis)}
                             value={this.props.codNF}
                             ref={(input) => { this.nrNotaFis = input; }}
-                            onSubmitEditing={() => this.carregaItemNF()}
                             onBlur={() => this.props.codNF && this.carregaItemNF()}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </View>

@@ -9,7 +9,8 @@ import {
     Alert,
     TouchableOpacity,
     Image,
-    ActivityIndicator
+    ActivityIndicator,
+    Keyboard
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -52,6 +53,8 @@ class FormArmazena extends Component {
             itemArmazena,
             listaItem 
         } = this.props;
+
+        Keyboard.dismiss();
 
         if (qtItem) {       
             if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
@@ -178,6 +181,8 @@ class FormArmazena extends Component {
             itemCheck.ean5 === codEAN
         ))];
 
+        Keyboard.dismiss();
+
         if (itemArm[0]) {
             if (itemArm[0].length === 0) {
                 Alert.alert(
@@ -210,6 +215,8 @@ class FormArmazena extends Component {
     }
     validBatismo() {
         const { batismo } = this.props;
+
+        Keyboard.dismiss();
 
         if (batismo) {
             if (batismo.length === 0) {
@@ -254,6 +261,7 @@ class FormArmazena extends Component {
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>Batismo</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
+                                selectTextOnFocus
                                 placeholder=""
                                 autoCapitalize="none"
                                 autoCorrect={false}
@@ -263,9 +271,7 @@ class FormArmazena extends Component {
                                 onChangeText={batismo => this.props.modificaBatismo(batismo)}
                                 value={this.props.batismo}
                                 ref={(input) => { this.txtBatismo = input; }}
-                                onSubmitEditing={() => { this.validBatismo(); }}
                                 onBlur={() => this.props.batismo && this.validBatismo()}
-                                blurOnSubmit={false}
                             />
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaBatismo()}
@@ -314,6 +320,7 @@ class FormArmazena extends Component {
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>EAN</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
+                                selectTextOnFocus
                                 placeholder=""
                                 keyboardType="numeric"
                                 autoCapitalize="none"
@@ -324,9 +331,7 @@ class FormArmazena extends Component {
                                 onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                                 value={this.props.codEAN}
                                 ref={(input) => { this.txtEAN = input; }}
-                                onSubmitEditing={() => { this.validEAN(); }}
                                 onBlur={() => this.props.codEAN && this.validEAN()}
-                                blurOnSubmit={false}
                             />
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaCodEAN()}
@@ -394,6 +399,7 @@ class FormArmazena extends Component {
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>Localização</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
+                                selectTextOnFocus
                                 placeholder=""
                                 autoCapitalize="none"
                                 autoCorrect={false}
@@ -403,9 +409,7 @@ class FormArmazena extends Component {
                                 onChangeText={codLocal => this.props.modificaCodLocal(codLocal)}
                                 value={this.props.codLocal}
                                 ref={(input) => { this.txtLocal = input; }}
-                                onSubmitEditing={() => { this.validLocal(); }}
                                 onBlur={() => this.props.codLocal && this.validLocal()}
-                                blurOnSubmit={false}
                             />
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaCodLocal()}
@@ -427,6 +431,7 @@ class FormArmazena extends Component {
                             Deposito
                         </Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -444,6 +449,7 @@ class FormArmazena extends Component {
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Quantidade</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             keyboardType="numeric"
                             autoCapitalize="none"
@@ -460,6 +466,7 @@ class FormArmazena extends Component {
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Lote</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -469,9 +476,7 @@ class FormArmazena extends Component {
                             onChangeText={lote => this.props.modificaLote(lote)}
                             value={this.props.lote}
                             ref={(input) => { this.txtLote = input; }}
-                            onSubmitEditing={() => { this.onPressEfetivar(); }}
                             onBlur={() => this.props.lote && this.onPressEfetivar()}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </View>

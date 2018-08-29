@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Button,
     TextInput,
-    Alert
+    Alert,
+    Keyboard
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -21,6 +22,8 @@ import {
 class WinInfoItemConf extends Component {
     salvarInfoItem = () => {
         const { pesoItem } = this.props;
+
+        Keyboard.dismiss();
 
         if (pesoItem) {
             if (_.toInteger(pesoItem) <= 0) {
@@ -116,9 +119,7 @@ class WinInfoItemConf extends Component {
                             }
                             value={this.props.comprimento}
                             ref={(input) => { this.comprimentoItem = input; }}
-                            onSubmitEditing={(this.salvarInfoItem)}
                             onBlur={() => this.props.comprimento && this.salvarInfoItem()}
-                            blurOnSubmit={false}
                         />
                     </View>
                 </View>

@@ -7,7 +7,8 @@ import {
     TextInput,
     Alert,
     TouchableOpacity,
-    Image
+    Image,
+    Keyboard
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -49,6 +50,9 @@ class FormEstoque extends Component {
     }
     fnBuscaEstoque() {
         const codEAN = this.props.codEAN;
+
+        Keyboard.dismiss();
+
         if (codEAN) {
             if (codEAN.length === 0) {
                 Alert.alert(
@@ -84,9 +88,7 @@ class FormEstoque extends Component {
                                 style={[styles.input, { flex: 5 }]}
                                 onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                                 value={this.props.codEAN}
-                                onSubmitEditing={() => this.fnBuscaEstoque()}
                                 onBlur={() => this.props.codEAN && this.fnBuscaEstoque()}
-                                blurOnSubmit={false}
                             />
                         </View>
                     </View>
