@@ -61,10 +61,12 @@ export default class MenuApp extends Component {
                         onPress={this.onPressConsulta}
                     >
                         <View style={styles.menu}>
-                            <Image 
-                                style={styles.imgMenu} 
-                                source={imgConsulta}
-                            />
+                            <View style={styles.viewImgCenter}> 
+                                <Image 
+                                    style={styles.imgMenuTwo} 
+                                    source={imgConsulta}
+                                />
+                            </View>
                             <Text style={styles.txtMenu}>Consulta</Text>
                         </View>
                     </TouchableHighlight>
@@ -101,6 +103,16 @@ const styles = StyleSheet.create({
     imgMenu: {
         width: 100,
         height: 100
+    },
+    viewImgCenter: {
+        width: 100,
+        height: 100,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    imgMenuTwo: {
+        width: 70,
+        height: 70
     },
     txtMenu: {
         fontSize: 16,

@@ -35,12 +35,27 @@ import {
     modificaOnEfetivar
 } from '../../../actions/ArmazenaActions';
 
+import LoadingSpin from '../../utils/LoadingSpin';
+
 const imgClear = require('../../../../resources/imgs/limpa_tela.png');
 
 class FormArmazena extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.fieldsChanged = {
+            batismo: false,
+            ean: false,
+            local: false, 
+            lote: false
+        };
+    }
+
     componentDidMount() {
         this.props.iniciaTela();
     }
+
     onPressEfetivar() {
         const { 
             usuario, 
@@ -256,6 +271,7 @@ class FormArmazena extends Component {
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
+                <LoadingSpin />
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>Batismo</Text>
@@ -268,10 +284,18 @@ class FormArmazena extends Component {
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="go"
                                 style={[styles.input, { flex: 1 }]}
-                                onChangeText={batismo => this.props.modificaBatismo(batismo)}
                                 value={this.props.batismo}
                                 ref={(input) => { this.txtBatismo = input; }}
-                                onBlur={() => this.props.batismo && this.validBatismo()}
+                                onChangeText={batismo => {
+                                    this.fieldsChanged.batismo = true; 
+                                    this.props.modificaBatismo(batismo); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.batismo && this.fieldsChanged.batismo) {
+                                        this.fieldsChanged.batismo = false;
+                                        this.validBatismo();
+                                    } 
+                                }}
                             />
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaBatismo()}
@@ -328,10 +352,18 @@ class FormArmazena extends Component {
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="go"
                                 style={[styles.input, { flex: 1 }]}
-                                onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                                 value={this.props.codEAN}
                                 ref={(input) => { this.txtEAN = input; }}
-                                onBlur={() => this.props.codEAN && this.validEAN()}
+                                onChangeText={codEAN => {
+                                    this.fieldsChanged.ean = true; 
+                                    this.props.modificaCodEAN(codEAN); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.codEAN && this.fieldsChanged.ean) {
+                                        this.fieldsChanged.ean = false;
+                                        this.validEAN();
+                                    } 
+                                }}
                             />
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaCodEAN()}
@@ -406,10 +438,18 @@ class FormArmazena extends Component {
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="next"
                                 style={[styles.input, { flex: 1 }]}
-                                onChangeText={codLocal => this.props.modificaCodLocal(codLocal)}
                                 value={this.props.codLocal}
                                 ref={(input) => { this.txtLocal = input; }}
-                                onBlur={() => this.props.codLocal && this.validLocal()}
+                                onChangeText={codLocal => {
+                                    this.fieldsChanged.local = true; 
+                                    this.props.modificaCodLocal(codLocal); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.codLocal && this.fieldsChanged.local) {
+                                        this.fieldsChanged.local = false;
+                                        this.validLocal();
+                                    } 
+                                }}
                             />
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaCodLocal()}
@@ -473,10 +513,18 @@ class FormArmazena extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            onChangeText={lote => this.props.modificaLote(lote)}
                             value={this.props.lote}
                             ref={(input) => { this.txtLote = input; }}
-                            onBlur={() => this.props.lote && this.onPressEfetivar()}
+                            onChangeText={lote => {
+                                this.fieldsChanged.lote = true; 
+                                this.props.modificaLote(lote); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.lote && this.fieldsChanged.lote) {
+                                    this.fieldsChanged.lote = false;
+                                    this.onPressEfetivar();
+                                } 
+                            }}
                         />
                     </View>
                 </View>

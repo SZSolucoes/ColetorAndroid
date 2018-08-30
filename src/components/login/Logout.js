@@ -19,8 +19,8 @@ export default class LogoutBtn extends Component {
 
     render() {
         return (
-            <TouchableOpacity style={styles.buttonLogin}>
-                <Text onPress={this.onPressLogout} style={styles.buttonLabel}> 
+            <TouchableOpacity style={styles.buttonLogin} onPress={this.onPressLogout}>
+                <Text style={styles.buttonLabel}> 
                     LOGOUT
                 </Text>
             </TouchableOpacity>

@@ -9,7 +9,6 @@ import {
     Image,
     Alert,
     Button,
-    ActivityIndicator,
     Platform,
     Keyboard
 } from 'react-native';
@@ -46,6 +45,8 @@ import {
     imprimeEtiquetaEAN
 } from '../../../actions/ImpressaoActions';
 
+import LoadingSpin from '../../utils/LoadingSpin';
+
 const imgZoom = require('../../../../resources/imgs/zoom_nf.png');
 const imgPrinter = require('../../../../resources/imgs/impressao_etiq.png');
 const imgClear = require('../../../../resources/imgs/limpa_tela.png');
@@ -57,6 +58,13 @@ class FormConf extends Component {
         this.state = {
             qtdDisable: true,
             batismoDisable: true
+        };
+
+        this.fieldsChanged = {
+            nf: false, 
+            ean: false,
+            qtitem: false,
+            batismo: false 
         };
     }
     componentDidMount() {
@@ -397,12 +405,6 @@ class FormConf extends Component {
         Actions.listaNFConf();
     }
     renderBtEfetiva() {
-        if (this.props.onEfetivar) {
-            return (
-                <ActivityIndicator size="large" />
-            );
-        }
-
         if (Platform.OS === 'windows') {
             return (
                 <View style={styles.viewBotao}>
@@ -430,6 +432,7 @@ class FormConf extends Component {
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
+                <LoadingSpin />
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Nota Fiscal</Text>
@@ -442,10 +445,18 @@ class FormConf extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            onChangeText={nrNotaFis => this.props.modificaNrNotaFis(nrNotaFis)}
                             value={this.props.nrNotaFis}
                             ref={(input) => { this.nrNotaFis = input; }}
-                            onBlur={() => this.props.nrNotaFis && this.carregaNF()}
+                            onChangeText={nrNotaFis => {
+                                this.fieldsChanged.nf = true; 
+                                this.props.modificaNrNotaFis(nrNotaFis); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.nrNotaFis && this.fieldsChanged.nf) {
+                                    this.fieldsChanged.nf = false;
+                                    this.carregaNF();
+                                } 
+                            }}
                         />
                     </View>
                     <View style={styles.viewBtSearch}>
@@ -515,10 +526,18 @@ class FormConf extends Component {
                                 placeholderTextColor='rgba(255,255,255,0.7)'
                                 returnKeyType="go"
                                 style={[styles.input, { flex: 6 }]}
-                                onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                                 value={this.props.codEAN}
                                 ref={(input) => { this.codEAN = input; }}
-                                onBlur={() => this.props.codEAN && this.validEAN()}
+                                onChangeText={codEAN => {
+                                    this.fieldsChanged.ean = true; 
+                                    this.props.modificaCodEAN(codEAN); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.codEAN && this.fieldsChanged.ean) {
+                                        this.fieldsChanged.ean = false;
+                                        this.validEAN();
+                                    } 
+                                }}
                             />
                             <TouchableOpacity
                                 style={styles.btClear}
@@ -545,10 +564,18 @@ class FormConf extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
                             value={this.props.qtItem}
                             ref={(input) => { this.qtItem = input; }}
-                            onBlur={() => this.props.qtItem && this.validQtd()}
+                            onChangeText={qtItem => {
+                                this.fieldsChanged.qtitem = true; 
+                                this.props.modificaQtItem(qtItem); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.qtItem && this.fieldsChanged.qtitem) {
+                                    this.fieldsChanged.qtitem = false;
+                                    this.validQtd();
+                                } 
+                            }}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
@@ -606,10 +633,18 @@ class FormConf extends Component {
                             editable={this.state.batismoDisable}
                             returnKeyType="go"
                             style={styles.input}
-                            onChangeText={batismo => this.props.modificaBatismo(batismo)}
                             value={this.props.batismo}
                             ref={(input) => { this.batismo = input; }}
-                            onBlur={() => this.props.batismo && this.onPressEfetivar()}
+                            onChangeText={batismo => {
+                                this.fieldsChanged.batismo = true; 
+                                this.props.modificaBatismo(batismo); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.batismo && this.fieldsChanged.batismo) {
+                                    this.fieldsChanged.batismo = false;
+                                    this.validQtdItem();
+                                } 
+                            }}
                         />
                     </View>
                 </View>

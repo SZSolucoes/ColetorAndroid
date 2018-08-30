@@ -187,6 +187,7 @@ export const limpaTela = () => {
 
 export const buscaNotaConferencia = (usuario) => {
     return dispatch => {
+        dispatch({ type: 'modifica_visible_loadingspin', payload: true });
         Axios.get('/coletor/getReceptPrior.p', {
             params: {
                 usuario
@@ -209,6 +210,7 @@ export const buscaNotaConferencia = (usuario) => {
 };
 
 const buscaSuccess = (dispatch, response) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     dispatch({ type: 'busca_conf_ok' });
     const resposta = _(response.data).value();
 
@@ -224,6 +226,7 @@ const buscaSuccess = (dispatch, response) => {
 };
 
 const buscaError = (dispatch) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     dispatch({ type: 'busca_conf_ok' });
     Alert.alert(
         'Erro Conferência',
@@ -233,6 +236,7 @@ const buscaError = (dispatch) => {
 
 export const efetivaConfere = ({ usuario, notaConfere, itemConfere, conferencia }) => {
     return dispatch => {
+        dispatch({ type: 'modifica_visible_loadingspin', payload: true });
         Axios.get('/coletor/doCheckAR.p', {
             params: {
                 usuario,
@@ -263,6 +267,7 @@ const confereSuccess = (dispatch, response, notaConfere, itemConfere) => {
         itemConfere
     };
 
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     dispatch({ type: 'modifica_onEfetivar_conf', payload: false });
 
     if (response && response.data && typeof response.data === 'object') {
@@ -288,6 +293,7 @@ const confereSuccess = (dispatch, response, notaConfere, itemConfere) => {
 };
 
 const confereError = (dispatch) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     dispatch({ type: 'modifica_onEfetivar_conf', payload: false });
 
     Alert.alert(

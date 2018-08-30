@@ -13,6 +13,8 @@ import DespachoReducer from './DespachoReducer';
 import ConsEtiqBatEntradaReducer from './ConsEtiqBatEntradaReducer';
 import ConsultaNFReducer from './ConsultaNFReducer';
 import ListaSeparacaoReducer from './ListaSeparacaoReducer';
+import ConsultaLocalizacaoReducer from './ConsultaLocalizacaoReducer';
+import LoadingSpinReducer from './LoadingSpinReducer';
 
 export default combineReducers({
     LoginReducer,
@@ -28,5 +30,7 @@ export default combineReducers({
     DespachoReducer,
     ConsEtiqBatEntradaReducer,
     ConsultaNFReducer,
-    ListaSeparacaoReducer
+    ListaSeparacaoReducer,
+    ConsultaLocalizacaoReducer,
+    LoadingSpinReducer
 });

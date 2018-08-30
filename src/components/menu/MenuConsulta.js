@@ -13,6 +13,7 @@ import { Actions } from 'react-native-router-flux';
 const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
 const imgConsBatismo = require('../../../resources/imgs/consulta_etiq_48.png');
 const imgConsultaNF = require('../../../resources/imgs/consultanf.png');
+const imgLocation = require('../../../resources/imgs/location.png');
 
 class MenuConsulta extends Component {
 
@@ -26,6 +27,8 @@ class MenuConsulta extends Component {
         this.onPressConsBatismoSaida = this.onPressConsBatismoSaida.bind(this);
         this.renderConsultaNF = this.renderConsultaNF.bind(this);
         this.onPressConsultaNF = this.onPressConsultaNF.bind(this);
+        this.renderConsultaLocalizacao = this.renderConsultaLocalizacao.bind(this);
+        this.onPressConsultaLocalizacao = this.onPressConsultaLocalizacao.bind(this);
     }
 
     onPressConsEstoq() {
@@ -38,6 +41,10 @@ class MenuConsulta extends Component {
 
     onPressConsBatismoSaida() {
         Actions.consultaEtiqBatismoSaida();
+    }
+
+    onPressConsultaLocalizacao() {
+        Actions.consultaLocalizacao();
     }
 
     onPressConsultaNF() {
@@ -92,6 +99,22 @@ class MenuConsulta extends Component {
         }
     }
 
+    renderConsultaLocalizacao() {
+        if (this.props.logEstoque) {
+            return (
+                <TouchableHighlight onPress={this.onPressConsultaLocalizacao}>
+                    <View style={styles.menu}>
+                        <Image 
+                            style={styles.imgMenu} 
+                            source={imgLocation}
+                        />
+                        <Text style={styles.txtMenu}>Localização</Text>
+                    </View>
+                </TouchableHighlight>
+            );
+        }
+    }
+
     renderConsultaNF() {
         return (
             <TouchableHighlight onPress={this.onPressConsultaNF}>
@@ -112,6 +135,7 @@ class MenuConsulta extends Component {
                 {this.renderConsultaEstoq()}
                 {this.renderConsultaBatismoEntrada()}
                 {/*this.renderConsultaBatismoSaida()*/}
+                {this.renderConsultaLocalizacao()}
                 {this.renderConsultaNF()}                   
             </ScrollView>
         );

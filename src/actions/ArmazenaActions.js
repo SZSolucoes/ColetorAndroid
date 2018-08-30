@@ -92,17 +92,19 @@ export const iniciaTela = () => {
 };
 export const buscaInfoBastimo = (batismo) => {
     return dispatch => {
+        dispatch({ type: 'modifica_visible_loadingspin', payload: true });
         Axios.get('/coletor/getLabelItems.p', {
             params: {
                 codEtiqBatismo: batismo
             }
         })
         .then(response => buscaBatismoSuccess(dispatch, response))
-        .catch(() => buscaBatismoError());
+        .catch(() => buscaBatismoError(dispatch));
     };
 };
 
 const buscaBatismoSuccess = (dispatch, response) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     if (response.data.success === 'true') {
         dispatch({ type: 'modifica_info_batismo_arm', payload: response.data.etiqueta });
     } else {
@@ -113,7 +115,8 @@ const buscaBatismoSuccess = (dispatch, response) => {
     }
 };
 
-const buscaBatismoError = () => {
+const buscaBatismoError = (dispatch) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     Alert.alert(
         'Erro Armazenamento',
         'Erro Conexão!'
@@ -122,6 +125,7 @@ const buscaBatismoError = () => {
 
 export const efetivaArmazena = (etiquetaArmazena, itemArmazena, armazenamento) => {
     return dispatch => {
+        dispatch({ type: 'modifica_visible_loadingspin', payload: true });
         Axios.get('/coletor/doStockPlacement.p', {
             params: {
                 usuario: armazenamento.usuario,
@@ -150,6 +154,7 @@ const armazenaSuccess = (dispatch, response, etiqueta, item, qtItem) => {
         qtItem
     };
 
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     dispatch({ type: 'modifica_onArmazena_arm', payload: false });
 
     if (response && response.data && response.data.success === 'true') {
@@ -172,6 +177,7 @@ const armazenaSuccess = (dispatch, response, etiqueta, item, qtItem) => {
 };
 
 const armazenaError = (dispatch) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     dispatch({ type: 'modifica_onArmazena_arm', payload: false });
 
     Alert.alert(

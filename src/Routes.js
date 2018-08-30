@@ -27,6 +27,7 @@ import RelacionaEan from './components/relacionaean/RelacionaEan';
 import ConsultaEtiqBatismoEntrada from './components/entrada/consulta/ConsultaBatismoEntrada';
 import ConsultaNF from './components/entrada/consulta/ConsultaNF';
 import ConsultaNFPush from './components/entrada/consulta/ConsultaNFPush';
+import ConsultaLocalizacao from './components/entrada/consulta/localizacao/ConsultaLocalizacao';
 
 export default () => (
     <Router>
@@ -238,6 +239,14 @@ export default () => (
                 key='consultaNFPush' 
                 component={ConsultaNFPush} 
                 title="Notas Fiscais" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='consultaLocalizacao' 
+                component={ConsultaLocalizacao} 
+                title="Localização" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

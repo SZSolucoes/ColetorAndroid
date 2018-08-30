@@ -52,21 +52,26 @@ class MenuEntrada extends Component {
         Actions.impressao();
     }
     renderConferecia(key) {
-        if (this.props.loadingConf) {
-            return (
-                <ActivityIndicator key={key} size="large" />
-            );
-        }
         if (this.props.logConfReceb) {
             return (
-                <TouchableHighlight key={key} onPress={() => { this.onPressConf(); }} >
-                    <View style={styles.menu}>
-                        <Image 
-                            style={styles.imgMenu} 
-                            source={imgConf}
-                        />
-                        <Text style={styles.txtMenu}>Conferência AR</Text>
-                    </View>
+                <TouchableHighlight key={key} onPress={() => { this.onPressConf(); }}>        
+                        { this.props.loadingConf ?
+                            (   
+                                <View style={[styles.menu, { justifyContent: 'center' }]}>
+                                    <View style={{ marginVertical: 6 }}>
+                                        <ActivityIndicator size={'large'} />
+                                    </View>
+                                </View>
+                            ) : (
+                                    <View style={styles.menu}>
+                                        <Image 
+                                            style={styles.imgMenu} 
+                                            source={imgConf}
+                                        />
+                                        <Text style={styles.txtMenu}>Conferência AR</Text>
+                                    </View> 
+                                )
+                        } 
                 </TouchableHighlight>
             );
         }
