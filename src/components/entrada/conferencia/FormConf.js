@@ -368,7 +368,7 @@ class FormConf extends Component {
             if (Platform.OS === 'windows') {
                 Actions.winInfoItemConf();
             } else {
-                this.props.modificaInfoVisible(true);
+                //this.props.modificaInfoVisible(true);
             }
         }        
     }
