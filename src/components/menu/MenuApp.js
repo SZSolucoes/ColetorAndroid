@@ -5,7 +5,8 @@ import {
     Text,
     Image,
     TouchableHighlight,
-    Alert
+    Alert,
+    Platform
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
@@ -16,60 +17,101 @@ const imgTruck2 = require('../../../resources/imgs/truck2.png');
 const imgConsulta = require('../../../resources/imgs/menuConsulta.png');
 
 export default class MenuApp extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.renderMenuEntrada = this.renderMenuEntrada.bind(this);
+        this.renderMenuSaida = this.renderMenuSaida.bind(this);
+        this.renderMenuConsulta = this.renderMenuConsulta.bind(this);
+    }
+
+
     onPressEntrada() {
         Actions.menuEntrada();
     }
 
     onPressSaida() {
-        Alert.alert(
+        /* Alert.alert(
             'Saída',
             'Em Desenvolvimento'
         );
-        return;
-        //Actions.menuSaida();
+        return; */
+        Actions.menuSaida();
     }
     onPressConsulta() {
         Actions.menuConsulta();
     }
+
+    renderMenuEntrada(key) {
+        return (
+            <TouchableHighlight
+                key={key} 
+                onPress={this.onPressEntrada}
+            >
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgTruck2}
+                    />
+                    <Text style={styles.txtMenu}>Entrada de Mercadorias</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
+
+    renderMenuSaida(key) {
+        return (
+            <TouchableHighlight
+                key={key} 
+                onPress={this.onPressSaida}
+            >
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgTruck1}
+                    />
+                    <Text style={styles.txtMenu}>Saída de Mercadorias</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
+
+    renderMenuConsulta(key) {
+        return (
+            <TouchableHighlight
+                key={key} 
+                onPress={this.onPressConsulta}
+            >
+                <View style={styles.menu}>
+                    <View style={styles.viewImgCenter}> 
+                        <Image 
+                            style={styles.imgMenuTwo} 
+                            source={imgConsulta}
+                        />
+                    </View>
+                    <Text style={styles.txtMenu}>Consulta</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
+
     render() {
         return (
             <View style={styles.viewPrinc}>
                 <View style={styles.opcao}>
-                    <TouchableHighlight 
-                        onPress={this.onPressEntrada}
-                    >
-                        <View style={styles.menu}>
-                            <Image 
-                                style={styles.imgMenu} 
-                                source={imgTruck2}
-                            />
-                            <Text style={styles.txtMenu}>Entrada de Mercadorias</Text>
-                        </View>
-                    </TouchableHighlight>
-                    <TouchableHighlight 
-                        onPress={this.onPressSaida}
-                    >
-                        <View style={styles.menu}>
-                            <Image 
-                                style={styles.imgMenu} 
-                                source={imgTruck1}
-                            />
-                            <Text style={styles.txtMenu}>Saída de Mercadorias</Text>
-                        </View>
-                    </TouchableHighlight>
-                    <TouchableHighlight 
-                        onPress={this.onPressConsulta}
-                    >
-                        <View style={styles.menu}>
-                            <View style={styles.viewImgCenter}> 
-                                <Image 
-                                    style={styles.imgMenuTwo} 
-                                    source={imgConsulta}
-                                />
-                            </View>
-                            <Text style={styles.txtMenu}>Consulta</Text>
-                        </View>
-                    </TouchableHighlight>
+                    { Platform.OS !== 'windows' ? (
+                    [
+                        this.renderMenuEntrada('1'),
+                        this.renderMenuSaida('2'),
+                        this.renderMenuConsulta('3')
+                    ]
+                ) : (
+                    [
+                        this.renderMenuEntrada('1'),
+                        this.renderMenuSaida('2')
+                    ]
+                )}
                 </View>
                 <View style={styles.btLogout}>
                     <LogoutBtn />

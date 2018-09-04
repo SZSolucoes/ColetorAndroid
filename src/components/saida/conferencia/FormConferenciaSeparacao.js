@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    Button
+    Button,
+    Platform
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -14,6 +15,38 @@ import FormRow from '../../utils/FormRow';
 import ListaItemConfSep from './ListaItemConfSep';
 
 class FormConferenciaSeparacao extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.renderBtEfetiva = this.renderBtEfetiva.bind(this);
+    }
+
+    renderBtEfetiva() {
+        if (Platform.OS === 'windows') {
+            return (
+                <View style={styles.viewBotao}>
+                    <View style={{ width: 150 }}>
+                        <Button
+                            onPress={() => false}
+                            title="Efetivar"
+                            color="black"
+                        />
+                    </View>
+                </View>
+            );
+        }
+
+        return (
+            <View style={styles.viewBotao}>
+                <Button
+                    onPress={() => false}
+                    title="Conferir"
+                    color="green"
+                />
+            </View>
+        );
+    }
 
     render() {
         return (
@@ -219,13 +252,7 @@ class FormConferenciaSeparacao extends Component {
                     </View>
                 </FormRow>
                 <FormRow>
-                    <View style={styles.viewBotao}>
-                        <Button
-                            onPress={() => false}
-                            title="Conferir"
-                            color="green"
-                        />
-                    </View>
+                    {this.renderBtEfetiva()}
                 </FormRow>
                 <View style={{ padding: 5 }}>
                     <ListaItemConfSep />

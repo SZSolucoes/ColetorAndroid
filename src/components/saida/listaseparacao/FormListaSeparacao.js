@@ -25,6 +25,7 @@ import {
     modificaBatismo,
     modificaCodEAN,
     modificaLocalizacao,
+    modificaLocalizacaoConf,
     modificaLote,
     modificaQtdEtiq,
     modificaQuantidade,
@@ -48,9 +49,21 @@ class FormListaSeparacao extends Component {
         this.findItemEAN = this.findItemEAN.bind(this);
         this.onChangeQtdText = this.onChangeQtdText.bind(this);
         this.onSubmitQtd = this.onSubmitQtd.bind(this);
+        this.onBlurLote = this.onBlurLote.bind(this);
         this.onPressNoQtd = this.onPressNoQtd.bind(this);
+        this.onPressNoLote = this.onPressNoLote.bind(this);
         this.eanError = this.eanError.bind(this);
         this.setValidQtd = this.setValidQtd.bind(this);
+        this.validLocalConf = this.validLocalConf.bind(this);
+        this.doCheckEnableLote = this.doCheckEnableLote.bind(this);
+        this.loteFocus = this.loteFocus.bind(this);
+
+        this.fieldsChanged = {
+            localizacaoConf: false, 
+            codEAN: false,
+            quantidade: false,
+            lote: false
+        };
     }
 
     componentDidMount() {
@@ -62,10 +75,41 @@ class FormListaSeparacao extends Component {
     componentWillUnmount() {
         this.props.modificaClean();
     }
-    
-    
+
     onPressNoQtd() {
         this.props.modificaQuantidade('');
+        this.quantidade.focus();
+    }
+
+    onPressNoLocalConf() {
+        this.props.modificaLocalizacaoConf('');
+        this.localizacaoConf.focus();
+    }
+
+    onPressNoLote() {
+        this.props.modificaLote('');
+        this.loteFocus();
+    }
+
+    onBlurLote() {
+        if (this.props.itemSelected !== -1) {
+            const { tpCont, lote } = this.props.listaItensSepPc[this.props.itemSelected];
+            if (tpCont === '3' && 
+                (tpCont.toLowerCase() !== this.props.lote.toLowerCase())) {
+                Alert.alert(
+                    'Aviso',
+                    `O Lote informado é inválido!\
+                    \nLote Sugerido: ${lote}\
+                    \nLote Informado: ${this.props.lote}\
+                    \n\nLote inválido.`,
+                    [
+                        { text: 'OK', onPress: () => this.onPressNoLote() },
+                    ],
+                    { cancelable: false }
+                );
+                return;
+            }
+        }
     }
     
     onChangeQtdText(value) {
@@ -84,7 +128,7 @@ class FormListaSeparacao extends Component {
             batismo,
             codEAN,
             quantidade,
-            localizacao,
+            localizacaoConf,
             lote,
             itemSelected,
             validEan,
@@ -95,7 +139,7 @@ class FormListaSeparacao extends Component {
             batismo.trim() && 
             codEAN.trim() && 
             quantidade.trim() &&
-            localizacao.trim() &&  
+            localizacaoConf.trim() &&  
             itemSelected !== -1 &&
             validEan &&
             (validQtd || this.onSubmitQtd(false))
@@ -106,8 +150,17 @@ class FormListaSeparacao extends Component {
                 itCode,
                 refer,
                 entrega,
-                depos
+                depos,
+                tpCont
             } = this.props.listaItensSepPc[itemSelected];
+
+            if (tpCont === '3' && !lote) {
+                Alert.alert(
+                    'Separação',
+                    'Campo (Lote) deve ser informado!'
+                );
+                return;
+            }
     
             const params = {
                 userName: usuario,
@@ -118,11 +171,11 @@ class FormListaSeparacao extends Component {
                 range,
                 estab,
                 seq,
-                item: itCode,
+                itCode,
                 refer,
                 entrega,
                 depos,
-                local: localizacao,
+                local: localizacaoConf,
                 lote,
                 etiqueta: batismo,
                 ean: codEAN,
@@ -138,7 +191,7 @@ class FormListaSeparacao extends Component {
             Alert.alert('Separação', 'Campo (EAN) deve ser informado.');
         } else if (!quantidade.trim()) {
             Alert.alert('Separação', 'Campo (Qtd) deve ser informado.');
-        } else if (!localizacao.trim()) {
+        } else if (!localizacaoConf.trim()) {
             Alert.alert('Separação', 'Campo (Localização) deve ser informado.');
         } else if (itemSelected === -1 || !validEan) {
             this.eanError();
@@ -200,16 +253,26 @@ class FormListaSeparacao extends Component {
             return false;
         }
         this.props.modificaValidQtd(true);
+        this.loteFocus();
         return true;
     }
 
     setValidQtd(fieldYesOrNo) {
         if (fieldYesOrNo) {
             this.props.modificaValidQtd(true);
+            this.loteFocus();
         } else {
             this.props.modificaValidQtd(true);
             setTimeout(() => this.onPressSeparar(), 500);
         }
+    }
+
+    doCheckEnableLote() {
+        if (this.props.itemSelected !== -1 && 
+            this.props.listaItensSepPc[this.props.itemSelected].tpCont === '3') {
+            return true;
+        }
+        return false;
     }
 
     findItemEAN() {
@@ -243,7 +306,23 @@ class FormListaSeparacao extends Component {
             this.props.modificaQuantidade('');
             this.props.modificaValidEan(true);
             this.props.modificaItemSelected(indexItemEAN);
-            this.quantidade.blur();
+
+            if (this.props.localizacaoConf && 
+                (local.toLowerCase() !== this.props.localizacaoConf.toLowerCase())) {
+                Alert.alert(
+                    'Aviso',
+                    `A localização informada é divergente da localização sugerida!\
+                    \nLocal Sugerido: ${local}\
+                    \nLocal Informado: ${this.props.localizacaoConf}\
+                    \n\nLocalização inválida.`,
+                    [
+                        { text: 'OK', onPress: () => this.onPressNoLocalConf() },
+                    ],
+                    { cancelable: false }
+                );
+            } else {
+                this.quantidade.focus();
+            }
         } else {
             this.eanError();
             Alert.alert(
@@ -263,6 +342,31 @@ class FormListaSeparacao extends Component {
         this.props.modificaQuantidade('');
         this.props.modificaItemSelected(-1);
         this.props.modificaValidEan(false);
+    }
+
+    loteFocus() {
+        if (this.props.itemSelected !== -1 && 
+            this.props.listaItensSepPc[this.props.itemSelected].tpCont === '3') {
+            this.lote.focus();
+        }
+    }
+
+    validLocalConf() {
+        if (this.props.localizacao.toLowerCase() !== this.props.localizacaoConf.toLowerCase()) {
+            Alert.alert(
+                'Aviso',
+                `A localização informada é divergente da localização sugerida!\
+                \nLocal Sugerido: ${this.props.localizacao}\
+                \nLocal Informado: ${this.props.localizacaoConf}\
+                \n\nLocalização inválida.`,
+                [
+                    { text: 'OK', onPress: () => this.onPressNoLocalConf() },
+                ],
+                { cancelable: false }
+            );
+        }
+
+        this.codEAN.focus();
     }
 
     renderImgUrgent() {
@@ -323,34 +427,20 @@ class FormListaSeparacao extends Component {
                     </View>
                 </FormRow>
                 <FormRow>
-                    <View pointerEvents="none">
-                        <Text style={styles.txtLabel}>Pedido</Text>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Local Sugerido</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
                             editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             style={styles.input}
-                            value={this.props.pedido}
+                            value={this.props.localizacao}
                             underlineColorAndroid='transparent'
                         />
                     </View>
-                    <View pointerEvents="none">
-                        <Text style={styles.txtLabel}>Nome Abrev</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.nomeAbrev}
-                            underlineColorAndroid='transparent'
-                        />
-                    </View>
-                </FormRow>
-                <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>
                         <TextInput
@@ -363,9 +453,36 @@ class FormListaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.batismo}
                             ref={(input) => { this.batismo = input; }}
-                            onSubmitEditing={() => this.codEAN.focus()}
+                            onSubmitEditing={() => this.localizacaoConf.focus()}
                             onChangeText={(value) => this.props.modificaBatismo(value)}
                             blurOnSubmit={false}
+                        />
+                    </View>
+                </FormRow>
+                <FormRow>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Localização</Text>
+                        <TextInput
+                            selectTextOnFocus
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            value={this.props.localizacaoConf}
+                            ref={(input) => { this.localizacaoConf = input; }}
+                            onChangeText={value => {
+                                this.fieldsChanged.localizacaoConf = true; 
+                                this.props.modificaLocalizacaoConf(value); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.localizacaoConf && 
+                                    this.fieldsChanged.localizacaoConf) {
+                                        this.fieldsChanged.localizacaoConf = false;
+                                        this.validLocalConf();
+                                    } 
+                            }}
                         />
                     </View>
                     <View style={{ flex: 1 }}>
@@ -380,30 +497,47 @@ class FormListaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.codEAN}
                             ref={(input) => { this.codEAN = input; }}
-                            onBlur={() => this.props.codEAN && this.findItemEAN()}
-                            onChangeText={(value) => this.props.modificaCodEAN(value)}
+                            onChangeText={value => {
+                                this.fieldsChanged.codEAN = true; 
+                                this.props.modificaCodEAN(value); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.codEAN && this.fieldsChanged.codEAN) {
+                                    this.fieldsChanged.codEAN = false;
+                                    this.findItemEAN();
+                                } 
+                            }}
                         />
                     </View>
                 </FormRow>
                 <FormRow>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Localização</Text>
+                    <View pointerEvents="none" style={{ flex: 0.8 }}>
+                        <Text style={styles.txtLabel}>Pedido</Text>
                         <TextInput
-                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
                             style={styles.input}
-                            value={this.props.localizacao}
-                            ref={(input) => { this.localizacao = input; }}
-                            onSubmitEditing={() => this.lote.focus()}
-                            onChangeText={(value) => this.props.modificaLocalizacao(value)}
-                            blurOnSubmit={false}
+                            value={this.props.pedido}
+                            underlineColorAndroid='transparent'
                         />
                     </View>
-                    <View style={{ flex: 2 }}>
+                    <View pointerEvents="none" style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Nome Abrev</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            style={styles.input}
+                            value={this.props.nomeAbrev}
+                            underlineColorAndroid='transparent'
+                        />
+                    </View>
+                    <View style={{ flex: 0.5 }}>
                         <Text style={styles.txtLabel}>Qtd</Text>
                         <TextInput
                             selectTextOnFocus
@@ -416,8 +550,16 @@ class FormListaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.quantidade}
                             ref={(input) => { this.quantidade = input; }}
-                            onBlur={() => this.props.quantidade && this.onSubmitQtd(true)}
-                            onChangeText={(value) => this.onChangeQtdText(value)}
+                            onChangeText={value => {
+                                this.fieldsChanged.quantidade = true; 
+                                this.onChangeQtdText(value); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.quantidade && this.fieldsChanged.quantidade) {
+                                    this.fieldsChanged.quantidade = false;
+                                    this.onSubmitQtd(true);
+                                } 
+                            }}
                         />
                     </View>
                 </FormRow>
@@ -455,14 +597,22 @@ class FormListaSeparacao extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            editable={this.doCheckEnableLote()}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
                             value={this.props.lote}
                             ref={(input) => { this.lote = input; }}
-                            onSubmitEditing={() => this.quantidade.focus()}
-                            onChangeText={(value) => this.props.modificaLote(value)}
-                            blurOnSubmit={false}
+                            onChangeText={value => {
+                                this.fieldsChanged.lote = true; 
+                                this.props.modificaLote(value); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.lote && this.fieldsChanged.lote) {
+                                    this.fieldsChanged.lote = false;
+                                    this.onBlurLote();
+                                } 
+                            }}
                         />
                     </View>
                 </FormRow>
@@ -537,6 +687,7 @@ const mapStateToProps = (state) => ({
     batismo: state.ListaSeparacaoReducer.batismo,
     codEAN: state.ListaSeparacaoReducer.codEAN,
     localizacao: state.ListaSeparacaoReducer.localizacao,
+    localizacaoConf: state.ListaSeparacaoReducer.localizacaoConf,
     um: state.ListaSeparacaoReducer.um,
     qtdItem: state.ListaSeparacaoReducer.qtdItem,
     qtdSep: state.ListaSeparacaoReducer.qtdSep,
@@ -556,6 +707,7 @@ export default connect(mapStateToProps, {
     modificaBatismo,
     modificaCodEAN,
     modificaLocalizacao,
+    modificaLocalizacaoConf,
     modificaLote,
     modificaQtdEtiq,
     modificaQuantidade,

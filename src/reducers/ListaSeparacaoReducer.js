@@ -7,6 +7,7 @@ const INITIAL_STATE = {
     batismo: '',
     codEAN: '',
     localizacao: '',
+    localizacaoConf: '',
     um: '',
     qtdItem: '',
     qtdSep: '',
@@ -63,6 +64,11 @@ export default (state = INITIAL_STATE, action) => {
             return { 
                 ...state, 
                 localizacao: action.payload 
+            };
+        case 'modifica_localizacaoconf_listaseparacao':
+            return { 
+                ...state, 
+                localizacaoConf: action.payload 
             };
         case 'modifica_um_listaseparacao':
             return { 
@@ -139,6 +145,7 @@ export default (state = INITIAL_STATE, action) => {
                 batismo: '',
                 codEAN: '',
                 localizacao: '',
+                localizacaoConf: '',
                 um: '',
                 qtdItem: '',
                 qtdSep: '',

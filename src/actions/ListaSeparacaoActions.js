@@ -34,6 +34,11 @@ export const modificaLocalizacao = (value) => ({
     payload: value
 });
 
+export const modificaLocalizacaoConf = (value) => ({
+    type: 'modifica_localizacaoconf_listaseparacao',
+    payload: value
+});
+
 export const modificaUm = (value) => ({
     type: 'modifica_um_listaseparacao',
     payload: value
@@ -98,7 +103,7 @@ export const fetchListItensSep = (userName) => dispatch => {
         payload: true
     });
 
-    Axios.get('/coletor/getPickingPriorNew.p', {
+    Axios.get('/coletor/getPickingPrior.p', {
         params: {
             userName
         },
@@ -152,12 +157,16 @@ const onFetchError = (dispatch) => {
 };
 
 export const doSep = (params, newItemList) => dispatch => {
-    Axios.get('/coletor/doPickingNew.p', { params })
+    dispatch({ type: 'modifica_visible_loadingspin', payload: true });
+
+    Axios.get('/coletor/doPicking.p', { params })
         .then((res) => onSepSuccess(dispatch, res, newItemList))
-        .catch(() => onSepError()); 
+        .catch(() => onSepError(dispatch)); 
 };
 
 const onSepSuccess = (dispatch, res, newItemList) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+
     if (res.data) {
         if (res.data.success === 'true') {
             doSepDispatch(dispatch, newItemList);
@@ -176,7 +185,9 @@ const onSepSuccess = (dispatch, res, newItemList) => {
     }
 };
 
-const onSepError = () => {
+const onSepError = (dispatch) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+
     Alert.alert(
         'Erro Separação',
         'Erro Conexão!'
@@ -214,6 +225,10 @@ const doSepDispatch = (dispatch, newItemList) => {
             payload: newItemList[0].local
         });
         dispatch({
+            type: 'modifica_localizacaoconf_listaseparacao',
+            payload: ''
+        });
+        dispatch({
             type: 'modifica_lote_listaseparacao',
             payload: newItemList[0].lote
         });
@@ -245,7 +260,7 @@ const dispatchChanges = (dispatch, data) => {
     // Embarque
     dispatch({
         type: 'modifica_embarque_listaseparacao',
-        payload: data.embarq
+        payload: data.embarque
     });
     // Resumo
     dispatch({
@@ -255,7 +270,7 @@ const dispatchChanges = (dispatch, data) => {
     // Pedido
     dispatch({
         type: 'modifica_pedido_listaseparacao',
-        payload: data.pedcli
+        payload: data.pedido
     });
     // Nome
     dispatch({
@@ -270,7 +285,7 @@ const dispatchChanges = (dispatch, data) => {
     // Qtd Item
     dispatch({
         type: 'modifica_qtditem_listaseparacao',
-        payload: data.qtd
+        payload: data.qtdLin
     });
     // Itens
     doSepDispatch(dispatch, data.itens);

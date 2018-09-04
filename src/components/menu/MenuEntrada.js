@@ -172,7 +172,7 @@ class MenuEntrada extends Component {
                         this.renderImpressao('7')
                     ]
                 ) : (
-                    this.renderConferecia()
+                    this.renderConferecia('2')
                 )}
             </ScrollView>
         );

@@ -6,7 +6,8 @@ import {
     Image,
     ScrollView,
     TouchableHighlight,
-    ActivityIndicator
+    ActivityIndicator,
+    Platform
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -57,9 +58,9 @@ class MenuSaida extends Component {
     onPressImpressao() {
         Actions.impressao();
     }
-    renderListaSep() {
+    renderListaSep(key) {
         return (
-            <TouchableHighlight onPress={this.onPressListSep}>
+            <TouchableHighlight key={key} onPress={this.onPressListSep}>
                 
                     { this.props.loadingListSep ?
                         (   
@@ -82,9 +83,9 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
-    renderConferencia() {
+    renderConferencia(key) {
         return (
-            <TouchableHighlight onPress={this.onPressConf}>
+            <TouchableHighlight key={key} onPress={this.onPressConf}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -95,9 +96,9 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
-    renderConferenciaVolume() {
+    renderConferenciaVolume(key) {
         return (
-            <TouchableHighlight onPress={this.onPressConfVol}>
+            <TouchableHighlight key={key} onPress={this.onPressConfVol}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -108,9 +109,9 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
-    renderConsolid() {
+    renderConsolid(key) {
         return (
-            <TouchableHighlight onPress={this.onPressConsolid}>
+            <TouchableHighlight key={key} onPress={this.onPressConsolid}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -121,9 +122,9 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
-    renderDespacho() {
+    renderDespacho(key) {
         return (
-            <TouchableHighlight onPress={this.onPressDespacho}>
+            <TouchableHighlight key={key} onPress={this.onPressDespacho}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -134,9 +135,9 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
-    renderRelacionaEan() {
+    renderRelacionaEan(key) {
         return (
-            <TouchableHighlight onPress={this.onPressRelEan}>
+            <TouchableHighlight key={key} onPress={this.onPressRelEan}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -147,9 +148,9 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
-    renderImpressao() {
+    renderImpressao(key) {
         return (
-            <TouchableHighlight onPress={this.onPressImpressao}>
+            <TouchableHighlight key={key} onPress={this.onPressImpressao}>
                 <View style={styles.menu}>
                     <Image 
                         style={styles.imgMenu} 
@@ -163,13 +164,19 @@ class MenuSaida extends Component {
     render() {
         return (
             <ScrollView style={styles.opcao}>                
-                {this.renderListaSep()}
-                {this.renderConferencia()}
-                {this.renderConferenciaVolume()}
-                {this.renderConsolid()}
-                {this.renderDespacho()}
-                {this.renderRelacionaEan()}
-                {this.renderImpressao()}
+                { Platform.OS !== 'windows' ? (
+                    [
+                        this.renderListaSep('1'),
+                        this.renderConferencia('2'),
+                        this.renderConferenciaVolume('3'),
+                        this.renderConsolid('4'),
+                        this.renderDespacho('5'),
+                        this.renderRelacionaEan('6'),
+                        this.renderImpressao('7')
+                    ]
+                ) : (
+                    this.renderConferencia('2')
+                )}
             </ScrollView>
         );
     }
