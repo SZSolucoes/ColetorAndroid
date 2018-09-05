@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import FormRow from '../../utils/FormRow';
+import LoadingSpin from '../../utils/LoadingSpin';
 import ListaItemSep from './ListaItemSep';
 
 import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
@@ -95,7 +96,7 @@ class FormListaSeparacao extends Component {
         if (this.props.itemSelected !== -1) {
             const { tpCont, lote } = this.props.listaItensSepPc[this.props.itemSelected];
             if (tpCont === '3' && 
-                (tpCont.toLowerCase() !== this.props.lote.toLowerCase())) {
+                (lote.toLowerCase() !== this.props.lote.toLowerCase())) {
                 Alert.alert(
                     'Aviso',
                     `O Lote informado é inválido!\
@@ -385,6 +386,7 @@ class FormListaSeparacao extends Component {
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
+                <LoadingSpin />
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 3 }}>
                         <Text style={styles.txtLabel}>Embarque</Text>

@@ -125,7 +125,7 @@ const onFetchSuccess = (dispatch, response) => {
     if (response && response.data) {
         const data = response.data;
         if (data.success === 'true' && data.prioridades.length > 0) {
-            const isUrgent = data.prioridades[0].urg.toLowerCase() === 'true';
+            const isUrgent = data.prioridades[0].urg.trim().toLowerCase() === 'true';
             dispatch({
                 type: 'modifica_loadinglistsep_listaseparacao',
                 payload: false

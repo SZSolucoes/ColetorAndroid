@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 
 import { Actions } from 'react-native-router-flux';
 import Login from './Login';
+import { doChangeUrlService } from '../utils/AxiosAux';
 
 import {
     modificaAmbiente,
@@ -34,6 +35,18 @@ class LoginApp extends Component {
     }
 
     componentDidMount() {
+        AsyncStorage.getItem('empresa')
+            .then((empresa) => {
+                if (empresa) {
+                    AsyncStorage.getItem('ambiente')
+                        .then((ambiente) => {
+                            if (ambiente) {
+                                // Atualiza a base URL com base na empresa e ambiente
+                                doChangeUrlService(empresa, ambiente);
+                            }
+                        });
+                }
+            });
         AsyncStorage.getItem('empresa')
             .then((value) => {
                 if (value) {

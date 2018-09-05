@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import LoginReducer from './LoginReducer';
 import ArmazenaReducer from './ArmazenaReducer';
 import ConfereReducer from './ConfereReducer';
+import ConfereSaidaReducer from './ConfereSaidaReducer';
 import VersionReducer from './VersionReducer';
 import EstoqueReducer from './EstoqueReducer';
 import TransfereReducer from './TransfereReducer';
@@ -20,6 +21,7 @@ export default combineReducers({
     LoginReducer,
     ArmazenaReducer,
     ConfereReducer,
+    ConfereSaidaReducer,
     VersionReducer,
     EstoqueReducer,
     TransfereReducer,

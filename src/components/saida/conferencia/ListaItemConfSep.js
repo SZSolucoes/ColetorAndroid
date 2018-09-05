@@ -3,33 +3,71 @@ import {
     FlatList, 
     View, 
     Text, 
-    StyleSheet, 
-    TouchableHighlight,
+    StyleSheet,
     ScrollView,
-    Dimensions 
+    Dimensions
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import ListaItemConfSepPc from './ListaItemConfSepPc';
+
+import {
+    modificaQtde,
+    modificaCodItem,
+    modificaUm,
+    modificaLote,
+    modificaItemDesc,
+    modificaSeparador,
+    modificaLocalizacao,
+    modificaItemSelected 
+} from '../../../actions/ConfereSaidaActions';
 
 class ListaItemConfSep extends Component {
 
-    constructor(props) {
+    constructor(props) { 
         super(props);
-        this.state = { listaItens: [
-            { seq: '001', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' },
-            { seq: '002', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' },
-            { seq: '003', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' },
-            { seq: '004', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' },
-            { seq: '005', itCode: '00001', itDescAbrev: 'Descri', num1: 'teste', num2: 'teste2', num3: 'teste2', num4: 'teste2' }] };
+
+        this.state = { width: Dimensions.get('window').width };
+        this.changedOrientation = this.changedOrientation.bind(this);
+        this.onPressItem = this.onPressItem.bind(this);
+        this.renderItem = this.renderItem.bind(this);
     }
-    
+
+    componentDidMount() {
+        Dimensions.addEventListener('change', this.changedOrientation);
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.changedOrientation);
+    }
+
+    onPressItem(item, index) {
+        const {
+            itCode,
+            un,
+            itDesc,
+            local
+        } = item;
+
+        this.props.modificaQtde('');
+        this.props.modificaCodItem(itCode);
+        this.props.modificaUm(un);
+        this.props.modificaLote('');
+        this.props.modificaItemDesc(itDesc);
+        this.props.modificaLocalizacao(local);
+        this.props.modificaItemSelected(index);
+        return false;
+    }
+
+    changedOrientation(e) {
+        this.setState({ width: e.window.width });
+    }
+ 
     keyExtractor(item, index) {
-        return (
-            item.seq
-        );
+        return index.toString();
     }
-    renderSeparator = () => {
-        const viewSep = (
+    renderSeparator() {
+        return (
             <View
                 style={{
                 height: 1,
@@ -38,49 +76,40 @@ class ListaItemConfSep extends Component {
                 }}
             />
         );
-
-        return viewSep;
     }
-    renderItem = ({ item }) => {
-        const viewItem = (
-            <TouchableHighlight
-                onPress={() => false}
-            >
-                <View
-                    style={styles.item}
-                >
-                    <Text style={styles.itCode}>{item.itCode}</Text>
-                    <Text style={styles.itDescAbrev}>{item.itDescAbrev}</Text>
-                    <Text style={styles.num1}>{item.num1}</Text>
-                    <Text style={styles.num2}>{item.num2}</Text>
-                    <Text style={styles.num3}>{item.num3}</Text>
-                    <Text style={styles.num4}>{item.num4}</Text>
-                </View>
-            </TouchableHighlight>            
+    renderItem({ item, index }) {
+        let itemSelected = false;
+        if (index === this.props.itemSelected) {
+            itemSelected = true;
+        }
+        return (
+            <ListaItemConfSepPc 
+                key={index} 
+                index={index} 
+                item={item} 
+                onPressItem={this.onPressItem}
+                itemSelected={itemSelected}
+            />
         );
-
-        return viewItem;
     }
+ 
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
-                <Text style={[styles.itCode, styles.sizeFldHeader]}> 
+                <Text style={[styles.codigo, styles.sizeFldHeader]}> 
                     Código
                 </Text>
-                <Text style={[styles.itDescAbrev, styles.sizeFldHeader]}> 
+                <Text style={[styles.descricao, styles.sizeFldHeader]}> 
                     Descrição
                 </Text>
-                <Text style={[styles.num1, styles.sizeFldHeader]}> 
-                    Qtde
+                <Text style={[styles.qtd, styles.sizeFldHeader]}> 
+                    Qtd
                 </Text>
-                <Text style={[styles.num2, styles.sizeFldHeader]}> 
+                <Text style={[styles.localizacao, styles.sizeFldHeader]}> 
                     Local
                 </Text>
-                <Text style={[styles.num3, styles.sizeFldHeader]}> 
+                <Text style={[styles.lote, styles.sizeFldHeader]}> 
                     Lote
-                </Text>
-                <Text style={[styles.num4, styles.sizeFldHeader]}> 
-                    Batismo
                 </Text>
             </View>
         );
@@ -89,34 +118,40 @@ class ListaItemConfSep extends Component {
     };
     render() {
         return (
-            <ScrollView horizontal >
-                <FlatList
-                    data={this.state.listaItens}
-                    style={styles.container}
-                    ItemSeparatorComponent={this.renderSeparator}
-                    keyExtractor={this.keyExtractor}
-                    renderItem={this.renderItem}
-                    extraData={this.props}
-                    numColumns='1'
-                    ListHeaderComponent={this.renderHeader}
-                    alwaysBounceHorizontal
-                />
-            </ScrollView>
+            <View {...this.props} >
+                <ScrollView horizontal>
+                    <FlatList
+                        stickyHeaderIndices={[0]}
+                        data={this.props.listItems}
+                        extraData={this.state}
+                        style={[styles.container, { width: this.state.width + 300 }]}
+                        ItemSeparatorComponent={this.renderSeparator}
+                        keyExtractor={this.keyExtractor}
+                        renderItem={this.renderItem}
+                        ListHeaderComponent={this.renderHeader}
+                        initialNumToRender={10}
+                    />
+                </ScrollView>
+            </View>
         );
     }
 }
 
-const mapStateToProps = state => {
-    const maps = (
-        {
+const mapStateToProps = (state) => ({
+    listItems: state.ConfereSaidaReducer.listItems,
+    itemSelected: state.ConfereSaidaReducer.itemSelected
+});
 
-        }
-    );
-
-    return maps;
-};
-
-export default connect(mapStateToProps, {})(ListaItemConfSep);
+export default connect(mapStateToProps, {
+    modificaQtde,
+    modificaCodItem,
+    modificaUm,
+    modificaLote,
+    modificaItemDesc,
+    modificaSeparador,
+    modificaLocalizacao,
+    modificaItemSelected 
+})(ListaItemConfSep);
 
 const styleField = {
     itemHeaderAndRow: {
@@ -129,42 +164,29 @@ const styleField = {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         marginVertical: 20,
-        width: Dimensions.get('window').width > Dimensions.get('window').height ? 
-                Dimensions.get('window').width : Dimensions.get('window').height,
         backgroundColor: 'rgba(255,255,255,0.2)'
     },
-    item: {
-        backgroundColor: '#20293F',
-        alignItems: 'center',
-        flex: 1,
-        flexDirection: 'row',
-        marginVertical: 2,
-        paddingHorizontal: 5
-    },
-    itCode: { 
+    codigo: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 6 
+        flex: 1.5 
     },
-    itDescAbrev: { 
+    descricao: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 6 
+        flex: 2.5 
     },
-    num1: { 
+    qtd: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 6 
+        flex: 1 
     },
-    num2: { 
+    localizacao: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 6 
+        flex: 2 
     },
-    num3: { 
+    lote: { 
         ...styleField.itemHeaderAndRow, 
-        flex: 6 
-    },
-    num4: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 6 
+        flex: 2 
     },
     sizeFldHeader: {
         fontSize: 14
