@@ -374,7 +374,7 @@ class FormConferenciaSeparacao extends Component {
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
-                <LoadingSpin />
+                { Platform.OS !== 'windows' && <LoadingSpin /> }
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>

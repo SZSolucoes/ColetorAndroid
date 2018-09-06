@@ -432,7 +432,7 @@ class FormConf extends Component {
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
-                <LoadingSpin />
+                { Platform.OS !== 'windows' && <LoadingSpin /> }
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Nota Fiscal</Text>

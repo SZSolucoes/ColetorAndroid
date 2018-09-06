@@ -11,7 +11,8 @@ const INITIAL_STATE = {
     logArmazenamento: '',
     logTodos: '',
     loadingLogin: false,
-    loadingConf: false
+    loadingConf: false,
+    refreshSenha: true
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -26,7 +27,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 senha: action.payload 
             };
-        
+        case 'modifica_refreshsenha_log':
+            return { 
+                ...state, 
+                refreshSenha: action.payload 
+            };
         case 'modifica_loading_log':
             return { 
                 ...state, 

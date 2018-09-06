@@ -39,6 +39,8 @@ const loginSuccess = (dispatch, response, ambiente) => {
             );
         }
         dispatch({ type: 'login_ok_log' });
+        dispatch({ type: 'modifica_refreshsenha_log', payload: false });
+        dispatch({ type: 'modifica_refreshsenha_log', payload: true });
         dispatch({ type: 'atualiza_permissao_log', payload: response.data.parameters[0] });
         Actions.menuApp();
     } else if (response.data.message !== undefined) {

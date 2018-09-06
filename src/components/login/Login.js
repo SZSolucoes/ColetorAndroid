@@ -89,7 +89,7 @@ class Login extends Component {
                                     returnKeyType="next"
                                     autoCapitalize="none"
                                     autoCorrect={false}
-                                    secureTextEntry
+                                    secureTextEntry={this.props.refreshSenha}
                                     style={styles.input}
                                     onChangeText={senha => this.props.modificaSenha(senha)}
                                     value={this.props.senha}
@@ -117,7 +117,7 @@ class Login extends Component {
                                     placeholderTextColor='rgba(255,255,255,0.7)'
                                     returnKeyType="go"
                                     autoCorrect={false}
-                                    secureTextEntry
+                                    secureTextEntry={this.props.refreshSenha}
                                     style={styles.input}
                                     onChangeText={senha => this.props.modificaSenha(senha)}
                                     value={this.props.senha}
@@ -144,6 +144,7 @@ const mapStateToProps = state => (
     {
         usuario: state.LoginReducer.usuario,
         senha: state.LoginReducer.senha,
+        refreshSenha: state.LoginReducer.refreshSenha,
         erroLogin: state.LoginReducer.erroLogin,
         logConfReceb: state.LoginReducer.logConfReceb,
         logEstoque: state.LoginReducer.logEstoque,
