@@ -175,7 +175,10 @@ class MenuSaida extends Component {
                         this.renderImpressao('7')
                     ]
                 ) : (
-                    this.renderConferencia('2')
+                    [
+                        this.renderConferencia('2'),
+                        this.renderConferenciaVolume('3')
+                    ]
                 )}
             </ScrollView>
         );

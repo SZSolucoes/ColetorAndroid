@@ -56,7 +56,6 @@ const onSuccess = (dispatch, res) => {
             Alert.alert('Erro', 'Ocorreu uma falha interna no servidor. Verifique a conexão');
         }
     } else {
-        console.log('sem data');
         Alert.alert('Erro', 'Ocorreu uma falha interna no servidor. Verifique a conexão');
     }
 };

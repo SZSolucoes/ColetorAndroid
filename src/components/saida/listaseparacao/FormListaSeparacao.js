@@ -93,8 +93,11 @@ class FormListaSeparacao extends Component {
     }
 
     onBlurLote() {
-        if (this.props.itemSelected !== -1) {
-            const { tpCont, lote } = this.props.listaItensSepPc[this.props.itemSelected];
+        const { listaItensSepPc, itemSelected } = this.props;
+        if (itemSelected !== -1 && 
+            listaItensSepPc && 
+            listaItensSepPc.length > 0) {
+            const { tpCont, lote } = listaItensSepPc[itemSelected];
             if (tpCont === '3' && 
                 (lote.toLowerCase() !== this.props.lote.toLowerCase())) {
                 Alert.alert(
@@ -133,10 +136,13 @@ class FormListaSeparacao extends Component {
             lote,
             itemSelected,
             validEan,
-            validQtd
+            validQtd,
+            listaItensSepPc
         } = this.props;
 
         if (
+            listaItensSepPc && 
+            listaItensSepPc.length > 0 &&
             batismo.trim() && 
             codEAN.trim() && 
             quantidade.trim() &&
@@ -153,7 +159,7 @@ class FormListaSeparacao extends Component {
                 entrega,
                 depos,
                 tpCont
-            } = this.props.listaItensSepPc[itemSelected];
+            } = listaItensSepPc[itemSelected];
 
             if (tpCont === '3' && !lote) {
                 Alert.alert(
@@ -183,7 +189,7 @@ class FormListaSeparacao extends Component {
                 qtdItem: quantidade
             };
     
-            const newItemList = [...this.props.listaItensSepPc];
+            const newItemList = [...listaItensSepPc];
             newItemList.splice(itemSelected, 1);
             this.props.doSep(params, newItemList);
         } else if (!batismo.trim()) {
@@ -269,8 +275,11 @@ class FormListaSeparacao extends Component {
     }
 
     doCheckEnableLote() {
-        if (this.props.itemSelected !== -1 && 
-            this.props.listaItensSepPc[this.props.itemSelected].tpCont === '3') {
+        const { listaItensSepPc, itemSelected } = this.props;
+        if (itemSelected !== -1 && 
+            listaItensSepPc && 
+            listaItensSepPc.length > 0 &&
+            listaItensSepPc[itemSelected].tpCont === '3') {
             return true;
         }
         return false;
@@ -278,58 +287,61 @@ class FormListaSeparacao extends Component {
 
     findItemEAN() {
         const { codEAN, listaItensSepPc } = this.props;
-        const itensEAN = _.values(listaItensSepPc);
-        const indexItemEAN = _.findIndex(itensEAN, (itemCheck) => (
-            itemCheck.ean1 === codEAN ||
-            itemCheck.ean2 === codEAN ||
-            itemCheck.ean3 === codEAN ||
-            itemCheck.ean4 === codEAN ||
-            itemCheck.ean5 === codEAN
-        ));
-        
-        Keyboard.dismiss();
-        
-        if (indexItemEAN !== -1) {
-            const {
-                un,
-                qtdItem,
-                itCode,
-                itDesc,
-                local,
-                lote
-            } = itensEAN[indexItemEAN];
-            this.props.modificaUm(un);
-            this.props.modificaQtdSep(qtdItem);
-            this.props.modificaCodItem(itCode);
-            this.props.modificaDesItem(itDesc);
-            this.props.modificaLocalizacao(local);
-            this.props.modificaLote(lote);
-            this.props.modificaQuantidade('');
-            this.props.modificaValidEan(true);
-            this.props.modificaItemSelected(indexItemEAN);
 
-            if (this.props.localizacaoConf && 
-                (local.toLowerCase() !== this.props.localizacaoConf.toLowerCase())) {
-                Alert.alert(
-                    'Aviso',
-                    `A localização informada é divergente da localização sugerida!\
-                    \nLocal Sugerido: ${local}\
-                    \nLocal Informado: ${this.props.localizacaoConf}\
-                    \n\nLocalização inválida.`,
-                    [
-                        { text: 'OK', onPress: () => this.onPressNoLocalConf() },
-                    ],
-                    { cancelable: false }
-                );
+        if (listaItensSepPc && listaItensSepPc.length > 0) {
+            const itensEAN = _.values(listaItensSepPc);
+            const indexItemEAN = _.findIndex(itensEAN, (itemCheck) => (
+                itemCheck.ean1 === codEAN ||
+                itemCheck.ean2 === codEAN ||
+                itemCheck.ean3 === codEAN ||
+                itemCheck.ean4 === codEAN ||
+                itemCheck.ean5 === codEAN
+            ));
+            
+            Keyboard.dismiss();
+            
+            if (indexItemEAN !== -1) {
+                const {
+                    un,
+                    qtdItem,
+                    itCode,
+                    itDesc,
+                    local,
+                    lote
+                } = itensEAN[indexItemEAN];
+                this.props.modificaUm(un);
+                this.props.modificaQtdSep(qtdItem);
+                this.props.modificaCodItem(itCode);
+                this.props.modificaDesItem(itDesc);
+                this.props.modificaLocalizacao(local);
+                this.props.modificaLote(lote);
+                this.props.modificaQuantidade('');
+                this.props.modificaValidEan(true);
+                this.props.modificaItemSelected(indexItemEAN);
+    
+                if (this.props.localizacaoConf && 
+                    (local.toLowerCase() !== this.props.localizacaoConf.toLowerCase())) {
+                    Alert.alert(
+                        'Aviso',
+                        `A localização informada é divergente da localização sugerida!\
+                        \nLocal Sugerido: ${local}\
+                        \nLocal Informado: ${this.props.localizacaoConf}\
+                        \n\nLocalização inválida.`,
+                        [
+                            { text: 'OK', onPress: () => this.onPressNoLocalConf() },
+                        ],
+                        { cancelable: false }
+                    );
+                } else {
+                    this.quantidade.focus();
+                }
             } else {
-                this.quantidade.focus();
+                this.eanError();
+                Alert.alert(
+                    'Serapação',
+                    'EAN Não Localizado!'
+                );
             }
-        } else {
-            this.eanError();
-            Alert.alert(
-                'Serapação',
-                'EAN Não Localizado!'
-            );
         }
     }
 
@@ -346,8 +358,11 @@ class FormListaSeparacao extends Component {
     }
 
     loteFocus() {
-        if (this.props.itemSelected !== -1 && 
-            this.props.listaItensSepPc[this.props.itemSelected].tpCont === '3') {
+        const { listaItensSepPc, itemSelected } = this.props;
+        if (itemSelected !== -1 && 
+            listaItensSepPc && 
+            listaItensSepPc.length > 0 &&
+            listaItensSepPc[itemSelected].tpCont === '3') {
             this.lote.focus();
         }
     }
@@ -438,7 +453,7 @@ class FormListaSeparacao extends Component {
                             autoCorrect={false}
                             editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
+                            style={[styles.input, { fontSize: 13 }]}
                             value={this.props.localizacao}
                             underlineColorAndroid='transparent'
                         />
@@ -471,7 +486,7 @@ class FormListaSeparacao extends Component {
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.input}
+                            style={[styles.input, { fontSize: 13 }]}
                             value={this.props.localizacaoConf}
                             ref={(input) => { this.localizacaoConf = input; }}
                             onChangeText={value => {

@@ -161,37 +161,44 @@ export const doSep = (params, newItemList) => dispatch => {
 
     Axios.get('/coletor/doPicking.p', { params })
         .then((res) => onSepSuccess(dispatch, res, newItemList))
-        .catch(() => onSepError(dispatch)); 
+        .catch((error) => onSepError(error, dispatch)); 
 };
 
 const onSepSuccess = (dispatch, res, newItemList) => {
+    const bResOk = res && res.data;
+
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
-    if (res.data) {
+    if (bResOk && typeof res.data === 'object') {
         if (res.data.success === 'true') {
+            dispatch({
+                type: 'modifica_qtditem_listaseparacao',
+                payload: newItemList.length.toString()
+            });
             doSepDispatch(dispatch, newItemList);
             setTimeout(() => Alert.alert(
                 'Separação',
                 'Separação efetuada com sucesso.'
             ), 500);
-        } else if (res.data.message) {
-            Alert.alert(
+        } else {
+            setTimeout(() => Alert.alert(
                 'Erro Separação',
                 res.data.message
-            );
-        } else {
-            Alert.alert('Erro', 'Ocorreu uma falha interna no servidor.');
+            ), 500);
         }
+    } else {
+        setTimeout(() => Alert.alert('Erro', 'Ocorreu uma falha interna no servidor.'), 500);  
     }
 };
 
-const onSepError = (dispatch) => {
+const onSepError = (error, dispatch) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
-    Alert.alert(
+    console.log(error);
+    setTimeout(() => Alert.alert(
         'Erro Separação',
         'Erro Conexão!'
-    );
+    ), 500);
 };
 
 const doSepDispatch = (dispatch, newItemList) => {

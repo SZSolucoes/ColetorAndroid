@@ -282,7 +282,8 @@ class FormConferenciaSeparacao extends Component {
     
             const newItemList = [...this.props.listItems];
             newItemList.splice(itemSelected, 1);
-            this.props.doConfSaida(params, newItemList);
+            const listEmpty = !!(newItemList.length === 0);
+            this.props.doConfSaida(params, newItemList, listEmpty);
         } else if (!batismo.trim()) {
             Alert.alert('Conferência', 'Campo (Batismo) deve ser informado.');
         } else if (!codEAN.trim()) {
@@ -299,12 +300,14 @@ class FormConferenciaSeparacao extends Component {
         switch (field) {
             case 'batismo':
                 this.batismo.focus();
+                this.fieldsChanged.batismo = true;
                 if (cleanField) {
                     this.props.modificaBatismo('');
                 }
                 break;
             case 'codean':
                 this.codEAN.focus();
+                this.fieldsChanged.codEAN = true;
                 if (cleanField) {
                     this.props.modificaCodEAN('');
                 }
@@ -313,6 +316,7 @@ class FormConferenciaSeparacao extends Component {
                 if (this.props.itemSelected !== -1 && this.props.listItems.length > 0 && 
                     this.props.listItems[this.props.itemSelected].tpCont === '3') {
                     this.lote.focus();
+                    this.fieldsChanged.lote = true;
                 }
                 if (cleanField) {
                     this.props.modificaLote('');
@@ -320,6 +324,7 @@ class FormConferenciaSeparacao extends Component {
                 break;
             case 'quantidade':
                 this.quantidade.focus();
+                this.fieldsChanged.quantidade = true;
                 if (cleanField) {
                     this.props.modificaQtde('');
                 }

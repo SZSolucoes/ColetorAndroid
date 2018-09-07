@@ -3,6 +3,7 @@ import LoginReducer from './LoginReducer';
 import ArmazenaReducer from './ArmazenaReducer';
 import ConfereReducer from './ConfereReducer';
 import ConfereSaidaReducer from './ConfereSaidaReducer';
+import ConfereVolumeReducer from './ConfereVolumeReducer';
 import VersionReducer from './VersionReducer';
 import EstoqueReducer from './EstoqueReducer';
 import TransfereReducer from './TransfereReducer';
@@ -22,6 +23,7 @@ export default combineReducers({
     ArmazenaReducer,
     ConfereReducer,
     ConfereSaidaReducer,
+    ConfereVolumeReducer,
     VersionReducer,
     EstoqueReducer,
     TransfereReducer,

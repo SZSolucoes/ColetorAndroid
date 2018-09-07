@@ -8,41 +8,51 @@ import {
     TouchableOpacity,
     TouchableHighlight,
     Image,
-    TextInput
+    TextInput,
+    Platform
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
 import FormRow from '../../utils/FormRow';
+import { leftStr } from '../../utils/StrComplex';
 
 import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
-import imgZoom from '../../../../resources/imgs/zoom_nf.png';
 import imgRemove from '../../../../resources/imgs/remove.png';
 
+import { modificaListVolumes, modificaPesoBruto } from '../../../actions/ConfereVolumeActions';
 
 class ListaItemAdicao extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { listaItens: [
-            { seq: '001', itCode: '0000155', itCo: '00001' },
-            { seq: '002', itCode: '00001', itCo: '00001' },
-            { seq: '003', itCode: '00001', itCo: '00001' },
-            { seq: '004', itCode: '00001', itCo: '00001' },
-            { seq: '005', itCode: '00001', itCo: '00001' },
-            { seq: '006', itCode: '00001', itCo: '00001' },
-            { seq: '007', itCode: '00001', itCo: '00001' },
-            { seq: '008', itCode: '00001', itCo: '00001' },
-            { seq: '009', itCode: '00001', itCo: '00001' },
-            { seq: '010', itCode: '00001', itCo: '00001' }] };
+        
+        this.renderItem = this.renderItem.bind(this);
+        this.removeVolume = this.removeVolume.bind(this);
+        this.onChangePesoBruto = this.onChangePesoBruto.bind(this);
     }
     
-    keyExtractor(item, index) {
-        return (
-            item.seq
-        );
+    onChangePesoBruto(value) {
+        const txtParsed = value.replace(/[^0-9\\.\\,]/g, '')
+        .replace(/\.\.+/g, '.')
+        .replace(/,,+/g, ',')
+        .replace(/,\./g, ',')
+        .replace(/\.,+/g, '.');
+        this.props.modificaPesoBruto(txtParsed);
     }
-    renderSeparator = () => {
+
+    keyExtractor(item, index) {
+        return index.toString();
+    }
+
+    removeVolume(index) {
+        const { listVolumes } = this.props;
+        const newList = [...listVolumes];
+        newList.splice(index, 1);
+        this.props.modificaListVolumes(newList);
+    }
+
+    renderSeparator() {
         const viewSep = (
             <View
                 style={{
@@ -55,27 +65,17 @@ class ListaItemAdicao extends Component {
 
         return viewSep;
     }
-    renderItem = ({ item }) => {
+
+    renderItem({ item, index }) {
         const viewItem = (
             <TouchableHighlight onPress={() => false} >
                 <View style={styles.item} >
-                    <Text style={styles.seq}>{item.seq}</Text>
-                    <Text style={styles.embalagem}>{item.itCode}</Text>
-                    <View style={styles.viewBtSearch}>
-                        <TouchableOpacity
-                            style={styles.btSearch}
-                            onPress={this.procuraNFLista}                            
-                        >
-                            <Image
-                                source={imgZoom}
-                                style={styles.imgSearch}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <Text style={styles.volume}>{item.itCo}</Text>
+                    <Text style={styles.seq}>{leftStr(index + 1)}</Text>
+                    <Text style={styles.embalagem}>{item.embalagem}</Text>
+                    <Text style={styles.volume}>{item.volume}</Text>
                     <TouchableOpacity
                         style={styles.btSearch}
-                        onPress={() => false}
+                        onPress={() => this.removeVolume(index)}
                     >
                         <Image
                             source={imgRemove}
@@ -83,13 +83,13 @@ class ListaItemAdicao extends Component {
                         />
                     </TouchableOpacity>
                 </View>
-            </TouchableHighlight>
-                      
+            </TouchableHighlight>         
         );
 
         return viewItem;
     }
-    renderHeader = () => {
+    
+    renderHeader() {
         const headerView = (
             <View style={styles.header}>
                 <Text style={[styles.seq, styles.sizeFldHeader]}> 
@@ -106,18 +106,33 @@ class ListaItemAdicao extends Component {
         );
 
         return headerView;
-    };
+    }
+
     render() {
         return (
             <View>
                 <View style={{ padding: 5 }}>
                     <FormRow >
                         <View style={styles.viewBotao}>
-                            <Button
-                                onPress={() => false}
-                                title="Adicionar"
-                                color="#4682B4"
-                            />
+                            { Platform.OS !== 'windows' ? (
+                                <View style={styles.viewAddBtn}>
+                                    <Button
+                                        onPress={() => this.props.adicionarVolume()}
+                                        title="Adicionar"
+                                        color="green"
+                                    />
+                                </View>
+                            ) : (
+                                <View style={styles.viewAddBtn}>
+                                    <View style={{ width: 150 }}>
+                                        <Button
+                                            onPress={() => this.props.adicionarVolume()}
+                                            title="Adicionar"
+                                            color="black"
+                                        />
+                                    </View>
+                                </View>
+                            )}
                             <TouchableOpacity
                                 style={styles.btSearch}
                                 onPress={() => false}
@@ -130,7 +145,7 @@ class ListaItemAdicao extends Component {
                         </View>
                     </FormRow>
                     <FlatList
-                        data={this.state.listaItens}
+                        data={this.props.listVolumes}
                         style={styles.container}
                         ItemSeparatorComponent={this.renderSeparator}
                         keyExtractor={this.keyExtractor}
@@ -148,11 +163,12 @@ class ListaItemAdicao extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            editable={false}
+                            keyboardType={'numeric'}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            value={this.props.fornec}
+                            value={this.props.pesoBruto}
+                            onChangeText={(value) => this.onChangePesoBruto(value)}
                         />
                     </View>
                     <View style={{ flex: 1 }} />
@@ -162,17 +178,15 @@ class ListaItemAdicao extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const maps = (
-        {
+const mapStateToProps = (state) => ({
+    listVolumes: state.ConfereVolumeReducer.listVolumes,
+    pesoBruto: state.ConfereVolumeReducer.pesoBruto
+});
 
-        }
-    );
-
-    return maps;
-};
-
-export default connect(mapStateToProps, {})(ListaItemAdicao);
+export default connect(mapStateToProps, {
+    modificaListVolumes,
+    modificaPesoBruto
+})(ListaItemAdicao);
 
 const styleField = {
     itemHeaderAndRow: {
@@ -212,6 +226,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-between',
         marginTop: 10
+    },
+    viewAddBtn: {
+        flexDirection: 'row',
+        flex: 1,
+        alignItems: 'center'
     },
     txtLabel: {
         color: 'white',
@@ -256,8 +275,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         flex: 1
-    },
-    viewBtSearch: {
-        justifyContent: 'flex-end'
     }
 });

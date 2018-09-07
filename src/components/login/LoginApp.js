@@ -46,7 +46,7 @@ class LoginApp extends Component {
                             }
                         });
                 }
-            });
+        });
         AsyncStorage.getItem('empresa')
             .then((value) => {
                 if (value) {

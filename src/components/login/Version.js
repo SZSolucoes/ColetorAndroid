@@ -43,7 +43,7 @@ class Version extends Component {
     componentDidMount() {
         this.props.iniciaTela();
 
-        const version = '1.2.2';
+        const version = '1.2.4';
         
         this.props.modificaVersao(version);
         this.props.verificaConexao();
@@ -93,16 +93,19 @@ class Version extends Component {
                 ambiente = value;
                 empresa = this.props.empresa;
                 AsyncStorage.setItem('ambiente', value);
-                this.props.modificaAmbiente(value, empresa);
+                AsyncStorage.setItem('empresa', empresa);
+                this.props.modificaAmbiente(value, ambiente);
                 break;
             case 'empresa':
                 empresa = value;
                 ambiente = this.props.ambiente;
                 AsyncStorage.setItem('empresa', value);
+                AsyncStorage.setItem('ambiente', ambiente);
                 this.props.modificaEmpresa(value, empresa);
                 break;
             default:     
         }
+
         this.setUrlService(empresa, ambiente);
     }
 
@@ -114,16 +117,19 @@ class Version extends Component {
                 ambiente = value;
                 empresa = this.props.empresa;
                 AsyncStorage.setItem('ambiente', value);
-                this.props.modificaAmbiente(value, empresa);
+                AsyncStorage.setItem('empresa', empresa);
+                this.props.modificaAmbiente(value, ambiente);
                 break;
             case 'empresa':
                 empresa = value;
                 ambiente = this.props.ambiente;
                 AsyncStorage.setItem('empresa', value);
+                AsyncStorage.setItem('ambiente', ambiente);
                 this.props.modificaEmpresa(value, empresa);
                 break;
             default:     
         }
+
         this.setUrlService(empresa, ambiente);   
     }
 

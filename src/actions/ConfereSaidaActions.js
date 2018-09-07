@@ -1,5 +1,8 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import { Actions } from 'react-native-router-flux';
+
+import { doFetchInfoBatismo } from './ConfereVolumeActions';
 
 export const modificaBatismo = (value) => ({
         type: 'modifica_batismo_confsaida',
@@ -83,17 +86,17 @@ const onFetchBatismoSuccess = (dispatch, res, focusInField, checkIfUrgent) => {
             doFetchDispatches(dispatch, res.data.prioridades);
             focusInField('qtdconfitens'); // foco no campo especifico
         } else {
-            Alert.alert(
+            setTimeout(() => Alert.alert(
                 'Erro Conferência',
                 res.data.message
-            );
+            ), 500);
             focusInField('batismo'); // foco no campo especifico
         }
     } else {
-        Alert.alert(
+        setTimeout(() => Alert.alert(
             'Conferência',
             'Ocorreu uma falha interna no servidor, verifique a conexão!'
-        );
+        ), 500);
         focusInField('batismo'); // foco no campo especifico
     }
     checkIfUrgent();
@@ -102,24 +105,24 @@ const onFetchBatismoSuccess = (dispatch, res, focusInField, checkIfUrgent) => {
 const onFetchBatismoError = (dispatch, focusInField, checkIfUrgent) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
-    Alert.alert(
+    setTimeout(() => Alert.alert(
         'Erro Conferência',
         'Erro Conexão!'
-    );
+    ), 500);
 
     focusInField('batismo');
     checkIfUrgent();
 };
 
-export const doConfSaida = (params, newItemList) => dispatch => {
+export const doConfSaida = (params, newItemList, listEmpty) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
     Axios.get('/coletor/doCheckPicking.p', { params })
-    .then(res => onConfSuccess(dispatch, res, newItemList))
+    .then(res => onConfSuccess(dispatch, res, newItemList, listEmpty, params))
     .catch(() => onConfError(dispatch));
 };
 
-const onConfSuccess = (dispatch, res, newItemList) => {
+const onConfSuccess = (dispatch, res, newItemList, listEmpty, params) => {
     const bResOk = res && res.data;
 
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
@@ -127,31 +130,35 @@ const onConfSuccess = (dispatch, res, newItemList) => {
     if (bResOk && typeof res.data === 'object') {
         if (res.data.success === 'true') {
             doItemDispatches(dispatch, newItemList);
-            Alert.alert(
+            setTimeout(() => Alert.alert(
                 'Conferência',
-                res.data.message
-            );
+                res.data.message,
+                [
+                    { text: 'OK', onPress: () => checkLastItem(dispatch, listEmpty, params) },
+                ],
+                { cancelable: false }
+            ), 500);
         } else {
-            Alert.alert(
+            setTimeout(() => Alert.alert(
                 'Erro Conferência',
                 res.data.message
-            );
+            ), 500);
         }
     } else {
-        Alert.alert(
+        setTimeout(() => Alert.alert(
             'Conferência',
             'Ocorreu uma falha interna no servidor, verifique a conexão!'
-        );
+        ), 500);
     }
 };
 
 const onConfError = (dispatch) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-
-    Alert.alert(
+    
+    setTimeout(() => Alert.alert(
         'Erro Conferência',
         'Erro Conexão!'
-    );
+    ), 500);
 };
 
 const doFetchDispatches = (dispatch, prioridades) => {
@@ -235,5 +242,18 @@ const doItemDispatches = (dispatch, itens) => {
             type: 'modifica_clean_confsaida'
         });
     }
+};
+
+const checkLastItem = (dispatch, listEmpty, params) => {
+    if (listEmpty) {
+        dispatch({
+            type: 'modifica_batismo_confvolume',
+            payload: params.etiqueta
+        });
+        doFetchInfoBatismo({ 
+            userName: params.userName, 
+            etiqueta: params.etiqueta })(dispatch);
+        Actions.conferenciaVolumeSaida();
+    }        
 };
 

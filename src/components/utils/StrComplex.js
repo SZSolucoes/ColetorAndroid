@@ -13,3 +13,4 @@ export const leftStr = (intNum) => {
 
     return '000';
 };
+
