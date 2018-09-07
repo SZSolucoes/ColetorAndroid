@@ -23,11 +23,27 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 codVol: action.payload
             };
+        case 'modifica_seq_consolid':
+            return { 
+                ...state, 
+                seqItem: action.payload
+            };
+        case 'modifica_listitens_consolid':
+            return { 
+                ...state, 
+                listaItens: [...action.payload]
+            };
         case 'modifica_addlist_consolid':
             return { 
                 ...state,
                 seqItem: state.seqItem + 1, 
                 listaItens: [...state.listaItens, { seq: state.seqItem + 1, vol: action.payload }]
+            };
+        case 'modifica_cleanlist_consolid':
+            return { 
+                ...state,
+                seqItem: 0,
+                listaItens: []
             };
         case 'modifica_clean_consolid':
             return { 

@@ -32,7 +32,8 @@ import {
     modificaModalVisible,
     modificaSigla,
     modificaKeyEmb,
-    doConfVol
+    doConfVol,
+    doPrint
 } from '../../../actions/ConfereVolumeActions';
 
 import imgSeta from '../../../../resources/imgs/seta.png';
@@ -49,6 +50,7 @@ class FormConferenciaVolume extends Component {
         this.modificaEmbalagemModal = this.modificaEmbalagemModal.bind(this);
         this.onChangeVolume = this.onChangeVolume.bind(this);
         this.renderForWindows = this.renderForWindows.bind(this);
+        this.doPrint = this.doPrint.bind(this);
 
         this.fieldsChanged = { batismo: false };
     }
@@ -64,6 +66,15 @@ class FormConferenciaVolume extends Component {
     onChangeVolume(value) {
         const txtParsed = value.replace(/[^0-9]/g, '');
         this.props.modificaVolume(txtParsed);
+    }
+
+    doPrint() {
+        const { embarque, usuario } = this.props;
+        if (!embarque) {
+            Alert.alert('Conf - Volumes', 'Campo (Embarque) deve ser informado!');
+            return;
+        }
+        this.props.doPrint({ usuario, embarque, qtdEtiq: '1' }, true);
     }
 
     adicionarVolume() {
@@ -272,7 +283,10 @@ class FormConferenciaVolume extends Component {
                     </View>
                 </FormRow>
                 <View>
-                    <ListaItemAdicao adicionarVolume={this.adicionarVolume} />
+                    <ListaItemAdicao 
+                        adicionarVolume={this.adicionarVolume}
+                        doPrint={this.doPrint} 
+                    />
                 </View>
                 <FormRow>
                     { Platform.OS !== 'windows' ? (
@@ -337,7 +351,8 @@ export default connect(mapStateToProps, {
     modificaModalVisible,
     modificaSigla,
     modificaKeyEmb,
-    doConfVol
+    doConfVol,
+    doPrint
 })(FormConferenciaVolume);
 
 const styles = StyleSheet.create({
@@ -368,10 +383,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginTop: 10,
         paddingHorizontal: 10
-    },
-    viewBtEtiq: {
-        justifyContent: 'space-between',
-        flexDirection: 'row'
     },
     imgSeta: {
         width: 35,

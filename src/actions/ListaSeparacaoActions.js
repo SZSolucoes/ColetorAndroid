@@ -204,8 +204,8 @@ const onSepError = (error, dispatch) => {
 const doSepDispatch = (dispatch, newItemList) => {
     if (newItemList && newItemList.length > 0) {
         dispatch({
-            type: 'modifica_listaitensseppc_listaseparacao',
-            payload: newItemList
+            type: 'modifica_itemselected_listaseparacao',
+            payload: 0
         });
         dispatch({
             type: 'modifica_um_listaseparacao',
@@ -244,16 +244,16 @@ const doSepDispatch = (dispatch, newItemList) => {
             payload: ''
         });
         dispatch({
-            type: 'modifica_itemselected_listaseparacao',
-            payload: 0
-        });
-        dispatch({
             type: 'modifica_validean_listaseparacao',
             payload: false
         });
         dispatch({
             type: 'modifica_validqtd_listaseparacao',
             payload: false
+        });
+        dispatch({
+            type: 'modifica_listaitensseppc_listaseparacao',
+            payload: newItemList
         });
     } else {
         // Limpa o formulário

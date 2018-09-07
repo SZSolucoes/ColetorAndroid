@@ -197,8 +197,8 @@ const doFetchDispatches = (dispatch, prioridades) => {
 const doItemDispatches = (dispatch, itens) => {
     if (itens && itens.length > 0) {
         dispatch({
-            type: 'modifica_listitems_confsaida',
-            payload: itens
+            type: 'modifica_itemselected_confsaida',
+            payload: 0
         });
         dispatch({
             type: 'modifica_qtdconfitens_confsaida',
@@ -233,8 +233,8 @@ const doItemDispatches = (dispatch, itens) => {
             payload: ''
         });
         dispatch({
-            type: 'modifica_itemselected_confsaida',
-            payload: 0
+            type: 'modifica_listitems_confsaida',
+            payload: itens
         });
     } else {
         // Limpa o formulário

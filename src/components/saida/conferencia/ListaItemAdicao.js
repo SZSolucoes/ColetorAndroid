@@ -135,7 +135,7 @@ class ListaItemAdicao extends Component {
                             )}
                             <TouchableOpacity
                                 style={styles.btSearch}
-                                onPress={() => false}
+                                onPress={() => this.props.doPrint()}
                             >
                                 <Image
                                     source={imgPrinter}
@@ -225,12 +225,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         justifyContent: 'space-between',
-        marginTop: 10
+        marginTop: 6,
+        paddingHorizontal: 8
     },
     viewAddBtn: {
         flexDirection: 'row',
-        flex: 1,
-        alignItems: 'center'
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     txtLabel: {
         color: 'white',

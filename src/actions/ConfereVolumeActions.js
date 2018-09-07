@@ -154,17 +154,22 @@ export const doConfVol = (params) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
     Axios.get('/coletor/doEndCheckPicking.p', { params })
-    .then(res => onConfVolSuccess(dispatch, res))
+    .then(res => onConfVolSuccess(dispatch, res, params))
     .catch(() => onConfVolError(dispatch));
 };
 
-const onConfVolSuccess = (dispatch, res) => {
+const onConfVolSuccess = (dispatch, res, params) => {
     const bResOk = res && res.data;
 
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
     if (bResOk && typeof res.data === 'object') {
         if (res.data.success === 'true') {
+            doPrint({
+                usuario: params.userName,
+                qtdEtiq: '1',
+                embarque: params.embarque
+            }, false)(dispatch);
             dispatch({
                 type: 'modifica_clean_confvolume'
             });
@@ -193,5 +198,44 @@ const onConfVolError = (dispatch) => {
         'Erro Conf - Volumes',
         'Erro Conexão!'
     ), 500);
+};
+
+export const doPrint = (params, doAlert = false) => dispatch => {
+    Axios.get('/coletor/doPrint.p', { params })
+    .then(res => onPrintSuccess(dispatch, res, doAlert))
+    .catch(() => onPrintError(doAlert));
+};
+
+const onPrintSuccess = (dispatch, res, doAlert) => {
+    const bResOk = res && res.data;
+    if (doAlert) {
+        if (bResOk && typeof res.data === 'object') {
+            if (res.data.success === 'true') {
+                setTimeout(() => Alert.alert(
+                    'Conf - Volumes',
+                    res.data.message
+                ), 500);
+            } else {
+                setTimeout(() => Alert.alert(
+                    'Erro Conf - Volumes',
+                    res.data.message
+                ), 500);
+            }
+        } else {
+            setTimeout(() => Alert.alert(
+                'Erro Conf - Volumes',
+                'Ocorreu uma falha interna no servidor, verifique a conexão!'
+            ), 500);
+        }
+    }
+};
+
+const onPrintError = (doAlert) => {
+    if (doAlert) {
+        setTimeout(() => Alert.alert(
+            'Erro Conf - Volumes',
+            'Erro Conexão!'
+        ), 500);
+    }
 };
 

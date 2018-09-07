@@ -16,13 +16,24 @@ import ListaItemConsolidacao from './ListaItemConsolidacao';
 
 import {
     modificaConf,
-    modificaEmb,
     modificaVol,
     addList,
-    modificaClean
+    modificaClean,
+    doFetchEtiqConf
 } from '../../../actions/ConsolidacaoActions';
 
 class FormConsolidacao extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.doFetchEtiqConf = this.doFetchEtiqConf.bind(this);
+        this.focusInField = this.focusInField.bind(this);
+
+        this.fieldsChanged = { 
+            etiqconf: false 
+        };
+    }
 
     componentWillUnmount() {
         this.props.modificaClean();
@@ -36,25 +47,50 @@ class FormConsolidacao extends Component {
         this.props.addList(volume);
     }
 
+    doFetchEtiqConf() {
+        this.props.doFetchEtiqConf({ etiqVol: this.props.codConf }, this.focusInField);
+    }
+
+    focusInField(field) {
+        switch (field) {
+            case 'etiqconf':
+                this.txtEtiqConf.focus();
+                this.fieldsChanged.etiqconf = true;
+                break;
+            case 'etiqvolume':
+                this.txtEtiqVolume.focus();
+                break;
+            default:
+        }
+    }
+
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
                 <FormRow>
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Conferência</Text>
+                        <Text style={styles.txtLabel}>Etiq Conferência</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            blurOnSubmit={false}
                             style={styles.input}
                             value={this.props.codConf}
-                            onChangeText={this.props.modificaConf}
-                            ref={(input) => { this.confInput = input; }}
-                            onSubmitEditing={() => this.embInput.focus()}
+                            ref={(ref) => (this.txtEtiqConf = ref)}
+                            onChangeText={value => {
+                                this.fieldsChanged.etiqconf = true; 
+                                this.props.modificaConf(value); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.codConf && 
+                                    this.fieldsChanged.etiqconf) {
+                                        this.fieldsChanged.etiqconf = false;
+                                        this.doFetchEtiqConf();
+                                    } 
+                            }}
                         />
                     </View>
                     <View style={{ flex: 1 }}>
@@ -63,90 +99,32 @@ class FormConsolidacao extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            blurOnSubmit={false}
                             style={styles.input}
-                            value={this.props.codEmb}
-                            onChangeText={this.props.modificaEmb}
-                            ref={(input) => { this.embInput = input; }}
-                            onSubmitEditing={() => this.volInput.focus()}
+                            value={`${this.props.codEmb}`}
+                            underlineColorAndroid={'transparent'}
                         />
                     </View>
                 </FormRow>
                 <FormRow>
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Volume</Text>
+                        <Text style={styles.txtLabel}>Etiq Volume</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            blurOnSubmit={false}
                             style={styles.input}
                             value={this.props.codVol}
-                            ref={(input) => { this.volInput = input; }}
+                            ref={(input) => { this.txtEtiqVolume = input; }}
                             onChangeText={this.props.modificaVol}
-                            onBlur={() => this.props.codVol && this.addVolumes()}
+                            onSubmitEditing={() => this.props.codVol && this.addVolumes()}
                         />
                     </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Volume Total</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            blurOnSubmit={false}
-                            style={styles.input}
-                            value={this.props.codVol}
-                            ref={(input) => { this.volInput = input; }}
-                            onChangeText={this.props.modificaVol}
-                            onBlur={() => this.props.codVol && this.addVolumes()}
-                        />
-                    </View>
-                </FormRow>
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Qtde Total</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            blurOnSubmit={false}
-                            style={styles.input}
-                            value={this.props.codVol}
-                            ref={(input) => { this.volInput = input; }}
-                            onChangeText={this.props.modificaVol}
-                            onBlur={() => this.props.codVol && this.addVolumes()}
-                        />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Qtde Consolidada</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            blurOnSubmit={false}
-                            style={styles.input}
-                            value={this.props.codVol}
-                            ref={(input) => { this.volInput = input; }}
-                            onChangeText={this.props.modificaVol}
-                            onBlur={() => this.props.codVol && this.addVolumes()}
-                        />
-                    </View>
+                    <View style={{ flex: 1 }} />
                 </FormRow>
                 <FormRow>
                     <View style={styles.viewBotao} >
@@ -167,24 +145,18 @@ class FormConsolidacao extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const maps = (
-        {
-             codConf: state.ConsolidacaoReducer.codConf,
-             codEmb: state.ConsolidacaoReducer.codEmb,
-             codVol: state.ConsolidacaoReducer.codVol
-        }
-    );
-
-    return maps;
-};
+const mapStateToProps = state => ({
+    codConf: state.ConsolidacaoReducer.codConf,
+    codEmb: state.ConsolidacaoReducer.codEmb,
+    codVol: state.ConsolidacaoReducer.codVol
+});
 
 export default connect(mapStateToProps, {
     modificaConf,
-    modificaEmb,
     modificaVol,
     addList,
-    modificaClean
+    modificaClean,
+    doFetchEtiqConf
 })(FormConsolidacao);
 
 const styles = StyleSheet.create({
@@ -211,7 +183,7 @@ const styles = StyleSheet.create({
     },
     viewBotao: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 10,
         paddingHorizontal: 10
