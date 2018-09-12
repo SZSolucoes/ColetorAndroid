@@ -51,8 +51,13 @@ class FormConferenciaVolume extends Component {
         this.onChangeVolume = this.onChangeVolume.bind(this);
         this.renderForWindows = this.renderForWindows.bind(this);
         this.doPrint = this.doPrint.bind(this);
+        this.doChangePersistTap = this.doChangePersistTap.bind(this);
 
         this.fieldsChanged = { batismo: false };
+
+        this.state = {
+            persistTap: 'never'
+        };
     }
 
     componentDidMount() {
@@ -154,6 +159,14 @@ class FormConferenciaVolume extends Component {
         this.props.doFetchInfoBatismo({ userName: usuario, etiqueta: batismo }, this.focusInField);
     }
 
+    doChangePersistTap(notPersist = true) {
+        if (notPersist) {
+            this.setState({ persistTap: 'never' });
+        } else {
+            this.setState({ persistTap: 'always' });
+        }
+    }
+
     focusInField(field) {
         switch (field) {
             case 'batismo':
@@ -184,7 +197,7 @@ class FormConferenciaVolume extends Component {
 
     render() {
         return (
-            <ScrollView style={styles.viewPrinc}>
+            <ScrollView style={styles.viewPrinc} keyboardShouldPersistTaps={this.state.persistTap}>
                 { Platform.OS !== 'windows' && <LoadingSpin /> }
                 <FormRow>
                     <View style={{ flex: 4 }}>
@@ -198,6 +211,7 @@ class FormConferenciaVolume extends Component {
                             style={styles.input}
                             value={this.props.batismo}
                             ref={(input) => { this.txtBatismo = input; }}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.batismo = true; 
                                 this.props.modificaBatismo(value); 
@@ -276,6 +290,7 @@ class FormConferenciaVolume extends Component {
                             returnKeyType="go"
                             style={styles.input}
                             value={this.props.volume}
+                            onFocus={() => this.doChangePersistTap(false)}
                             onChangeText={(value) => this.onChangeVolume(value)}
                             ref={(input) => { this.txtVolume = input; }}
                             onSubmitEditing={() => this.props.volume && this.adicionarVolume()}

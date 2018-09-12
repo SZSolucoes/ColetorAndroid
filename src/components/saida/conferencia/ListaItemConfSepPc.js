@@ -8,31 +8,40 @@ import {
 
 export default class ListaItemConfSepPc extends PureComponent {
     render() {
-        const itemSelected = (
-            this.props.itemSelected ? 
+        const { 
+            item, 
+            itemSelected, 
+            itemStyle,
+            onPressItem,
+            index 
+        } = this.props;
+
+        const itemSelectedStyle = (
+            itemSelected ? 
             styles.selectedStyle : { borderWidth: 2.5, borderColor: '#4b86b4' }
         );
+        
         return (
             <TouchableHighlight
-                onPress={() => this.props.onPressItem({ ...this.props.item }, this.props.index)}
+                onPress={() => onPressItem({ ...item }, index)}
             >
                 <View
-                    style={[styles.item, itemSelected]} 
+                    style={[styles.item, itemSelectedStyle, itemStyle]} 
                 >
                     <Text style={styles.codigo}>
-                        {this.props.item.itCode}
+                        {item.itCode}
                     </Text>
                     <Text style={styles.descricao}>
-                        {this.props.item.itDescAbrev}
+                        {item.itDescAbrev}
                     </Text>
                     <Text style={styles.qtd}>
-                        {this.props.item.qtdItem}
+                        {item.qtdItem}
                     </Text>
                     <Text style={styles.localizacao}>
-                        {this.props.item.local}
+                        {item.local}
                     </Text>
                     <Text style={styles.lote}>
-                        {this.props.item.lote}
+                        {item.lote}
                     </Text>
                 </View>
             </TouchableHighlight>      

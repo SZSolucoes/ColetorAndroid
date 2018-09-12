@@ -6,20 +6,22 @@ import {
     Text,
     TextInput,
     Button,
-    Keyboard
+    Keyboard,
+    Alert
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
 import FormRow from '../../utils/FormRow';
+import LoadingSpin from '../../utils/LoadingSpin';
 import ListaItemConsolidacao from './ListaItemConsolidacao';
 
 import {
     modificaConf,
     modificaVol,
-    addList,
     modificaClean,
-    doFetchEtiqConf
+    doFetchEtiqConf,
+    doConsolidation
 } from '../../../actions/ConsolidacaoActions';
 
 class FormConsolidacao extends Component {
@@ -29,9 +31,15 @@ class FormConsolidacao extends Component {
 
         this.doFetchEtiqConf = this.doFetchEtiqConf.bind(this);
         this.focusInField = this.focusInField.bind(this);
+        this.doConsolidation = this.doConsolidation.bind(this);
+        this.doChangePersistTap = this.doChangePersistTap.bind(this);
 
         this.fieldsChanged = { 
             etiqconf: false 
+        };
+
+        this.state = {
+            persistTap: 'never'
         };
     }
 
@@ -39,12 +47,43 @@ class FormConsolidacao extends Component {
         this.props.modificaClean();
     }
 
-    addVolumes() {
-        const volume = this.props.codVol;
+    doChangePersistTap(notPersist = true) {
+        if (notPersist) {
+            this.setState({ persistTap: 'never' });
+        } else {
+            this.setState({ persistTap: 'always' });
+        }
+    }
+
+    doConsolidation() {
+        const { 
+            codConf,
+            codEmb, 
+            codVol,
+            keyRet,
+            usuario
+        } = this.props;
 
         Keyboard.dismiss();
 
-        this.props.addList(volume);
+        if (codConf.trim() && codEmb.toString().trim() && codVol.trim()) {
+            const params = {
+                userName: usuario, 
+                embarque: codEmb, 
+                resumo: keyRet.resumo, 
+                nome: keyRet.nome, 
+                pedido: keyRet.pedido, 
+                range: keyRet.range, 
+                etiqConf: codConf,
+                etiqCons: codVol
+            };
+            
+            this.props.doConsolidation(params, this.focusInField);
+        } else if (!codConf.trim()) {
+            Alert.alert('Cosolidação', 'Campo (Etiq Volume) deve ser informado!');
+        } else if (!codVol.trim()) {
+            Alert.alert('Cosolidação', 'Campo (Etiq Consolidação) deve ser informado!');
+        }
     }
 
     doFetchEtiqConf() {
@@ -66,10 +105,11 @@ class FormConsolidacao extends Component {
 
     render() {
         return (
-            <ScrollView style={styles.viewPrinc}>
+            <ScrollView style={styles.viewPrinc} keyboardShouldPersistTaps={this.state.persistTap}>
+                <LoadingSpin />
                 <FormRow>
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Etiq Conferência</Text>
+                        <Text style={styles.txtLabel}>Etiq Volume</Text>
                         <TextInput
                             selectTextOnFocus
                             placeholder=""
@@ -80,9 +120,10 @@ class FormConsolidacao extends Component {
                             style={styles.input}
                             value={this.props.codConf}
                             ref={(ref) => (this.txtEtiqConf = ref)}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.etiqconf = true; 
-                                this.props.modificaConf(value); 
+                                this.props.modificaConf(value);
                             }}
                             onBlur={() => { 
                                 if (this.props.codConf && 
@@ -110,7 +151,7 @@ class FormConsolidacao extends Component {
                 </FormRow>
                 <FormRow>
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Etiq Volume</Text>
+                        <Text style={styles.txtLabel}>Etiq Consolidação</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
@@ -120,8 +161,9 @@ class FormConsolidacao extends Component {
                             style={styles.input}
                             value={this.props.codVol}
                             ref={(input) => { this.txtEtiqVolume = input; }}
+                            onFocus={() => this.doChangePersistTap(false)}
                             onChangeText={this.props.modificaVol}
-                            onSubmitEditing={() => this.props.codVol && this.addVolumes()}
+                            onSubmitEditing={() => this.props.codVol && this.doConsolidation()}
                         />
                     </View>
                     <View style={{ flex: 1 }} />
@@ -129,7 +171,7 @@ class FormConsolidacao extends Component {
                 <FormRow>
                     <View style={styles.viewBotao} >
                         <Button
-                            onPress={() => false}
+                            onPress={() => this.doConsolidation()}
                             title="Consolidar"
                             color="green"
                         />      
@@ -148,15 +190,17 @@ class FormConsolidacao extends Component {
 const mapStateToProps = state => ({
     codConf: state.ConsolidacaoReducer.codConf,
     codEmb: state.ConsolidacaoReducer.codEmb,
-    codVol: state.ConsolidacaoReducer.codVol
+    codVol: state.ConsolidacaoReducer.codVol,
+    keyRet: state.ConsolidacaoReducer.keyRet,
+    usuario: state.LoginReducer.usuario
 });
 
 export default connect(mapStateToProps, {
     modificaConf,
     modificaVol,
-    addList,
     modificaClean,
-    doFetchEtiqConf
+    doFetchEtiqConf,
+    doConsolidation
 })(FormConsolidacao);
 
 const styles = StyleSheet.create({

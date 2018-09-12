@@ -58,12 +58,17 @@ class FormListaSeparacao extends Component {
         this.validLocalConf = this.validLocalConf.bind(this);
         this.doCheckEnableLote = this.doCheckEnableLote.bind(this);
         this.loteFocus = this.loteFocus.bind(this);
+        this.doChangePersistTap = this.doChangePersistTap.bind(this);
 
         this.fieldsChanged = {
             localizacaoConf: false, 
             codEAN: false,
             quantidade: false,
             lote: false
+        };
+
+        this.state = {
+            persistTap: 'never'
         };
     }
 
@@ -345,12 +350,19 @@ class FormListaSeparacao extends Component {
         }
     }
 
+    doChangePersistTap(notPersist = true) {
+        if (notPersist) {
+            this.setState({ persistTap: 'never' });
+        } else {
+            this.setState({ persistTap: 'always' });
+        }
+    }
+
     eanError() {
         this.props.modificaUm('');
         this.props.modificaQtdSep('');
         this.props.modificaCodItem('');
         this.props.modificaDesItem('');
-        this.props.modificaLocalizacao('');
         this.props.modificaLote('');
         this.props.modificaQuantidade('');
         this.props.modificaItemSelected(-1);
@@ -400,7 +412,7 @@ class FormListaSeparacao extends Component {
 
     render() {
         return (
-            <ScrollView style={styles.viewPrinc}>
+            <ScrollView style={styles.viewPrinc} keyboardShouldPersistTaps={this.state.persistTap}>
                 <LoadingSpin />
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 3 }}>
@@ -470,6 +482,7 @@ class FormListaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.batismo}
                             ref={(input) => { this.batismo = input; }}
+                            onFocus={() => this.doChangePersistTap(false)}
                             onSubmitEditing={() => this.localizacaoConf.focus()}
                             onChangeText={(value) => this.props.modificaBatismo(value)}
                             blurOnSubmit={false}
@@ -489,6 +502,7 @@ class FormListaSeparacao extends Component {
                             style={[styles.input, { fontSize: 13 }]}
                             value={this.props.localizacaoConf}
                             ref={(input) => { this.localizacaoConf = input; }}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.localizacaoConf = true; 
                                 this.props.modificaLocalizacaoConf(value); 
@@ -514,6 +528,7 @@ class FormListaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.codEAN}
                             ref={(input) => { this.codEAN = input; }}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.codEAN = true; 
                                 this.props.modificaCodEAN(value); 
@@ -567,6 +582,7 @@ class FormListaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.quantidade}
                             ref={(input) => { this.quantidade = input; }}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.quantidade = true; 
                                 this.onChangeQtdText(value); 
@@ -620,6 +636,7 @@ class FormListaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.lote}
                             ref={(input) => { this.lote = input; }}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.lote = true; 
                                 this.props.modificaLote(value); 
@@ -673,6 +690,7 @@ class FormListaSeparacao extends Component {
                                 style={styles.input}
                                 value={this.props.qtEtiq}
                                 ref={(input) => { this.qtEtiq = input; }}
+                                onFocus={() => this.doChangePersistTap(false)}
                                 onChangeText={(value) => this.props.modificaQtdEtiq(value)}
                             />
                             <TouchableOpacity

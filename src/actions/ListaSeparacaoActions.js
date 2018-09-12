@@ -194,7 +194,6 @@ const onSepSuccess = (dispatch, res, newItemList) => {
 const onSepError = (error, dispatch) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
-    console.log(error);
     setTimeout(() => Alert.alert(
         'Erro Separação',
         'Erro Conexão!'

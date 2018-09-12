@@ -55,12 +55,17 @@ class FormConferenciaSeparacao extends Component {
         this.onBlurEAN = this.onBlurEAN.bind(this);
         this.onBlurQtde = this.onBlurQtde.bind(this);
         this.onChangeQtdText = this.onChangeQtdText.bind(this);
+        this.doChangePersistTap = this.doChangePersistTap.bind(this);
 
         this.fieldsChanged = {
             batismo: false,
             lote: false,
             codEAN: false,
             quantidade: false
+        };
+
+        this.state = {
+            persistTap: 'never'
         };
     }
 
@@ -296,6 +301,14 @@ class FormConferenciaSeparacao extends Component {
         }
     }
 
+    doChangePersistTap(notPersist = true) {
+        if (notPersist) {
+            this.setState({ persistTap: 'never' });
+        } else {
+            this.setState({ persistTap: 'always' });
+        }
+    }
+
     focusInField(field, cleanField = false) {
         switch (field) {
             case 'batismo':
@@ -378,7 +391,7 @@ class FormConferenciaSeparacao extends Component {
 
     render() {
         return (
-            <ScrollView style={styles.viewPrinc}>
+            <ScrollView style={styles.viewPrinc} keyboardShouldPersistTaps={this.state.persistTap}>
                 { Platform.OS !== 'windows' && <LoadingSpin /> }
                 <FormRow>
                     <View style={{ flex: 1 }}>
@@ -393,6 +406,7 @@ class FormConferenciaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.batismo}
                             ref={(input) => { this.batismo = input; }}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.batismo = true; 
                                 this.props.modificaBatismo(value); 
@@ -479,6 +493,7 @@ class FormConferenciaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.codEAN}
                             ref={(input) => { this.codEAN = input; }}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.codEAN = true; 
                                 this.props.modificaCodEAN(value); 
@@ -504,6 +519,7 @@ class FormConferenciaSeparacao extends Component {
                             style={styles.input}
                             value={this.props.quantidade}
                             ref={input => { this.quantidade = input; }}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.quantidade = true; 
                                 this.onChangeQtdText(value); 
@@ -560,6 +576,7 @@ class FormConferenciaSeparacao extends Component {
                             value={this.props.lote}
                             editable={this.doCheckEnableLote()}
                             ref={(input) => { this.lote = input; }}
+                            onFocus={() => this.doChangePersistTap()}
                             onChangeText={value => {
                                 this.fieldsChanged.lote = true; 
                                 this.props.modificaLote(value); 

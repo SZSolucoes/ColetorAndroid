@@ -39,6 +39,7 @@ const onFetchSuccess = (dispatch, res, focusInField) => {
             focusInField('etiqvolume');
             doFetchDispatch(dispatch, res.data);
         } else {
+            dispatch({ type: 'modifica_emb_consolid', payload: '' });
             dispatch({ type: 'modifica_cleanlist_consolid' });
             setTimeout(() => Alert.alert(
                 'Consolidação',
@@ -47,6 +48,7 @@ const onFetchSuccess = (dispatch, res, focusInField) => {
             focusInField('etiqconf');
         }
     } else {
+        dispatch({ type: 'modifica_emb_consolid', payload: '' });
         dispatch({ type: 'modifica_cleanlist_consolid' });
         setTimeout(() => Alert.alert(
             'Consolidação',
@@ -58,7 +60,9 @@ const onFetchSuccess = (dispatch, res, focusInField) => {
 
 const onFetchError = (dispatch, focusInField) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+    dispatch({ type: 'modifica_emb_consolid', payload: '' });
     dispatch({ type: 'modifica_cleanlist_consolid' });
+
     setTimeout(() => Alert.alert(
         'Consolidação',
         'Erro Conexão!'
@@ -71,6 +75,15 @@ const doFetchDispatch = (dispatch, data) => {
     dispatch({ 
         type: 'modifica_emb_consolid',
         payload: data.embarque 
+    });
+    dispatch({ 
+        type: 'modifica_keyret_consolid',
+        payload: {
+            resumo: data.resumo,
+            nome: data.nome,
+            pedido: data.pedido,
+            range: data.range
+        } 
     });
     if (etiquetas && etiquetas.length > 0) {
         dispatch({ type: 'modifica_cleanlist_consolid' });
@@ -94,22 +107,29 @@ const doFetchDispatch = (dispatch, data) => {
     }
 };
 
-// IMPLEMENTANDO MÉTODO DE RETORNO PARA CONSOLIDAR
-/* export const doConsolidation = (params, focusInField) => dispatch => {
+export const doConsolidation = (params, focusInField) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
     Axios.get('/coletor/doConsolidation.p', { params })
-    .then(res => onConsSuccess(dispatch, res, focusInField))
+    .then(res => onConsSuccess(dispatch, res, params, focusInField))
     .catch(() => onConsError(dispatch, focusInField));
 };
 
-const onConsSuccess = (dispatch, res, focusInField) => {
+const onConsSuccess = (dispatch, res, params, focusInField) => {
     const bResOk = res && res.data;
 
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
     if (bResOk && typeof res.data === 'object') {
         if (res.data.success === 'true') {
+            dispatch({
+                type: 'modifica_addlist_consolid',
+                payload: params.etiqCons
+            });
+            dispatch({
+                type: 'modifica_vol_consolid',
+                payload: ''
+            });
         } else {
             setTimeout(() => Alert.alert(
                 'Consolidação',
@@ -122,12 +142,16 @@ const onConsSuccess = (dispatch, res, focusInField) => {
             'Ocorreu uma falha interna no servidor, verifique a conexão!'
         ), 500);
     }
+    focusInField('etiqvolume');
 };
 
 const onConsError = (dispatch, focusInField) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+    
     setTimeout(() => Alert.alert(
         'Consolidação',
         'Erro Conexão!'
     ), 500);
-}; */
+    focusInField('etiqvolume');
+};
+

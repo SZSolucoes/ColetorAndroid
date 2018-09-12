@@ -19,7 +19,6 @@ import {
     modificaLocalPad
 } from '../../../actions/ConfereActions';
 
-
 class ListaItem extends Component {
 
     constructor(props) {
@@ -38,11 +37,13 @@ class ListaItem extends Component {
         this.props.modificaLocalPad(localiz);
         this.props.modificaItemConfere(item);
     }
+
     keyExtractor(item) {
         return (
             item.seq
         );
     }
+
     renderSeparator() {
         return (
             <View
@@ -54,6 +55,7 @@ class ListaItem extends Component {
             />
         );
     }
+
     renderItem = ({ item }) => {
         const listaItem = this.props.listaItem;
         // Se pelo menos um ean estiver disponivel entao não possue erro 
@@ -107,6 +109,7 @@ class ListaItem extends Component {
                 </TouchableHighlight>            
             );
     }
+
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
@@ -124,6 +127,7 @@ class ListaItem extends Component {
 
         return headerView;
     };
+    
     render() {
         return (
             <FlatList

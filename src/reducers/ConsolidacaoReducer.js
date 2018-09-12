@@ -3,7 +3,8 @@ const INITIAL_STATE = {
     codEmb: '',
     codVol: '',
     seqItem: 0,
-    listaItens: []
+    listaItens: [],
+    keyRet: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -33,6 +34,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 listaItens: [...action.payload]
             };
+        case 'modifica_keyret_consolid':
+            return { 
+                ...state, 
+                keyRet: { ...action.payload }
+            };
         case 'modifica_addlist_consolid':
             return { 
                 ...state,
@@ -46,12 +52,14 @@ export default (state = INITIAL_STATE, action) => {
                 listaItens: []
             };
         case 'modifica_clean_consolid':
-            return { 
+            return {
+                ...state, 
                 codConf: '',
                 codEmb: '',
                 codVol: '',
                 seqItem: 0,
-                listaItens: []
+                listaItens: [],
+                keyRet: {}
             };
         default:
             return state;

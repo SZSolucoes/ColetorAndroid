@@ -8,9 +8,14 @@ class LoadingSpin extends React.Component {
         return (
             <Spinner 
                 visible={this.props.visible} 
-                textContent={this.props.text} 
-                textStyle={{ color: this.props.color }}
-                overlayColor={'rgba(0, 0, 0, 0.75)'} 
+                textContent={this.props.text}
+                animation={'fade'}
+                color={'#FFF'} 
+                textStyle={{ 
+                    color: this.props.color, 
+                    fontWeight: 'bold'
+                }}
+                overlayColor={'rgba(0, 0, 0, 0.60)'} 
             />
         );
     }

@@ -12,7 +12,7 @@ import { leftStr } from '../../utils/StrComplex';
 
 class ListaItemConsolidacao extends Component {
 
-    keyExtractor(item, index) {
+    keyExtractor(item) {
         return (
             leftStr(item.seq)
         );
@@ -51,7 +51,7 @@ class ListaItemConsolidacao extends Component {
                     Seq
                 </Text>
                 <Text style={[styles.volume, styles.sizeFldHeader]}> 
-                    Volume
+                    Etiq Volume
                 </Text>
             </View>
         );

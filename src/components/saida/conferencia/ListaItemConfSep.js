@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import ListaItemConfSepPc from './ListaItemConfSepPc';
 
 import {
@@ -79,9 +80,42 @@ class ListaItemConfSep extends Component {
     }
     renderItem({ item, index }) {
         let itemSelected = false;
+        let itemStyle = {};
         if (index === this.props.itemSelected) {
             itemSelected = true;
         }
+
+        if (item.ean1.length > 0 ||
+            item.ean2.length > 0 ||
+            item.ean3.length > 0 ||
+            item.ean4.length > 0 ||
+            item.ean5.length > 0) {
+             const itemsFound = _.filter(
+                 this.props.listItems, 
+                 (o) => o.itCode === item.itCode).length;
+             if (itemsFound > 1) {
+                 itemStyle = {
+                    backgroundColor: '#EEC863',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flex: 1,
+                    flexDirection: 'row',
+                    marginVertical: 2,
+                    paddingHorizontal: 5
+                };
+             }
+        } else {
+            itemStyle = {
+                backgroundColor: '#9C0305',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flex: 1,
+                flexDirection: 'row',
+                marginVertical: 2,
+                paddingHorizontal: 5
+            };
+        }
+
         return (
             <ListaItemConfSepPc 
                 key={index} 
@@ -89,6 +123,7 @@ class ListaItemConfSep extends Component {
                 item={item} 
                 onPressItem={this.onPressItem}
                 itemSelected={itemSelected}
+                itemStyle={itemStyle}
             />
         );
     }
