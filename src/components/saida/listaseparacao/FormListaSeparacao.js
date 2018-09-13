@@ -38,7 +38,8 @@ import {
     modificaItemSelected,
     modificaValidEan,
     modificaValidQtd,
-    doSep
+    doSep,
+    doPrintEtiqEAN
 } from '../../../actions/ListaSeparacaoActions';
 
 class FormListaSeparacao extends Component {
@@ -49,6 +50,7 @@ class FormListaSeparacao extends Component {
         this.onPressSeparar = this.onPressSeparar.bind(this);
         this.findItemEAN = this.findItemEAN.bind(this);
         this.onChangeQtdText = this.onChangeQtdText.bind(this);
+        this.onChangeQtdEtiq = this.onChangeQtdEtiq.bind(this);
         this.onSubmitQtd = this.onSubmitQtd.bind(this);
         this.onBlurLote = this.onBlurLote.bind(this);
         this.onPressNoQtd = this.onPressNoQtd.bind(this);
@@ -59,6 +61,7 @@ class FormListaSeparacao extends Component {
         this.doCheckEnableLote = this.doCheckEnableLote.bind(this);
         this.loteFocus = this.loteFocus.bind(this);
         this.doChangePersistTap = this.doChangePersistTap.bind(this);
+        this.onPressPrint = this.onPressPrint.bind(this);
 
         this.fieldsChanged = {
             localizacaoConf: false, 
@@ -124,6 +127,11 @@ class FormListaSeparacao extends Component {
     onChangeQtdText(value) {
         const txtParsed = value.replace(/[^0-9]/g, '');
         this.props.modificaQuantidade(txtParsed);
+    }
+
+    onChangeQtdEtiq(value) {
+        const txtParsed = value.replace(/[^1-9]/g, '');
+        this.props.modificaQtdEtiq(txtParsed);
     }
     
     onPressSeparar() {
@@ -267,6 +275,29 @@ class FormListaSeparacao extends Component {
         this.props.modificaValidQtd(true);
         this.loteFocus();
         return true;
+    }
+
+    onPressPrint() {
+        const { codEAN, qtEtiq, usuario } = this.props;
+        const params = {
+            usuario,
+            codEAN,
+            qtdEtiq: qtEtiq
+        };
+
+        if (codEAN && qtEtiq && qtEtiq !== '0') {
+            this.props.doPrintEtiqEAN(params);
+        } else if (!codEAN) {
+            Alert.alert(
+                'Impressão Etiqueta',
+                'Campo (EAN) deve ser informado.'
+            );
+        } else if (!qtEtiq || qtEtiq === '0') {
+            Alert.alert(
+                'Impressão Etiqueta',
+                'Campo (Qtde Etiq) deve ser informado'
+            );
+        }
     }
 
     setValidQtd(fieldYesOrNo) {
@@ -685,11 +716,11 @@ class FormListaSeparacao extends Component {
                                 value={this.props.qtEtiq}
                                 ref={(input) => { this.qtEtiq = input; }}
                                 onFocus={() => this.doChangePersistTap(false)}
-                                onChangeText={(value) => this.props.modificaQtdEtiq(value)}
+                                onChangeText={(value) => this.onChangeQtdEtiq(value)}
                             />
                             <TouchableOpacity
                                 style={styles.btSearch}
-                                onPress={() => false}
+                                onPress={() => this.onPressPrint()}
                             >
                                 <Image
                                     source={imgPrinter}
@@ -748,7 +779,8 @@ export default connect(mapStateToProps, {
     modificaItemSelected,
     modificaValidEan,
     modificaValidQtd,
-    doSep
+    doSep,
+    doPrintEtiqEAN
 })(FormListaSeparacao);
 
 const styles = StyleSheet.create({

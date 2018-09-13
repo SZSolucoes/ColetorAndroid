@@ -296,3 +296,33 @@ const dispatchChanges = (dispatch, data) => {
     // Itens
     doSepDispatch(dispatch, data.itens);
 };
+
+export const doPrintEtiqEAN = (params) => dispatch => {
+    Axios.get('/coletor/doPrint.p', { params })
+    .then(res => doPrintEtiqEANSuccess(dispatch, res))
+    .catch(() => doPrintEtiqEANError()); 
+};
+
+const doPrintEtiqEANSuccess = (dispatch, res) => {
+    const bResOk = res && res.data;
+
+    if (bResOk && typeof res.data === 'object') {
+        if (res.data.success === 'true') {
+            setTimeout(() => Alert.alert(
+                'Impressão Etiqueta',
+                res.data.message
+            ), 500);
+        } else {
+            setTimeout(() => Alert.alert(
+                'Erro Impressão Etiqueta',
+                res.data.message
+            ), 500);
+        }
+    } else {
+        setTimeout(() => Alert.alert('Erro', 'Ocorreu uma falha interna no servidor.'), 500);
+    }
+};
+
+const doPrintEtiqEANError = () => {
+    setTimeout(() => Alert.alert('Erro Impressão', 'Erro Conexão!'), 500);
+};
