@@ -359,12 +359,6 @@ class FormListaSeparacao extends Component {
     }
 
     eanError() {
-        this.props.modificaUm('');
-        this.props.modificaQtdSep('');
-        this.props.modificaCodItem('');
-        this.props.modificaDesItem('');
-        this.props.modificaLote('');
-        this.props.modificaQuantidade('');
         this.props.modificaItemSelected(-1);
         this.props.modificaValidEan(false);
     }

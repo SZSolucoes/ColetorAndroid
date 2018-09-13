@@ -127,6 +127,10 @@ const onConsSuccess = (dispatch, res, params, focusInField) => {
                 payload: params.etiqCons
             });
             dispatch({
+                type: 'modifica_conf_consolid',
+                payload: ''
+            });
+            dispatch({
                 type: 'modifica_vol_consolid',
                 payload: ''
             });
