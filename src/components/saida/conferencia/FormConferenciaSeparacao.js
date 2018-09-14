@@ -609,7 +609,7 @@ class FormConferenciaSeparacao extends Component {
                     </View>
                 </FormRow>
                 <FormRow>
-                <View pointerEvents="none" style={{ flex: 4 }}>
+                    <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Separador</Text>
                         <TextInput
                             placeholder=""
@@ -635,6 +635,32 @@ class FormConferenciaSeparacao extends Component {
                             returnKeyType="go"
                             style={styles.input}
                             value={this.props.localizacao}
+                        />
+                    </View>
+                </FormRow>
+                <FormRow>
+                    <View pointerEvents="none" style={{ flex: 4 }}>
+                        <Text style={styles.txtLabel}>Cidade</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            underlineColorAndroid='transparent'
+                            style={styles.input}
+                            value={this.props.cidade}
+                        />
+                    </View>
+                    <View pointerEvents="none" style={{ flex: 4 }}>
+                        <Text style={styles.txtLabel}>Entrega</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            underlineColorAndroid='transparent'
+                            style={styles.input}
+                            value={this.props.entrega}
                         />
                     </View>
                 </FormRow>
@@ -667,6 +693,8 @@ const mapStateToProps = (state) => ({
     lote: state.ConfereSaidaReducer.lote,
     separador: state.ConfereSaidaReducer.separador,
     localizacao: state.ConfereSaidaReducer.localizacao,
+    cidade: state.ConfereSaidaReducer.cidade,
+    entrega: state.ConfereSaidaReducer.entrega,
     isUrgent: state.ConfereSaidaReducer.isUrgent,
     usuario: state.LoginReducer.usuario,
     listItems: state.ConfereSaidaReducer.listItems,

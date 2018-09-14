@@ -15,6 +15,8 @@ const INITIAL_STATE = {
     lote: '',
     separador: '',
     localizacao: '',
+    cidade: '',
+    entrega: '',
     listItems: [],
     itemSelected: 0,
     isUrgent: false
@@ -102,6 +104,16 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 localizacao: action.payload 
             };
+        case 'modifica_cidade_confsaida':
+            return { 
+                ...state, 
+                cidade: action.payload 
+            };
+        case 'modifica_entrega_confsaida':
+            return { 
+                ...state, 
+                entrega: action.payload 
+            };
         case 'modifica_listitems_confsaida':
             return { 
                 ...state, 
@@ -136,6 +148,8 @@ export default (state = INITIAL_STATE, action) => {
                 lote: '',
                 separador: '',
                 localizacao: '',
+                cidade: '',
+                entrega: '',
                 listItems: [],
                 itemSelected: 0,
                 isUrgent: false
@@ -157,6 +171,8 @@ export default (state = INITIAL_STATE, action) => {
                 um: '',
                 lote: '',
                 localizacao: '',
+                cidade: '',
+                entrega: '',
                 listItems: [],
                 itemSelected: 0
             };

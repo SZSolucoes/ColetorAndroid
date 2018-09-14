@@ -122,18 +122,24 @@ const onConsSuccess = (dispatch, res, params, focusInField) => {
 
     if (bResOk && typeof res.data === 'object') {
         if (res.data.success === 'true') {
-            dispatch({
-                type: 'modifica_addlist_consolid',
-                payload: params.etiqCons
-            });
-            dispatch({
-                type: 'modifica_conf_consolid',
-                payload: ''
-            });
-            dispatch({
-                type: 'modifica_vol_consolid',
-                payload: ''
-            });
+            if (res.data.concluido && res.data.concluido === 'true') {
+                dispatch({
+                    type: 'modifica_clean_consolid'
+                });
+            } else {
+                dispatch({
+                    type: 'modifica_addlist_consolid',
+                    payload: params.etiqCons
+                });
+                dispatch({
+                    type: 'modifica_conf_consolid',
+                    payload: ''
+                });
+                dispatch({
+                    type: 'modifica_vol_consolid',
+                    payload: ''
+                });
+            }
         } else {
             setTimeout(() => Alert.alert(
                 'Consolidação',

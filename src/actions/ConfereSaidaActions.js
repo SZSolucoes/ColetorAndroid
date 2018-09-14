@@ -175,6 +175,14 @@ const doFetchDispatches = (dispatch, prioridades) => {
             payload: prioridades[0].resumo
         });
         dispatch({
+            type: 'modifica_cidade_confsaida',
+            payload: prioridades[0].cidade
+        });
+        dispatch({
+            type: 'modifica_entrega_confsaida',
+            payload: prioridades[0].entrega
+        });
+        dispatch({
             type: 'modifica_nome_confsaida',
             payload: prioridades[0].nome
         });
