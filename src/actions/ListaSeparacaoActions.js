@@ -102,6 +102,7 @@ export const fetchListItensSep = (userName) => dispatch => {
         type: 'modifica_loadinglistsep_listaseparacao',
         payload: true
     });
+    dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
     Axios.get('/coletor/getPickingPrior.p', {
         params: {
@@ -122,6 +123,8 @@ export const fetchListItensSep = (userName) => dispatch => {
 };
 
 const onFetchSuccess = (dispatch, response) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+    
     if (response && response.data) {
         const data = response.data;
         if (data.success === 'true' && data.prioridades.length > 0) {
@@ -149,6 +152,7 @@ const onFetchSuccess = (dispatch, response) => {
 };
 
 const onFetchError = (dispatch) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     dispatch({
         type: 'modifica_loadinglistsep_listaseparacao',
         payload: false
@@ -160,11 +164,11 @@ export const doSep = (params, newItemList) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
     Axios.get('/coletor/doPicking.p', { params })
-        .then((res) => onSepSuccess(dispatch, res, newItemList))
+        .then((res) => onSepSuccess(dispatch, res, newItemList, params))
         .catch((error) => onSepError(error, dispatch)); 
 };
 
-const onSepSuccess = (dispatch, res, newItemList) => {
+const onSepSuccess = (dispatch, res, newItemList, params) => {
     const bResOk = res && res.data;
 
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
@@ -175,7 +179,7 @@ const onSepSuccess = (dispatch, res, newItemList) => {
                 type: 'modifica_qtditem_listaseparacao',
                 payload: newItemList.length.toString()
             });
-            doSepDispatch(dispatch, newItemList);
+            doSepDispatch(dispatch, newItemList, params);
             setTimeout(() => Alert.alert(
                 'Separação',
                 'Separação efetuada com sucesso.'
@@ -200,7 +204,7 @@ const onSepError = (error, dispatch) => {
     ), 500);
 };
 
-const doSepDispatch = (dispatch, newItemList) => {
+const doSepDispatch = (dispatch, newItemList, params = false) => {
     if (newItemList && newItemList.length > 0) {
         dispatch({
             type: 'modifica_itemselected_listaseparacao',
@@ -259,6 +263,9 @@ const doSepDispatch = (dispatch, newItemList) => {
         dispatch({
             type: 'modifica_clean_listaseparacao'
         });
+        if (params) {
+            fetchListItensSep(params.userName)(dispatch); // Busca a proxima ficha
+        }
     }
 };
 
@@ -292,6 +299,11 @@ const dispatchChanges = (dispatch, data) => {
     dispatch({
         type: 'modifica_qtditem_listaseparacao',
         payload: data.qtdLin
+    });
+    // Entrega
+    dispatch({
+        type: 'modifica_entrega_listaseparacao',
+        payload: data.entrega
     });
     // Itens
     doSepDispatch(dispatch, data.itens);

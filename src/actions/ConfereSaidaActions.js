@@ -44,11 +44,6 @@ export const modificaItemDesc = (value) => ({
         payload: value
 });
 
-export const modificaSeparador = (value) => ({
-        type: 'modifica_separador_confsaida',
-        payload: value
-});
-
 export const modificaLocalizacao = (value) => ({
         type: 'modifica_localizacao_confsaida',
         payload: value
@@ -197,6 +192,10 @@ const doFetchDispatches = (dispatch, prioridades) => {
         dispatch({
             type: 'modifica_qtdtotitens_confsaida',
             payload: prioridades[0].qtdLin
+        });
+        dispatch({
+            type: 'modifica_separador_confsaida',
+            payload: prioridades[0].separador
         });
         doItemDispatches(dispatch, prioridades[0].itens);
     }

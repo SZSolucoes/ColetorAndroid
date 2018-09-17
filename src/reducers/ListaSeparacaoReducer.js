@@ -16,6 +16,7 @@ const INITIAL_STATE = {
     quantidade: '',
     desItem: '',
     qtEtiq: '',
+    entrega: '',
     listaItensSepPc: [],
     loadingListSep: false,
     validEan: false,
@@ -110,6 +111,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 qtEtiq: action.payload 
             };
+        case 'modifica_entrega_listaseparacao':
+            return { 
+                ...state, 
+                entrega: action.payload 
+            };
         case 'modifica_validean_listaseparacao':
             return { 
                 ...state, 
@@ -154,6 +160,7 @@ export default (state = INITIAL_STATE, action) => {
                 quantidade: '',
                 desItem: '',
                 qtEtiq: '',
+                entrega: '',
                 listaItensSepPc: [],
                 loadingListSep: false,
                 validEan: false,

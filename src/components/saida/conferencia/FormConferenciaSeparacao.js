@@ -26,7 +26,6 @@ import {
     modificaCodEAN,
     modificaQtde,
     modificaLote,
-    modificaSeparador,
     modificaCodItem,
     modificaUm,
     modificaItemDesc,
@@ -67,10 +66,6 @@ class FormConferenciaSeparacao extends Component {
         this.state = {
             persistTap: 'never'
         };
-    }
-
-    componentDidMount() {
-        this.props.modificaSeparador(this.props.usuario);
     }
 
     componentWillUnmount() {
@@ -150,7 +145,7 @@ class FormConferenciaSeparacao extends Component {
                 return false;
             }
     
-            if (quantidade && quantidade !== '0') {
+            if (quantidade) {
                 if (Number(quantidade) < Number(qtdItem)) {
                     Alert.alert(
                         'Aviso',
@@ -186,7 +181,7 @@ class FormConferenciaSeparacao extends Component {
                     );
                     return false;
                 }
-            } else if (quantidade && quantidade === '0') {
+            } else if (quantidade) {
                 this.focusInField('quantidade', true);
                 return false;
             }
@@ -569,7 +564,6 @@ class FormConferenciaSeparacao extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            keyboardType="numeric"
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
@@ -707,7 +701,6 @@ export default connect(mapStateToProps, {
     modificaCodEAN,
     modificaQtde,
     modificaLote,
-    modificaSeparador,
     modificaCodItem,
     modificaUm,
     modificaItemDesc,

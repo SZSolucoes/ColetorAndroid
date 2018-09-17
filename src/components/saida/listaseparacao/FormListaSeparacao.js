@@ -230,7 +230,7 @@ class FormListaSeparacao extends Component {
             return false;
         }
 
-        if (quantidade && quantidade !== '0') {
+        if (quantidade) {
             if (Number(quantidade) < Number(qtdSep)) {
                 Alert.alert(
                     'Aviso',
@@ -268,7 +268,7 @@ class FormListaSeparacao extends Component {
                 this.props.modificaValidQtd(false);
                 return false;
             }
-        } else if (quantidade && quantidade === '0') {
+        } else if (quantidade) {
             this.onPressNoQtd();
             return false;
         }
@@ -694,6 +694,22 @@ class FormListaSeparacao extends Component {
                     </View>
                 </FormRow>
                 <FormRow>
+                    <View pointerEvents="none">
+                        <Text style={styles.txtLabel}>Entrega</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            style={styles.input}
+                            value={this.props.entrega}
+                            underlineColorAndroid='transparent'
+                        />
+                    </View>
+                    <View pointerEvents="none" />
+                </FormRow>
+                <FormRow>
                     <View style={styles.viewBotao}>
                         <Button
                             onPress={() => this.onPressSeparar()}
@@ -756,6 +772,7 @@ const mapStateToProps = (state) => ({
     quantidade: state.ListaSeparacaoReducer.quantidade,
     desItem: state.ListaSeparacaoReducer.desItem,
     qtEtiq: state.ListaSeparacaoReducer.qtEtiq,
+    entrega: state.ListaSeparacaoReducer.entrega,
     listaItensSepPc: state.ListaSeparacaoReducer.listaItensSepPc,
     itemSelected: state.ListaSeparacaoReducer.itemSelected,
     usuario: state.LoginReducer.usuario,
