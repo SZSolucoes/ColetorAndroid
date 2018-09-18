@@ -166,18 +166,18 @@ class MenuSaida extends Component {
             <ScrollView style={styles.opcao}>                
                 { Platform.OS !== 'windows' ? (
                     [
-                        this.renderListaSep('1'),
-                        this.renderConferencia('2'),
-                        this.renderConferenciaVolume('3'),
+                        this.props.logSeparacao && this.renderListaSep('1'),
+                        this.props.logConfSeparacao && this.renderConferencia('2'),
+                        this.props.logConfSeparacao && this.renderConferenciaVolume('3'),
                         this.renderConsolid('4'),
-                        this.renderDespacho('5'),
+                        //this.renderDespacho('5'),
                         this.renderRelacionaEan('6'),
                         this.renderImpressao('7')
                     ]
                 ) : (
                     [
-                        this.renderConferencia('2'),
-                        this.renderConferenciaVolume('3')
+                        this.props.logConfSeparacao && this.renderConferencia('2'),
+                        this.props.logConfSeparacao && this.renderConferenciaVolume('3')
                     ]
                 )}
             </ScrollView>
