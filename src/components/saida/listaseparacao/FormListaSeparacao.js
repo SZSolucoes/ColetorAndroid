@@ -21,6 +21,7 @@ import ListaItemSep from './ListaItemSep';
 
 import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
 import imgUrgent from '../../../../resources/imgs/urgent.png';
+import imgRefresh from '../../../../resources/imgs/refresh.png';
 
 import {
     modificaBatismo,
@@ -39,6 +40,7 @@ import {
     modificaValidEan,
     modificaValidQtd,
     doSep,
+    fetchListItensSep,
     doPrintEtiqEAN
 } from '../../../actions/ListaSeparacaoActions';
 
@@ -62,6 +64,9 @@ class FormListaSeparacao extends Component {
         this.loteFocus = this.loteFocus.bind(this);
         this.doChangePersistTap = this.doChangePersistTap.bind(this);
         this.onPressPrint = this.onPressPrint.bind(this);
+        this.renderToolIcons = this.renderToolIcons.bind(this);
+        this.refreshTools = this.refreshTools.bind(this);
+        this.onPressRefreshIcon = this.onPressRefreshIcon.bind(this);
 
         this.fieldsChanged = {
             localizacaoConf: false, 
@@ -76,9 +81,7 @@ class FormListaSeparacao extends Component {
     }
 
     componentDidMount() {
-        if (this.props.isUrgent) {
-            Actions.refresh({ right: this.renderImgUrgent });
-        }
+        this.refreshTools();
     }
     
     componentWillUnmount() {
@@ -132,6 +135,11 @@ class FormListaSeparacao extends Component {
     onChangeQtdEtiq(value) {
         const txtParsed = value.replace(/[^1-9]/g, '');
         this.props.modificaQtdEtiq(txtParsed);
+    }
+
+    onPressRefreshIcon() {
+        const { usuario } = this.props;
+        this.props.fetchListItensSep(usuario, this.refreshTools);
     }
     
     onPressSeparar() {
@@ -204,7 +212,7 @@ class FormListaSeparacao extends Component {
     
             const newItemList = [...listaItensSepPc];
             newItemList.splice(itemSelected, 1);
-            this.props.doSep(params, newItemList);
+            this.props.doSep(params, newItemList, this.refreshTools);
         } else if (!batismo.trim()) {
             Alert.alert('Separação', 'Campo (Batismo) deve ser informado.');
         } else if (!codEAN.trim()) {
@@ -422,19 +430,51 @@ class FormListaSeparacao extends Component {
         this.codEAN.focus();
     }
 
-    renderImgUrgent() {
+    refreshTools() {
+        Actions.refresh({ right: () => this.renderToolIcons() });
+    }
+
+    renderToolIcons() {
         return (
-            <View
-                style={styles.btUrgent}
-            >
-                <Image
-                    source={imgUrgent}
-                    style={styles.imgUrgent}
-                />
+            <View style={{ flexDirection: 'row' }}>
+                { 
+                    this.props.enableFetchBtn &&
+                    (
+                        <TouchableOpacity
+                            onPress={() => this.onPressRefreshIcon()}
+                        >
+                            <View
+                                style={styles.btnTools}
+                            >
+                                <Image
+                                    source={imgRefresh}
+                                    style={{
+                                        marginTop: 5,
+                                        width: 30,
+                                        height: 30
+                                    }}
+                                />
+                            </View> 
+                        </TouchableOpacity>
+                    )
+                }
+                {
+                    this.props.isUrgent &&
+                    (
+                        <View
+                            style={styles.btnTools}
+                        >
+                            <Image
+                                source={imgUrgent}
+                                style={styles.imgTools}
+                            />
+                        </View>
+                    )
+                }
             </View>
         );
     }
-
+    
     render() {
         return (
             <ScrollView style={styles.viewPrinc} keyboardShouldPersistTaps={this.state.persistTap}>
@@ -707,7 +747,19 @@ class FormListaSeparacao extends Component {
                             underlineColorAndroid='transparent'
                         />
                     </View>
-                    <View pointerEvents="none" />
+                    <View pointerEvents="none">
+                        <Text style={styles.txtLabel}>Cond Pagamento</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            style={styles.input}
+                            value={this.props.condPagto}
+                            underlineColorAndroid='transparent'
+                        />
+                    </View>
                 </FormRow>
                 <FormRow>
                     <View style={styles.viewBotao}>
@@ -773,11 +825,14 @@ const mapStateToProps = (state) => ({
     desItem: state.ListaSeparacaoReducer.desItem,
     qtEtiq: state.ListaSeparacaoReducer.qtEtiq,
     entrega: state.ListaSeparacaoReducer.entrega,
+    condPagto: state.ListaSeparacaoReducer.condPagto,
     listaItensSepPc: state.ListaSeparacaoReducer.listaItensSepPc,
     itemSelected: state.ListaSeparacaoReducer.itemSelected,
     usuario: state.LoginReducer.usuario,
     validEan: state.ListaSeparacaoReducer.validEan,
-    validQtd: state.ListaSeparacaoReducer.validQtd
+    validQtd: state.ListaSeparacaoReducer.validQtd,
+    enableFetchBtn: state.ListaSeparacaoReducer.enableFetchBtn,
+    isUrgent: state.ListaSeparacaoReducer.isUrgent
 });
 
 export default connect(mapStateToProps, {
@@ -797,6 +852,7 @@ export default connect(mapStateToProps, {
     modificaValidEan,
     modificaValidQtd,
     doSep,
+    fetchListItensSep,
     doPrintEtiqEAN
 })(FormListaSeparacao);
 
@@ -850,12 +906,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row'
     },
-    btUrgent: {
+    btnTools: {
         width: 40,
         height: 35,
         marginHorizontal: 5
     },
-    imgUrgent: {
+    imgTools: {
+        marginTop: 2,
         width: 35,
         height: 35
     }

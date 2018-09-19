@@ -88,8 +88,14 @@ export const modificaValidEan = (value) => ({
     type: 'modifica_validean_listaseparacao',
     payload: value
 });
+
 export const modificaValidQtd = (value) => ({
     type: 'modifica_validqtd_listaseparacao',
+    payload: value
+});
+
+export const modificaEnableFetchButton = (value) => ({
+    type: 'modifica_enablefetchbtn_listaseparacao',
     payload: value
 });
 
@@ -97,7 +103,7 @@ export const modificaClean = () => ({
     type: 'modifica_clean_listaseparacao'
 });
 
-export const fetchListItensSep = (userName) => dispatch => {
+export const fetchListItensSep = (userName, refreshTools = false) => dispatch => {
     dispatch({
         type: 'modifica_loadinglistsep_listaseparacao',
         payload: true
@@ -118,11 +124,11 @@ export const fetchListItensSep = (userName) => dispatch => {
             return dataParsed;
         }
     })
-    .then(response => onFetchSuccess(dispatch, response))
+    .then(response => onFetchSuccess(dispatch, response, refreshTools))
     .catch(() => onFetchError(dispatch));
 };
 
-const onFetchSuccess = (dispatch, response) => {
+const onFetchSuccess = (dispatch, response, refreshTools) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     
     if (response && response.data) {
@@ -133,8 +139,20 @@ const onFetchSuccess = (dispatch, response) => {
                 type: 'modifica_loadinglistsep_listaseparacao',
                 payload: false
             });
+            dispatch({
+                type: 'modifica_isurgent_listaseparacao',
+                payload: isUrgent
+            });
+            dispatch({
+                type: 'modifica_enablefetchbtn_listaseparacao',
+                payload: false
+            });
             dispatchChanges(dispatch, data.prioridades[0]);
-            Actions.listaSeparacaoSaida({ isUrgent });
+            if (refreshTools) {
+                refreshTools(); // Ação do botão de atualizar
+            } else {
+                Actions.listaSeparacaoSaida();
+            }
             return;
         } 
         dispatch({
@@ -160,15 +178,15 @@ const onFetchError = (dispatch) => {
     Alert.alert('Erro', 'Ocorreu uma falha de comunicação com o servidor.');
 };
 
-export const doSep = (params, newItemList) => dispatch => {
+export const doSep = (params, newItemList, refreshTools) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
     Axios.get('/coletor/doPicking.p', { params })
-        .then((res) => onSepSuccess(dispatch, res, newItemList, params))
+        .then((res) => onSepSuccess(dispatch, res, newItemList, refreshTools))
         .catch((error) => onSepError(error, dispatch)); 
 };
 
-const onSepSuccess = (dispatch, res, newItemList, params) => {
+const onSepSuccess = (dispatch, res, newItemList, refreshTools) => {
     const bResOk = res && res.data;
 
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
@@ -179,7 +197,7 @@ const onSepSuccess = (dispatch, res, newItemList, params) => {
                 type: 'modifica_qtditem_listaseparacao',
                 payload: newItemList.length.toString()
             });
-            doSepDispatch(dispatch, newItemList, params);
+            doSepDispatch(dispatch, newItemList, refreshTools);
             setTimeout(() => Alert.alert(
                 'Separação',
                 'Separação efetuada com sucesso.'
@@ -204,7 +222,7 @@ const onSepError = (error, dispatch) => {
     ), 500);
 };
 
-const doSepDispatch = (dispatch, newItemList, params = false) => {
+const doSepDispatch = (dispatch, newItemList, refreshTools = false) => {
     if (newItemList && newItemList.length > 0) {
         dispatch({
             type: 'modifica_itemselected_listaseparacao',
@@ -263,8 +281,12 @@ const doSepDispatch = (dispatch, newItemList, params = false) => {
         dispatch({
             type: 'modifica_clean_listaseparacao'
         });
-        if (params) {
-            fetchListItensSep(params.userName)(dispatch); // Busca a proxima ficha
+        if (refreshTools) {
+            dispatch({
+                type: 'modifica_enablefetchbtn_listaseparacao',
+                payload: true
+            });
+            setTimeout(() => refreshTools(), 500);
         }
     }
 };
@@ -304,6 +326,11 @@ const dispatchChanges = (dispatch, data) => {
     dispatch({
         type: 'modifica_entrega_listaseparacao',
         payload: data.entrega
+    });
+    // Cond Pagamento
+    dispatch({
+        type: 'modifica_condpagto_listaseparacao',
+        payload: data.condPagto
     });
     // Itens
     doSepDispatch(dispatch, data.itens);

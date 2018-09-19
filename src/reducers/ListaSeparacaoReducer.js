@@ -17,11 +17,14 @@ const INITIAL_STATE = {
     desItem: '',
     qtEtiq: '',
     entrega: '',
+    condPagto: '',
     listaItensSepPc: [],
     loadingListSep: false,
     validEan: false,
     validQtd: false,
-    itemSelected: 0
+    itemSelected: 0,
+    enableFetchBtn: false,
+    isUrgent: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -116,6 +119,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 entrega: action.payload 
             };
+        case 'modifica_condpagto_listaseparacao':
+            return { 
+                ...state, 
+                condPagto: action.payload
+            };
         case 'modifica_validean_listaseparacao':
             return { 
                 ...state, 
@@ -141,8 +149,19 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 itemSelected: action.payload
             };
-        case 'modifica_clean_listaseparacao':
+        case 'modifica_enablefetchbtn_listaseparacao':
             return { 
+                ...state, 
+                enableFetchBtn: action.payload
+            };
+        case 'modifica_isurgent_listaseparacao':
+            return { 
+                ...state, 
+                isUrgent: action.payload
+            };
+        case 'modifica_clean_listaseparacao':
+            return {
+                ...state, 
                 embarque: '',
                 resumo: '',
                 pedido: '',
@@ -161,11 +180,14 @@ export default (state = INITIAL_STATE, action) => {
                 desItem: '',
                 qtEtiq: '',
                 entrega: '',
+                condPagto: '',
                 listaItensSepPc: [],
                 loadingListSep: false,
                 validEan: false,
                 validQtd: false,
-                itemSelected: 0
+                itemSelected: 0,
+                enableFetchBtn: false,
+                isUrgent: false
             };
         default:
             return state;
