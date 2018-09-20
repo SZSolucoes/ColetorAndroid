@@ -67,6 +67,7 @@ class ListaItemConfSep extends Component {
     keyExtractor(item, index) {
         return index.toString();
     }
+
     renderSeparator() {
         return (
             <View
@@ -78,6 +79,7 @@ class ListaItemConfSep extends Component {
             />
         );
     }
+    
     renderItem({ item, index }) {
         let itemSelected = false;
         let itemStyle = {};

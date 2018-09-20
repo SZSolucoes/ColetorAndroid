@@ -13,6 +13,7 @@ import RelEanReducer from './RelEanReducer';
 import ConsolidacaoReducer from './ConsolidacaoReducer';
 import DespachoReducer from './DespachoReducer';
 import ConsEtiqBatEntradaReducer from './ConsEtiqBatEntradaReducer';
+import ConsEtiqBatSaidaReducer from './ConsEtiqBatSaidaReducer';
 import ConsultaNFReducer from './ConsultaNFReducer';
 import ListaSeparacaoReducer from './ListaSeparacaoReducer';
 import ConsultaLocalizacaoReducer from './ConsultaLocalizacaoReducer';
@@ -33,6 +34,7 @@ export default combineReducers({
     ConsolidacaoReducer,
     DespachoReducer,
     ConsEtiqBatEntradaReducer,
+    ConsEtiqBatSaidaReducer,
     ConsultaNFReducer,
     ListaSeparacaoReducer,
     ConsultaLocalizacaoReducer,

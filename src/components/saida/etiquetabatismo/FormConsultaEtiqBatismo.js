@@ -4,7 +4,10 @@ import {
     View,
     StyleSheet,
     Text,
-    TextInput
+    TextInput,
+    TouchableOpacity,
+    Image,
+    Platform
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -12,50 +15,81 @@ import { Actions } from 'react-native-router-flux';
 
 import FormRow from '../../utils/FormRow';
 import ListaItemConsEtiqBat from './ListaItemConsEtiqBat';
+import {
+    modificaBatismo,
+    modificaClean,
+    doConsBatismo
+} from '../../../actions/ConsEtiqBatSaidaActions';
+import LoadingSpin from '../../utils/LoadingSpin';
+import imgClear from '../../../../resources/imgs/limpa_tela.png'; 
 
 class FormConsultaEtiqBatismo extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.fieldsChanged = {
+            etiqueta: false
+        };
+
+        this.onBlurEtiqueta = this.onBlurEtiqueta.bind(this);
+        this.renderRightButtonBar = this.renderRightButtonBar.bind(this);
+    }
+
+    componentDidMount() {
+        Actions.refresh({ right: this.renderRightButtonBar });
+    }
+
+    componentWillUnmount() {
+        this.props.modificaClean();
+    }
+
+    onBlurEtiqueta() {
+        const { etiqueta } = this.props;
+
+        this.props.doConsBatismo({ etiqueta });
+    }
+
+    renderRightButtonBar() {
+        return (
+            <TouchableOpacity 
+                onPress={() => this.props.modificaClean()}
+                style={styles.btClear}
+            >
+                <Image
+                    source={imgClear}
+                    style={styles.imgClear}
+                />
+            </TouchableOpacity>
+        );
+    }
 
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
+                { Platform.OS !== 'windows' && <LoadingSpin /> }
                 <FormRow>
-                    <View style={{ flex: 4 }}>
+                    <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            value={this.props.nrNotaFis}
-                            ref={(input) => { this.nrNotaFis = input; }}
-                        />
-                    </View>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Embarque</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.fornec}
-                        />
-                    </View>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Pedido</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.fornec}
+                            value={this.props.etiqueta}
+                            onChangeText={value => {
+                                this.fieldsChanged.etiqueta = true; 
+                                this.props.modificaBatismo(value); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.etiqueta && this.fieldsChanged.etiqueta) {
+                                    this.fieldsChanged.etiqueta = false;
+                                    this.onBlurEtiqueta();
+                                } 
+                            }}
                         />
                     </View>
                 </FormRow>
@@ -68,17 +102,15 @@ class FormConsultaEtiqBatismo extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const maps = (
-        {
-             
-        }
-    );
+const mapStateToProps = state => ({
+    etiqueta: state.ConsEtiqBatSaidaReducer.etiqueta
+});
 
-    return maps;
-};
-
-export default connect(mapStateToProps, {})(FormConsultaEtiqBatismo);
+export default connect(mapStateToProps, {
+    modificaBatismo,
+    modificaClean,
+    doConsBatismo
+})(FormConsultaEtiqBatismo);
 
 const styles = StyleSheet.create({
     viewPrinc: {
@@ -101,5 +133,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'sans-serif-medium',
 		borderRadius: 10
+    },
+    btClear: {
+        width: 40,
+        height: 35
+    },
+    imgClear: {
+        width: 35,
+        height: 35
     }
 });

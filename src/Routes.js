@@ -190,7 +190,7 @@ export default () => (
             <Scene 
                 key='consultaEtiqBatismoSaida' 
                 component={ConsultaEtiqBatismoSaida} 
-                title="Consulta Etiqueta Batismo" 
+                title="Etiqueta Batismo - Saída" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"
@@ -222,7 +222,7 @@ export default () => (
             <Scene 
                 key='consultaBatismoEntrada' 
                 component={ConsultaEtiqBatismoEntrada} 
-                title="Consulta Etiqueta Batismo" 
+                title="Etiqueta Batismo - Entrada" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

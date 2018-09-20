@@ -92,7 +92,7 @@ class MenuConsulta extends Component {
                             style={styles.imgMenu} 
                             source={imgConsBatismo}
                         />
-                        <Text style={styles.txtMenu}>Etiqueta Batismo - Saida</Text>
+                        <Text style={styles.txtMenu}>Etiqueta Batismo - Saída</Text>
                     </View>
                 </TouchableHighlight>
             );
@@ -134,7 +134,7 @@ class MenuConsulta extends Component {
             <ScrollView style={styles.opcao}>  
                 {this.renderConsultaEstoq()}
                 {this.renderConsultaBatismoEntrada()}
-                {/*this.renderConsultaBatismoSaida()*/}
+                {this.renderConsultaBatismoSaida()}
                 {this.renderConsultaLocalizacao()}
                 {this.renderConsultaNF()}                   
             </ScrollView>

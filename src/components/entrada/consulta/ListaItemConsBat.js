@@ -5,12 +5,32 @@ import {
     Text, 
     StyleSheet, 
     TouchableHighlight,
-    ScrollView 
+    ScrollView,
+    Dimensions
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
 class ListaItemConsBat extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = { width: Dimensions.get('window').width };
+        this.changedOrientation = this.changedOrientation.bind(this);
+    }
+
+    componentDidMount() {
+        Dimensions.addEventListener('change', this.changedOrientation);
+    }
+    
+    componentWillUnmount() {
+        Dimensions.removeEventListener('change', this.changedOrientation);
+    }
+
+    changedOrientation(e) {
+        this.setState({ width: e.window.width });
+    }
 
     keyExtractor(item) {
         return (
@@ -73,7 +93,7 @@ class ListaItemConsBat extends Component {
             <ScrollView horizontal >
                 <FlatList
                     data={this.props.listaItens}
-                    style={styles.container}
+                    style={[styles.container, { width: this.state.width + 300 }]}
                     ItemSeparatorComponent={this.renderSeparator}
                     keyExtractor={this.keyExtractor}
                     renderItem={this.renderItem}

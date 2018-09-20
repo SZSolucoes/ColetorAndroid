@@ -1,35 +1,31 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
 
-export const modificaBatismo = codEtiqBatismo => ({
-    type: 'modifica_batismo_consbatentrada',
-    payload: codEtiqBatismo
+export const modificaBatismo = value => ({
+    type: 'modifica_batismo_consbatsaida',
+    payload: value
 });
 
 export const modificaClean = () => ({
-    type: 'modifica_clean_consbatentrada'
+    type: 'modifica_clean_consbatsaida'
 });
 
-export const doConsBatismo = codEtiqBatismo => dispatch => {
+export const doConsBatismo = params => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
-    Axios.get('/coletor/getConsEtiqBatismo.p', {
-        params: {
-            codEtiqBatismo
-        }
-    })
+    Axios.get('/coletor/getBatismoSaida.p', { params })
     .then(res => buscaSuccess(dispatch, res))
     .catch(() => buscaError(dispatch));
 };
 
 const buscaSuccess = (dispatch, res) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-    
+
     const bResOk = res && res.data;
 
     if (bResOk && typeof res.data === 'object') {
         if (res.data.success === 'true') {
-            dispatch({ type: 'modifica_listitem_consbatentrada', payload: res.data.item });
+            dispatch({ type: 'modifica_listitem_consbatsaida', payload: res.data.etiquetas });
         } else {
             setTimeout(() => Alert.alert(
                 'Erro Consulta',
@@ -43,6 +39,7 @@ const buscaSuccess = (dispatch, res) => {
 
 const buscaError = (dispatch) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+
     Alert.alert(
         'Erro Consulta',
         'Erro Conexão!'

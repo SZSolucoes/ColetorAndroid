@@ -7,7 +7,8 @@ import {
     TextInput,
     TouchableOpacity,
     Image,
-    Keyboard
+    Keyboard,
+    Platform
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -21,10 +22,22 @@ import {
     modificaClean,
     doConsBatismo
 } from '../../../actions/ConsEtiqBatEntradaActions';
+import LoadingSpin from '../../utils/LoadingSpin';
 
 import imgClear from '../../../../resources/imgs/limpa_tela.png'; 
 
 class FormConsultaBatismo extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.onBlurCodEtiqBatismo = this.onBlurCodEtiqBatismo.bind(this);
+        this.renderRightButtonBar = this.renderRightButtonBar.bind(this);
+
+        this.fieldsChanged = {
+            codEtiqBatismo: false
+        };
+    }
 
     componentDidMount() {
         Actions.refresh({ right: this.renderRightButtonBar });
@@ -34,7 +47,7 @@ class FormConsultaBatismo extends Component {
         this.props.modificaClean();
     }
 
-    doConsultBatismo() {
+    onBlurCodEtiqBatismo() {
         const codEtiqBatismo = this.props.codEtiqBatismo;
 
         Keyboard.dismiss();
@@ -59,10 +72,12 @@ class FormConsultaBatismo extends Component {
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
+                { Platform.OS !== 'windows' && <LoadingSpin /> }
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
@@ -71,8 +86,17 @@ class FormConsultaBatismo extends Component {
                             style={styles.input}
                             value={this.props.codEtiqBatismo}
                             ref={(input) => { this.batInput = input; }}
-                            onChangeText={this.props.modificaBatismo}
-                            onBlur={() => this.props.codEtiqBatismo && this.doConsultBatismo()}
+                            onChangeText={value => {
+                                this.fieldsChanged.codEtiqBatismo = true; 
+                                this.props.modificaBatismo(value); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.codEtiqBatismo && 
+                                    this.fieldsChanged.codEtiqBatismo) {
+                                    this.fieldsChanged.codEtiqBatismo = false;
+                                    this.onBlurCodEtiqBatismo();
+                                } 
+                            }}
                         />
                     </View>
                 </FormRow>
