@@ -28,6 +28,7 @@ import ConsultaEtiqBatismoEntrada from './components/entrada/consulta/ConsultaBa
 import ConsultaNF from './components/entrada/consulta/ConsultaNF';
 import ConsultaNFPush from './components/entrada/consulta/ConsultaNFPush';
 import ConsultaLocalizacao from './components/entrada/consulta/localizacao/ConsultaLocalizacao';
+import ConsultaItemEan from './components/entrada/consulta/ConsultaItemEan';
 
 export default () => (
     <Router>
@@ -247,6 +248,14 @@ export default () => (
                 key='consultaLocalizacao' 
                 component={ConsultaLocalizacao} 
                 title="Localização" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='consultaItemEan' 
+                component={ConsultaItemEan} 
+                title="Consulta EAN" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

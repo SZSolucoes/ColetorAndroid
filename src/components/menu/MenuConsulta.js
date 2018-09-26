@@ -14,6 +14,7 @@ const imgConsulta = require('../../../resources/imgs/consulta_estoque.png');
 const imgConsBatismo = require('../../../resources/imgs/consulta_etiq_48.png');
 const imgConsultaNF = require('../../../resources/imgs/consultanf.png');
 const imgLocation = require('../../../resources/imgs/location.png');
+const imgEan = require('../../../resources/imgs/eanconsulta.png');
 
 class MenuConsulta extends Component {
 
@@ -29,6 +30,7 @@ class MenuConsulta extends Component {
         this.onPressConsultaNF = this.onPressConsultaNF.bind(this);
         this.renderConsultaLocalizacao = this.renderConsultaLocalizacao.bind(this);
         this.onPressConsultaLocalizacao = this.onPressConsultaLocalizacao.bind(this);
+        this.onPressConsultaEAN = this.onPressConsultaEAN.bind(this);
     }
 
     onPressConsEstoq() {
@@ -49,6 +51,10 @@ class MenuConsulta extends Component {
 
     onPressConsultaNF() {
         Actions.consultaNF();
+    }
+
+    onPressConsultaEAN() {
+        Actions.consultaItemEan();
     }
     
     renderConsultaEstoq() {
@@ -128,6 +134,20 @@ class MenuConsulta extends Component {
             </TouchableHighlight>
         );
     }
+
+    renderConsultaEAN() {
+        return (
+            <TouchableHighlight onPress={this.onPressConsultaEAN}>
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgEan}
+                    />
+                    <Text style={styles.txtMenu}>EAN</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
     
     render() {
         return (
@@ -137,6 +157,7 @@ class MenuConsulta extends Component {
                 {this.renderConsultaBatismoSaida()}
                 {this.renderConsultaLocalizacao()}
                 {this.renderConsultaNF()}                   
+                {this.renderConsultaEAN()}                   
             </ScrollView>
         );
     }

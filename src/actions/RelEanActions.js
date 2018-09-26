@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import { doFetchEan } from './ConsultaItemEanActions';
 
 export const modificaCodEan = (codEAN) => ({ 
         type: 'modifica_codean_relean', 
@@ -19,15 +20,16 @@ export const doConfirm = (propparams) => dispatch => {
                 codItem: propparams.codItem
             }
         })
-        .then(response => onRelSuccess(dispatch, response))
+        .then(response => onRelSuccess(dispatch, response, propparams.codItem))
         .catch(() => alertRelError());
     };
 const alertRelError = () => {
     Alert.alert('Erro', 'Erro ao Confirmar');
 };
-const onRelSuccess = (dispatch, response) => {
+const onRelSuccess = (dispatch, response, codItem) => {
     if (response.data.success === 'true') {
         Alert.alert('Aviso', response.data.message);
+        doFetchEan({ itCode: codItem }, true)(dispatch);
     } else if (response.data.message) {
         Alert.alert('Aviso', response.data.message); 
     } else {

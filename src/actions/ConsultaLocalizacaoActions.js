@@ -60,7 +60,7 @@ const onSuccess = (dispatch, res) => {
     }
 };
 
-const onError = () => {
+const onError = (dispatch) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     Alert.alert('Erro', 'Falha de comunicação com o servidor. Verifique a conexão!');
 };

@@ -18,6 +18,7 @@ import ConsultaNFReducer from './ConsultaNFReducer';
 import ListaSeparacaoReducer from './ListaSeparacaoReducer';
 import ConsultaLocalizacaoReducer from './ConsultaLocalizacaoReducer';
 import LoadingSpinReducer from './LoadingSpinReducer';
+import ConsultaItemEanReducer from './ConsultaItemEanReducer';
 
 export default combineReducers({
     LoginReducer,
@@ -38,5 +39,6 @@ export default combineReducers({
     ConsultaNFReducer,
     ListaSeparacaoReducer,
     ConsultaLocalizacaoReducer,
-    LoadingSpinReducer
+    LoadingSpinReducer,
+    ConsultaItemEanReducer
 });
