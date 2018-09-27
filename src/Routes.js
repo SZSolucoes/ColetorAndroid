@@ -134,7 +134,7 @@ export default () => (
             <Scene 
                 key='estoque' 
                 component={Estoque} 
-                title="Consulta Estoque" 
+                title="Estoque" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"
@@ -231,7 +231,7 @@ export default () => (
             <Scene 
                 key='consultaNF' 
                 component={ConsultaNF} 
-                title="Consulta Nota Fiscal" 
+                title="Nota Fiscal" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"
@@ -255,7 +255,7 @@ export default () => (
             <Scene 
                 key='consultaItemEan' 
                 component={ConsultaItemEan} 
-                title="Consulta EAN" 
+                title="EAN" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

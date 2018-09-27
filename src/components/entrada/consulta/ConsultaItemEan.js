@@ -6,7 +6,9 @@ import {
     Text,
     TextInput,
     Button,
-    Alert
+    Alert,
+    TouchableOpacity,
+    Image
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -28,6 +30,7 @@ import {
 } from '../../../actions/RelEanActions';
 
 import LoadingSpin from '../../utils/LoadingSpin';
+import imgClear from '../../../../resources/imgs/limpa_tela.png';
 
 class ConsultaItemEan extends Component {
 
@@ -38,10 +41,15 @@ class ConsultaItemEan extends Component {
         this.doFetchEan = this.doFetchEan.bind(this);
         this.modificaEan = this.modificaEan.bind(this);
         this.onPressRelacionar = this.onPressRelacionar.bind(this);
+        this.renderClearButton = this.renderClearButton.bind(this);
 
         this.fieldsChanged = {
             itCode: false
         };
+    }
+
+    componentDidMount() {
+        Actions.refresh({ right: this.renderClearButton });
     }
 
     componentWillUnmount() {
@@ -169,6 +177,20 @@ class ConsultaItemEan extends Component {
         });
     }
 
+    renderClearButton() {
+        return (
+            <TouchableOpacity 
+                onPress={() => this.props.modificaClean()}
+                style={styles.btClear}
+            >
+                <Image
+                    source={imgClear}
+                    style={styles.imgClear}
+                />
+            </TouchableOpacity>
+        );
+    }
+
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
@@ -294,6 +316,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 10,
         paddingHorizontal: 10
+    },
+    btClear: {
+        width: 40,
+        height: 35
+    },
+    imgClear: {
+        width: 35,
+        height: 35
     }
 });
 
