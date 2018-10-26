@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import { store } from '../App';
 
 export const modificaBatismo = value => ({
     type: 'modifica_batismo_consbatsaida',
@@ -13,7 +14,12 @@ export const modificaClean = () => ({
 export const doConsBatismo = params => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
-    Axios.get('/coletor/getBatismoSaida.p', { params })
+    Axios.get('/coletor/getBatismoSaida.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => buscaSuccess(dispatch, res))
     .catch(() => buscaError(dispatch));
 };

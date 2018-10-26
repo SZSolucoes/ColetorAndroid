@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import { store } from '../App';
 
 export const modificaCodLocal = (codLocal) => ({ 
         type: 'modifica_codlocal_invent', 
@@ -77,7 +78,7 @@ export const doConfirmEst = (propparams) => dispatch => {
     .catch(error => alertConfError(dispatch, error));
 };
 
-const alertConfError = (dispatch, error) => {
+const alertConfError = () => {
     Alert.alert('Erro', 'Erro ao Confirmar');
 };
 
@@ -93,7 +94,8 @@ const onConfSuccess = (dispatch, response) => {
 export const buscaInfoEAN = (codEAN) => dispatch => {
     Axios.get('/coletor/getStockInfoByEan.p', {
         params: {
-            cod_ean: codEAN
+            cod_ean: codEAN,
+            usuario: store.getState().LoginReducer.usuario
         }
     })
     .then(response => buscaSuccess(dispatch, response))

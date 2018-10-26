@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import { Alert } from 'react-native';
+import { store } from '../App';
 
 export const modificaBatismo = (value) => ({
     type: 'modifica_batismo_confvolume',
@@ -48,7 +49,12 @@ export const modificaClean = () => ({
 export const doFetchInfoBatismo = (params, focusInField) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
-    Axios.get('/coletor/getInfoBatismo.p', { params })
+    Axios.get('/coletor/getInfoBatismo.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => onFetchSuccess(dispatch, res, focusInField))
     .catch(() => onFetchError(dispatch, focusInField));
 };
@@ -107,7 +113,11 @@ const doFetchDispatch = (dispatch, embarque) => {
 };
 
 export const doFetchListEmbalagens = () => dispatch => {
-    Axios.get('/coletor/getPackings.p', {})
+    Axios.get('/coletor/getPackings.p', { params: 
+        { 
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => onFetchEmbSuccess(dispatch, res))
     .catch(() => onFetchEmbError());
 };
@@ -153,7 +163,12 @@ const onFetchEmbError = () => {
 export const doConfVol = (params) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
-    Axios.get('/coletor/doEndCheckPicking.p', { params })
+    Axios.get('/coletor/doEndCheckPicking.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => onConfVolSuccess(dispatch, res, params))
     .catch(() => onConfVolError(dispatch));
 };
@@ -201,7 +216,12 @@ const onConfVolError = (dispatch) => {
 };
 
 export const doPrint = (params, doAlert = false) => dispatch => {
-    Axios.get('/coletor/doPrint.p', { params })
+    Axios.get('/coletor/doPrint.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => onPrintSuccess(dispatch, res, doAlert))
     .catch(() => onPrintError(doAlert));
 };

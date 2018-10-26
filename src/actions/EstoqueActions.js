@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import { store } from '../App';
 
 export const iniciaTela = () => {
     return {
@@ -52,7 +53,8 @@ export const buscaEstoque = (codEAN) => {
     return dispatch => {
         Axios.get('/coletor/getStockInfoByEan.p', {
             params: {
-                cod_ean: codEAN
+                cod_ean: codEAN,
+                usuario: store.getState().LoginReducer.usuario
             }
         })
         .then(response => buscaSuccess(dispatch, response))

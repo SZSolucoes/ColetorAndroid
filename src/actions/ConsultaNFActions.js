@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { Actions } from 'react-native-router-flux';
 import { Alert } from 'react-native';
 import _ from 'lodash';
+import { store } from '../App';
 
 export const modificaCodNF = (value) => (
     {
@@ -27,7 +28,8 @@ export const modificaClean = () => (
 export const buscaItemsNF = (usuario, codNF) => dispatch => {
         Axios.get('/coletor/getInvoiceInfo.p', {
             params: {
-                nrodocto: codNF
+                nrodocto: codNF,
+                usuario: store.getState().LoginReducer.usuario
             },
             headers: {
                 'Content-Type': 'application/json'

@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import { Alert } from 'react-native';
+import { store } from '../App';
 
 export const modificaConf = codConf => ({
         type: 'modifica_conf_consolid',
@@ -24,7 +25,12 @@ export const modificaClean = () => ({
 export const doFetchEtiqConf = (params, focusInField) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
-    Axios.get('/coletor/getCheckLabel.p', { params })
+    Axios.get('/coletor/getCheckLabel.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => onFetchSuccess(dispatch, res, focusInField))
     .catch(() => onFetchError(dispatch, focusInField));
 };
@@ -110,7 +116,12 @@ const doFetchDispatch = (dispatch, data) => {
 export const doConsolidation = (params, focusInField) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
-    Axios.get('/coletor/doConsolidation.p', { params })
+    Axios.get('/coletor/doConsolidation.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => onConsSuccess(dispatch, res, params, focusInField))
     .catch(() => onConsError(dispatch, focusInField));
 };

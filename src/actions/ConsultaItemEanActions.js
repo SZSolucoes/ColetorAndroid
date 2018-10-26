@@ -1,6 +1,7 @@
 
 import Axios from 'axios';
 import { Alert } from 'react-native';
+import { store } from '../App';
 
 export const modificaItCode = (value) => ({
     type: 'modifica_itcod_consultaitemean',
@@ -42,7 +43,8 @@ export const doFetchEan = (params, notShowAlerts = false) => dispatch => {
     }
     Axios.get('/coletor/getEanItem.p', {
         params: {
-            itCode: params.itCode
+            itCode: params.itCode,
+            usuario: store.getState().LoginReducer.usuario
         },
         transformResponse: (data) => {
             let dataParsed = '';

@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
 import { Actions } from 'react-native-router-flux';
+import { store } from '../App';
 
 import { doFetchInfoBatismo } from './ConfereVolumeActions';
 
@@ -61,7 +62,12 @@ export const modificaClean = () => ({
 export const doFetchBatismo = (params, focusInField, checkIfUrgent) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
-    Axios.get('/coletor/getPickingList.p', { params })
+    Axios.get('/coletor/getPickingList.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => onFetchBatismoSuccess(dispatch, res, focusInField, checkIfUrgent))
     .catch(() => onFetchBatismoError(dispatch, focusInField, checkIfUrgent));
 };
@@ -112,7 +118,12 @@ const onFetchBatismoError = (dispatch, focusInField, checkIfUrgent) => {
 export const doConfSaida = (params, newItemList, listEmpty) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
-    Axios.get('/coletor/doCheckPicking.p', { params })
+    Axios.get('/coletor/doCheckPicking.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => onConfSuccess(dispatch, res, newItemList, listEmpty, params))
     .catch(() => onConfError(dispatch));
 };

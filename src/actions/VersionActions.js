@@ -56,7 +56,7 @@ const statusConexao = (dispatch, isConnected) => {
     .then(connectionInfo => infoConexao(dispatch, isConnected, connectionInfo));
 };
 
-const infoConexao = (dispatch, isConnected, connectionInfo) => {
+const infoConexao = (dispatch, isConnected) => {
     const connected = (isConnected ? 'Online' : 'Offline');
     const desConexao = `${connected}`;
     
@@ -73,6 +73,6 @@ const serviceSuccess = (dispatch, response) => {
     }
 };
 
-const serviceError = (dispatch, error) => {
+const serviceError = (dispatch) => {
     dispatch({ type: 'modifica_servico_vers', payload: 'Problema Conexão!' });
 };

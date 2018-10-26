@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
 import { doFetchEan } from './ConsultaItemEanActions';
+import { store } from '../App';
 
 export const modificaCodEan = (codEAN) => ({ 
         type: 'modifica_codean_relean', 
@@ -17,7 +18,8 @@ export const doConfirm = (propparams) => dispatch => {
         Axios.get('app/doListItemEan.p', {
             params: {
                 codEAN: propparams.codEAN,
-                codItem: propparams.codItem
+                codItem: propparams.codItem,
+                usuario: store.getState().LoginReducer.usuario
             }
         })
         .then(response => onRelSuccess(dispatch, response, propparams.codItem))

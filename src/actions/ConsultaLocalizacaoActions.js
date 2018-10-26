@@ -1,6 +1,7 @@
 
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import { store } from '../App';
 
 export const modificaLocalizacao = (value) => ({
     type: 'modifica_localizacao_consultalocalizacao',
@@ -15,7 +16,8 @@ export const doFetchLocation = (params) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
     Axios.get('/coletor/getStockInfoByLocaliz.p', {
         params: {
-            cod_localiz: params.localizacao
+            cod_localiz: params.localizacao,
+            usuario: store.getState().LoginReducer.usuario
         },
         transformResponse: (data) => {
             let dataParsed = '';

@@ -2,7 +2,7 @@
 import Axios from 'axios';
 import { Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-
+import { store } from '../App';
 
 export const modificaEmbarque = (value) => ({
     type: 'modifica_embarque_listaseparacao',
@@ -181,9 +181,14 @@ const onFetchError = (dispatch) => {
 export const doSep = (params, newItemList, refreshTools) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
-    Axios.get('/coletor/doPicking.p', { params })
-        .then((res) => onSepSuccess(dispatch, res, newItemList, refreshTools))
-        .catch((error) => onSepError(error, dispatch)); 
+    Axios.get('/coletor/doPicking.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
+    .then((res) => onSepSuccess(dispatch, res, newItemList, refreshTools))
+    .catch((error) => onSepError(error, dispatch)); 
 };
 
 const onSepSuccess = (dispatch, res, newItemList, refreshTools) => {
@@ -337,7 +342,12 @@ const dispatchChanges = (dispatch, data) => {
 };
 
 export const doPrintEtiqEAN = (params) => dispatch => {
-    Axios.get('/coletor/doPrint.p', { params })
+    Axios.get('/coletor/doPrint.p', { params: 
+        { 
+            ...params,
+            usuario: store.getState().LoginReducer.usuario  
+        } 
+    })
     .then(res => doPrintEtiqEANSuccess(dispatch, res))
     .catch(() => doPrintEtiqEANError()); 
 };

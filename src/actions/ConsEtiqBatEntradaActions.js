@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import { store } from '../App';
 
 export const modificaBatismo = codEtiqBatismo => ({
     type: 'modifica_batismo_consbatentrada',
@@ -15,7 +16,8 @@ export const doConsBatismo = codEtiqBatismo => dispatch => {
 
     Axios.get('/coletor/getConsEtiqBatismo.p', {
         params: {
-            codEtiqBatismo
+            codEtiqBatismo,
+            usuario: store.getState().LoginReducer.usuario
         }
     })
     .then(res => buscaSuccess(dispatch, res))

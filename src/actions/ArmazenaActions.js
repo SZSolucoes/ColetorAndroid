@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import { store } from '../App';
 
 export const modificaOnEfetivar = (ativo) => {
     return {
@@ -95,7 +96,8 @@ export const buscaInfoBastimo = (batismo) => {
         dispatch({ type: 'modifica_visible_loadingspin', payload: true });
         Axios.get('/coletor/getLabelItems.p', {
             params: {
-                codEtiqBatismo: batismo
+                codEtiqBatismo: batismo,
+                usuario: store.getState().LoginReducer.usuario
             }
         })
         .then(response => buscaBatismoSuccess(dispatch, response))
