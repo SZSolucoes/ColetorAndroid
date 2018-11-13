@@ -36,7 +36,7 @@ export const buscaItemsNF = (usuario, codNF) => dispatch => {
             },
             transformResponse: [(data) => {
                 try {
-                    return JSON.parse(decodeURIComponent(data));
+                    return JSON.parse(data);
                 } catch (e) {
                     return data;
                 }
