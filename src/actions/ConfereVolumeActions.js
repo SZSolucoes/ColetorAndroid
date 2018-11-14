@@ -183,7 +183,8 @@ const onConfVolSuccess = (dispatch, res, params) => {
             doPrint({
                 usuario: params.userName,
                 qtdEtiq: '1',
-                embarque: params.embarque
+                embarque: params.embarque,
+                range: params.range
             }, false)(dispatch);
             dispatch({
                 type: 'modifica_clean_confvolume'
