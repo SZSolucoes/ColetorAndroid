@@ -137,6 +137,10 @@ const onConsSuccess = (dispatch, res, params, focusInField) => {
                 dispatch({
                     type: 'modifica_clean_consolid'
                 });
+                setTimeout(() => Alert.alert(
+                    'Consolidação',
+                    res.data.message
+                ), 500);
             } else {
                 dispatch({
                     type: 'modifica_addlist_consolid',
