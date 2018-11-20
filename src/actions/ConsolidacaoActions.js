@@ -133,7 +133,7 @@ const onConsSuccess = (dispatch, res, params, focusInField) => {
 
     if (bResOk && typeof res.data === 'object') {
         if (res.data.success === 'true') {
-            if (res.data.concluido && res.data.concluido === 'true') {
+            if (res.data.concluido && res.data.concluido.trim() === 'true') {
                 dispatch({
                     type: 'modifica_clean_consolid'
                 });
@@ -141,6 +141,8 @@ const onConsSuccess = (dispatch, res, params, focusInField) => {
                     'Consolidação',
                     res.data.message
                 ), 500);
+                
+                focusInField('etiqconf');
             } else {
                 dispatch({
                     type: 'modifica_addlist_consolid',
@@ -154,20 +156,25 @@ const onConsSuccess = (dispatch, res, params, focusInField) => {
                     type: 'modifica_vol_consolid',
                     payload: ''
                 });
+
+                focusInField('etiqvolume');
             }
         } else {
             setTimeout(() => Alert.alert(
                 'Consolidação',
                 res.data.message
             ), 500);
+
+            focusInField('etiqvolume');
         }
     } else {
         setTimeout(() => Alert.alert(
             'Consolidação',
             'Ocorreu uma falha interna no servidor, verifique a conexão!'
         ), 500);
+        
+        focusInField('etiqvolume');
     }
-    focusInField('etiqvolume');
 };
 
 const onConsError = (dispatch, focusInField) => {
