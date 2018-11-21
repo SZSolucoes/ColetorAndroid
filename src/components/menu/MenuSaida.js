@@ -44,7 +44,7 @@ class MenuSaida extends Component {
         Actions.conferenciaSeparacao();
     } 
     onPressConfVol() {
-        Actions.conferenciaVolumeSaida();
+        Actions.conferenciaVolumeSaida({ isMenu: true });
     } 
     onPressRelEan() {
         Actions.relacionaEan();

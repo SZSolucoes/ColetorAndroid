@@ -118,7 +118,8 @@ class FormConferenciaVolume extends Component {
             keyRet,
             listVolumes,
             pesoBruto,
-            usuario 
+            usuario,
+            isMenu
         } = this.props;
 
         if (batismo && pesoBruto && listVolumes.length > 0) {
@@ -141,7 +142,7 @@ class FormConferenciaVolume extends Component {
                 peso: parsedPsBruto,
                 listaVolumes: JSON.stringify(newListVol)
             };
-            this.props.doConfVol(params);
+            this.props.doConfVol(params, isMenu);
         } else if (!batismo) {
             Alert.alert('Conf - Volumes', 'Campo (Batismo) deve ser informado!');
         } else if (!pesoBruto) {

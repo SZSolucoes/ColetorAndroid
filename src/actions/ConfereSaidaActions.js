@@ -271,7 +271,7 @@ const checkLastItem = (dispatch, listEmpty, params) => {
         doFetchInfoBatismo({ 
             userName: params.userName, 
             etiqueta: params.etiqueta })(dispatch);
-        Actions.conferenciaVolumeSaida();
+        Actions.conferenciaVolumeSaida({ isMenu: false });
     }        
 };
 

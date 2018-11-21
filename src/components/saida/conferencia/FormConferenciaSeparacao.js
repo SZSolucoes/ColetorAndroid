@@ -660,6 +660,18 @@ class FormConferenciaSeparacao extends Component {
                 </FormRow>
                 <FormRow>
                     {this.renderBtEfetiva()}
+                    <View pointerEvents="none" style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Cliente</Text>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            underlineColorAndroid='transparent'
+                            style={styles.input}
+                            value={this.props.nome}
+                        />
+                    </View>
                 </FormRow>
                 <View style={{ padding: 5 }}>
                     <ListaItemConfSep />
@@ -743,9 +755,9 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-medium'
     },
     viewBotao: {
-        flexDirection: 'row',
         flex: 1,
-        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-end',
         marginTop: 10,
         paddingHorizontal: 10
     },

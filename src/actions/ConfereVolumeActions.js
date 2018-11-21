@@ -1,5 +1,6 @@
 import Axios from 'axios';
 import { Alert } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import { store } from '../App';
 
 export const modificaBatismo = (value) => ({
@@ -160,7 +161,7 @@ const onFetchEmbError = () => {
     );
 };
 
-export const doConfVol = (params) => dispatch => {
+export const doConfVol = (params, isMenu) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
 
     Axios.get('/coletor/doEndCheckPicking.p', { params: 
@@ -169,11 +170,11 @@ export const doConfVol = (params) => dispatch => {
             usuario: store.getState().LoginReducer.usuario  
         } 
     })
-    .then(res => onConfVolSuccess(dispatch, res, params))
+    .then(res => onConfVolSuccess(dispatch, res, params, isMenu))
     .catch(() => onConfVolError(dispatch));
 };
 
-const onConfVolSuccess = (dispatch, res, params) => {
+const onConfVolSuccess = (dispatch, res, params, isMenu) => {
     const bResOk = res && res.data;
 
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
@@ -191,7 +192,21 @@ const onConfVolSuccess = (dispatch, res, params) => {
             });
             setTimeout(() => Alert.alert(
                 'Conf - Volumes',
-                res.data.message
+                res.data.message,
+                [
+                    { 
+                        text: 'OK', 
+                        onPress: () => {
+                            if (!isMenu) {
+                                dispatch({
+                                    type: 'modifica_clean_confsaida'
+                                });
+                                Actions.pop();
+                            }
+                        } 
+                    }
+                ],
+                { cancelable: false }
             ), 500);
         } else {
             setTimeout(() => Alert.alert(
