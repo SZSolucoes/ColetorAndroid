@@ -53,7 +53,7 @@ export const doFetchInfoBatismo = (params, focusInField) => dispatch => {
     Axios.get('/coletor/getInfoBatismo.p', { params: 
         { 
             ...params,
-            usuario: store.getState().LoginReducer.usuario  
+            usuario: params.userName
         } 
     })
     .then(res => onFetchSuccess(dispatch, res, focusInField))
@@ -167,7 +167,7 @@ export const doConfVol = (params, isMenu) => dispatch => {
     Axios.get('/coletor/doEndCheckPicking.p', { params: 
         { 
             ...params,
-            usuario: store.getState().LoginReducer.usuario  
+            usuario: params.userName
         } 
     })
     .then(res => onConfVolSuccess(dispatch, res, params, isMenu))

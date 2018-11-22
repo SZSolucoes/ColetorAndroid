@@ -1,7 +1,6 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
 import { Actions } from 'react-native-router-flux';
-import { store } from '../App';
 
 import { doFetchInfoBatismo } from './ConfereVolumeActions';
 
@@ -65,7 +64,7 @@ export const doFetchBatismo = (params, focusInField, checkIfUrgent) => dispatch 
     Axios.get('/coletor/getPickingList.p', { params: 
         { 
             ...params,
-            usuario: store.getState().LoginReducer.usuario  
+            usuario: params.userName 
         } 
     })
     .then(res => onFetchBatismoSuccess(dispatch, res, focusInField, checkIfUrgent))
@@ -121,7 +120,7 @@ export const doConfSaida = (params, newItemList, listEmpty) => dispatch => {
     Axios.get('/coletor/doCheckPicking.p', { params: 
         { 
             ...params,
-            usuario: store.getState().LoginReducer.usuario  
+            usuario: params.userName
         } 
     })
     .then(res => onConfSuccess(dispatch, res, newItemList, listEmpty, params))

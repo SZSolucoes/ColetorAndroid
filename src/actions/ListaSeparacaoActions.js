@@ -341,10 +341,11 @@ const dispatchChanges = (dispatch, data) => {
     doSepDispatch(dispatch, data.itens);
 };
 
-export const doPrintEtiqEAN = (params) => dispatch => {
+export const doPrintEtiqEAN = (params, lote = 'false') => dispatch => {
     Axios.get('/coletor/doPrint.p', { params: 
         { 
             ...params,
+            lote,
             usuario: store.getState().LoginReducer.usuario  
         } 
     })

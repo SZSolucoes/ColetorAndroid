@@ -294,7 +294,7 @@ class FormListaSeparacao extends Component {
         };
 
         if (codEAN && qtEtiq && qtEtiq !== '0') {
-            this.props.doPrintEtiqEAN(params);
+            this.props.doPrintEtiqEAN(params, 'true');
         } else if (!codEAN) {
             Alert.alert(
                 'Impressão Etiqueta',
