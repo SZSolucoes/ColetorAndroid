@@ -251,7 +251,7 @@ const doSepDispatch = (dispatch, newItemList, refreshTools = false) => {
         });
         dispatch({
             type: 'modifica_desitem_listaseparacao',
-            payload: newItemList[0].itDescAbrev
+            payload: newItemList[0].itDesc
         });
         dispatch({
             type: 'modifica_localizacao_listaseparacao',
@@ -341,12 +341,11 @@ const dispatchChanges = (dispatch, data) => {
     doSepDispatch(dispatch, data.itens);
 };
 
-export const doPrintEtiqEAN = (params, lote = 'false') => dispatch => {
+export const doPrintEtiqEAN = (params) => dispatch => {
     Axios.get('/coletor/doPrint.p', { params: 
         { 
             ...params,
-            lote,
-            usuario: store.getState().LoginReducer.usuario  
+            usuario: store.getState().LoginReducer.usuario
         } 
     })
     .then(res => doPrintEtiqEANSuccess(dispatch, res))

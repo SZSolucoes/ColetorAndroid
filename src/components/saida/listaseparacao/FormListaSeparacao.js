@@ -286,15 +286,16 @@ class FormListaSeparacao extends Component {
     }
 
     onPressPrint() {
-        const { codEAN, qtEtiq, usuario } = this.props;
+        const { codEAN, qtEtiq, usuario, lote } = this.props;
         const params = {
             usuario,
             codEAN,
-            qtdEtiq: qtEtiq
+            qtdEtiq: qtEtiq,
+            lote
         };
 
         if (codEAN && qtEtiq && qtEtiq !== '0') {
-            this.props.doPrintEtiqEAN(params, 'true');
+            this.props.doPrintEtiqEAN(params);
         } else if (!codEAN) {
             Alert.alert(
                 'Impressão Etiqueta',
