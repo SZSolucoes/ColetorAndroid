@@ -5,8 +5,9 @@ import {
     Text,
     Image,
     TouchableHighlight,
-    Alert,
-    Platform
+    //Alert,
+    Platform,
+    ScrollView
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
@@ -15,17 +16,22 @@ import LogoutBtn from '../login/Logout';
 const imgTruck1 = require('../../../resources/imgs/truck1.png');
 const imgTruck2 = require('../../../resources/imgs/truck2.png');
 const imgConsulta = require('../../../resources/imgs/menuConsulta.png');
+const imgInventario = require('../../../resources/imgs/inventariomenu.png');
 
 export default class MenuApp extends Component {
 
     constructor(props) {
         super(props);
 
+        this.onPressEntrada = this.onPressEntrada.bind(this);
+        this.onPressSaida = this.onPressSaida.bind(this);
+        this.onPressConsulta = this.onPressConsulta.bind(this);
+        this.onPressInventario = this.onPressInventario.bind(this);
         this.renderMenuEntrada = this.renderMenuEntrada.bind(this);
         this.renderMenuSaida = this.renderMenuSaida.bind(this);
         this.renderMenuConsulta = this.renderMenuConsulta.bind(this);
+        this.renderMenuInventario = this.renderMenuInventario.bind(this);
     }
-
 
     onPressEntrada() {
         Actions.menuEntrada();
@@ -39,8 +45,13 @@ export default class MenuApp extends Component {
         return; */
         Actions.menuSaida();
     }
+
     onPressConsulta() {
         Actions.menuConsulta();
+    }
+
+    onPressInventario() {
+        Actions.menuInventario();
     }
 
     renderMenuEntrada(key) {
@@ -96,22 +107,46 @@ export default class MenuApp extends Component {
         );
     }
 
+    renderMenuInventario(key) {
+        return (
+            <TouchableHighlight
+                key={key} 
+                onPress={this.onPressInventario}
+            >
+                <View style={styles.menu}>
+                    <View style={styles.viewImgCenter}> 
+                        <Image 
+                            style={styles.imgMenu} 
+                            source={imgInventario}
+                        />
+                    </View>
+                    <Text style={styles.txtMenu}>Inventário</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
+
     render() {
         return (
             <View style={styles.viewPrinc}>
-                <View style={styles.opcao}>
-                    { Platform.OS !== 'windows' ? (
-                    [
-                        this.renderMenuEntrada('1'),
-                        this.renderMenuSaida('2'),
-                        this.renderMenuConsulta('3')
-                    ]
-                ) : (
-                    [
-                        this.renderMenuEntrada('1'),
-                        this.renderMenuSaida('2')
-                    ]
-                )}
+                <View
+                    style={styles.opcao}
+                >
+                    <ScrollView>
+                        { Platform.OS !== 'windows' ? (
+                        [
+                            this.renderMenuEntrada('1'),
+                            this.renderMenuSaida('2'),
+                            this.renderMenuConsulta('3'),
+                            this.renderMenuInventario('4')
+                        ]
+                    ) : (
+                        [
+                            this.renderMenuEntrada('1'),
+                            this.renderMenuSaida('2')
+                        ]
+                    )}
+                    </ScrollView>
                 </View>
                 <View style={styles.btLogout}>
                     <LogoutBtn />

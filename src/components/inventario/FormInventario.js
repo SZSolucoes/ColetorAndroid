@@ -12,14 +12,11 @@ import {
     Keyboard
 } from 'react-native';
 import _ from 'lodash';
-import DatePicker from 'react-native-datepicker';
-import ModalFilterPicker from 'react-native-modal-filter-picker';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
-import FormRow from '../../utils/FormRow';
-
-import imgSeta from '../../../../resources/imgs/seta.png';
+import GridInventItens from './GridInventItens';
+import FormRow from '../utils/FormRow';
 
 import {
     modificaCodLocal,
@@ -34,9 +31,9 @@ import {
     doConfirm,
     doConfirmEst,
     buscaInfoEAN
-} from '../../../actions/InventarioActions';
+} from '../../actions/InventarioActions';
 
-const imgClear = require('../../../../resources/imgs/limpa_tela.png');
+const imgClear = require('../../../resources/imgs/limpa_tela.png');
 
 class FormInventario extends Component {
 
@@ -258,33 +255,7 @@ class FormInventario extends Component {
         return (
             <ScrollView style={styles.viewPrinc}>
                 <FormRow>
-                    <View style={{ flex: 3 }}>
-                        <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Data</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <DatePicker
-                                style={{ flex: 1 }}
-                                date={this.props.dtInventario}
-                                mode="date"
-                                placeholder=" "
-                                autoCapitalize="none"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                autoCorrect={false}
-                                returnKeyType="go"
-                                format="DD/MM/YYYY"
-                                confirmBtnText="Ok"
-                                cancelBtnText="Cancelar"
-                                customStyles={{     
-                                    dateInput: StyleSheet.flatten(styles.dateInput),
-                                    dateIcon: StyleSheet.flatten(styles.dateIcon),
-                                    dateText: StyleSheet.flatten(styles.dateText)
-                                }}
-                                onDateChange={this.props.modificaDtInventario}
-                            />
-                        </View>
-                    </View>  
-                </FormRow>
-                <FormRow>
-                    <View style={{ flex: 2 }}>
+                    <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
                         <TextInput
                             selectTextOnFocus
@@ -299,8 +270,6 @@ class FormInventario extends Component {
                             onSubmitEditing={() => { this.txtEAN.focus(); }}
                         />
                     </View>
-                </FormRow>
-                <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>EAN</Text>
                         <TextInput
@@ -320,7 +289,7 @@ class FormInventario extends Component {
                     </View>
                 </FormRow>
                 <FormRow>
-                    <View style={{ flex: 4 }}>
+                    <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Item</Text>
                         <TextInput
                             placeholder=""
@@ -331,9 +300,10 @@ class FormInventario extends Component {
                             returnKeyType="next"
                             style={styles.input}
                             value={this.props.codItem}
+                            underlineColorAndroid={'transparent'}
                         />
                     </View>
-                    <View style={{ flex: 1 }}>
+                    <View pointerEvents="none" style={{ flex: 1.4 }}>
                         <Text style={styles.txtLabel}>UM</Text>
                         <TextInput
                             placeholder=""
@@ -344,11 +314,26 @@ class FormInventario extends Component {
                             returnKeyType="next"
                             style={styles.input}
                             value={this.props.unidMed}
+                            underlineColorAndroid={'transparent'}
+                        />
+                    </View>
+                    <View pointerEvents="none" style={{ flex: 3.7 }}>
+                        <Text style={styles.txtLabel}>Lote</Text>
+                        <TextInput
+                            selectTextOnFocus
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={styles.input}
+                            value={this.props.codLote}
                         />
                     </View>
                 </FormRow>
                 <FormRow>
-                    <View style={{ flex: 1 }}>
+                    <View pointerEvents="none" style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Descrição</Text>
                         <TextInput
                             placeholder=""
@@ -361,52 +346,28 @@ class FormInventario extends Component {
                             returnKeyType="next"
                             style={styles.inputDescricao}
                             value={this.props.descItem}
+                            underlineColorAndroid={'transparent'}
                         />
                     </View>                    
                 </FormRow>
                 <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Contagem</Text>
-                        <TouchableOpacity 
-                            onPress={() => this.props.modificaModalVisible(true)}
-                            style={{ flexDirection: 'row' }}
-                        >
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                editable={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={[styles.input, { flex: 1 }]}
-                                value={this.props.nrContagem}
-                            />
-                            <Image
-                                source={imgSeta}
-                                style={styles.imgSeta}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ flex: 2 }}>
-                        <Text style={styles.txtLabel}>Lote</Text>
+                    <View pointerEvents="none" style={{ flex: 1 }}>
+                        <Text style={styles.txtLabel}>Contagem</Text>
                         <TextInput
-                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codLote}
-                            onChangeText={codLote => this.props.modificaCodLote(codLote)}
-                            onSubmitEditing={() => {
-                                if (!this.props.estorno) { this.txtQtde.focus(); } 
-                            }}
+                            style={[styles.input, { flex: 1 }]}
+                            value={this.props.nrContagem}
+                            underlineColorAndroid={'transparent'}
                         />
                     </View>
-                </FormRow>
-                <FormRow>
-                    {this.renderQtde()}
+                    <View style={{ flex: 1.5 }}>
+                        {this.renderQtde()}
+                    </View>
                 </FormRow>
                 <FormRow>
                     <View style={styles.viewBotao}>
@@ -417,28 +378,10 @@ class FormInventario extends Component {
                         />
                     </View>
                 </FormRow>
+                <View style={{ padding: 5 }}>
+                    <GridInventItens />
+                </View>
                 <View style={{ marginBottom: 50 }} />
-                <ModalFilterPicker
-                    placeholderText="Filtro..."
-                    cancelButtonText="Cancelar"
-                    noResultsText="Não encontrado"
-                    visible={this.props.modalVisible}
-                    onSelect={this.props.modificaNrContagem}
-                    onCancel={() => this.props.modificaModalVisible(false)}
-                    options={[
-                        {
-                            key: '1',
-                            label: '1',
-                        },
-                        {
-                            key: '2',
-                            label: '2',
-                        },
-                        {
-                            key: '3',
-                            label: '3',
-                        }]}
-                />
             </ScrollView>
         );
     }

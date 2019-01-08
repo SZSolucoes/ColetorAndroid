@@ -8,10 +8,11 @@ import MenuApp from './components/menu/MenuApp';
 import MenuEntrada from './components/menu/MenuEntrada';
 import MenuSaida from './components/menu/MenuSaida';
 import MenuConsulta from './components/menu/MenuConsulta';
+import MenuInventario from './components/menu/MenuInventario';
 import Armazena from './components/entrada/armazenamento/Armazenamento';
 import Conferencia from './components/entrada/conferencia/Conferencia';
 import WinInfoItemConf from './components/entrada/conferencia/WinInfoItemConf';
-import Inventario from './components/entrada/inventario/Inventario';
+import Inventario from './components/inventario/Inventario';
 import Transferencia from './components/entrada/transferencia/Transferencia';
 import Estoque from './components/estoque/Estoque';
 import ListaNotaFiscal from './components/entrada/conferencia/ListaNotaFiscal';
@@ -59,7 +60,7 @@ export default () => (
             <Scene 
                 key='menuEntrada' 
                 component={MenuEntrada} 
-                title="Entrada" 
+                title="Menu - Entrada" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"
@@ -67,7 +68,7 @@ export default () => (
             <Scene 
                 key='menuSaida' 
                 component={MenuSaida} 
-                title="Saída"
+                title="Menu - Saída"
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"
@@ -75,7 +76,15 @@ export default () => (
             <Scene 
                 key='menuConsulta' 
                 component={MenuConsulta} 
-                title="Consulta"
+                title="Menu - Consulta"
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='menuInventario' 
+                component={MenuInventario} 
+                title="Menu - Inventário"
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

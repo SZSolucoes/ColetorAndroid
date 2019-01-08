@@ -20,8 +20,6 @@ import {
 
 const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
 const imgArmazen = require('../../../resources/imgs/armazenamento.png');
-const imgInvent = require('../../../resources/imgs/inventario_64.png');
-const imgInventEst = require('../../../resources/imgs/inventarioestorno.png');
 const imgRelEan = require('../../../resources/imgs/relacionaean.png');
 const imgTransEnt = require('../../../resources/imgs/transf_entrada.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
@@ -38,12 +36,6 @@ class MenuEntrada extends Component {
     }
     onPressTransferencia() {
         Actions.transferencia();
-    }
-    onPressInvent() {
-        Actions.inventario({ estorno: false });
-    }
-    onPressInventEst() {
-        Actions.inventarioEst({ estorno: true });
     }
     onPressRelEan() {
         Actions.relacionaEan();
@@ -106,32 +98,6 @@ class MenuEntrada extends Component {
             );
         }
     }
-    renderInventario(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressInvent}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgInvent}
-                    />
-                    <Text style={styles.txtMenu}>Inventário</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderInventarioEst(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressInventEst}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgInventEst}
-                    />
-                    <Text style={styles.txtMenu}>Inventário - Estorno</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
     renderRelacionaEan(key) {
         return (
             <TouchableHighlight key={key} onPress={this.onPressRelEan}>
@@ -166,13 +132,11 @@ class MenuEntrada extends Component {
                         this.renderConferecia('1'),
                         this.renderArmazenamento('2'),
                         this.renderTransferencia('3'),
-                        this.renderInventario('4'),
-                        this.renderInventarioEst('5'),
-                        this.renderRelacionaEan('6'),
-                        this.renderImpressao('7')
+                        this.renderRelacionaEan('4'),
+                        this.renderImpressao('5')
                     ]
                 ) : (
-                    this.renderConferecia('2')
+                    this.renderConferecia('1')
                 )}
             </ScrollView>
         );
