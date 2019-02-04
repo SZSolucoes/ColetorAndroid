@@ -38,6 +38,10 @@ export const modificaQtItem = (qtItem) => ({
         type: 'modifica_qtitem_invent', 
         payload: qtItem
     });
+export const modificaItemSelected = (index) => ({ 
+        type: 'modifica_itemselected_invent', 
+        payload: index
+    });
 export const modificaModalVisible = (modalVisible) => ({ 
         type: 'modifica_modalvisible_invent', 
         payload: modalVisible
@@ -48,22 +52,56 @@ export const cleanInventarioReducer = () => ({
 export const cleanInventarioReducerWDT = () => ({ 
         type: 'modifica_cleanwdt_invent'
     });
-export const doConfirm = (propparams) => dispatch => {
-        Axios.get('/coletor/doInventoryCounting.p', {
-            params: {
-                username: propparams.username,
-                codLocal: propparams.codLocal,
-                nrContagem: propparams.nrContagem,
-                codEtiq: propparams.codEAN,
-                dtInventario: propparams.dtInventario,
-                codLote: propparams.codLote,
-                qtItem: propparams.qtItem
+
+export const doConfirm = (propparams, newList) => dispatch => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: true });
+    Axios.get('/coletor/doInventoryCounting.p', {
+        params: { ...propparams }
+    })
+    .then(res => {
+        const validRes = res && res.data && res.data.success;
+
+        if (validRes) {
+            if (res.data.success === 'true') {
+                dispatch({
+                    type: 'modifica_cleanlesslocal_invent'
+                });
+                dispatch({
+                    type: 'modifica_listitems_invent',
+                    payload: newList
+                });
+                dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+                setTimeout(() => {
+                    Alert.alert('Inventário', res.data.message);
+                }, 500);
+            } else {
+                dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+                setTimeout(() => {
+                    Alert.alert('Erro', res.data.message);
+                }, 500);
             }
-        })
-        .then(response => onConfSuccess(dispatch, response))
-        .catch(error => alertConfError(dispatch, error));
-    };
-export const doConfirmEst = (propparams) => dispatch => {
+        } else {
+            dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+            setTimeout(() => {
+                Alert.alert(
+                    'Erro',
+                    'Ocorreu uma falha interna no servidor, verifique a conexão!'
+                );
+            }, 500);
+        }
+    })
+    .catch(() => {
+        dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+        setTimeout(() => {
+            Alert.alert(
+                'Erro',
+                'Ocorreu uma falha interna no servidor, verifique a conexão!'
+            );
+        }, 500);
+    });
+};
+
+/* export const doConfirmEst = (propparams) => dispatch => {
     Axios.get('/coletor/undoInventoryCounting.p', {
         params: {
             username: propparams.username,
@@ -76,7 +114,7 @@ export const doConfirmEst = (propparams) => dispatch => {
     })
     .then(response => onConfSuccess(dispatch, response))
     .catch(error => alertConfError(dispatch, error));
-};
+}; */
 
 const alertConfError = () => {
     Alert.alert('Erro', 'Erro ao Confirmar');
@@ -91,40 +129,49 @@ const onConfSuccess = (dispatch, response) => {
     }
 };
 
-export const buscaInfoEAN = (codEAN) => dispatch => {
-    Axios.get('/coletor/getStockInfoByEan.p', {
+export const getInventoryLocal = (local) => dispatch => {
+    Axios.get('/coletor/getInventoryLocal.p', {
         params: {
-            cod_ean: codEAN,
+            local,
             usuario: store.getState().LoginReducer.usuario
         }
     })
-    .then(response => buscaSuccess(dispatch, response))
-    .catch(() => buscaError());
-};
-
-const buscaSuccess = (dispatch, response) => {
-    const responseDataOk = response && response.data;
-    if (responseDataOk && response.data.success === 'true') {
-        dispatch({ type: 'modifica_coditem_invent', payload: response.data.item.codItem });
-        dispatch({ type: 'modifica_unidmed_invent', payload: response.data.item.un });
-        dispatch({ type: 'modifica_descitem_invent', payload: response.data.item.descItem });
-        dispatch({ type: 'modifica_tpcont_invent', payload: response.data.item.tpCont });
-    } else if (responseDataOk && response.data.success === 'false') {
+    .then(res => {
+        const validRet = res && res.data && res.data.success;
+        if (validRet && res.data.success === 'true' && res.data.fichas) {
+            dispatch({
+                type: 'modifica_listitems_invent',
+                payload: res.data.fichas
+            });
+        } else if (validRet && res.data.success === 'false') {
+            setTimeout(() => {
+                Alert.alert(
+                    'Erro',
+                    res.data.message
+                );
+            }, 500);
+            cleanInventarioReducerLessLocal(dispatch);
+        } else {
+            setTimeout(() => {
+                Alert.alert(
+                    'Erro',
+                    'Ocorreu uma falha interna no servidor, verifique a conexão!'
+                );
+            }, 500);
+            cleanInventarioReducerLessLocal(dispatch);
+        }
+    })
+    .catch(() => setTimeout(() => {
         Alert.alert(
-            'Erro Estoque',
-            response.data.message
-        );
-    } else {
-        Alert.alert(
-            'Erro Estoque',
+            'Erro',
             'Ocorreu uma falha interna no servidor, verifique a conexão!'
         );
-    }
+    }, 500));
+    cleanInventarioReducerLessLocal(dispatch);
 };
 
-const buscaError = () => {
-    Alert.alert(
-        'Erro Estoque',
-        'Erro Conexão!'
-    );
+const cleanInventarioReducerLessLocal = dispatch => {
+    dispatch({
+        type: 'modifica_cleanlesslocal_invent'
+    });
 };

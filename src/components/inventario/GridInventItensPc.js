@@ -34,11 +34,8 @@ export default class GridInventItensPc extends PureComponent {
                     <Text style={styles.descricao}>
                         {item.itDescAbrev}
                     </Text>
-                    <Text style={styles.qtd}>
-                        {item.qtdItem}
-                    </Text>
                     <Text style={styles.localizacao}>
-                        {item.local}
+                        {item.localiz}
                     </Text>
                     <Text style={styles.lote}>
                         {item.lote}
@@ -78,10 +75,6 @@ const styles = StyleSheet.create({
     descricao: { 
         ...styleField.itemHeaderAndRow, 
         flex: 2.5 
-    },
-    qtd: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 1 
     },
     localizacao: { 
         ...styleField.itemHeaderAndRow, 

@@ -9,7 +9,8 @@ import {
     TouchableOpacity,
     Image,
     Alert,
-    Keyboard
+    Keyboard,
+    Platform
 } from 'react-native';
 import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
@@ -17,8 +18,13 @@ import { connect } from 'react-redux';
 
 import GridInventItens from './GridInventItens';
 import FormRow from '../utils/FormRow';
+import LoadingSpin from '../utils/LoadingSpin';
 
 import {
+    modificaCodItem,
+    modificaUnidMed,
+    modificaDescItem,
+    modificaItemSelected,
     modificaCodLocal,
     modificaNrContagem,
     modificaCodEAN,
@@ -30,7 +36,7 @@ import {
     cleanInventarioReducerWDT,
     doConfirm,
     doConfirmEst,
-    buscaInfoEAN
+    getInventoryLocal
 } from '../../actions/InventarioActions';
 
 const imgClear = require('../../../resources/imgs/limpa_tela.png');
@@ -40,14 +46,18 @@ class FormInventario extends Component {
     constructor(props) {
         super(props);
 
-        this.limpaTela = this.limpaTela.bind(this);
         this.renderRightButton = this.renderRightButton.bind(this);
-        this.fnBuscaInfoEan = this.fnBuscaInfoEan.bind(this);
+        this.onBLurEAN = this.onBLurEAN.bind(this);
         this.confirmButton = this.confirmButton.bind(this);
         this.renderQtde = this.renderQtde.bind(this);
         this.onChangeQtdText = this.onChangeQtdText.bind(this);
-    }
 
+        this.fieldsChanged = {
+            codLocal: false,
+            codEAN: false,
+            qtItem: false
+        };
+    }
 
     componentDidMount() {
         Actions.refresh({ right: this.renderRightButton });
@@ -62,113 +72,111 @@ class FormInventario extends Component {
         this.props.modificaQtItem(txtParsed);
     }
     
-    limpaTela() {
-        this.props.cleanInventarioReducerWDT();
-    }
-    
-    fnBuscaInfoEan() {
-        const codEAN = this.props.codEAN;
+    onBLurEAN() {
+        const { codEAN, listItems } = this.props;
 
         Keyboard.dismiss();
 
-        if (codEAN) {
-            if (codEAN.length === 0) {
-                Alert.alert(
-                    'Erro EAN',
-                    'Código EAN deve ser informado!'
-                );
-                return;
-            }
-        } else {
+        if (!(typeof codEAN === 'string' && codEAN.trim())) {
             Alert.alert(
                 'Erro EAN',
                 'Código EAN deve ser informado!'
             );
             return;
         }
+
+        if (this.props.listItems.length > 0) {
+            const itensEAN = _.values(listItems);
+            const indexItemEAN = _.findIndex(itensEAN, (itemCheck) => (
+                itemCheck.ean1 === codEAN ||
+                itemCheck.ean2 === codEAN ||
+                itemCheck.ean3 === codEAN ||
+                itemCheck.ean4 === codEAN ||
+                itemCheck.ean5 === codEAN
+            ));
+            
+            Keyboard.dismiss();
+            
+            if (indexItemEAN !== -1) {
+                const {
+                    itCode,
+                    un,
+                    lote,
+                    itDesc,
+                    contagem
+                } = itensEAN[indexItemEAN];
         
-        this.props.buscaInfoEAN(codEAN);
+                this.props.modificaCodItem(itCode);
+                this.props.modificaUnidMed(un);
+                this.props.modificaCodLote(lote);
+                this.props.modificaDescItem(itDesc);
+                this.props.modificaNrContagem(contagem);
+                this.props.modificaItemSelected(indexItemEAN);
+    
+                this.focusInField('qtitem'); 
+            } else {
+                this.focusInField('codean', false, true); 
+                Alert.alert(
+                    'Inventário',
+                    'EAN Não Localizado!'
+                );
+            }
+        }
     }
 
     confirmButton() {
         const {
-            username,
             codLocal,
-            nrContagem,
             codEAN,
-            dtInventario,
             qtItem,
-            tpCont,
-            codLote
+            listItems,
+            itemSelected,
+            username
         } = this.props;
 
         Keyboard.dismiss();
 
-        if (codLocal) {
-            if (codLocal.length === 0) {
-                Alert.alert(
-                    'Inventário',
-                    'Local deve ser informado!'
-                );
-                return;
-            }
-        } else {
+        const validLocal = typeof codLocal === 'string' && codLocal.trim();
+        const validEAN = typeof codLocal === 'string' && codEAN.trim();
+        const validQtItem = typeof codLocal === 'string' && qtItem.trim();
+
+        if (!validLocal) {
             Alert.alert(
                 'Inventário',
-                'Local deve ser informado!'
+                'Localização deve ser informada!'
             );
-            return;
-        }
-        
-        if (nrContagem) {
-            if (nrContagem.length === 0) {
-                Alert.alert(
-                    'Inventário',
-                    'Contagem deve ser informada!'
-                );
-                return;
-            }
-        } else {
-            Alert.alert(
-                'Inventário',
-                'Contagem deve ser informada!'
-            );
+
             return;
         }
 
-        if (codEAN) {
-            if (codEAN.length === 0) {
-                Alert.alert(
-                    'Inventário',
-                    'EAN deve ser informado!'
-                );
-                return;
-            }
-        } else {
+        if (!validEAN && qtItem.trim() !== '0') {
             Alert.alert(
                 'Inventário',
                 'EAN deve ser informado!'
             );
+            
             return;
         }
 
-        if (dtInventario) {
-            if (dtInventario.length === 0) {
-                Alert.alert(
-                    'Inventário',
-                    'Data Inventário deve ser informada!'
-                );
-                return;
-            }
-        } else {
+        if (!validQtItem) {
             Alert.alert(
                 'Inventário',
-                'Data Inventário deve ser informada!'
+                'Quantidade deve ser informada!'
             );
+
             return;
         }
 
-        if (tpCont === '3') {
+        if (itemSelected < 0) {
+            Alert.alert(
+                'Inventário',
+                'Item deve ser selecionado!'
+            );
+
+            return;
+        }
+
+        /* if (tpCont === '3') {
             if (!codLote) {
                 Alert.alert(
                     'Conferência',
@@ -176,45 +184,82 @@ class FormInventario extends Component {
                 );
                 return;
             }
-        } 
+        }  */
+
+        const itemS = listItems[itemSelected];
 
         const propparams = {
             username,
-            codLocal,
-            nrContagem,
-            codEAN,
-            dtInventario,
-            qtItem,
-            codLote
+            usuario: username,
+            data: itemS.data,
+            estabel: itemS.estab,
+            depos: itemS.depos,
+            local: itemS.localiz,
+            lote: itemS.lote,
+            refer: itemS.refer,
+            itCode: itemS.itCode,
+            contagem: itemS.contagem,
+            qtItem
         };
 
         if (this.props.estorno) {
             this.props.doConfirmEst(propparams);
         } else {
-            if (qtItem) {
-                if (qtItem.length === 0 || _.toInteger(qtItem) < 1) {
-                    Alert.alert(
-                        'Conferência',
-                        'Quantidade Item deve ser maior que 0!'
-                    );
-                    return;  
-                }
-            } else {
+            if (_.toInteger(qtItem) < 0) {
                 Alert.alert(
                     'Conferência',
-                    'Quantidade Item deve ser maior que 0!'
+                    'Quantidade Item deve ser maior ou igual 0!'
                 );
-                return; 
+                return;  
             }
 
-            this.props.doConfirm(propparams);
+            const newList = [...listItems];
+            newList.splice(itemSelected, 1);
+
+            this.props.doConfirm(propparams, newList);
+        }
+    }
+
+    focusInField(field, cleanField = false, cleanItem = false) {
+        switch (field) {
+            case 'codlocal':
+                this.codLocal.focus();
+                this.fieldsChanged.codLocal = true;
+                if (cleanField) {
+                    this.props.modificaCodLocal('');
+                }
+                break;
+            case 'codean':
+                this.codEAN.focus();
+                this.fieldsChanged.codEAN = true;
+                if (cleanField) {
+                    this.props.modificaCodEAN('');
+                }
+                break;
+            case 'qtitem':
+                this.qtItem.focus();
+                this.fieldsChanged.qtItem = true;
+                if (cleanField) {
+                    this.props.modificaQtItem('');
+                }
+                break;
+            default:  
+        }
+
+        if (cleanItem) {
+            this.props.modificaCodItem('');
+            this.props.modificaUnidMed('');
+            this.props.modificaCodLote('');
+            this.props.modificaDescItem('');
+            this.props.modificaNrContagem('');
+            this.props.modificaItemSelected(-1);
         }
     }
 
     renderRightButton() {
         return (
             <TouchableOpacity 
-                onPress={() => this.limpaTela()}
+                onPress={() => this.props.cleanInventarioReducerWDT()}
                 style={styles.btClear}
             >
                 <Image
@@ -235,14 +280,23 @@ class FormInventario extends Component {
                         placeholder=""
                         autoCapitalize="none"
                         autoCorrect={false}
+                        ref={(input) => { this.qtItem = input; }}
                         placeholderTextColor='rgba(255,255,255,0.7)'
                         returnKeyType="go"
                         keyboardType="numeric"
                         style={styles.input}
-                        onChangeText={value => this.onChangeQtdText(value)}
                         value={this.props.qtItem}
-                        onBlur={() => this.props.qtItem && this.confirmButton()}
-                        ref={(input) => { this.txtQtde = input; }}
+                        onChangeText={value => {
+                            this.fieldsChanged.qtItem = true; 
+                            this.onChangeQtdText(value);
+                        }}
+                        /* onBlur={() => { 
+                            if (this.props.qtItem && 
+                                this.fieldsChanged.qtItem) {
+                                    this.fieldsChanged.qtItem = false;
+                                    this.confirmButton();
+                                } 
+                        }} */
                     />
                 </View>
             );       
@@ -254,10 +308,12 @@ class FormInventario extends Component {
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
+                { Platform.OS !== 'windows' && <LoadingSpin /> }
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
                         <TextInput
+                            ref={(input) => { this.codLocal = input; }}
                             selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
@@ -266,13 +322,25 @@ class FormInventario extends Component {
                             returnKeyType="next"
                             style={styles.input}
                             value={this.props.codLocal}
-                            onChangeText={this.props.modificaCodLocal}
-                            onSubmitEditing={() => { this.txtEAN.focus(); }}
+                            onChangeText={value => {
+                                this.fieldsChanged.codLocal = true; 
+                                this.props.modificaCodLocal(value); 
+                            }}
+                            onBlur={() => { 
+                                if (this.props.codLocal && 
+                                    this.fieldsChanged.codLocal) {
+                                        this.fieldsChanged.codLocal = false;
+                                        this.props.getInventoryLocal(this.props.codLocal);
+                                } else if (this.fieldsChanged.codLocal && !this.props.codLocal) {
+                                    this.props.cleanInventarioReducerWDT();
+                                }
+                            }}
                         />
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>EAN</Text>
                         <TextInput
+                            ref={(input) => { this.codEAN = input; }}
                             selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
@@ -281,10 +349,25 @@ class FormInventario extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
                             value={this.props.codEAN}
-                            onBlur={() => this.props.codEAN && this.fnBuscaInfoEan()}
-                            ref={(input) => { this.txtEAN = input; }}
+                            onChangeText={value => {
+                                this.fieldsChanged.codEAN = true; 
+                                this.props.modificaCodEAN(value);
+                            }}
+                            onBlur={() => { 
+                                if (this.props.codEAN && 
+                                    this.fieldsChanged.codEAN) {
+                                        this.fieldsChanged.codEAN = false;
+                                        this.onBLurEAN();
+                                } else if (this.fieldsChanged.codEAN && !this.props.codEAN) {
+                                    this.props.modificaCodItem('');
+                                    this.props.modificaUnidMed('');
+                                    this.props.modificaCodLote('');
+                                    this.props.modificaDescItem('');
+                                    this.props.modificaNrContagem('');
+                                    this.props.modificaItemSelected(-1);
+                                }
+                            }}
                         />
                     </View>
                 </FormRow>
@@ -399,11 +482,17 @@ const mapStateToProps = state => (
         codLote: state.InventarioReducer.codLote,
         dtInventario: state.InventarioReducer.dtInventario,
         qtItem: state.InventarioReducer.qtItem,
-        modalVisible: state.InventarioReducer.modalVisible
+        modalVisible: state.InventarioReducer.modalVisible,
+        listItems: state.InventarioReducer.listItems,
+        itemSelected: state.InventarioReducer.itemSelected
     }
 );
 
 export default connect(mapStateToProps, {
+    modificaCodItem,
+    modificaUnidMed,
+    modificaDescItem,
+    modificaItemSelected,
     modificaCodLocal,
     modificaNrContagem,
     modificaCodEAN,
@@ -415,7 +504,7 @@ export default connect(mapStateToProps, {
     cleanInventarioReducerWDT,
     doConfirm,
     doConfirmEst,
-    buscaInfoEAN
+    getInventoryLocal
 })(FormInventario);
 
 const styles = StyleSheet.create({

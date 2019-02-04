@@ -9,7 +9,9 @@ const INITIAL_STATE = {
     codLote: '',
     dtInventario: '',
     qtItem: '',
-    modalVisible: false
+    itemSelected: -1,
+    modalVisible: false,
+    listItems: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -65,10 +67,20 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 qtItem: action.payload 
             };
+        case 'modifica_itemselected_invent':
+            return { 
+                ...state, 
+                itemSelected: action.payload 
+            };
         case 'modifica_modalvisible_invent':
             return { 
                 ...state, 
                 modalVisible: action.payload 
+            };
+        case 'modifica_listitems_invent':
+            return { 
+                ...state, 
+                listItems: action.payload 
             };
         case 'modifica_clean_invent':
             return {
@@ -83,7 +95,9 @@ export default (state = INITIAL_STATE, action) => {
                 codLote: '',
                 dtInventario: '',
                 qtItem: '',
-                modalVisible: false
+                itemSelected: -1,
+                modalVisible: false,
+                listItems: []
             };
         case 'modifica_cleanwdt_invent':
             return {
@@ -97,7 +111,24 @@ export default (state = INITIAL_STATE, action) => {
                 tpCont: '',
                 codLote: '',
                 qtItem: '',
-                modalVisible: false
+                itemSelected: -1,
+                modalVisible: false,
+                listItems: []
+            };
+        case 'modifica_cleanlesslocal_invent':
+            return {
+                ...state,
+                nrContagem: '',
+                codEAN: '',
+                codItem: '',
+                unidMed: '',
+                descItem: '',
+                tpCont: '',
+                codLote: '',
+                qtItem: '',
+                itemSelected: -1,
+                modalVisible: false,
+                listItems: []
             };
         default:
             return state;

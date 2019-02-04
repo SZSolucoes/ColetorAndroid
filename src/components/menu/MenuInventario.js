@@ -55,7 +55,7 @@ class MenuInventario extends Component {
         return (
             <ScrollView style={styles.opcao}>
                 {this.renderInventario('1')}
-                {this.renderInventarioEst('2')}
+                {/*this.renderInventarioEst('2')*/}
             </ScrollView>
         );
     }

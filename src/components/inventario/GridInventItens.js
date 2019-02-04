@@ -13,15 +13,14 @@ import _ from 'lodash';
 import GridInventItensPc from './GridInventItensPc';
 
 import {
-    modificaQtde,
+    modificaCodEAN,
     modificaCodItem,
-    modificaUm,
-    modificaLote,
-    modificaItemDesc,
-    modificaSeparador,
-    modificaLocalizacao,
+    modificaUnidMed,
+    modificaCodLote,
+    modificaDescItem,
+    modificaNrContagem,
     modificaItemSelected 
-} from '../../actions/ConfereSaidaActions';
+} from '../../actions/InventarioActions';
 
 class GridInventItens extends Component {
 
@@ -46,16 +45,17 @@ class GridInventItens extends Component {
         const {
             itCode,
             un,
+            lote,
             itDesc,
-            local
+            contagem
         } = item;
 
-        this.props.modificaQtde('');
+        this.props.modificaCodEAN('');
         this.props.modificaCodItem(itCode);
-        this.props.modificaUm(un);
-        this.props.modificaLote('');
-        this.props.modificaItemDesc(itDesc);
-        this.props.modificaLocalizacao(local);
+        this.props.modificaUnidMed(un);
+        this.props.modificaCodLote(lote);
+        this.props.modificaDescItem(itDesc);
+        this.props.modificaNrContagem(contagem);
         this.props.modificaItemSelected(index);
         return false;
     }
@@ -139,9 +139,6 @@ class GridInventItens extends Component {
                 <Text style={[styles.descricao, styles.sizeFldHeader]}> 
                     Descrição
                 </Text>
-                <Text style={[styles.qtd, styles.sizeFldHeader]}> 
-                    Qtd
-                </Text>
                 <Text style={[styles.localizacao, styles.sizeFldHeader]}> 
                     Local
                 </Text>
@@ -175,18 +172,17 @@ class GridInventItens extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    listItems: state.ConfereSaidaReducer.listItems,
-    itemSelected: state.ConfereSaidaReducer.itemSelected
+    listItems: state.InventarioReducer.listItems,
+    itemSelected: state.InventarioReducer.itemSelected
 });
 
 export default connect(mapStateToProps, {
-    modificaQtde,
+    modificaCodEAN,
     modificaCodItem,
-    modificaUm,
-    modificaLote,
-    modificaItemDesc,
-    modificaSeparador,
-    modificaLocalizacao,
+    modificaUnidMed,
+    modificaCodLote,
+    modificaDescItem,
+    modificaNrContagem,
     modificaItemSelected 
 })(GridInventItens);
 
@@ -212,10 +208,6 @@ const styles = StyleSheet.create({
     descricao: { 
         ...styleField.itemHeaderAndRow, 
         flex: 2.5 
-    },
-    qtd: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 1 
     },
     localizacao: { 
         ...styleField.itemHeaderAndRow, 
