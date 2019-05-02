@@ -99,7 +99,7 @@ class LoginApp extends Component {
             case '3': // Unif
                 return (
                     <Image 
-                        style={styles.logoDw}
+                        style={styles.logoCentelha}
                         source={imgCentelha}
                     />
                 );

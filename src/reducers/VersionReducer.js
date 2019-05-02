@@ -48,8 +48,10 @@ export default (state = INITIAL_STATE, action) => {
 
             if (action.payload === '1') {
                 desc = 'Centelha';
-            } else {
+            } else if (action.payload === '2') {
                 desc = 'DW';
+            } else {
+                desc = 'Unificado';
             }
             return { 
                 ...state, 

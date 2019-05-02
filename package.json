@@ -7,8 +7,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "atob": "^2.1.0",
     "axios": "^0.18.0",
+    "cryptiles": "^4.1.2",
+    "deep-extend": "^0.5.1",
+    "electron": "^1.8.8",
     "lodash": "^4.17.10",
+    "merge": "^1.2.1",
+    "randomatic": "^3.0.0",
     "react": "^16.3.0-alpha.1",
     "react-native": "0.54.1",
     "react-native-datepicker": "^1.7.2",
@@ -19,7 +25,8 @@
     "react-native-windows": "0.54.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "sshpk": "^1.13.2"
   },
   "devDependencies": {
     "babel-jest": "22.4.1",
