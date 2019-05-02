@@ -25,6 +25,17 @@ export const doChangeUrlService = (empresa, ambiente) => {
                 default:
             }
             break;
+        case '3': // Unif
+            switch (ambiente) {
+                case '1': // Ambiente de produção
+                    Axios.defaults.baseURL = 'http://192.168.50.219/cgi-bin/coletorUnif.sh/WService=coletorUnif';
+                    break;
+                case '2': // Ambiente de homologação
+                    Axios.defaults.baseURL = 'http://10.4.0.35/cgi-bin/coletorUnif.sh/WService=coletorUnif';
+                    break;
+                default:
+            }
+            break;
         default:
     }
 };

@@ -43,7 +43,7 @@ class Version extends Component {
     componentDidMount() {
         this.props.iniciaTela();
 
-        const version = '1.4.5';
+        const version = '1.4.6';
         
         this.props.modificaVersao(version);
         this.props.verificaConexao();
@@ -68,7 +68,12 @@ class Version extends Component {
             {
                 key: '2',
                 label: 'DW',
-            }];
+            },
+            {
+                key: '3',
+                label: 'Unificado'
+            }
+        ];
 
         switch (input) {
             case 'ambiente':
@@ -159,6 +164,7 @@ class Version extends Component {
                     >
                         <Picker.Item label='Centelha' value='1' />
                         <Picker.Item label='DW' value='2' />
+                        <Picker.Item label='Unificado' value='3' />
                     </Picker>
                 </View>
                 <View style={[styles.viewLinha, { marginTop: 10 }]}>

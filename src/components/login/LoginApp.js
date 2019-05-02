@@ -96,6 +96,13 @@ class LoginApp extends Component {
                         source={imgDw}
                     />
                 );
+            case '3': // Unif
+                return (
+                    <Image 
+                        style={styles.logoDw}
+                        source={imgCentelha}
+                    />
+                );
             default:
                 return (<View />);
         }
@@ -113,6 +120,12 @@ class LoginApp extends Component {
                 return (
                     <Text style={styles.infoBot}>
                         Coletor de Dados DW
+                    </Text>
+                );
+            case '3': // Unif
+                return (
+                    <Text style={styles.infoBot}>
+                        Coletor de Dados Unificado
                     </Text>
                 );
             default:
