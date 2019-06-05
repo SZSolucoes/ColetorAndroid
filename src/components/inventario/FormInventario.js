@@ -36,7 +36,8 @@ import {
     cleanInventarioReducerWDT,
     doConfirm,
     doConfirmEst,
-    getInventoryLocal
+    getInventoryLocal,
+    buscaContInventario
 } from '../../actions/InventarioActions';
 
 const imgClear = require('../../../resources/imgs/limpa_tela.png');
@@ -259,7 +260,11 @@ class FormInventario extends Component {
     renderRightButton() {
         return (
             <TouchableOpacity 
-                onPress={() => this.props.cleanInventarioReducerWDT()}
+                onPress={() => {
+                    this.props.cleanInventarioReducerWDT();
+                    this.props.buscaContInventario(this.props.username, false);
+                    }
+                }
                 style={styles.btClear}
             >
                 <Image
@@ -333,6 +338,7 @@ class FormInventario extends Component {
                                         this.props.getInventoryLocal(this.props.codLocal);
                                 } else if (this.fieldsChanged.codLocal && !this.props.codLocal) {
                                     this.props.cleanInventarioReducerWDT();
+                                    this.props.buscaContInventario(this.props.username, false);
                                 }
                             }}
                         />
@@ -504,7 +510,8 @@ export default connect(mapStateToProps, {
     cleanInventarioReducerWDT,
     doConfirm,
     doConfirmEst,
-    getInventoryLocal
+    getInventoryLocal,
+    buscaContInventario
 })(FormInventario);
 
 const styles = StyleSheet.create({

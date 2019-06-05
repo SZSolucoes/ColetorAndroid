@@ -1,5 +1,8 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
+import _ from 'lodash';
+import { Actions } from 'react-native-router-flux';
+
 import { store } from '../App';
 
 export const modificaCodLocal = (codLocal) => ({ 
@@ -52,6 +55,9 @@ export const cleanInventarioReducer = () => ({
 export const cleanInventarioReducerWDT = () => ({ 
         type: 'modifica_cleanwdt_invent'
     });
+export const modificaLoadingInvent = () => ({
+        type: 'modifica_loading_invent'
+});
 
 export const doConfirm = (propparams, newList) => dispatch => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: true });
@@ -114,7 +120,7 @@ export const doConfirm = (propparams, newList) => dispatch => {
     })
     .then(response => onConfSuccess(dispatch, response))
     .catch(error => alertConfError(dispatch, error));
-}; */
+}; 
 
 const alertConfError = () => {
     Alert.alert('Erro', 'Erro ao Confirmar');
@@ -128,7 +134,7 @@ const onConfSuccess = (dispatch, response) => {
         Alert.alert('Erro', response.data.message);
     }
 };
-
+*/
 export const getInventoryLocal = (local) => dispatch => {
     Axios.get('/coletor/getInventoryLocal.p', {
         params: {
@@ -174,4 +180,58 @@ const cleanInventarioReducerLessLocal = dispatch => {
     dispatch({
         type: 'modifica_cleanlesslocal_invent'
     });
+};
+
+export const buscaContInventario = (usuario, open) => dispatch => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: true });
+    Axios.get('/coletor/getInventoryCount.p', {
+        params: {
+            usuario
+        },
+        timeout: 30000,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        transformResponse: [(data) => {
+            try {
+                return JSON.parse(data);
+            } catch (e) {
+                return data;
+            }
+        }]
+    })
+    .then(response => buscaSuccess(dispatch, response, open))
+    .catch(() => buscaError(dispatch));
+};
+
+const buscaSuccess = (dispatch, response, open) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+    dispatch({ type: 'busca_invent_ok' });
+    const resposta = _(response.data).value();
+
+    if (response.data.success === 'true') {
+        dispatch({ 
+            type: 'modifica_listitems_invent',
+            payload: response.data.fichas 
+        });
+        if (open === true) {
+            Actions.inventario({ estorno: false });
+        } 
+    } else {
+        Alert.alert(
+            'Erro Inventário',
+            resposta.message ? 
+            resposta.message : 
+            'Ocorreu uma falha interna no servidor, verifique a conexão!'
+        );
+    }
+};
+
+const buscaError = (dispatch) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+    dispatch({ type: 'busca_invent_ok' });
+    Alert.alert(
+        'Erro Inventário',
+        'Erro Conexão!'
+    );
 };

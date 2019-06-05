@@ -19,7 +19,7 @@ import {
     modificaCodLote,
     modificaDescItem,
     modificaNrContagem,
-    modificaItemSelected 
+    modificaItemSelected
 } from '../../actions/InventarioActions';
 
 class GridInventItens extends Component {
@@ -133,15 +133,18 @@ class GridInventItens extends Component {
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
+                <Text style={[styles.localizacao, styles.sizeFldHeader]}> 
+                    Local
+                </Text>
+                <Text style={[styles.localizacao, styles.sizeFldHeader]}> 
+                    Agrupador
+                </Text>
                 <Text style={[styles.codigo, styles.sizeFldHeader]}> 
                     Código
                 </Text>
                 <Text style={[styles.descricao, styles.sizeFldHeader]}> 
                     Descrição
-                </Text>
-                <Text style={[styles.localizacao, styles.sizeFldHeader]}> 
-                    Local
-                </Text>
+                </Text>                
                 <Text style={[styles.lote, styles.sizeFldHeader]}> 
                     Lote
                 </Text>
@@ -183,7 +186,7 @@ export default connect(mapStateToProps, {
     modificaCodLote,
     modificaDescItem,
     modificaNrContagem,
-    modificaItemSelected 
+    modificaItemSelected
 })(GridInventItens);
 
 const styleField = {

@@ -11,6 +11,7 @@ const INITIAL_STATE = {
     qtItem: '',
     itemSelected: -1,
     modalVisible: false,
+    loadingInvent: false,
     listItems: []
 };
 
@@ -81,6 +82,16 @@ export default (state = INITIAL_STATE, action) => {
             return { 
                 ...state, 
                 listItems: action.payload 
+            };
+        case 'modifica_loading_invent':
+            return {
+                ...state,
+                loadingInvent: true
+            };
+        case 'busca_invent_ok':
+            return { 
+                ...state, 
+                loadingInvent: false
             };
         case 'modifica_clean_invent':
             return {

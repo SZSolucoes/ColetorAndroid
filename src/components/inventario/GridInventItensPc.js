@@ -28,14 +28,17 @@ export default class GridInventItensPc extends PureComponent {
                 <View
                     style={[styles.item, itemSelectedStyle, itemStyle]} 
                 >
+                    <Text style={styles.localizacao}>
+                        {item.localiz}
+                    </Text>
+                    <Text style={styles.localizacao}>
+                        {item.agrup}
+                    </Text>
                     <Text style={styles.codigo}>
                         {item.itCode}
                     </Text>
                     <Text style={styles.descricao}>
                         {item.itDescAbrev}
-                    </Text>
-                    <Text style={styles.localizacao}>
-                        {item.localiz}
                     </Text>
                     <Text style={styles.lote}>
                         {item.lote}

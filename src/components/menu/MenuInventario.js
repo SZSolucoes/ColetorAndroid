@@ -5,10 +5,15 @@ import {
     Text,
     Image,
     ScrollView,
-    TouchableHighlight
+    TouchableHighlight,
+    ActivityIndicator
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import {
+    buscaContInventario,
+    modificaLoadingInvent
+} from '../../actions/InventarioActions';
 
 const imgInvent = require('../../../resources/imgs/inventario_64.png');
 const imgInventEst = require('../../../resources/imgs/inventarioestorno.png');
@@ -16,7 +21,11 @@ const imgInventEst = require('../../../resources/imgs/inventarioestorno.png');
 class MenuInventario extends Component {
 
     onPressInvent() {
-        Actions.inventario({ estorno: false });
+        //Actions.inventario({ estorno: false });
+        this.props.modificaLoadingInvent();
+        const usuario = this.props.usuario;
+
+        this.props.buscaContInventario(usuario, true);
     }
 
     onPressInventEst() {
@@ -25,15 +34,25 @@ class MenuInventario extends Component {
     
     renderInventario(key) {
         return (
-            <TouchableHighlight key={key} onPress={this.onPressInvent}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgInvent}
-                    />
-                    <Text style={styles.txtMenu}>Inventário</Text>
-                </View>
-            </TouchableHighlight>
+            <TouchableHighlight key={key} onPress={() => { this.onPressInvent(); }}>        
+                    { this.props.loadingInvent ?
+                        (   
+                            <View style={[styles.menu, { justifyContent: 'center' }]}>
+                                <View style={{ marginVertical: 6 }}>
+                                    <ActivityIndicator size={'large'} />
+                                </View>
+                            </View>
+                        ) : (
+                                <View style={styles.menu}>
+                                    <Image 
+                                        style={styles.imgMenu} 
+                                        source={imgInvent}
+                                    />
+                                    <Text style={styles.txtMenu}>Inventário</Text>
+                                </View> 
+                            )
+                    } 
+            </TouchableHighlight>            
         );
     }
 
@@ -61,9 +80,17 @@ class MenuInventario extends Component {
     }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = state => (
+    {
+        usuario: state.LoginReducer.usuario,
+        loadingInvent: state.InventarioReducer.loadingInvent
+    }
+);
 
-export default connect(mapStateToProps, {})(MenuInventario);
+export default connect(mapStateToProps, { 
+    buscaContInventario, 
+    modificaLoadingInvent 
+})(MenuInventario);
 
 const styles = StyleSheet.create({
     opcao: {
