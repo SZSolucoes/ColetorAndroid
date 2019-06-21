@@ -66,20 +66,20 @@ export const doConfirm = (propparams, newList) => dispatch => {
     })
     .then(res => {
         const validRes = res && res.data && res.data.success;
-
         if (validRes) {
             if (res.data.success === 'true') {
                 dispatch({
-                    type: 'modifica_cleanlesslocal_invent'
+                    type: 'modifica_cleanwdt_invent'
                 });
                 dispatch({
                     type: 'modifica_listitems_invent',
                     payload: newList
                 });
                 dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-                setTimeout(() => {
+                setTimeout(() => {                    
                     Alert.alert('Inventário', res.data.message);
                 }, 500);
+                buscaInventario(propparams.username);
             } else {
                 dispatch({ type: 'modifica_visible_loadingspin', payload: false });
                 setTimeout(() => {
@@ -105,6 +105,10 @@ export const doConfirm = (propparams, newList) => dispatch => {
             );
         }, 500);
     });
+};
+
+const buscaInventario = usuario => {
+    buscaContInventario(usuario, false);
 };
 
 /* export const doConfirmEst = (propparams) => dispatch => {

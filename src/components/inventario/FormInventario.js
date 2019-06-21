@@ -132,7 +132,9 @@ class FormInventario extends Component {
             qtItem,
             listItems,
             itemSelected,
-            username
+            username,
+            tpCont,
+            codLote
         } = this.props;
 
         Keyboard.dismiss();
@@ -177,15 +179,15 @@ class FormInventario extends Component {
             return;
         }
 
-        /* if (tpCont === '3') {
+        if (tpCont === '3') {
             if (!codLote) {
                 Alert.alert(
-                    'Conferência',
+                    'Inventário',
                     'Lote deve ser informado!'
                 );
                 return;
             }
-        }  */
+        }
 
         const itemS = listItems[itemSelected];
 
@@ -327,6 +329,7 @@ class FormInventario extends Component {
                             returnKeyType="next"
                             style={styles.input}
                             value={this.props.codLocal}
+                            onSubmitEditing={() => this.codEAN.focus()}
                             onChangeText={value => {
                                 this.fieldsChanged.codLocal = true; 
                                 this.props.modificaCodLocal(value); 
@@ -356,6 +359,7 @@ class FormInventario extends Component {
                             returnKeyType="go"
                             style={styles.input}
                             value={this.props.codEAN}
+                            onSubmitEditing={() => this.qtItem.focus()}
                             onChangeText={value => {
                                 this.fieldsChanged.codEAN = true; 
                                 this.props.modificaCodEAN(value);
@@ -413,7 +417,6 @@ class FormInventario extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
