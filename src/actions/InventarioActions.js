@@ -79,7 +79,7 @@ export const doConfirm = (propparams, newList) => dispatch => {
                 setTimeout(() => {                    
                     Alert.alert('Inventário', res.data.message);
                 }, 500);
-                buscaInventario(propparams.username);
+                buscaInventario(propparams.username, dispatch);
             } else {
                 dispatch({ type: 'modifica_visible_loadingspin', payload: false });
                 setTimeout(() => {
@@ -107,8 +107,8 @@ export const doConfirm = (propparams, newList) => dispatch => {
     });
 };
 
-const buscaInventario = usuario => {
-    buscaContInventario(usuario, false);
+const buscaInventario = (usuario, dispatch) => {
+    buscaContInventario(usuario, false)(dispatch);
 };
 
 /* export const doConfirmEst = (propparams) => dispatch => {

@@ -7,7 +7,7 @@ const INITIAL_STATE = {
     ean3: '',
     ean4: '',
     ean5: '',
-    eanFetched: []
+    eanFetched: [1, 2, 3, 4, 5]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -67,7 +67,7 @@ export default (state = INITIAL_STATE, action) => {
                 ean3: '',
                 ean4: '',
                 ean5: '',
-                eanFetched: []
+                eanFetched: [1, 2, 3, 4, 5]
             };
         case 'modifica_clean_consultaitemean':
             return {
@@ -80,7 +80,7 @@ export default (state = INITIAL_STATE, action) => {
                 ean3: '',
                 ean4: '',
                 ean5: '',
-                eanFetched: []
+                eanFetched: [1, 2, 3, 4, 5]
             };
         default:
             return state;
