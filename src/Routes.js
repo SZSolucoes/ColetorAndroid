@@ -30,6 +30,8 @@ import ConsultaNF from './components/entrada/consulta/ConsultaNF';
 import ConsultaNFPush from './components/entrada/consulta/ConsultaNFPush';
 import ConsultaLocalizacao from './components/entrada/consulta/localizacao/ConsultaLocalizacao';
 import ConsultaItemEan from './components/entrada/consulta/ConsultaItemEan';
+import ConferenciaPlaca from './components/entrada/conferenciaPlaca/ConferenciaPlaca';
+import FormSelecaoNF from './components/entrada/conferenciaPlaca/FormSelecaoNF';
 
 export default () => (
     <Router>
@@ -39,8 +41,8 @@ export default () => (
         >
             <Scene 
                 key='loginApp' 
-                component={LoginApp} 
-                initial
+                component={LoginApp}
+                initial                               
                 hideNavBar
             />
             <Scene 
@@ -53,7 +55,7 @@ export default () => (
             />
             <Scene 
                 key='menuApp' 
-                component={MenuApp} 
+                component={MenuApp}                 
                 title="Menu" 
                 hideNavBar
             />
@@ -265,6 +267,23 @@ export default () => (
                 key='consultaItemEan' 
                 component={ConsultaItemEan} 
                 title="EAN" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='conferenciaPlaca' 
+                 
+                component={ConferenciaPlaca} 
+                title="Conferência Placa" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='formSelecaoNF'
+                component={FormSelecaoNF} 
+                title="Seleção NF" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

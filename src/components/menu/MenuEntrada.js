@@ -12,12 +12,14 @@ import {
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { 
-    modificaLoadingConferencia
+    modificaLoadingConferencia,
+    modificaLoadingConfPlaca
 } from '../../actions/LoginActions';
 import {
     buscaNotaConferencia
 } from '../../actions/ConfereActions';
 
+const imgConfPlaca = require('../../../resources/imgs/conferencia-volume-64.png');
 const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
 const imgArmazen = require('../../../resources/imgs/armazenamento.png');
 const imgRelEan = require('../../../resources/imgs/relacionaean.png');
@@ -25,6 +27,10 @@ const imgTransEnt = require('../../../resources/imgs/transf_entrada.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
 
 class MenuEntrada extends Component {
+    onPressConfPlaca() {
+        this.props.modificaLoadingConfPlaca();
+        Actions.conferenciaPlaca();
+    }
     onPressConf() {
         this.props.modificaLoadingConferencia();
         const usuario = this.props.usuario;
@@ -42,6 +48,31 @@ class MenuEntrada extends Component {
     }
     onPressImpressao() {
         Actions.impressao();
+    }
+    renderConfereciaPlaca(key) {
+        if (this.props.logConfPlaca) {
+            return (
+                <TouchableHighlight key={key} onPress={() => { this.onPressConfPlaca(); }}>        
+                        { this.props.loadingConfPlaca ?
+                            (   
+                                <View style={[styles.menu, { justifyContent: 'center' }]}>
+                                    <View style={{ marginVertical: 6 }}>
+                                        <ActivityIndicator size={'large'} />
+                                    </View>
+                                </View>
+                            ) : (
+                                    <View style={styles.menu}>
+                                        <Image 
+                                            style={styles.imgMenu} 
+                                            source={imgConfPlaca}
+                                        />
+                                        <Text style={styles.txtMenu}>Conferência Placa</Text>
+                                    </View> 
+                                )
+                        } 
+                </TouchableHighlight>
+            );
+        }
     }
     renderConferecia(key) {
         if (this.props.logConfReceb) {
@@ -129,6 +160,7 @@ class MenuEntrada extends Component {
             <ScrollView style={styles.opcao}>
                 { Platform.OS !== 'windows' ? (
                     [
+                        this.renderConfereciaPlaca('6'),
                         this.renderConferecia('1'),
                         this.renderArmazenamento('2'),
                         this.renderTransferencia('3'),
@@ -145,6 +177,7 @@ class MenuEntrada extends Component {
 
 const mapStateToProps = state => (
         {
+            logConfPlaca: state.LoginReducer.logConfPlaca,
             logConfReceb: state.LoginReducer.logConfReceb,
             logEstoque: state.LoginReducer.logEstoque,
             logDespacho: state.LoginReducer.logDespacho,
@@ -160,6 +193,7 @@ const mapStateToProps = state => (
 
 export default connect(mapStateToProps, { 
     modificaLoadingConferencia,
+    modificaLoadingConfPlaca,
     buscaNotaConferencia
 })(MenuEntrada);
 

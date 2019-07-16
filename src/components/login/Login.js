@@ -147,6 +147,7 @@ const mapStateToProps = state => (
         refreshSenha: state.LoginReducer.refreshSenha,
         erroLogin: state.LoginReducer.erroLogin,
         logConfReceb: state.LoginReducer.logConfReceb,
+        logConfPlaca: state.LoginReducer.logConfPlaca,
         logEstoque: state.LoginReducer.logEstoque,
         logDespacho: state.LoginReducer.logDespacho,
         logSeparacao: state.LoginReducer.logSeparacao,
