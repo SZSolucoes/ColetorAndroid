@@ -33,8 +33,12 @@ export default (state = INITIAL_STATE, action) => {
 
             if (action.payload === '1') {
                 desc = 'Produção';
-            } else {
+            } else if (action.payload === '2') {
                 desc = 'Homologação';
+            } else if (action.payload === '3') {
+                desc = 'Unificado';
+            } else if (action.payload === '4') {
+                desc = 'Unificado Teste';
             }
             return { 
                 ...state, 
@@ -50,8 +54,6 @@ export default (state = INITIAL_STATE, action) => {
                 desc = 'Centelha';
             } else if (action.payload === '2') {
                 desc = 'DW';
-            } else {
-                desc = 'Unificado';
             }
             return { 
                 ...state, 

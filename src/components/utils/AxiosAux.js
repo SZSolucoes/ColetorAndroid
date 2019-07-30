@@ -11,6 +11,12 @@ export const doChangeUrlService = (empresa, ambiente) => {
                 case '2': // Ambiente de homologação
                     Axios.defaults.baseURL = 'http://10.4.0.35/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
                     break;
+                case '3': // Ambiente
+                    Axios.defaults.baseURL = 'http://192.168.51.153/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
+                    break;
+                case '4': // Ambiente Unificado
+                    Axios.defaults.baseURL = 'http://192.168.50.203/cgi-bin/coletorCentelha.sh/WService=coletorCentelha';
+                    break;
                 default:
             }
             break;
@@ -21,17 +27,6 @@ export const doChangeUrlService = (empresa, ambiente) => {
                     break;
                 case '2': // Ambiente de homologação
                     Axios.defaults.baseURL = 'http://10.4.0.35/cgi-bin/coletorDW.sh/WService=coletorDW';
-                    break;
-                default:
-            }
-            break;
-        case '3': // Unif
-            switch (ambiente) {
-                case '1': // Ambiente de produção
-                    Axios.defaults.baseURL = 'http://192.168.50.219/cgi-bin/coletorUnif.sh/WService=coletorUnif';
-                    break;
-                case '2': // Ambiente de homologação
-                    Axios.defaults.baseURL = 'http://10.4.0.35/cgi-bin/coletorUnif.sh/WService=coletorUnif';
                     break;
                 default:
             }

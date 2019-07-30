@@ -38,6 +38,12 @@ const loginSuccess = (dispatch, response, ambiente) => {
                 'LOGIN NO AMBIENTE DE HOMOLOGAÇÃO'
             );
         }
+        if (ambiente === '4') {
+            Alert.alert(
+                'UNIFICADO TESTE',
+                'LOGIN NO AMBIENTE UNIFICADO TESTE'
+            );
+        }
         dispatch({ type: 'login_ok_log' });
         dispatch({ type: 'modifica_refreshsenha_log', payload: false });
         dispatch({ type: 'modifica_refreshsenha_log', payload: true });
