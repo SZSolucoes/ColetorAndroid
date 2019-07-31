@@ -19,6 +19,7 @@ import ListaSeparacaoReducer from './ListaSeparacaoReducer';
 import ConsultaLocalizacaoReducer from './ConsultaLocalizacaoReducer';
 import LoadingSpinReducer from './LoadingSpinReducer';
 import ConsultaItemEanReducer from './ConsultaItemEanReducer';
+import CorteCabosReducer from './CorteCabosReducer';
 
 export default combineReducers({
     LoginReducer,
@@ -40,5 +41,6 @@ export default combineReducers({
     ListaSeparacaoReducer,
     ConsultaLocalizacaoReducer,
     LoadingSpinReducer,
-    ConsultaItemEanReducer
+    ConsultaItemEanReducer,
+    CorteCabosReducer
 });

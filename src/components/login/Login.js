@@ -153,6 +153,7 @@ const mapStateToProps = state => (
         logConfSeparacao: state.LoginReducer.logConfSeparacao,
         logTransferencia: state.LoginReducer.logTransferencia,
         logArmazenamento: state.LoginReducer.logArmazenamento,
+        logCorteCabos: state.LoginReducer.logCorteCabos,
         logTodos: state.LoginReducer.logTodos,
         loadingLogin: state.LoginReducer.loadingLogin,
         ambiente: state.VersionReducer.ambiente,

@@ -30,6 +30,8 @@ import ConsultaNF from './components/entrada/consulta/ConsultaNF';
 import ConsultaNFPush from './components/entrada/consulta/ConsultaNFPush';
 import ConsultaLocalizacao from './components/entrada/consulta/localizacao/ConsultaLocalizacao';
 import ConsultaItemEan from './components/entrada/consulta/ConsultaItemEan';
+import CorteCabos from './components/saida/corteCabos/CorteCabos';
+import ListaCortes from './components/saida/corteCabos/ListaCortes';
 
 export default () => (
     <Router>
@@ -152,6 +154,22 @@ export default () => (
                 key='impressao' 
                 component={ImpressaoEAN} 
                 title="Impressao EAN" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='corteCabos' 
+                component={CorteCabos} 
+                title="Corte de Cabos" 
+                titleStyle={styles.title}
+                leftButtonTextStyle={styles.btLeft}
+                backButtonTintColor="white"
+            />
+            <Scene 
+                key='listaCortes' 
+                component={ListaCortes} 
+                title="Corte de Cabos" 
                 titleStyle={styles.title}
                 leftButtonTextStyle={styles.btLeft}
                 backButtonTintColor="white"

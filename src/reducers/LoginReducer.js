@@ -9,6 +9,7 @@ const INITIAL_STATE = {
     logConfSeparacao: '',
     logTransferencia: '',
     logArmazenamento: '',
+    logCorteCabos: '',
     logTodos: '',
     loadingLogin: false,
     loadingConf: false,
@@ -70,6 +71,7 @@ export default (state = INITIAL_STATE, action) => {
                 logConfSeparacao: false,
                 logTransferencia: false,
                 logArmazenamento: false,
+                logCorteCabos: false,
                 logTodos: false                
             };
         case 'atualiza_permissao_log': {
@@ -83,6 +85,7 @@ export default (state = INITIAL_STATE, action) => {
                     logConfSeparacao: true,
                     logTransferencia: true,
                     logArmazenamento: true,
+                    logCorteCabos: true,
                     logTodos: true
                 };
             } 
@@ -95,7 +98,8 @@ export default (state = INITIAL_STATE, action) => {
                 logConfSeparacao: action.payload.logConfSeparacao,
                 logTransferencia: action.payload.logTransferencia,
                 logArmazenamento: action.payload.logArmazenamento,
-                logTodos: action.payload.logTodos
+                logTodos: action.payload.logTodos,
+                logCorteCabos: action.payload.logCorteCabos
             };
         }
         default:

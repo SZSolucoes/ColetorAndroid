@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { store } from '../../App';
 import { fetchListItensSep } from '../../actions/ListaSeparacaoActions';
+import { fetchListCortes } from '../../actions/CorteCabosActions';
 
 const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
 const imgConfCheck = require('../../../resources/imgs/conferencia-volume-64.png');
@@ -21,6 +22,7 @@ const imgDespacho = require('../../../resources/imgs/despacho_64.png');
 const imgListSep = require('../../../resources/imgs/lista_separacao_64.png');
 const imgRelEan = require('../../../resources/imgs/relacionaean.png');
 const imgPrinter = require('../../../resources/imgs/impressao_etiq.png');
+const imgCorte = require('../../../resources/imgs/cortecabos.png');
 
 class MenuSaida extends Component {
 
@@ -34,6 +36,7 @@ class MenuSaida extends Component {
         this.onPressConsolid = this.onPressConsolid.bind(this);
         this.onPressDespacho = this.onPressDespacho.bind(this);
         this.onPressImpressao = this.onPressImpressao.bind(this);
+        this.onPressCorte = this.onPressCorte.bind(this);
     }
     
     onPressListSep() {
@@ -57,6 +60,10 @@ class MenuSaida extends Component {
     }
     onPressImpressao() {
         Actions.impressao();
+    }
+    onPressCorte() {
+        const userName = store.getState().LoginReducer.usuario;
+        this.props.fetchListCortes(userName);
     }
     renderListaSep(key) {
         return (
@@ -161,23 +168,49 @@ class MenuSaida extends Component {
             </TouchableHighlight>
         );
     }
+    renderCorte(key) {
+        return (
+            <TouchableHighlight key={key} onPress={this.onPressCorte}>
+                
+                    { this.props.loadingCortes ?
+                        (   
+                            <View style={[styles.menu, { justifyContent: 'center' }]}>
+                                <View style={{ marginVertical: 6 }}>
+                                    <ActivityIndicator size={'large'} />
+                                </View>
+                            </View>
+                        ) : (
+                                <View style={styles.menu}>
+                                    <Image 
+                                        style={styles.imgMenu} 
+                                        source={imgCorte}
+                                    />
+                                    <Text style={styles.txtMenu}>Corte de Cabos</Text>
+                                </View> 
+                            )
+                    }
+                
+            </TouchableHighlight>
+        );
+    }
     render() {
         return (
             <ScrollView style={styles.opcao}>                
                 { Platform.OS !== 'windows' ? (
                     [
-                        this.props.logSeparacao && this.renderListaSep('1'),
-                        this.props.logConfSeparacao && this.renderConferencia('2'),
-                        this.props.logConfSeparacao && this.renderConferenciaVolume('3'),
-                        this.renderConsolid('4'),
+                        this.props.logCorteCabos && this.renderCorte('1'),
+                        this.props.logSeparacao && this.renderListaSep('2'),
+                        this.props.logConfSeparacao && this.renderConferencia('3'),
+                        this.props.logConfSeparacao && this.renderConferenciaVolume('4'),
+                        this.renderConsolid('5'),
                         //this.renderDespacho('5'),
                         this.renderRelacionaEan('6'),
                         this.renderImpressao('7')
                     ]
                 ) : (
                     [
-                        this.props.logConfSeparacao && this.renderConferencia('2'),
-                        this.props.logConfSeparacao && this.renderConferenciaVolume('3')
+                        this.props.logConfSeparacao && this.renderConferencia('3'),
+                        this.props.logConfSeparacao && this.renderConferenciaVolume('4')
                     ]
                 )}
             </ScrollView>
@@ -195,13 +228,17 @@ const mapStateToProps = state => (
             logTransferencia: state.LoginReducer.logTransferencia,
             logArmazenamento: state.LoginReducer.logArmazenamento,
             logTodos: state.LoginReducer.logTodos,
-            loadingListSep: state.ListaSeparacaoReducer.loadingListSep
+            loadingListSep: state.ListaSeparacaoReducer.loadingListSep,
+            logCorteCabos: state.LoginReducer.logCorteCabos,
+            loadingCortes: state.CorteCabosReducer.loadingCortes,
+            usuario: state.LoginReducer.usuario
         }
 );
 
 
 export default connect(mapStateToProps, {
-    fetchListItensSep
+    fetchListItensSep,
+    fetchListCortes
 })(MenuSaida);
 
 const styles = StyleSheet.create({
