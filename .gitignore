@@ -61,3 +61,5 @@ android/.settings/org.eclipse.buildship.core.prefs
 android/app/keySZ
 android/app/build.gradle
 android/gradle.properties
+android/app/src/main/assets/index.android.bundle
+android/app/src/main/assets/index.android.bundle.meta

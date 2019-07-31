@@ -201,18 +201,8 @@ class FormInventario extends Component {
 
         Keyboard.dismiss();
 
-        const validLocal = typeof codLocal === 'string' && codLocal.trim();
         const validEAN = typeof codLocal === 'string' && codEAN.trim();
         const validQtItem = typeof codLocal === 'string' && qtItem.trim();
-
-        if (!validLocal) {
-            Alert.alert(
-                'Inventário',
-                'Localização deve ser informada!'
-            );
-
-            return;
-        }
 
         if (!validEAN && qtItem.trim() !== '0') {
             Alert.alert(

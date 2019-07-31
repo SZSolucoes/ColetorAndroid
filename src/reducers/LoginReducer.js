@@ -2,6 +2,7 @@ const INITIAL_STATE = {
     usuario: '',
     senha: '',
     erroLogin: '',
+    logConfPlaca: '',
     logConfReceb: '',
     logEstoque: '',
     logDespacho: '',
@@ -38,6 +39,11 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 loadingLogin: true 
             };
+        case 'modifica_loading_conf_placa':
+                return { 
+                    ...state, 
+                    loadingConfPlaca: true 
+                };
         case 'modifica_loading_conf':
             return { 
                 ...state, 
@@ -63,7 +69,8 @@ export default (state = INITIAL_STATE, action) => {
             };
         case 'inicia_permissao_log':
             return { 
-                ...state, 
+                ...state,
+                logConfPlaca: false, 
                 logConfReceb: false,
                 logEstoque: false,
                 logDespacho: false,
@@ -77,7 +84,8 @@ export default (state = INITIAL_STATE, action) => {
         case 'atualiza_permissao_log': {
             if (action.payload.logTodos === true) {
                 return { 
-                    ...state, 
+                    ...state,
+                    logConfPlaca: true, 
                     logConfReceb: true,
                     logEstoque: true,
                     logDespacho: true,
@@ -90,7 +98,8 @@ export default (state = INITIAL_STATE, action) => {
                 };
             } 
             return { 
-                ...state, 
+                ...state,
+                logConfPlaca: action.payload.logConfPlaca, 
                 logConfReceb: action.payload.logConfReceb,
                 logEstoque: action.payload.logEstoque,
                 logDespacho: action.payload.logDespacho,

@@ -220,6 +220,7 @@ class MenuSaida extends Component {
 
 const mapStateToProps = state => (
         {
+            logConfPlaca: state.LoginReducer.logConfPlaca,
             logConfReceb: state.LoginReducer.logConfReceb,
             logEstoque: state.LoginReducer.logEstoque,
             logDespacho: state.LoginReducer.logDespacho,

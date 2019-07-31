@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react';
 import { 
     ScrollView,
@@ -12,6 +13,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import _ from 'lodash';
 
 import FormRow from '../../utils/FormRow';
 import { 
@@ -29,8 +31,13 @@ import {
     modificaCodItem,
 } from '../../../actions/RelEanActions';
 
+import { 
+    imprimeEtiquetaEAN
+} from '../../../actions/ImpressaoActions';
+
 import LoadingSpin from '../../utils/LoadingSpin';
 import imgClear from '../../../../resources/imgs/limpa_tela.png';
+import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
 
 class ConsultaItemEan extends Component {
 
@@ -40,11 +47,21 @@ class ConsultaItemEan extends Component {
         this.renderEans = this.renderEans.bind(this);
         this.doFetchEan = this.doFetchEan.bind(this);
         this.modificaEan = this.modificaEan.bind(this);
+        this.modificaQtdEtiq = this.modificaQtdEtiq.bind(this);
         this.onPressRelacionar = this.onPressRelacionar.bind(this);
+        this.onPressPrint = this.onPressPrint.bind(this);
         this.renderClearButton = this.renderClearButton.bind(this);
 
         this.fieldsChanged = {
             itCode: false
+        };
+
+        this.state = {
+            qtdEtiqEan1: '',
+            qtdEtiqEan2: '',
+            qtdEtiqEan3: '',
+            qtdEtiqEan4: '',
+            qtdEtiqEan5: ''
         };
     }
 
@@ -56,6 +73,54 @@ class ConsultaItemEan extends Component {
         this.props.modificaClean();
         this.props.modificaCodEan('');
         this.props.modificaCodItem('');
+    }
+
+    onPressPrint(codEAN, qtdEtiq) {
+        const { usuario } = this.props;
+
+        if (codEAN) {
+            if (codEAN.length === 0) {
+                Alert.alert(
+                    'Impressão Etiqueta',
+                    'EAN deve ser informado!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Impressão Etiqueta',
+                'EAN deve ser informado!'
+            );
+            return;
+        }
+        if (qtdEtiq) {
+            if (qtdEtiq.length === 0 || _.toInteger(qtdEtiq) < 1) {
+                Alert.alert(
+                    'Impressão Etiqueta',
+                    'Quantidade Etiqueta deve ser maior que 0!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Impressão Etiqueta',
+                'Quantidade Etiqueta deve ser maior que 0!'
+            );
+            return;
+        }
+
+        Alert.alert(
+            'Aviso', 
+            'Confirma a impressão ?',
+            [
+                { text: 'Cancelar', onPress: () => false },
+                { 
+                    text: 'Sim', 
+                    onPress: () => this.props.imprimeEtiquetaEAN(usuario, codEAN, qtdEtiq)
+                }
+            ],
+            { cancelable: true }
+        );
     }
 
     onPressRelacionar() {
@@ -130,21 +195,44 @@ class ConsultaItemEan extends Component {
         }
     }
 
+    modificaQtdEtiq(label, value) {
+        const txtParsed = value.replace(/[^0-9]/g, '');
+
+        switch (label) {
+            case 'EAN 1':
+                this.setState({ qtdEtiqEan1: txtParsed });
+                break;
+            case 'EAN 2':
+                this.setState({ qtdEtiqEan2: txtParsed });
+                break;
+            case 'EAN 3':
+                this.setState({ qtdEtiqEan3: txtParsed });
+                break;
+            case 'EAN 4':
+                this.setState({ qtdEtiqEan4: txtParsed });
+                break;
+            case 'EAN 5':
+                this.setState({ qtdEtiqEan5: txtParsed });
+                break;
+            default:
+        }
+    }
+
     renderEans() {
         const { eanFetched } = this.props;
         const eans = [
-            { label: 'EAN 1', value: this.props.ean1, fetchedNum: 1 },
-            { label: 'EAN 2', value: this.props.ean2, fetchedNum: 2 },
-            { label: 'EAN 3', value: this.props.ean3, fetchedNum: 3 },
-            { label: 'EAN 4', value: this.props.ean4, fetchedNum: 4 },
-            { label: 'EAN 5', value: this.props.ean5, fetchedNum: 5 }, 
+            { label: 'EAN 1', value: this.props.ean1, qtdEtiq: this.state.qtdEtiqEan1, fetchedNum: 1 },
+            { label: 'EAN 2', value: this.props.ean2, qtdEtiq: this.state.qtdEtiqEan2, fetchedNum: 2 },
+            { label: 'EAN 3', value: this.props.ean3, qtdEtiq: this.state.qtdEtiqEan3, fetchedNum: 3 },
+            { label: 'EAN 4', value: this.props.ean4, qtdEtiq: this.state.qtdEtiqEan4, fetchedNum: 4 },
+            { label: 'EAN 5', value: this.props.ean5, qtdEtiq: this.state.qtdEtiqEan5, fetchedNum: 5 }
         ];
 
         return eans.map((item, index) => {
             if (!eanFetched.includes(item.fetchedNum)) {
                 return (
                     <FormRow key={index}>
-                        <View>
+                        <View style={{ flex: 3 }}>
                             <Text style={styles.txtLabel}>{item.label}</Text>
                             <View style={styles.viewSection}>
                                 <Text
@@ -156,6 +244,35 @@ class ConsultaItemEan extends Component {
                                 </Text>
                             </View>
                         </View>
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.txtLabel}>Qtde Etiq</Text>
+                            <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
+                                <View style={{ flex: 1, marginRight: 5 }}>
+                                    <TextInput
+                                        placeholder=""
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                        keyboardType="numeric"
+                                        placeholderTextColor='rgba(255,255,255,0.7)'
+                                        returnKeyType="next"
+                                        style={styles.input}
+                                        onChangeText={valueTxt => this.modificaQtdEtiq(item.label, valueTxt)}
+                                        value={item.qtdEtiq}
+                                    />
+                                </View>
+                                <View style={{ flex: 1 }}>
+                                    <TouchableOpacity
+                                        style={styles.btSearch}
+                                        onPress={() => { this.onPressPrint(item.value, item.qtdEtiq); }}
+                                    >
+                                        <Image
+                                            source={imgPrinter}
+                                            style={{ width: 35, height: 35 }}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
                     </FormRow>
                 );
             }
@@ -164,12 +281,12 @@ class ConsultaItemEan extends Component {
                     <View>
                         <Text style={styles.txtLabel}>{item.label}</Text>
                         <TextInput
-                                selectTextOnFocus
-                                autoCapitalize={'none'}
-                                autoCorrect={false}
-                                style={styles.input}
-                                value={item.value}
-                                onChangeText={(value) => this.modificaEan(item.label, value)}
+                            selectTextOnFocus
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            style={styles.input}
+                            value={item.value}
+                            onChangeText={(value) => this.modificaEan(item.label, value)}
                         />
                     </View>
                 </FormRow>
@@ -265,7 +382,8 @@ const mapStateToProps = state => ({
     ean3: state.ConsultaItemEanReducer.ean3,
     ean4: state.ConsultaItemEanReducer.ean4,
     ean5: state.ConsultaItemEanReducer.ean5,
-    eanFetched: state.ConsultaItemEanReducer.eanFetched
+    eanFetched: state.ConsultaItemEanReducer.eanFetched,
+    usuario: state.LoginReducer.usuario
 });
 
 const styles = StyleSheet.create({
@@ -338,4 +456,5 @@ export default connect(mapStateToProps, {
     modificaEan5,
     modificaCodEan,
     modificaCodItem,
+    imprimeEtiquetaEAN
 })(ConsultaItemEan);

@@ -55,7 +55,7 @@ class MenuConsulta extends Component {
 
     onPressConsultaEAN() {
         Actions.consultaItemEan();
-    }
+    }    
     
     renderConsultaEstoq() {
         if (this.props.logEstoque) {

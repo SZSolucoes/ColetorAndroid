@@ -50,14 +50,14 @@ class FormImpressao extends Component {
             if (qtEtiq.length === 0 || _.toInteger(qtEtiq) < 1) {
                 Alert.alert(
                     'Impressão Etiqueta',
-                    'Quantidade Etiqueta deve maior que 0!'
+                    'Quantidade Etiqueta deve ser maior que 0!'
                 );
                 return;
             }
         } else {
             Alert.alert(
                 'Impressão Etiqueta',
-                'Quantidade Etiqueta deve maior que 0!'
+                'Quantidade Etiqueta deve ser maior que 0!'
             );
             return;
         }

@@ -16,6 +16,9 @@ export const modificaLoadingLogin = () => ({
 export const modificaLoadingConferencia = () => ({
         type: 'modifica_loading_conf'
 });
+export const modificaLoadingConfPlaca = () => ({
+    type: 'modifica_loading_conf_placa'
+});
 export const iniciaPermissao = () => ({
         type: 'inicia_permissao_log'
 });
