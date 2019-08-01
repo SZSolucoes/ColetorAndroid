@@ -166,7 +166,6 @@ class FormConferenciaPlaca extends Component {
                         <TextInput
                             placeholder=""                           
                             autoCapitalize="none"
-                            keyboardType="numeric"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             style={[styles.input]}
@@ -276,7 +275,6 @@ class FormConferenciaPlaca extends Component {
                         <TextInput
                             placeholder=""                           
                             autoCapitalize="none"
-                            keyboardType="numeric"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             style={[styles.input, {textAlign: 'left'}]}
