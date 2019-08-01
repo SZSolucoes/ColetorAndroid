@@ -59,7 +59,16 @@ class Version extends Component {
             {
                 key: '2',
                 label: 'Homologação',
-            }];
+            },
+            {
+                key: '3',
+                label: 'Unificado'
+            },
+            {
+                key: '4',
+                label: 'Unificado Teste'
+            }
+        ];
         const optionsEmpresa = [
             {
                 key: '1',
@@ -68,10 +77,6 @@ class Version extends Component {
             {
                 key: '2',
                 label: 'DW',
-            },
-            {
-                key: '3',
-                label: 'Unificado'
             }
         ];
 
@@ -164,7 +169,6 @@ class Version extends Component {
                     >
                         <Picker.Item label='Centelha' value='1' />
                         <Picker.Item label='DW' value='2' />
-                        <Picker.Item label='Unificado' value='3' />
                     </Picker>
                 </View>
                 <View style={[styles.viewLinha, { marginTop: 10 }]}>
@@ -184,6 +188,8 @@ class Version extends Component {
                     >
                         <Picker.Item label='Produção' value='1' />
                         <Picker.Item label='Homologação' value='2' />
+                        <Picker.Item label='Unificado' value='3' />
+                        <Picker.Item label='Unificado Teste' value='4' />
                     </Picker>
                 </View>
             </View>

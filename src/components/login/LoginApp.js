@@ -122,12 +122,6 @@ class LoginApp extends Component {
                         Coletor de Dados DW
                     </Text>
                 );
-            case '3': // Unif
-                return (
-                    <Text style={styles.infoBot}>
-                        Coletor de Dados Unificado
-                    </Text>
-                );
             default:
                 return (<View />);
         }

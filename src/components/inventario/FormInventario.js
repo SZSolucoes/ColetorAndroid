@@ -114,6 +114,68 @@ class FormInventario extends Component {
                 this.props.modificaNrContagem(contagem);
                 this.props.modificaItemSelected(indexItemEAN);
     
+                //this.focusInField('qtitem'); 
+            } else {
+                this.focusInField('codean', false, true); 
+                Alert.alert(
+                    'Inventário',
+                    'EAN Não Localizado!'
+                );
+            }
+        }
+    }
+
+    onBlurLote() {
+        const { codEAN, listItems, codLote, tpCont } = this.props;
+
+        Keyboard.dismiss();
+
+        if (!(typeof codEAN === 'string' && codEAN.trim())) {
+            Alert.alert(
+                'Erro EAN',
+                'Código EAN deve ser informado!'
+            );
+            return;
+        }
+
+        if (tpCont === '3') {
+            if (!codLote) {
+                Alert.alert(
+                    'Inventário',
+                    'Lote deve ser informado!'
+                );
+                return;
+            }
+        }
+
+        if (this.props.listItems.length > 0) {
+            const itensEAN = _.values(listItems);
+            const indexItemEAN = _.findIndex(itensEAN, (itemCheck) => (
+                (itemCheck.ean1 === codEAN && itemCheck.lote === codLote) ||
+                (itemCheck.ean2 === codEAN && itemCheck.lote === codLote) ||
+                (itemCheck.ean3 === codEAN && itemCheck.lote === codLote) ||
+                (itemCheck.ean4 === codEAN && itemCheck.lote === codLote) ||
+                (itemCheck.ean5 === codEAN && itemCheck.lote === codLote)
+            ));
+            
+            Keyboard.dismiss();
+            
+            if (indexItemEAN !== -1) {
+                const {
+                    itCode,
+                    un,
+                    lote,
+                    itDesc,
+                    contagem
+                } = itensEAN[indexItemEAN];
+        
+                this.props.modificaCodItem(itCode);
+                this.props.modificaUnidMed(un);
+                this.props.modificaCodLote(lote);
+                this.props.modificaDescItem(itDesc);
+                this.props.modificaNrContagem(contagem);
+                this.props.modificaItemSelected(indexItemEAN);
+    
                 this.focusInField('qtitem'); 
             } else {
                 this.focusInField('codean', false, true); 
@@ -349,7 +411,7 @@ class FormInventario extends Component {
                             returnKeyType="go"
                             style={styles.input}
                             value={this.props.codEAN}
-                            onSubmitEditing={() => this.qtItem.focus()}
+                            onSubmitEditing={() => this.codLote.focus()}
                             onChangeText={value => {
                                 this.fieldsChanged.codEAN = true; 
                                 this.props.modificaCodEAN(value);
@@ -400,9 +462,10 @@ class FormInventario extends Component {
                             underlineColorAndroid={'transparent'}
                         />
                     </View>
-                    <View pointerEvents="none" style={{ flex: 3.7 }}>
+                    <View style={{ flex: 3.7 }}>
                         <Text style={styles.txtLabel}>Lote</Text>
                         <TextInput
+                            ref={(input) => { this.codLote = input; }}
                             selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
@@ -411,6 +474,10 @@ class FormInventario extends Component {
                             returnKeyType="next"
                             style={styles.input}
                             value={this.props.codLote}
+                            onChangeText={value => {
+                                this.props.modificaCodLote(value);
+                            }}
+                            onBlur={() => { this.onBlurLote(); }}
                         />
                     </View>
                 </FormRow>
