@@ -17,12 +17,24 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import { 
-    modificaCodCorte
+    modificaCodCorte,
+    modificaEquipamento,
+    modificaCodEAN,
+    modificaLocalizacao,
+    modificaQtdItem,
+    modificaObrigatorio,
+    modificaCodItem,
+    modificaDescItem,
+    modificaUn,
+    modificaLote,
+    modificaListaItem,
+    modificaCorteSelec,
+    iniciaTela,
+    efetivaCorteCabos,
+    imprimeEtiquetaCorte
 } from '../../../actions/CorteCabosActions';
 
-import {
-    imprimeEtiquetaEAN
-} from '../../../actions/ImpressaoActions';
+import ListaItem from './ListaItemCorte';
 
 import LoadingSpin from '../../utils/LoadingSpin';
 
@@ -35,63 +47,49 @@ class FormCorteCabos extends Component {
         super();
      
         this.fieldsChanged = {
-            cdCorte: false
+            cdCorte: false,
+            eqpto: false,
+            qtitem: false,
+            ean: false
         };
     }
     componentDidMount() {
         this.setState({ ...this.state });
-        console.log(this.props.listaCortes);
-        //this.props.iniciaTela();
+        this.props.iniciaTela();
     }    
-    /*onPressEfetivar() {
+    onPressCortar() {
         const { 
-            usuario, 
-            notaConfere, 
-            codEAN, 
-            qtItem, 
-            batismo,
-            pesoItem,
-            largura,
-            altura,
-            comprimento,
-            listaItemLote
+            usuario,
+            codCorte,
+            equipamento,
+            codEAN,
+            qtdItem,
+            corteSelec
         } = this.props;
 
-        const conferencia = {
-            batismo,
+        const corte = {
+            codCorte,
+            equipamento,
             codEAN,
-            qtItem,
-            pesoItem,
-            largura,
-            altura,
-            comprimento,
-            listaItemLote
+            qtdItem
         };
 
-        let itemConfere = this.props.itemConfere;
-
-        let qtConferida = 0;
+        let itemCorte = this.props.itemSelec;
 
         Keyboard.dismiss();
 
-        if (batismo) {
-            if (batismo.length === 0) {
+        if (codCorte) {
+            if (codCorte.length === 0) {
                 Alert.alert(
-                    'Conferência',
-                    'Etiqueta Batismo deve ser informada!'
+                    'Corte Cabos',
+                    'Corte Cabo deve ser informada!'
                 );
                 return;
-            } else if (batismo.toLowerCase().charAt(0) !== 'b') {
-                Alert.alert(
-                    'Conferência',
-                    'Etiqueta Batismo inválida!'
-                );
-                return;   
             }
         } else {
             Alert.alert(
-                'Conferência',
-                'Etiqueta Batismo deve ser informada!'
+                'Corte Cabos',
+                'Corte Cabo deve ser informada!'
             );
             return;
         }
@@ -99,15 +97,15 @@ class FormCorteCabos extends Component {
         if (codEAN) {
             if (codEAN.length === 0) {
                 Alert.alert(
-                    'Conferência',
+                    'Corte Cabos',
                     'EAN deve ser informado!'
                 );
                 return;
             } 
             
-            const itensNF = _.values(notaConfere.itens);
+            const itensCorte = _.values(corteSelec.itens);
    
-            const itemConf = [_.find(itensNF, (itemCheck) => (
+            const itCorte = [_.find(itensCorte, (itemCheck) => (
                 itemCheck.ean1 === codEAN ||
                 itemCheck.ean2 === codEAN ||
                 itemCheck.ean3 === codEAN ||
@@ -115,132 +113,94 @@ class FormCorteCabos extends Component {
                 itemCheck.ean5 === codEAN
             ))];
 
-            if (itemConf[0]) {
-                if (itemConf.length === 0) {
+            if (itCorte[0]) {
+                if (itCorte.length === 0) {
                     Alert.alert(
-                        'Conferência',
+                        'Corte Cabos',
                         'EAN Não Localizado!'
                     );
                     return;
                 }
             } else {
                 Alert.alert(
-                    'Conferência',
+                    'Corte Cabos',
                     'EAN Não Localizado!'
                 );
                 return;
             }
             
-            itemConfere = itemConf[0];
+            itemCorte = itCorte[0];
         } else {
             Alert.alert(
-                'Conferência',
+                'Corte Cabos',
                 'EAN deve ser informado!'
             );
             return;
         }
 
-        if (itemConfere.tpCont === '3') {
-            if (listaItemLote.length === 0) {
+        if (qtdItem) {
+            if (qtdItem.length === 0 || _.toInteger(qtdItem) < 0) {
                 Alert.alert(
-                    'Conferência',
-                    'Lote deve ser informado!'
-                );
-                return;
-            }
-
-            for (let i = 0; i < listaItemLote.length; i++) {
-                qtConferida += _.toInteger(listaItemLote[i].qtdItemLote);
-            }
-    
-            if (_.toInteger(qtConferida) !== _.toInteger(qtItem)) {
-                Alert.alert(
-                    'Conferência',
-                    'Quantidade Inválida!'
-                );
-                return;
-            }
-        } 
-        
-        if (qtItem) {
-            if (qtItem.length === 0 || _.toInteger(qtItem) < 0) {
-                Alert.alert(
-                    'Conferência',
+                    'Corte Cabos',
                     'Quantidade Item deve ser maior que 0!'
                 );
                 return;  
             }
         } else {
             Alert.alert(
-                'Conferência',
+                'Corte Cabos',
                 'Quantidade Item deve ser maior que 0!'
             );
             return; 
         }
 
-        this.props.modificaOnEfetivar(true);
-        this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });
-    }*/
-    onPressPrint() {
-        const { codEAN, qtEtiq, usuario } = this.props;
-
-        if (codEAN) {
-            if (codEAN.length === 0) {
-                Alert.alert(
-                    'Impressão Etiqueta',
-                    'EAN deve ser informado!'
-                );
-                return;
-            }
-        } else {
-            Alert.alert(
-                'Impressão Etiqueta',
-                'EAN deve ser informado!'
-            );
-            return;
-        }
-        if (qtEtiq) {
-            if (qtEtiq.length === 0 || _.toInteger(qtEtiq) < 1) {
-                Alert.alert(
-                    'Impressão Etiqueta',
-                    'Quantidade Etiqueta deve ser maior que 0!'
-                );
-                return;
-            }
-        } else {
-            Alert.alert(
-                'Impressão Etiqueta',
-                'Quantidade Etiqueta deve ser maior que 0!'
-            );
-            return;
-        }
-        this.props.imprimeEtiquetaEAN(usuario, codEAN, qtEtiq);
+        this.props.efetivaCorteCabos({ usuario, corteSelec, itemCorte, corte });
     }
-    /*validQtdItem() {
+    onPressPrint() {
+        const { codCorte, usuario } = this.props;
+
+        if (codCorte) {
+            if (codCorte.length === 0) {
+                Alert.alert(
+                    'Impressão Etiqueta',
+                    'Corte Cabo deve ser informado!'
+                );
+                return;
+            }
+        } else {
+            Alert.alert(
+                'Impressão Etiqueta',
+                'Corte Cabo deve ser informado!'
+            );
+            return;
+        }
+        this.props.imprimeEtiquetaCorte(usuario, codCorte);
+    }
+    validQtdItem() {
         const item = this.props.itemConfere;
-        const { qtItem } = this.props;
+        const { qtdItem } = this.props;
 
         Keyboard.dismiss();
 
-        if (qtItem) {
-            if (qtItem.length === 0 || _.toInteger(qtItem) < 0) {
+        if (qtdItem) {
+            if (qtdItem.length === 0 || _.toInteger(qtdItem) < 0) {
                 Alert.alert(
-                    'Conferência',
+                    'Corte Cabos',
                     'Quantidade Item deve ser maior que 0!'
                 );
                 return;
             }
         } else {
             Alert.alert(
-                'Conferência',
+                'Corte Cabos',
                 'Quantidade Item deve ser maior que 0!'
             );
             return;
         }
 
-        if (item.qtdItem !== qtItem) {
+        if (item.qtdItem !== qtdItem) {
             Alert.alert(
-                'Conferência',
+                'Corte Cabos',
                 'Quantidade Item Divergente! Deseja continuar?',
                 [
                     { 
@@ -250,55 +210,53 @@ class FormCorteCabos extends Component {
                     },
                     { 
                         text: 'Sim', 
-                        onPress: () => this.onPressEfetivar() 
+                        onPress: () => this.onPressCortar() 
                     },
                 ],
                 { cancelable: false }
             );
         } else {
-            this.onPressEfetivar();
+            this.onPressCortar();
         }
-    }*/
+    }
     carregaCorte() {
-        const nrNota = this.props.nrNotaFis;
-        const listaConfere = _.values(this.props.listaNF);
+        const codCorte = this.props.codCorte;
+        const listaCortes = _.values(this.props.listaCortes);
 
-        const notaConf = _.filter(listaConfere, { nroDocto: nrNota });
+        const corte = _.filter(listaCortes, { codCorte });
 
         Keyboard.dismiss();
         
-        if (nrNota !== '') {
-            if (notaConf.length === 0) {
+        if (corte !== '') {
+            if (corte.length === 0) {
                 Alert.alert(
-                    'Conferência',
-                    'Nota Fiscal não Localizada!'
+                    'Corte Cabos',
+                    'Corte de Cabo não Localizado!'
                 );
                 return;
             }
 
-            const item = notaConf[0].itens[0];
-            const qtdConf = notaConf[0].itens.length;
+            const item = corte[0].itens[0];
 
-            this.props.modificaFornec(notaConf[0].nomeEmit);
-            this.props.modificaNrNotaFis(notaConf[0].nroDocto);
-            this.props.modificaQtTotal(notaConf[0].qtdItem);
-            this.props.modificaQtConferir(_.toString(qtdConf));
-            this.props.modificaListaItem(notaConf[0].itens);
-            this.props.modificaCodItem(item.itCode);
-            this.props.modificaDesItem(item.itDesc);
-            this.props.modificaLocalPad(item.localiz);
-            this.props.modificaUnidMed(item.un);
-            this.props.modificaNotaConfere(notaConf[0]);
-            this.props.modificaItemConfere(item);
+            const { codItem, descItem, un, lote, obrigatorio, localizacao } = item;
 
-            this.codEAN.focus();
+            this.props.modificaCodItem(codItem);
+            this.props.modificaDescItem(descItem);
+            this.props.modificaUn(un);
+            this.props.modificaLote(lote);
+            this.props.modificaObrigatorio(obrigatorio);
+            this.props.modificaLocalizacao(localizacao);
+            this.props.modificaListaItem(corte[0].itens);
+            this.props.modificaCorteSelec(corte[0]);
+
+            this.eqpto.focus();
         }
     }
-    /*validEAN() {
-        const { notaConfere, codEAN } = this.props;
-        const itensNF = _.values(notaConfere.itens);
+    validEAN() {
+        const { corteSelec, codEAN } = this.props;
+        const itensCorte = _.values(corteSelec.itens);
 
-        const itemConf = [_.find(itensNF, (itemCheck) => (
+        const itemCorte = [_.find(itensCorte, (itemCheck) => (
                 itemCheck.ean1 === codEAN ||
                 itemCheck.ean2 === codEAN ||
                 itemCheck.ean3 === codEAN ||
@@ -308,98 +266,55 @@ class FormCorteCabos extends Component {
 
         Keyboard.dismiss();
         
-        if (itemConf[0]) {
-            if (itemConf.length === 0) {
+        if (itemCorte[0]) {
+            if (itemCorte.length === 0) {
                 Alert.alert(
-                    'Conferência',
+                    'Corte Cabos',
                     'EAN Não Localizado!'
                 );
                 return;
             }
         } else {
             Alert.alert(
-                'Conferência',
+                'Corte Cabos',
                 'EAN Não Localizado!'
             );
             return;
         }
 
-        this.props.modificaCodItem(itemConf[0].itCode);
-        this.props.modificaDesItem(itemConf[0].itDesc);
-        this.props.modificaLocalPad(itemConf[0].localiz);
-        this.props.modificaUnidMed(itemConf[0].un);
-        this.props.modificaItemConfere(itemConf[0]);
-        this.props.modificaQtItem();
-        this.props.modificaBatismo();
+        this.props.modificaCodItem(itemCorte[0].codItem);
+        this.props.modificaDescItem(itemCorte[0].descItem);
+        this.props.modificaUn(itemCorte[0].un);
+        this.props.modificaLote(itemCorte[0].lote);
+        this.props.modificaObrigatorio(itemCorte[0].obrigatorio);
+        this.props.modificaLocalizacao(itemCorte[0].localizacao);
+        this.props.modificaItemCorteSelec(itemCorte[0]);
 
-        this.setState({ ...this.state, qtdDisable: true });
-
-        this.qtItem.focus();
-
-        if (_.toInteger(itemConf.peso) <= 0) {
-            if (Platform.OS === 'windows') {
-                Actions.winInfoItemConf();
-            } else {
-                //this.props.modificaInfoVisible(true);
-            }
-        }        
+        this.qtItem.focus();      
     }
     validQtd() {
-        this.setState({ ...this.state, batismoDisable: true });
+        const { qtdItem } = this.props;
 
-        const item = this.props.itemConfere;
-
-        const { qtItem } = this.props;
-
-        if (qtItem) {
-            if (qtItem.length === 0 || _.toInteger(qtItem) < 0) {
+        if (qtdItem) {
+            if (qtdItem.length === 0 || _.toInteger(qtdItem) < 0) {
                 Alert.alert(
-                    'Conferência',
+                    'Corte Cabos',
                     'Quantidade Item deve ser maior que 0!'
                 );
                 return;
             }
         } else {
             Alert.alert(
-                'Conferência',
+                'Corte Cabos',
                 'Quantidade Item deve ser informada!'
             );
             return;
         }
 
-        if (item.tpCont === '3') {
-            Actions.conferenciaLote();
-        }
-
-        this.batismo.focus();
-    }*/
+        this.cdCorte.focus();
+    }
     procuraCorteCabo() {
         Actions.listaCortes();
-    }
-    renderBtEfetiva() {
-        if (Platform.OS === 'windows') {
-            return (
-                <View style={styles.viewBotao}>
-                    <View style={{ width: 150 }}>
-                        <Button
-                            onPress={() => { this.validQtdItem(); }}
-                            title="Cortar"
-                            color="black"
-                        />
-                    </View>
-                </View>
-            );
-        }
-
-        return (
-            <View style={[styles.viewBotao, { flex: 2 }]}>
-                <Button
-                    onPress={() => { this.validQtdItem(); }}
-                    title="Cortar"
-                    color="green"
-                />
-            </View>
-        );
     }
     render() {
         return (
@@ -448,17 +363,18 @@ class FormCorteCabos extends Component {
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={equipto => this.props.modificaEquipto(equipto)}
+                            onChangeText={equipto => this.props.modificaEquipamento(equipto)}
                             value={this.props.equipto}
+                            ref={(input) => { this.eqpto = input; }}
+                            onSubmitEditing={() => { this.codEAN.focus(); }}
                         />
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 6 }]}>
+                    <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>EAN</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
@@ -480,7 +396,9 @@ class FormCorteCabos extends Component {
                                     if (this.props.codEAN && this.fieldsChanged.ean) {
                                         this.fieldsChanged.ean = false;
                                         this.validEAN();
-                                    } 
+                                    } else {
+                                        this.qtItem.focus();
+                                    }
                                 }}
                             />
                             <TouchableOpacity
@@ -495,7 +413,7 @@ class FormCorteCabos extends Component {
                         </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
-                        <Text style={styles.txtLabel}>Quantidade</Text>
+                        <Text style={styles.txtLabel}>Localização</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
@@ -504,24 +422,10 @@ class FormCorteCabos extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
-                            value={this.props.qtItem}
+                            onChangeText={local => this.props.modificaLocalizacao(local)}
+                            value={this.props.localizacao}
                         />
-                    </View>
-                    <View style={[styles.viewCampo, { flex: 2 }]}>
-                        <Text style={styles.txtLabel}>Conferir</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={qtConferir => this.props.modificaQtConferir(qtConferir)}
-                            value={this.props.qtConferir}
-                        />
-                    </View>                    
+                    </View>                                        
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
@@ -532,7 +436,6 @@ class FormCorteCabos extends Component {
                             autoCapitalize="none"
                             autoCorrect={false}
                             keyboardType="numeric"
-                            editable={this.state.qtdDisable}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
@@ -540,7 +443,7 @@ class FormCorteCabos extends Component {
                             ref={(input) => { this.qtItem = input; }}
                             onChangeText={qtItem => {
                                 this.fieldsChanged.qtitem = true; 
-                                this.props.modificaQtItem(qtItem); 
+                                this.props.modificaQtdItem(qtItem); 
                             }}
                             onBlur={() => { 
                                 if (this.props.qtItem && this.fieldsChanged.qtitem) {
@@ -550,8 +453,8 @@ class FormCorteCabos extends Component {
                             }}
                         />
                     </View>
-                    <View style={[styles.viewCampo, { flex: 3 }]}>
-                        <Text style={styles.txtLabel}>Localização Padrão</Text>
+                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <Text style={styles.txtLabel}>Lance Obrigatório</Text>
                         <TextInput
                             placeholder=""
                             autoCapitalize="none"
@@ -560,8 +463,8 @@ class FormCorteCabos extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={localPad => this.props.modificaLocalPad(localPad)}
-                            value={this.props.localPad}
+                            onChangeText={obrigatorio => this.props.modificaObrigatorio(obrigatorio)}
+                            value={`${this.props.obrigatorio}`}
                         />
                     </View>
                 </View>
@@ -590,33 +493,22 @@ class FormCorteCabos extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={unidMed => this.props.modificaUnidMed(unidMed)}
-                            value={this.props.unidMed}
+                            onChangeText={un => this.props.modificaUn(un)}
+                            value={this.props.un}
                         />
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
-                        <Text style={styles.txtLabel}>Batismo</Text>
+                        <Text style={styles.txtLabel}>Lote</Text>
                         <TextInput
-                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
+                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            editable={this.state.batismoDisable}
-                            returnKeyType="go"
+                            returnKeyType="next"
                             style={styles.input}
-                            value={this.props.batismo}
-                            ref={(input) => { this.batismo = input; }}
-                            onChangeText={batismo => {
-                                this.fieldsChanged.batismo = true; 
-                                this.props.modificaBatismo(batismo); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.batismo && this.fieldsChanged.batismo) {
-                                    this.fieldsChanged.batismo = false;
-                                    this.validQtdItem();
-                                } 
-                            }}
+                            onChangeText={lote => this.props.modificaLote(lote)}
+                            value={this.props.lote}
                         />
                     </View>
                 </View>
@@ -633,75 +525,22 @@ class FormCorteCabos extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.inputDescricao}
-                            onChangeText={desItem => this.props.modificaDesItem(desItem)}
-                            value={this.props.desItem}
+                            onChangeText={descItem => this.props.modificaDescItem(descItem)}
+                            value={this.props.descItem}
                         />
                     </View>
                 </View>
-                { Platform.OS !== 'windows' ? (
-                    <View style={styles.viewLinha}>
-                        {this.renderBtEfetiva()}
-                        <View style={[styles.viewCampo, { flex: 1 }]}>
-                            <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
-                            <View style={styles.viewBtEtiq}>
-                                <TextInput
-                                    selectTextOnFocus
-                                    placeholder=""
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    keyboardType="numeric"
-                                    placeholderTextColor='rgba(255,255,255,0.7)'
-                                    editable={this.state.qtdDisable}
-                                    returnKeyType="go"
-                                    style={styles.input}
-                                    onChangeText={qtEtiq => this.props.modificaQtEtiq(qtEtiq)}
-                                    value={this.props.qtEtiq}
-                                    ref={(input) => { this.qtEtiq = input; }}
-                                />
-                                <TouchableOpacity
-                                    style={styles.btSearch}
-                                    onPress={() => { this.onPressPrint(); }}
-                                >
-                                    <Image
-                                        source={imgPrinter}
-                                        style={styles.imgSearch}
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                <View style={styles.viewLinha}>
+                    <View style={[styles.viewBotao, { flex: 2 }]}>
+                        <Button
+                            onPress={() => { this.validQtdItem(); }}
+                            title="Cortar"
+                            color="green"
+                        />
                     </View>
-                ) : (
-                    // WINDOWS RENDER
-                    <View style={styles.viewLinha}>
-                        <View style={{ flex: 2 }}>
-                            {this.renderBtEfetiva()}
-                        </View>
-                        <View style={[styles.viewCampo, { flex: 1 }]}>
-                            <Text style={styles.txtLabel}>Qtde Etiq</Text>
-                            <View style={styles.viewBtEtiq}>
-                                <TextInput
-                                    placeholder=""
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    keyboardType="numeric"
-                                    placeholderTextColor='rgba(255,255,255,0.7)'
-                                    editable={this.state.qtdDisable}
-                                    returnKeyType="go"
-                                    style={styles.input}
-                                    onChangeText={qtEtiq => this.props.modificaQtEtiq(qtEtiq)}
-                                    value={this.props.qtEtiq}
-                                    ref={(input) => { this.qtEtiq = input; }}
-                                />
-                            </View>
-                        </View>
-                        <View 
-                            style={{
-                                justifyContent: 'center', 
-                                alignItems: 'center',
-                                marginTop: 15,
-                                marginRight: 5 
-                            }}
-                        >
+                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <Text style={[styles.txtLabel, { textAlign: 'left' }]} />
+                        <View style={styles.viewBtEtiq}>
                             <TouchableOpacity
                                 style={styles.btSearch}
                                 onPress={() => { this.onPressPrint(); }}
@@ -713,11 +552,10 @@ class FormCorteCabos extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                ) }
+                </View>
                 <View style={{ padding: 5 }} >
                     <ListaItem />
                 </View>
-                <InfoItemConferencia />
             </ScrollView>
         );
     }
@@ -727,12 +565,41 @@ const mapStateToProps = state => (
         {
             codCorte: state.CorteCabosReducer.codCorte,
             listaCortes: state.CorteCabosReducer.listaCortes,
-            usuario: state.LoginReducer.usuario            
+            usuario: state.LoginReducer.usuario,
+            codItem: state.CorteCabosReducer.codItem,
+            descItem: state.CorteCabosReducer.descItem,
+            equipamento: state.CorteCabosReducer.equipamento,
+            codEAN: state.CorteCabosReducer.codEAN,
+            localizacao: state.CorteCabosReducer.localizacao,
+            qtdItem: state.CorteCabosReducer.qtdItem,
+            obrigatorio: state.CorteCabosReducer.obrigatorio,
+            un: state.CorteCabosReducer.un,
+            lote: state.CorteCabosReducer.lote,
+            listaItem: state.CorteCabosReducer.listaItem,
+            corteSelec: state.CorteCabosReducer.corteSelec,
+            itemSelec: state.CorteCabosReducer.itemSelec,
+            embarque: state.CorteCabosReducer.embarque,
+            nomeAbrev: state.CorteCabosReducer.nomeAbrev,
+            pedido: state.CorteCabosReducer.pedido
         }
     );
 
 export default connect(mapStateToProps, { 
-    modificaCodCorte
+    modificaCodCorte,
+    modificaEquipamento,
+    modificaCodEAN,
+    modificaLocalizacao,
+    modificaQtdItem,
+    modificaObrigatorio,
+    modificaCodItem,
+    modificaDescItem,
+    modificaUn,
+    modificaLote,
+    modificaListaItem,
+    modificaCorteSelec,
+    iniciaTela,
+    efetivaCorteCabos,
+    imprimeEtiquetaCorte
 })(FormCorteCabos);
 
 const styles = StyleSheet.create({

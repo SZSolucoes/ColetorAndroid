@@ -1,12 +1,15 @@
+import _ from 'lodash';
+
 const INITIAL_STATE = {
     codCorte: '',
+    equipamento: '',
     dtCorte: '',
     embarque: '',
     nomeAbrev: '',
     pedido: '',
     sequencia: '',
     codItem: '',
-    desItem: '',
+    descItem: '',
     lote: '',
     un: '',
     localizacao: '',
@@ -14,20 +17,91 @@ const INITIAL_STATE = {
     obrigatorio: '',
     minimo: '',
     codEAN: '',
+    listaItem: [],
     listaCortes: [],
     loadingCortes: false,
     validEan: false,
     validQtd: false,
-    itemSelected: 0,
-    enableFetchBtn: false
+    enableFetchBtn: false,
+    corteSelec: '',
+    itemSelec: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
+        case 'efetiva_corte': {
+            const { listaCortes, listaItem } = state;
+            const { corteSelec, itemSelec } = action.payload;
+
+            _.remove(corteSelec.itens, {
+                sequencia: itemSelec.sequencia
+            });
+
+            _.remove(listaItem, {
+                sequencia: itemSelec.sequencia
+            });
+            
+            if (corteSelec.itens.length === 0) {
+                _.remove(listaCortes, {
+                    codCorte: corteSelec.codCorte
+                });
+                return {
+                    ...state,
+                    listaCortes,
+                    listaItem,
+                    itemSelec: '',
+                    corteSelec: '',
+                    codCorte: '',
+                    equipamento: '',
+                    dtCorte: '',
+                    embarque: '',
+                    nomeAbrev: '',
+                    pedido: '',
+                    sequencia: '',
+                    codItem: '',
+                    descItem: '',
+                    lote: '',
+                    un: '',
+                    localizacao: '',
+                    qtdItem: '',
+                    obrigatorio: '',
+                    minimo: '',
+                    codEAN: ''
+                };
+            }
+            return {
+                ...state,
+                listaCortes,
+                listaItem,
+                itemSelec: '',
+                corteSelec,
+                codCorte: '',
+                equipamento: '',
+                dtCorte: '',
+                embarque: '',
+                nomeAbrev: '',
+                pedido: '',
+                sequencia: '',
+                codItem: '',
+                descItem: '',
+                lote: '',
+                un: '',
+                localizacao: '',
+                qtdItem: '',
+                obrigatorio: '',
+                minimo: '',
+                codEAN: ''
+            };
+        }
         case 'modifica_codigo_corte':
             return { 
                 ...state, 
                 codCorte: action.payload 
+            };
+        case 'modifica_equipamento_corte':
+            return { 
+                ...state, 
+                equipamento: action.payload 
             };
         case 'modifica_data_corte':
             return { 
@@ -59,10 +133,10 @@ export default (state = INITIAL_STATE, action) => {
                 ...state, 
                 codItem: action.payload 
             };
-        case 'modifica_desitem_corte':
+        case 'modifica_descitem_corte':
             return { 
                 ...state, 
-                desItem: action.payload 
+                descItem: action.payload 
             };
         case 'modifica_lote_corte':
             return { 
@@ -110,37 +184,47 @@ export default (state = INITIAL_STATE, action) => {
                 validQtd: action.payload 
             };
         case 'modifica_listaCortes_corte':
-            console.log(action.payload);
             return { 
                 ...state, 
                 listaCortes: [...action.payload] 
+            };
+        case 'modifica_listaItem_corte':
+            return { 
+                ...state, 
+                listaItem: [...action.payload] 
             };
         case 'modifica_loadingCortes':
             return { 
                 ...state, 
                 loadingCortes: action.payload
             };
-        case 'modifica_itemselected_corte':
-            return { 
-                ...state, 
-                itemSelected: action.payload
-            };
-        case 'modifica_enablefetchbtn_corte':
+       case 'modifica_enablefetchbtn_corte':
             return { 
                 ...state, 
                 enableFetchBtn: action.payload
+            };
+        case 'modifica_corte_selec':
+            return { 
+                ...state, 
+                corteSelec: action.payload
+            };
+        case 'modifica_item_corte_selec':
+            return { 
+                ...state, 
+                itemSelec: action.payload
             };
         case 'modifica_clean_corte':
             return {
                 ...state, 
                 codCorte: '',
+                equipamento: '',
                 dtCorte: '',
                 embarque: '',
                 nomeAbrev: '',
                 pedido: '',
                 sequencia: '',
                 codItem: '',
-                desItem: '',
+                descItem: '',
                 lote: '',
                 un: '',
                 localizacao: '',
@@ -148,12 +232,13 @@ export default (state = INITIAL_STATE, action) => {
                 obrigatorio: '',
                 minimo: '',
                 codEAN: '',
-                listaCortes: [],
+                listaItem: [],
                 loadingCortes: false,
                 validEan: false,
                 validQtd: false,
-                itemSelected: 0,
-                enableFetchBtn: false
+                enableFetchBtn: false,
+                corteSelec: '',
+                itemSelec: ''
             };
         default:
             return state;

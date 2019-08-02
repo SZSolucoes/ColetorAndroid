@@ -8,6 +8,11 @@ export const modificaCodCorte = (value) => ({
     payload: value
 });
 
+export const modificaEquipamento = (value) => ({
+    type: 'modifica_equipamento_corte',
+    payload: value
+});
+
 export const modificaDtCorte = (value) => ({
     type: 'modifica_data_corte',
     payload: value
@@ -38,8 +43,8 @@ export const modificaCodItem = (value) => ({
     payload: value
 });
 
-export const modificaDesItem = (value) => ({
-    type: 'modifica_desitem_corte',
+export const modificaDescItem = (value) => ({
+    type: 'modifica_descitem_corte',
     payload: value
 });
 
@@ -73,14 +78,9 @@ export const modificaObrigatorio = (value) => ({
     payload: value
 });
 
-export const modificaMinimo = (value) => ({
-    type: 'modifica_minimo_corte',
-    payload: value
-});
-
-export const modificaItemSelected = (value) => ({
-    type: 'modifica_itemselected_corte',
-    payload: value
+export const modificaListaItem = (listaItem) => ({
+    type: 'modifica_listaItem_corte',
+    payload: listaItem
 });
 
 export const modificaValidEan = (value) => ({
@@ -98,7 +98,21 @@ export const modificaEnableFetchButton = (value) => ({
     payload: value
 });
 
+export const modificaCorteSelec = (value) => ({
+    type: 'modifica_corte_selec',
+    payload: value
+});
+
+export const modificaItemCorteSelec = (value) => ({
+    type: 'modifica_item_corte_selec',
+    payload: value
+});
+
 export const modificaClean = () => ({
+    type: 'modifica_clean_corte'
+});
+
+export const iniciaTela = () => ({
     type: 'modifica_clean_corte'
 });
 
@@ -170,18 +184,33 @@ const onFetchError = (dispatch) => {
     Alert.alert('Erro', 'Ocorreu uma falha de comunicação com o servidor.');
 };
 
-export const corteCabos = (usuario) => dispatch => {
-        Axios.get('/coletor/doPrePicking.p', {
-            params: {
-                usuario
-            }
-        })
-        .then(response => corteSuccess(dispatch, response))
-        .catch(() => corteError());
-    };
+export const efetivaCorteCabos = (usuario, corteSelec, itemCorte, corte) => dispatch => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: true });
+    Axios.get('/coletor/doPrePicking.p', {
+        params: {
+            usuario,
+            codCorte: corteSelec.codCorte,
+            embarque: itemCorte.embarque,
+            nomeAbrev: itemCorte.nomeAbrev,
+            pedido: itemCorte.pedido,
+            sequencia: itemCorte.sequencia,
+            codItem: itemCorte.codItem,
+            qtdItem: corte.qtdItem,
+            eqpto: corte.equipamento
+        }
+    })
+    .then(response => corteSuccess(dispatch, response, corteSelec, itemCorte))
+    .catch(() => corteError(dispatch));
+};
 
-const corteSuccess = (dispatch, response) => {
+const corteSuccess = (dispatch, response, corteSelec, itemCorte) => {
+    const retorno = {
+        corteSelec,
+        itemCorte
+    };
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     if (response.data.success === 'true') {
+        dispatch({ type: 'efetiva_corte', payload: retorno });
         Alert.alert(
             'Corte de Cabos',
             response.data.message
@@ -194,9 +223,44 @@ const corteSuccess = (dispatch, response) => {
     }
 };
 
-const corteError = () => {
+const corteError = (dispatch) => {
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     Alert.alert(
         'Erro Corte de Cabos',
+        'Erro Conexão!'
+    );
+};
+
+export const imprimeEtiquetaCorte = (usuario, codCorte) => {
+    return dispatch => {
+        Axios.get('/coletor/doPrint.p', {
+            params: {
+                usuario,
+                codCorte
+            }
+        })
+        .then(response => imprimeSuccess(dispatch, response))
+        .catch(() => imprimeError());
+    };
+};
+
+const imprimeSuccess = (dispatch, response) => {
+    if (response.data.success === 'true') {
+        Alert.alert(
+            'Impressão Etiqueta',
+            response.data.message
+        );
+    } else {
+        Alert.alert(
+            'Erro Impressão Etiqueta',
+            response.data.message
+        );
+    }
+};
+
+const imprimeError = () => {
+    Alert.alert(
+        'Erro Impressão Etiqueta',
         'Erro Conexão!'
     );
 };

@@ -15,7 +15,7 @@ export const cleanRelEanReducer = () => ({
         type: 'modifica_clean_relean'
     });
 export const doConfirm = (propparams) => dispatch => {
-        Axios.get('app/doListItemEan.p', {
+        Axios.get('coletor/doListItemEan.p', {
             params: {
                 codEAN: propparams.codEAN,
                 codItem: propparams.codItem,

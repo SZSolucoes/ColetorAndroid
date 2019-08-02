@@ -10,25 +10,34 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { 
-       modificaCodCorte
+       modificaCodCorte,
+       modificaListaItem,
+       modificaCodItem,
+       modificaDescItem,
+       modificaUn,
+       modificaLote,
+       modificaObrigatorio,
+       modificaLocalizacao,
+       modificaCorteSelec,
+       modificaItemCorteSelec
 } from '../../../actions/CorteCabosActions';
 
 class ListaCorteCabos extends Component {
     onPressItem(corte) {
-        /*const item = corte.itens[0];
-        const qtdConf = corte.itens.length;
+        this.props.modificaListaItem(corte.itens);
+        this.props.modificaCodCorte(corte.codCorte);
 
-        this.props.modificaFornec(nota.nomeEmit);
-        this.props.modificaNrNotaFis(nota.nroDocto);
-        this.props.modificaQtTotal(nota.qtdItem);
-        this.props.modificaQtConferir(_.toString(qtdConf));
-        this.props.modificaListaItem(nota.itens);
-        this.props.modificaCodItem(item.itCode);
-        this.props.modificaDesItem(item.itDesc);
-        this.props.modificaLocalPad(item.localiz);
-        this.props.modificaUnidMed(item.un);
-        this.props.modificaNotaConfere(nota);
-        this.props.modificaItemConfere(item);*/
+        const item = corte.itens[0];
+        const { codItem, descItem, un, lote, obrigatorio, localizacao } = item;
+
+        this.props.modificaCodItem(codItem);
+        this.props.modificaDescItem(descItem);
+        this.props.modificaUn(un);
+        this.props.modificaLote(lote);
+        this.props.modificaObrigatorio(obrigatorio);
+        this.props.modificaLocalizacao(localizacao);
+        this.props.modificaCorteSelec(corte);
+        this.props.modificaItemCorteSelec(item);
 
         Actions.pop();
     }
@@ -107,7 +116,16 @@ const mapStateToProps = state => {
 export default connect(
     mapStateToProps, 
     { 
-        modificaCodCorte
+        modificaCodCorte,
+        modificaListaItem,
+        modificaCodItem,
+        modificaDescItem,
+        modificaUn,
+        modificaLote,
+        modificaObrigatorio,
+        modificaLocalizacao,
+        modificaCorteSelec,
+        modificaItemCorteSelec
     }
 )(ListaCorteCabos);
 
