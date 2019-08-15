@@ -31,14 +31,18 @@ export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case 'efetiva_corte': {
             const { listaCortes, listaItem } = state;
-            const { corteSelec, itemSelec } = action.payload;
+            const { corteSelec, itemCorte } = action.payload;
+
+            console.log(corteSelec.itens);
+            console.log(listaItem);
+            console.log(itemCorte);
 
             _.remove(corteSelec.itens, {
-                sequencia: itemSelec.sequencia
+                sequencia: itemCorte.sequencia
             });
 
             _.remove(listaItem, {
-                sequencia: itemSelec.sequencia
+                sequencia: itemCorte.sequencia
             });
             
             if (corteSelec.itens.length === 0) {

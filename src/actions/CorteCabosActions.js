@@ -200,10 +200,11 @@ export const efetivaCorteCabos = (usuario, corteSelec, itemCorte, corte) => disp
         }
     })
     .then(response => corteSuccess(dispatch, response, corteSelec, itemCorte))
-    .catch(() => corteError(dispatch));
+    .catch(error => corteError(dispatch, error));
 };
 
 const corteSuccess = (dispatch, response, corteSelec, itemCorte) => {
+    console.log(response);
     const retorno = {
         corteSelec,
         itemCorte
@@ -223,7 +224,8 @@ const corteSuccess = (dispatch, response, corteSelec, itemCorte) => {
     }
 };
 
-const corteError = (dispatch) => {
+const corteError = (dispatch, error) => {
+    console.log(error);
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     Alert.alert(
         'Erro Corte de Cabos',

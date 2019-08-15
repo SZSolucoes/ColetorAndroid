@@ -29,6 +29,7 @@ import {
     modificaLote,
     modificaListaItem,
     modificaCorteSelec,
+    modificaItemCorteSelec,
     iniciaTela,
     efetivaCorteCabos,
     imprimeEtiquetaCorte
@@ -154,7 +155,7 @@ class FormCorteCabos extends Component {
             return; 
         }
 
-        this.props.efetivaCorteCabos({ usuario, corteSelec, itemCorte, corte });
+        this.props.efetivaCorteCabos(usuario, corteSelec, itemCorte, corte);
     }
     onPressPrint() {
         const { codCorte, usuario } = this.props;
@@ -177,10 +178,13 @@ class FormCorteCabos extends Component {
         this.props.imprimeEtiquetaCorte(usuario, codCorte);
     }
     validQtdItem() {
-        const item = this.props.itemConfere;
+        const item = this.props.itemSelec;
         const { qtdItem } = this.props;
 
         Keyboard.dismiss();
+
+        console.log(qtdItem);
+        console.log(item);
 
         if (qtdItem) {
             if (qtdItem.length === 0 || _.toInteger(qtdItem) < 0) {
@@ -198,7 +202,7 @@ class FormCorteCabos extends Component {
             return;
         }
 
-        if (item.qtdItem !== qtdItem) {
+        if (item.qtdItem !== _.toInteger(qtdItem)) {
             Alert.alert(
                 'Corte Cabos',
                 'Quantidade Item Divergente! Deseja continuar?',
@@ -597,6 +601,7 @@ export default connect(mapStateToProps, {
     modificaLote,
     modificaListaItem,
     modificaCorteSelec,
+    modificaItemCorteSelec,
     iniciaTela,
     efetivaCorteCabos,
     imprimeEtiquetaCorte
