@@ -19,7 +19,8 @@ import {
        modificaObrigatorio,
        modificaLocalizacao,
        modificaCorteSelec,
-       modificaItemCorteSelec
+       modificaItemCorteSelec,
+       salvarUsuarioCorte
 } from '../../../actions/CorteCabosActions';
 
 class ListaCorteCabos extends Component {
@@ -38,6 +39,8 @@ class ListaCorteCabos extends Component {
         this.props.modificaLocalizacao(localizacao);
         this.props.modificaCorteSelec(corte);
         this.props.modificaItemCorteSelec(item);
+
+        this.props.salvarUsuarioCorte(this.props.usuario, corte.codCorte);
 
         Actions.pop();
     }
@@ -59,17 +62,29 @@ class ListaCorteCabos extends Component {
         );
     }
     renderItem = ({ item }) => {
-        console.log(item);
+        if (item.userCorte !== undefined && item.userCorte !== '') {
+            return (
+                <TouchableHighlight
+                    onPress={() => this.onPressItem(item)}
+                >
+                    <View style={styles.itemUser}>
+                        <Text style={styles.itemCodCorte}>{ item.codCorte}</Text>
+                        <Text style={styles.itemLocal}>{ item.localizacao}</Text>
+                    </View>
+                </TouchableHighlight>            
+            );
+        }
+        
         return (
             <TouchableHighlight
                 onPress={() => this.onPressItem(item)}
             >
                 <View style={styles.item}>
                     <Text style={styles.itemCodCorte}>{ item.codCorte}</Text>
-                    <Text style={styles.itemLocal}>{ item.local}</Text>
+                    <Text style={styles.itemLocal}>{ item.localizacao}</Text>
                 </View>
             </TouchableHighlight>            
-        );
+        );        
     }
     renderHeader = () => {
         const headerView = (
@@ -85,7 +100,6 @@ class ListaCorteCabos extends Component {
         return headerView;
     };
     render() {
-        console.log(this.props.listaCortes);
         return (
             <View style={styles.viewLista}>
                 <FlatList
@@ -108,7 +122,8 @@ const mapStateToProps = state => {
         {
             listaCortes: state.CorteCabosReducer.listaCortes,
             codCorte: state.CorteCabosReducer.codCorte,
-            local: state.CorteCabosReducer.local
+            local: state.CorteCabosReducer.local,
+            usuario: state.LoginReducer.usuario,
         }
     );
 };
@@ -125,7 +140,8 @@ export default connect(
         modificaObrigatorio,
         modificaLocalizacao,
         modificaCorteSelec,
-        modificaItemCorteSelec
+        modificaItemCorteSelec,
+        salvarUsuarioCorte
     }
 )(ListaCorteCabos);
 
@@ -142,6 +158,15 @@ const styles = StyleSheet.create({
     },
     item: {
         backgroundColor: '#20293F',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        marginVertical: 2,
+        paddingHorizontal: 5
+    },
+    itemUser: {
+        backgroundColor: '#EEC863',
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,

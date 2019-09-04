@@ -144,12 +144,9 @@ export const fetchListCortes = (userName) => dispatch => {
 const onFetchSuccess = (dispatch, response) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
-    console.log(response);
-    
     if (response && response.data) {
         const data = response.data;
         if (data.success === 'true' && data.cortes.length > 0) {
-            console.log(data.cortes);
             dispatch({
                 type: 'modifica_loadingCortes',
                 payload: false
@@ -158,7 +155,8 @@ const onFetchSuccess = (dispatch, response) => {
                 type: 'modifica_listaCortes_corte',
                 payload: data.cortes
             });
-            Actions.corteCabos();
+            //Actions.corteCabos();
+            Actions.listaCortes();
             return;
         } 
         dispatch({
@@ -204,7 +202,6 @@ export const efetivaCorteCabos = (usuario, corteSelec, itemCorte, corte) => disp
 };
 
 const corteSuccess = (dispatch, response, corteSelec, itemCorte) => {
-    console.log(response);
     const retorno = {
         corteSelec,
         itemCorte
@@ -225,7 +222,6 @@ const corteSuccess = (dispatch, response, corteSelec, itemCorte) => {
 };
 
 const corteError = (dispatch, error) => {
-    console.log(error);
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     Alert.alert(
         'Erro Corte de Cabos',
@@ -265,4 +261,15 @@ const imprimeError = () => {
         'Erro Impressão Etiqueta',
         'Erro Conexão!'
     );
+};
+
+export const salvarUsuarioCorte = (usuario, codCorte) => {
+    return dispatch => {
+        Axios.get('/coletor/doSaveUserCorte.p', {
+            params: {
+                usuario,
+                codCorte
+            }
+        });
+    };
 };

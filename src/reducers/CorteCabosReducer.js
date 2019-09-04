@@ -33,10 +33,6 @@ export default (state = INITIAL_STATE, action) => {
             const { listaCortes, listaItem } = state;
             const { corteSelec, itemCorte } = action.payload;
 
-            console.log(corteSelec.itens);
-            console.log(listaItem);
-            console.log(itemCorte);
-
             _.remove(corteSelec.itens, {
                 sequencia: itemCorte.sequencia
             });

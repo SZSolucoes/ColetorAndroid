@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { store } from '../../App';
 import { fetchListItensSep } from '../../actions/ListaSeparacaoActions';
-import { fetchListCortes } from '../../actions/CorteCabosActions';
 
 const imgConf = require('../../../resources/imgs/conferencia_ar_64.png');
 const imgConfCheck = require('../../../resources/imgs/conferencia-volume-64.png');
@@ -62,13 +61,11 @@ class MenuSaida extends Component {
         Actions.impressao();
     }
     onPressCorte() {
-        const userName = store.getState().LoginReducer.usuario;
-        this.props.fetchListCortes(userName);
+        Actions.corteCabos();
     }
     renderListaSep(key) {
         return (
             <TouchableHighlight key={key} onPress={this.onPressListSep}>
-                
                     { this.props.loadingListSep ?
                         (   
                             <View style={[styles.menu, { justifyContent: 'center' }]}>
@@ -86,7 +83,6 @@ class MenuSaida extends Component {
                                 </View> 
                             )
                     }
-                
             </TouchableHighlight>
         );
     }
@@ -171,25 +167,13 @@ class MenuSaida extends Component {
     renderCorte(key) {
         return (
             <TouchableHighlight key={key} onPress={this.onPressCorte}>
-                
-                    { this.props.loadingCortes ?
-                        (   
-                            <View style={[styles.menu, { justifyContent: 'center' }]}>
-                                <View style={{ marginVertical: 6 }}>
-                                    <ActivityIndicator size={'large'} />
-                                </View>
-                            </View>
-                        ) : (
-                                <View style={styles.menu}>
-                                    <Image 
-                                        style={styles.imgMenu} 
-                                        source={imgCorte}
-                                    />
-                                    <Text style={styles.txtMenu}>Corte de Cabos</Text>
-                                </View> 
-                            )
-                    }
-                
+                <View style={styles.menu}>
+                    <Image 
+                        style={styles.imgMenu} 
+                        source={imgCorte}
+                    />
+                    <Text style={styles.txtMenu}>Corte de Cabos</Text>
+                </View>                 
             </TouchableHighlight>
         );
     }
@@ -230,16 +214,14 @@ const mapStateToProps = state => (
             logArmazenamento: state.LoginReducer.logArmazenamento,
             logTodos: state.LoginReducer.logTodos,
             loadingListSep: state.ListaSeparacaoReducer.loadingListSep,
-            logCorteCabos: state.LoginReducer.logCorteCabos,
-            loadingCortes: state.CorteCabosReducer.loadingCortes,
+            logCorteCabos: state.LoginReducer.logCorteCabos,            
             usuario: state.LoginReducer.usuario
         }
 );
 
 
 export default connect(mapStateToProps, {
-    fetchListItensSep,
-    fetchListCortes
+    fetchListItensSep
 })(MenuSaida);
 
 const styles = StyleSheet.create({

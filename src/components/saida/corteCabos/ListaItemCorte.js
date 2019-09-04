@@ -68,7 +68,6 @@ class ListaItem extends Component {
     }
 
     renderItem = ({ item }) => {
-        console.log(item);
         return (
             <TouchableHighlight
                 onPress={() => this.onPressItem(item)}
@@ -115,7 +114,6 @@ class ListaItem extends Component {
     };
     
     render() {
-        console.log(this.props.listaItem);
         return (
             <ScrollView horizontal>
                 <FlatList
@@ -182,7 +180,7 @@ const styles = StyleSheet.create({
         marginVertical: 2,
         paddingHorizontal: 5
     },
-    itemClone: {
+    itemUser: {
         backgroundColor: '#EEC863',
         alignItems: 'center',
         justifyContent: 'center',

@@ -10,11 +10,11 @@ import {
     Alert,
     Button,
     Platform,
-    Keyboard
+    Keyboard,
+    ActivityIndicator
 } from 'react-native';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 
 import { 
     modificaCodCorte,
@@ -32,7 +32,8 @@ import {
     modificaItemCorteSelec,
     iniciaTela,
     efetivaCorteCabos,
-    imprimeEtiquetaCorte
+    imprimeEtiquetaCorte,
+    fetchListCortes
 } from '../../../actions/CorteCabosActions';
 
 import ListaItem from './ListaItemCorte';
@@ -177,6 +178,10 @@ class FormCorteCabos extends Component {
         }
         this.props.imprimeEtiquetaCorte(usuario, codCorte);
     }
+    procuraCorteCabo() {
+        //Actions.listaCortes();
+        this.props.fetchListCortes(this.props.usuario);
+    }
     validQtdItem() {
         const item = this.props.itemSelec;
         const { qtdItem } = this.props;
@@ -316,10 +321,7 @@ class FormCorteCabos extends Component {
         }
 
         this.cdCorte.focus();
-    }
-    procuraCorteCabo() {
-        Actions.listaCortes();
-    }
+    }    
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
@@ -353,12 +355,23 @@ class FormCorteCabos extends Component {
                     <View style={styles.viewBtSearch}>
                         <TouchableOpacity
                             style={styles.btSearch}
-                            onPress={this.procuraCorteCabo}                            
+                            onPress={() => { this.procuraCorteCabo(); }}
                         >
-                            <Image
-                                source={imgZoom}
-                                style={styles.imgSearch}
-                            />
+                            { this.props.loadingCortes ?
+                                (   
+                                    <View style={[styles.menu, { justifyContent: 'center' }]}>
+                                        <View style={{ marginVertical: 6 }}>
+                                            <ActivityIndicator size={'large'} />
+                                        </View>
+                                    </View>
+                                ) : (
+                                    <Image
+                                        source={imgZoom}
+                                        style={styles.imgSearch}
+                                    /> 
+                                    )
+                            }
+                            
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
@@ -584,7 +597,8 @@ const mapStateToProps = state => (
             itemSelec: state.CorteCabosReducer.itemSelec,
             embarque: state.CorteCabosReducer.embarque,
             nomeAbrev: state.CorteCabosReducer.nomeAbrev,
-            pedido: state.CorteCabosReducer.pedido
+            pedido: state.CorteCabosReducer.pedido,
+            loadingCortes: state.CorteCabosReducer.loadingCortes
         }
     );
 
@@ -604,7 +618,8 @@ export default connect(mapStateToProps, {
     modificaItemCorteSelec,
     iniciaTela,
     efetivaCorteCabos,
-    imprimeEtiquetaCorte
+    imprimeEtiquetaCorte,
+    fetchListCortes
 })(FormCorteCabos);
 
 const styles = StyleSheet.create({
