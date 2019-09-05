@@ -114,13 +114,15 @@ class FormInventario extends Component {
                 this.props.modificaNrContagem(contagem);
                 this.props.modificaItemSelected(indexItemEAN);
     
-                //this.focusInField('qtitem'); 
+                //this.focusInField('codlocal'); 
+                this.codLote.focus();
             } else {
-                this.focusInField('codean', false, true); 
+                this.focusInField('codean', false, true);                 
                 Alert.alert(
                     'Inventário',
                     'EAN Não Localizado!'
                 );
+                //return;
             }
         }
     }
@@ -148,7 +150,9 @@ class FormInventario extends Component {
             }
         }
 
-        if (this.props.listItems.length > 0) {
+        this.focusInField('qtitem');
+
+        /*if (this.props.listItems.length > 0) {
             const itensEAN = _.values(listItems);
             const indexItemEAN = _.findIndex(itensEAN, (itemCheck) => (
                 (itemCheck.ean1 === codEAN && itemCheck.lote === codLote) ||
@@ -175,16 +179,16 @@ class FormInventario extends Component {
                 this.props.modificaDescItem(itDesc);
                 this.props.modificaNrContagem(contagem);
                 this.props.modificaItemSelected(indexItemEAN);
-    
-                this.focusInField('qtitem'); 
+                     
             } else {
-                this.focusInField('codean', false, true); 
+                this.focusInField('codean', false, true);                 
                 Alert.alert(
                     'Inventário',
                     'EAN Não Localizado!'
                 );
+                //return;
             }
-        }
+        }*/
     }
 
     confirmButton() {
@@ -411,7 +415,7 @@ class FormInventario extends Component {
                             returnKeyType="go"
                             style={styles.input}
                             value={this.props.codEAN}
-                            onSubmitEditing={() => this.codLote.focus()}
+                            //onSubmitEditing={() => this.codLote.focus()}
                             onChangeText={value => {
                                 this.fieldsChanged.codEAN = true; 
                                 this.props.modificaCodEAN(value);

@@ -107,7 +107,6 @@ export const buscaInfoBastimo = (batismo) => {
 
 const buscaBatismoSuccess = (dispatch, response) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-    console.log(response.data);
     if (response.data.success === 'true') {
         dispatch({ type: 'modifica_info_batismo_arm', payload: response.data.etiqueta });
     } else {

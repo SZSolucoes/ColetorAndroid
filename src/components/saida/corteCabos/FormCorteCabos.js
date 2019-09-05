@@ -188,9 +188,6 @@ class FormCorteCabos extends Component {
 
         Keyboard.dismiss();
 
-        console.log(qtdItem);
-        console.log(item);
-
         if (qtdItem) {
             if (qtdItem.length === 0 || _.toInteger(qtdItem) < 0) {
                 Alert.alert(
