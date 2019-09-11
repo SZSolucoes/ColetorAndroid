@@ -31,6 +31,7 @@ import {
     modificaCorteSelec,
     modificaItemCorteSelec,
     iniciaTela,
+    modificaClean,
     efetivaCorteCabos,
     imprimeEtiquetaCorte,
     fetchListCortes
@@ -180,6 +181,7 @@ class FormCorteCabos extends Component {
     }
     procuraCorteCabo() {
         //Actions.listaCortes();
+        this.props.modificaClean();
         this.props.fetchListCortes(this.props.usuario);
     }
     validQtdItem() {
@@ -317,7 +319,7 @@ class FormCorteCabos extends Component {
             return;
         }
 
-        this.cdCorte.focus();
+        //this.codCorte.focus();
     }    
     render() {
         return (
@@ -381,7 +383,7 @@ class FormCorteCabos extends Component {
                             returnKeyType="next"
                             style={styles.input}
                             onChangeText={equipto => this.props.modificaEquipamento(equipto)}
-                            value={this.props.equipto}
+                            value={this.props.equipamento}
                             ref={(input) => { this.eqpto = input; }}
                             onSubmitEditing={() => { this.codEAN.focus(); }}
                         />
@@ -435,7 +437,7 @@ class FormCorteCabos extends Component {
                             editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.input}
+                            style={[styles.input, { fontSize: 10 }]}
                             onChangeText={local => this.props.modificaLocalizacao(local)}
                             value={this.props.localizacao}
                         />
@@ -453,14 +455,14 @@ class FormCorteCabos extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="go"
                             style={styles.input}
-                            value={this.props.qtItem}
+                            value={this.props.qtdItem}
                             ref={(input) => { this.qtItem = input; }}
                             onChangeText={qtItem => {
                                 this.fieldsChanged.qtitem = true; 
                                 this.props.modificaQtdItem(qtItem); 
                             }}
                             onBlur={() => { 
-                                if (this.props.qtItem && this.fieldsChanged.qtitem) {
+                                if (this.props.qtdItem && this.fieldsChanged.qtitem) {
                                     this.fieldsChanged.qtitem = false;
                                     this.validQtd();
                                 } 
@@ -520,7 +522,7 @@ class FormCorteCabos extends Component {
                             editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.input}
+                            style={[styles.input, { fontSize: 10 }]}
                             onChangeText={lote => this.props.modificaLote(lote)}
                             value={this.props.lote}
                         />
@@ -614,6 +616,7 @@ export default connect(mapStateToProps, {
     modificaCorteSelec,
     modificaItemCorteSelec,
     iniciaTela,
+    modificaClean,
     efetivaCorteCabos,
     imprimeEtiquetaCorte,
     fetchListCortes

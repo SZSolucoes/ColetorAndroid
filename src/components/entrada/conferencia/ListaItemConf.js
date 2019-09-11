@@ -12,7 +12,7 @@ import _ from 'lodash';
 
 import { 
     modificaListaItem,
-    modificaCodItem,
+    modificaCodItemConf,
     modificaDesItem,
     modificaUnidMed,
     modificaItemConfere,
@@ -31,7 +31,7 @@ class ListaItem extends Component {
     onPressItem(item) {
         const { itCode, itDesc, un, localiz } = item;
 
-        this.props.modificaCodItem(itCode);
+        this.props.modificaCodItemConf(itCode);
         this.props.modificaDesItem(itDesc);
         this.props.modificaUnidMed(un);
         this.props.modificaLocalPad(localiz);
@@ -154,7 +154,7 @@ const mapStateToProps = state => (
 export default connect(mapStateToProps, 
     { 
         modificaListaItem,
-        modificaCodItem,
+        modificaCodItemConf,
         modificaDesItem,
         modificaUnidMed,
         modificaItemConfere,

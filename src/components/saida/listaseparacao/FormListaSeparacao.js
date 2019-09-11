@@ -125,6 +125,7 @@ class FormListaSeparacao extends Component {
                 return;
             }
         }
+        //this.onPressSeparar();
     }
     
     onChangeQtdText(value) {
@@ -282,6 +283,7 @@ class FormListaSeparacao extends Component {
         }
         this.props.modificaValidQtd(true);
         this.loteFocus();
+        
         return true;
     }
 
@@ -578,7 +580,7 @@ class FormListaSeparacao extends Component {
                                     this.fieldsChanged.localizacaoConf) {
                                         this.fieldsChanged.localizacaoConf = false;
                                         this.validLocalConf();
-                                    } 
+                                }
                             }}
                         />
                     </View>
@@ -711,7 +713,8 @@ class FormListaSeparacao extends Component {
                                 if (this.props.lote && this.fieldsChanged.lote) {
                                     this.fieldsChanged.lote = false;
                                     this.onBlurLote();
-                                } 
+                                }
+                                //this.onPressSeparar();
                             }}
                         />
                     </View>
@@ -788,7 +791,7 @@ class FormListaSeparacao extends Component {
                                 onChangeText={(value) => this.onChangeQtdEtiq(value)}
                             />
                             <TouchableOpacity
-                                style={styles.btSearch}
+                                style={styles.btSearch}                                
                                 onPress={() => this.onPressPrint()}
                             >
                                 <Image

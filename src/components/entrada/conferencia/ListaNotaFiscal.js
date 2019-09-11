@@ -15,7 +15,7 @@ import {
     modificaQtConferir,
     modificaQtTotal,
     modificaListaItem,
-    modificaCodItem,
+    modificaCodItemConf,
     modificaDesItem,
     modificaUnidMed,
     modificaNotaConfere,
@@ -33,7 +33,7 @@ class ListaNotaFiscal extends Component {
         this.props.modificaQtTotal(nota.qtdItem);
         this.props.modificaQtConferir(_.toString(qtdConf));
         this.props.modificaListaItem(nota.itens);
-        this.props.modificaCodItem(item.itCode);
+        this.props.modificaCodItemConf(item.itCode);
         this.props.modificaDesItem(item.itDesc);
         this.props.modificaLocalPad(item.localiz);
         this.props.modificaUnidMed(item.un);
@@ -67,7 +67,7 @@ class ListaNotaFiscal extends Component {
                 <View style={styles.item}>
                     <Text style={styles.itemNroDoc}>{ item.nroDocto}</Text>
                     <Text style={styles.itemSerie}>{ item.serie}</Text>
-                    <Text style={styles.itemEmitente}>{ item.codEmit}</Text>
+                    <Text style={styles.itemEmitente}>{ item.nomeEmit}</Text>
                     <Text style={styles.itemNatureza}>{ item.natOper}</Text>
                 </View>
             </TouchableHighlight>            
@@ -132,7 +132,7 @@ export default connect(
         modificaQtConferir,
         modificaQtTotal,
         modificaListaItem,
-        modificaCodItem,
+        modificaCodItemConf,
         modificaDesItem,
         modificaUnidMed,
         modificaNotaConfere,

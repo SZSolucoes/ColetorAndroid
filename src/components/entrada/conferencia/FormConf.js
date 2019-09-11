@@ -21,7 +21,7 @@ import InfoItemConferencia from './InfoItemConferencia';
 import { 
     modificaBatismo,
     modificaCodEAN,
-    modificaCodItem,
+    modificaCodItemConf,
     modificaDesItem,
     modificaFornec,
     modificaLocalPad,
@@ -44,12 +44,17 @@ import {
 import {
     imprimeEtiquetaEAN
 } from '../../../actions/ImpressaoActions';
+import { 
+    modificaCodEan,
+    modificaCodItem
+} from '../../../actions/RelEanActions';
 
 import LoadingSpin from '../../utils/LoadingSpin';
 
 const imgZoom = require('../../../../resources/imgs/zoom_nf.png');
 const imgPrinter = require('../../../../resources/imgs/impressao_etiq.png');
 const imgClear = require('../../../../resources/imgs/limpa_tela.png');
+const imgRelEan = require('../../../../resources/imgs/relacionaean.png');
 
 class FormConf extends Component {
     constructor() {
@@ -209,6 +214,12 @@ class FormConf extends Component {
         this.props.modificaOnEfetivar(true);
         this.props.efetivaConfere({ usuario, notaConfere, itemConfere, conferencia });
     }
+    onPressRelaciona() {
+        //this.props.modificaCodEan(firstEan);
+        this.props.modificaCodItem(this.props.codItem);
+
+        Actions.relacionaEan();
+    }
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
 
@@ -312,7 +323,7 @@ class FormConf extends Component {
             this.props.modificaQtTotal(notaConf[0].qtdItem);
             this.props.modificaQtConferir(_.toString(qtdConf));
             this.props.modificaListaItem(notaConf[0].itens);
-            this.props.modificaCodItem(item.itCode);
+            this.props.modificaCodItemConf(item.itCode);
             this.props.modificaDesItem(item.itDesc);
             this.props.modificaLocalPad(item.localiz);
             this.props.modificaUnidMed(item.un);
@@ -352,7 +363,7 @@ class FormConf extends Component {
             return;
         }
 
-        this.props.modificaCodItem(itemConf[0].itCode);
+        this.props.modificaCodItemConf(itemConf[0].itCode);
         this.props.modificaDesItem(itemConf[0].itDesc);
         this.props.modificaLocalPad(itemConf[0].localiz);
         this.props.modificaUnidMed(itemConf[0].un);
@@ -604,7 +615,7 @@ class FormConf extends Component {
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
                             style={styles.input}
-                            onChangeText={codItem => this.props.modificaCodItem(codItem)}
+                            onChangeText={codItem => this.props.modificaCodItemConf(codItem)}
                             value={this.props.codItem}
                         />
                     </View>
@@ -669,7 +680,7 @@ class FormConf extends Component {
                 { Platform.OS !== 'windows' ? (
                     <View style={styles.viewLinha}>
                         {this.renderBtEfetiva()}
-                        <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <View style={[styles.viewCampo, { flex: 2 }]}>
                             <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
                             <View style={styles.viewBtEtiq}>
                                 <TextInput
@@ -695,6 +706,15 @@ class FormConf extends Component {
                                         style={styles.imgSearch}
                                     />
                                 </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={styles.btSearch}
+                                    onPress={() => { this.onPressRelaciona(); }}
+                                >
+                                    <Image
+                                        source={imgRelEan}
+                                        style={styles.imgSearch}
+                                    />
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -704,7 +724,7 @@ class FormConf extends Component {
                         <View style={{ flex: 2 }}>
                             {this.renderBtEfetiva()}
                         </View>
-                        <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <View style={[styles.viewCampo, { flex: 2 }]}>
                             <Text style={styles.txtLabel}>Qtde Etiq</Text>
                             <View style={styles.viewBtEtiq}>
                                 <TextInput
@@ -736,6 +756,15 @@ class FormConf extends Component {
                             >
                                 <Image
                                     source={imgPrinter}
+                                    style={styles.imgSearch}
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                    style={styles.btSearch}
+                                    onPress={() => { this.onPressRelaciona(); }}
+                            >
+                                <Image
+                                    source={imgRelEan}
                                     style={styles.imgSearch}
                                 />
                             </TouchableOpacity>
@@ -781,7 +810,7 @@ const mapStateToProps = state => (
 export default connect(mapStateToProps, { 
     modificaBatismo,
     modificaCodEAN,
-    modificaCodItem,
+    modificaCodItemConf,
     modificaDesItem,
     modificaFornec,
     modificaLocalPad,
@@ -800,7 +829,9 @@ export default connect(mapStateToProps, {
     modificaNotaConfere,
     modificaItemConfere,
     modificaInfoVisible,
-    modificaOnEfetivar
+    modificaOnEfetivar,
+    modificaCodEan,
+    modificaCodItem
 })(FormConf);
 
 const styles = StyleSheet.create({

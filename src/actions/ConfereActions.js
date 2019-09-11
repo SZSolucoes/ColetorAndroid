@@ -62,7 +62,7 @@ export const modificaLocalPad = (localPad) => ({
     type: 'modifica_localPad_conf',
     payload: localPad    
 });
-export const modificaCodItem = (codItem) => ({
+export const modificaCodItemConf = (codItem) => ({
     type: 'modifica_codItem_conf',
     payload: codItem    
 });
