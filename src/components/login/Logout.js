@@ -1,0 +1,44 @@
+import React from 'react';
+import { 
+    TouchableOpacity,
+    Text,
+    StyleSheet
+} from 'react-native';
+import { Actions } from 'react-native-router-flux';
+
+export default class LogoutBtn extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.onPressLogout = this.onPressLogout.bind(this);
+    }
+    onPressLogout() {
+        Actions.pop();
+    }
+
+    render() {
+        return (
+            <TouchableOpacity style={styles.buttonLogin} onPress={this.onPressLogout}>
+                <Text style={styles.buttonLabel}> 
+                    LOGOUT
+                </Text>
+            </TouchableOpacity>
+        );
+    }
+}
+
+const styles = StyleSheet.create({
+    buttonLogin: {
+		backgroundColor: '#2a4d69',
+        paddingVertical: 15,
+        marginHorizontal: 10,
+        marginTop: 10,
+        marginBottom: 10,
+		borderRadius: 10
+	},
+	buttonLabel: {
+		textAlign: 'center',
+		color: 'white',
+		fontWeight: '700'
+	},
+});
