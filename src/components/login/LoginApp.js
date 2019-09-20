@@ -112,13 +112,13 @@ class LoginApp extends React.PureComponent {
             case '1': // Centelha
                 return (
                     <Text style={styles.infoBot}>
-                        Coletor de Dados Centelha
+                        Coletor de Dados <Text style={{ fontWeight: 'bold' }}>Centelha</Text>
                     </Text>
                 );
             case '2': // Dw
                 return (
                     <Text style={styles.infoBot}>
-                        Coletor de Dados DW
+                        Coletor de Dados <Text style={{ fontWeight: 'bold' }}>DW</Text>
                     </Text>
                 );
             default:

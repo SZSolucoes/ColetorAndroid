@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { 
     ScrollView,
@@ -23,12 +24,12 @@ import {
     modificaQtdItemLote,
     modificaListaItemLote
 } from '../../../actions/ConfereActions';
-
+import { defaultFormStyles } from '../../utils/Forms';
 
 class FormConfLote extends React.PureComponent {
     componentDidMount() {
         this.props.iniciaConfLote();
-        Actions.refresh({ right: this._renderRightButton });
+        setTimeout(Actions.refresh, 500, { right: this._renderRightButton });
     }
 
     _renderRightButton = () => {
@@ -73,6 +74,24 @@ class FormConfLote extends React.PureComponent {
 
         Actions.pop();
     }
+
+    onBlurQtdVolume = () => {
+        if (this.props.qtdLote) this.criaVolumesLote();
+    }
+    onBlurQuantidade = () => {
+        if (this.props.qtdItemLote) this.salvaQtdLote();
+    }
+
+    onChangeQtdVolume = (value) => {
+        this.props.modificaQtdLote(value);
+    }
+    onChangeLote = (value) => {
+        this.props.modificaCodLote(value);
+    }
+    onChangeQuantidade = (value) => {
+        this.props.modificaQtdItemLote(value);
+    }
+
     criaVolumesLote() {
         const { qtdLote } = this.props;
         let arrLote = [];
@@ -128,19 +147,21 @@ class FormConfLote extends React.PureComponent {
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Qtde Volumes</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            onChangeText={qtdLote => this.props.modificaQtdLote(qtdLote)}
-                            value={this.props.qtdLote}
-                            ref={(input) => { this.qtdLote = input; }}
-                            onBlur={() => this.props.qtdLote && this.criaVolumesLote()}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeQtdVolume}
+                                value={this.props.qtdLote}
+                                ref={(input) => { this.qtdLote = input; }}
+                                onBlur={this.onBlurQtdVolume}
+                            />
+                        </View>
                     </View>
                     <View style={styles.viewBtOk}>
                         <TouchableOpacity
@@ -154,48 +175,53 @@ class FormConfLote extends React.PureComponent {
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Seq</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={seqLote => this.props.modificaSeqLote(seqLote)}
-                            value={this.props.seqLote}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.seqLote}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>Lote</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={codLote => this.props.modificaCodLote(codLote)}
-                            ref={(input) => { this.codLote = input; }}
-                            value={this.props.codLote}
-                            onSubmitEditing={() => { this.qtdItemLote.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeLote}
+                                ref={(input) => { this.codLote = input; }}
+                                value={this.props.codLote}
+                                onSubmitEditing={() => { this.qtdItemLote.focus(); }}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={styles.txtLabel}>Qtde</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            onChangeText={qtdItemLote => this.props.modificaQtdItemLote(qtdItemLote)}
-                            value={this.props.qtdItemLote}
-                            ref={(input) => { this.qtdItemLote = input; }}
-                            onBlur={() => this.props.qtdItemLote && this.salvaQtdLote()}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeQuantidade}
+                                value={this.props.qtdItemLote}
+                                ref={(input) => { this.qtdItemLote = input; }}
+                                onBlur={this.onBlurQuantidade}
+                            />
+                        </View>
                     </View>
                     <View style={styles.viewBtOk}>
                         <TouchableOpacity
@@ -256,15 +282,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     },
     btOk: {
         width: 40,

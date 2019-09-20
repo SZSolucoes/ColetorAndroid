@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { 
     ScrollView,
@@ -41,6 +42,7 @@ import {
 import ListaItem from './ListaItemCorte';
 
 import LoadingSpin from '../../utils/LoadingSpin';
+import { defaultFormStyles } from '../../utils/Forms';
 
 import imgZoom from '../../../../resources/imgs/zoom_nf.png';
 import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
@@ -334,28 +336,30 @@ class FormCorteCabos extends React.PureComponent {
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Corte Cabo</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.codCorte}
-                            ref={(input) => { this.codCorte = input; }}
-                            onChangeText={codCorte => {
-                                this.fieldsChanged.cdCorte = true; 
-                                this.props.modificaCodCorte(codCorte); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.codCorte && this.fieldsChanged.cdCorte) {
-                                    this.fieldsChanged.cdCorte = false;
-                                    this.carregaCorte();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.codCorte}
+                                ref={(input) => { this.codCorte = input; }}
+                                onChangeText={codCorte => {
+                                    this.fieldsChanged.cdCorte = true; 
+                                    this.props.modificaCodCorte(codCorte); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.codCorte && this.fieldsChanged.cdCorte) {
+                                        this.fieldsChanged.cdCorte = false;
+                                        this.carregaCorte();
+                                    } 
+                                }}
+                            />
+                        </View>
                     </View>
                     <View style={styles.viewBtSearch}>
                         <TouchableOpacity
@@ -366,7 +370,7 @@ class FormCorteCabos extends React.PureComponent {
                                 (   
                                     <View style={[styles.menu, { justifyContent: 'center' }]}>
                                         <View style={{ marginVertical: 6 }}>
-                                            <ActivityIndicator size={'large'} />
+                                            <ActivityIndicator size={'large'} color={'white'} />
                                         </View>
                                     </View>
                                 ) : (
@@ -381,48 +385,52 @@ class FormCorteCabos extends React.PureComponent {
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={styles.txtLabel}>Equipamento</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={equipto => this.props.modificaEquipamento(equipto)}
-                            value={this.props.equipamento}
-                            ref={(input) => { this.eqpto = input; }}
-                            onSubmitEditing={() => { this.codEAN.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={equipto => this.props.modificaEquipamento(equipto)}
+                                value={this.props.equipamento}
+                                ref={(input) => { this.eqpto = input; }}
+                                onSubmitEditing={() => { this.codEAN.focus(); }}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>EAN</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <TextInput
-                                selectTextOnFocus
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={[styles.input, { flex: 6 }]}
-                                value={this.props.codEAN}
-                                ref={(input) => { this.codEAN = input; }}
-                                onChangeText={codEAN => {
-                                    this.fieldsChanged.ean = true; 
-                                    this.props.modificaCodEAN(codEAN); 
-                                }}
-                                onBlur={() => { 
-                                    if (this.props.codEAN && this.fieldsChanged.ean) {
-                                        this.fieldsChanged.ean = false;
-                                        this.validEAN();
-                                    } else {
-                                        this.qtItem.focus();
-                                    }
-                                }}
-                            />
+                            <View style={[defaultFormStyles.inputView, { flex: 6 }]}>
+                                <TextInput
+                                    selectTextOnFocus
+                                    placeholder=""
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    keyboardType="numeric"
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="go"
+                                    style={defaultFormStyles.input}
+                                    value={this.props.codEAN}
+                                    ref={(input) => { this.codEAN = input; }}
+                                    onChangeText={codEAN => {
+                                        this.fieldsChanged.ean = true; 
+                                        this.props.modificaCodEAN(codEAN); 
+                                    }}
+                                    onBlur={() => { 
+                                        if (this.props.codEAN && this.fieldsChanged.ean) {
+                                            this.fieldsChanged.ean = false;
+                                            this.validEAN();
+                                        } else {
+                                            this.qtItem.focus();
+                                        }
+                                    }}
+                                />
+                            </View>
                             <TouchableOpacity
                                 style={styles.btClear}
                                 onPress={() => { this.props.modificaCodEAN(); }}
@@ -436,102 +444,109 @@ class FormCorteCabos extends React.PureComponent {
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Localização</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={[styles.input, { fontSize: 10 }]}
-                            onChangeText={local => this.props.modificaLocalizacao(local)}
-                            value={this.props.localizacao}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={[defaultFormStyles.input, { fontSize: 10 }]}
+                                value={this.props.localizacao}
+                            />
+                        </View>
                     </View>                                        
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Qtde</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.qtdItem}
-                            ref={(input) => { this.qtItem = input; }}
-                            onChangeText={qtItem => {
-                                this.fieldsChanged.qtitem = true; 
-                                this.props.modificaQtdItem(qtItem); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.qtdItem && this.fieldsChanged.qtitem) {
-                                    this.fieldsChanged.qtitem = false;
-                                    this.validQtd();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.qtdItem}
+                                ref={(input) => { this.qtItem = input; }}
+                                onChangeText={qtItem => {
+                                    this.fieldsChanged.qtitem = true; 
+                                    this.props.modificaQtdItem(qtItem); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.qtdItem && this.fieldsChanged.qtitem) {
+                                        this.fieldsChanged.qtitem = false;
+                                        this.validQtd();
+                                    } 
+                                }}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Lance Obrigatório</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={obrigatorio => this.props.modificaObrigatorio(obrigatorio)}
-                            value={`${this.props.obrigatorio}`}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={`${this.props.obrigatorio}`}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 5 }]}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={codItem => this.props.modificaCodItem(codItem)}
-                            value={this.props.codItem}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codItem}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={un => this.props.modificaUn(un)}
-                            value={this.props.un}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.un}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={styles.txtLabel}>Lote</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={[styles.input, { fontSize: 10 }]}
-                            onChangeText={lote => this.props.modificaLote(lote)}
-                            value={this.props.lote}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={[defaultFormStyles.input, { fontSize: 10 }]}
+                                value={this.props.lote}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -546,8 +561,7 @@ class FormCorteCabos extends React.PureComponent {
                             numberOfLines={3}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.inputDescricao}
-                            onChangeText={descItem => this.props.modificaDescItem(descItem)}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.descItem}
                         />
                     </View>
@@ -648,24 +662,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
     },
     viewBotao: {
         flexDirection: 'row',

@@ -35,6 +35,7 @@ import {
     doFetchBatismo,
     doConfSaida
 } from '../../../actions/ConfereSaidaActions';
+import { defaultFormStyles } from '../../utils/Forms';
 
 import imgUrgent from '../../../../resources/imgs/urgent.png';
 
@@ -48,7 +49,6 @@ class FormConferenciaSeparacao extends React.PureComponent {
         this.focusInField = this.focusInField.bind(this);
         this.checkIfUrgent = this.checkIfUrgent.bind(this);
         this.renderImgUrgent = this.renderImgUrgent.bind(this);
-        this.doCheckEnableLote = this.doCheckEnableLote.bind(this);
         this.onBlurLote = this.onBlurLote.bind(this);
         this.onBlurEAN = this.onBlurEAN.bind(this);
         this.onBlurQtde = this.onBlurQtde.bind(this);
@@ -188,10 +188,48 @@ class FormConferenciaSeparacao extends React.PureComponent {
             return true;
         }
     }
+    
+    onBlurBatismo = () => {
+        if (this.props.batismo && this.fieldsChanged.batismo) {
+            this.fieldsChanged.batismo = false;
+            this.doFetchBatismo();
+        }
+    }
+    onBlurEanCod = () => {
+        if (this.props.codEAN && this.fieldsChanged.codEAN) {
+            this.fieldsChanged.codEAN = false;
+            this.onBlurEAN();
+        } 
+    }
+    onBlurQtdeCod = () => {
+        if (this.props.quantidade && this.fieldsChanged.quantidade) {
+            this.fieldsChanged.quantidade = false;
+            this.onBlurQtde();
+        }
+    }
+    onBlurLoteCod = () => {
+        if (this.props.lote && this.fieldsChanged.lote) {
+            this.fieldsChanged.lote = false;
+            this.onBlurLote();
+        } 
+    }
 
+    onChangeBatismo = (value) => {
+        this.fieldsChanged.batismo = true; 
+        this.props.modificaBatismo(value); 
+    }
+    onChangeEan = (value) => {
+        this.fieldsChanged.codEAN = true; 
+        this.props.modificaCodEAN(value);
+    }
     onChangeQtdText(value) {
+        this.fieldsChanged.quantidade = true;
         const txtParsed = value.replace(/[^0-9]/g, '');
         this.props.modificaQtde(txtParsed);
+    }
+    onChangeLote = (value) => {
+        this.fieldsChanged.lote = true; 
+        this.props.modificaLote(value); 
     }
     
     checkIfUrgent() {
@@ -200,14 +238,6 @@ class FormConferenciaSeparacao extends React.PureComponent {
         } else {
             Actions.refresh({ right: () => this.renderImgUrgent(false) });
         }
-    }
-
-    doCheckEnableLote() {
-        if (this.props.itemSelected !== -1 && this.props.listItems.length > 0 &&
-            this.props.listItems[this.props.itemSelected].tpCont === '3') {
-            return true;
-        }
-        return false;
     }
 
     doFetchBatismo() {
@@ -346,7 +376,7 @@ class FormConferenciaSeparacao extends React.PureComponent {
                 <View style={styles.viewBotao}>
                     <View style={{ width: 150 }}>
                         <Button
-                            onPress={() => this.doConferir()}
+                            onPress={this.doConferir}
                             title="Efetivar"
                             color="black"
                         />
@@ -358,7 +388,7 @@ class FormConferenciaSeparacao extends React.PureComponent {
         return (
             <View style={styles.viewBotao}>
                 <Button
-                    onPress={() => this.doConferir()}
+                    onPress={this.doConferir}
                     title="Conferir"
                     color="green"
                 />
@@ -390,197 +420,188 @@ class FormConferenciaSeparacao extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.batismo}
-                            ref={(input) => { this.batismo = input; }}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.batismo = true; 
-                                this.props.modificaBatismo(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.batismo && 
-                                    this.fieldsChanged.batismo) {
-                                        this.fieldsChanged.batismo = false;
-                                        this.doFetchBatismo();
-                                    } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.batismo}
+                                ref={(input) => { this.batismo = input; }}
+                                onFocus={this.doChangePersistTap}
+                                onChangeText={this.onChangeBatismo}
+                                onBlur={this.onBlurBatismo}
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Embarque</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.embarque}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.embarque}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Pedido</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.pedido}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.pedido}
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 3 }}>
                         <Text style={styles.txtLabel}>Total Itens</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.qtdTotItens}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.qtdTotItens}
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 3 }}>
                         <Text style={styles.txtLabel}>Itens Conf</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={`${this.props.qtdConfItens}`}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={`${this.props.qtdConfItens}`}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View style={{ flex: 5 }}>
                         <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.codEAN}
-                            ref={(input) => { this.codEAN = input; }}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.codEAN = true; 
-                                this.props.modificaCodEAN(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.codEAN && this.fieldsChanged.codEAN) {
-                                    this.fieldsChanged.codEAN = false;
-                                    this.onBlurEAN();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.codEAN}
+                                ref={(input) => { this.codEAN = input; }}
+                                onFocus={this.doChangePersistTap}
+                                onChangeText={this.onChangeEan}
+                                onBlur={this.onBlurEanCod}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 3 }}>
                         <Text style={styles.txtLabel}>Qtde</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType={'numeric'}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.quantidade}
-                            ref={input => { this.quantidade = input; }}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.quantidade = true; 
-                                this.onChangeQtdText(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.quantidade && this.fieldsChanged.quantidade) {
-                                    this.fieldsChanged.quantidade = false;
-                                    this.onBlurQtde();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType={'numeric'}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.quantidade}
+                                ref={input => { this.quantidade = input; }}
+                                onFocus={this.doChangePersistTap}
+                                onChangeText={this.onChangeQtdText}
+                                onBlur={this.onBlurQtdeCod}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codItem}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codItem}
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 1.4 }}>
                         <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.um}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.um}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 3.7 }}>
                         <Text style={styles.txtLabel}>Lote</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.lote}
-                            editable={this.doCheckEnableLote()}
-                            ref={(input) => { this.lote = input; }}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.lote = true; 
-                                this.props.modificaLote(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.lote && this.fieldsChanged.lote) {
-                                    this.fieldsChanged.lote = false;
-                                    this.onBlurLote();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.lote}
+                                editable={(
+                                    this.props.itemSelected !== -1 && 
+                                    this.props.listItems.length > 0 &&
+                                    this.props.listItems[this.props.itemSelected].tpCont === '3'
+                                )}
+                                ref={(input) => { this.lote = input; }}
+                                onFocus={this.doChangePersistTap}
+                                onChangeText={this.onChangeLote}
+                                onBlur={this.onBlurLoteCod}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
@@ -596,7 +617,7 @@ class FormConferenciaSeparacao extends React.PureComponent {
                             numberOfLines={3}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.inputDescricao}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.itemDesc}
                         />
                     </View>
@@ -604,72 +625,82 @@ class FormConferenciaSeparacao extends React.PureComponent {
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Separador</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.separador}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.separador}
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.localizacao}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.localizacao}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Cidade</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            style={styles.input}
-                            value={this.props.cidade}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                style={defaultFormStyles.input}
+                                value={this.props.cidade}
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Entrega</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            style={styles.input}
-                            value={this.props.entrega}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                style={defaultFormStyles.input}
+                                value={this.props.entrega}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     {this.renderBtEfetiva()}
                     <View pointerEvents="none" style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Cliente</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            underlineColorAndroid='transparent'
-                            style={styles.input}
-                            value={this.props.nome}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                underlineColorAndroid='transparent'
+                                style={defaultFormStyles.input}
+                                value={this.props.nome}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <View style={{ padding: 5 }}>
@@ -734,24 +765,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
     },
     viewBotao: {
         flex: 1,

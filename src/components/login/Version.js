@@ -28,6 +28,7 @@ import {
     modificaModalOptions
 } from '../../actions/VersionActions';
 import { doChangeUrlService } from '../utils/AxiosAux';
+import { defaultFormStyles } from '../utils/Forms';
 
 import imgSeta from '../../../resources/imgs/seta.png';
 
@@ -229,16 +230,18 @@ class Version extends React.PureComponent {
                                 onPress={() => this.onShowModal('empresa')}
                                 style={{ flexDirection: 'row', flex: 2 }}
                             >
-                                <TextInput
-                                    placeholder=''
-                                    autoCapitalize='none'
-                                    autoCorrect={false}
-                                    editable={false}
-                                    placeholderTextColor='rgba(255,255,255,0.7)'
-                                    returnKeyType='next'
-                                    style={[styles.input, { flex: 1 }]}
-                                    value={this.props.desEmpresa}
-                                />
+                                <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                                    <TextInput
+                                        placeholder=''
+                                        autoCapitalize='none'
+                                        autoCorrect={false}
+                                        editable={false}
+                                        placeholderTextColor='rgba(255,255,255,0.7)'
+                                        returnKeyType='next'
+                                        style={defaultFormStyles.input}
+                                        value={this.props.desEmpresa}
+                                    />
+                                </View>
                                 <Image
                                     source={imgSeta}
                                     style={styles.imgSeta}
@@ -259,16 +262,18 @@ class Version extends React.PureComponent {
                                 onPress={() => this.onShowModal('ambiente')}
                                 style={{ flexDirection: 'row', flex: 2 }}
                             >
-                                <TextInput
-                                    placeholder=''
-                                    autoCapitalize='none'
-                                    autoCorrect={false}
-                                    editable={false}
-                                    placeholderTextColor='rgba(255,255,255,0.7)'
-                                    returnKeyType='next'
-                                    style={[styles.input, { flex: 1 }]}
-                                    value={this.props.desAmbiente}
-                                />
+                                <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                                    <TextInput
+                                        placeholder=''
+                                        autoCapitalize='none'
+                                        autoCorrect={false}
+                                        editable={false}
+                                        placeholderTextColor='rgba(255,255,255,0.7)'
+                                        returnKeyType='next'
+                                        style={defaultFormStyles.input}
+                                        value={this.props.desAmbiente}
+                                    />
+                                </View>
                                 <Image
                                     source={imgSeta}
                                     style={styles.imgSeta}
@@ -342,14 +347,5 @@ const styles = StyleSheet.create({
     imgSeta: {
         width: 35,
         height: 35
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     }
 });

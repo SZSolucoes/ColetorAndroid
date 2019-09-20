@@ -20,7 +20,10 @@ import {
     modificaClean,
     doConsBatismo
 } from '../../../actions/ConsEtiqBatSaidaActions';
+
+import { defaultFormStyles } from '../../utils/Forms';
 import LoadingSpin from '../../utils/LoadingSpin';
+
 import imgClear from '../../../../resources/imgs/limpa_tela.png'; 
 
 class FormConsultaEtiqBatismo extends React.PureComponent {
@@ -36,7 +39,7 @@ class FormConsultaEtiqBatismo extends React.PureComponent {
     }
 
     componentDidMount() {
-        Actions.refresh({ right: this.renderRightButtonBar });
+        setTimeout(Actions.refresh, 500, { right: this.renderRightButtonBar });
     }
 
     componentWillUnmount() {
@@ -70,26 +73,28 @@ class FormConsultaEtiqBatismo extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.etiqueta}
-                            onChangeText={value => {
-                                this.fieldsChanged.etiqueta = true; 
-                                this.props.modificaBatismo(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.etiqueta && this.fieldsChanged.etiqueta) {
-                                    this.fieldsChanged.etiqueta = false;
-                                    this.onBlurEtiqueta();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.etiqueta}
+                                onChangeText={value => {
+                                    this.fieldsChanged.etiqueta = true; 
+                                    this.props.modificaBatismo(value); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.etiqueta && this.fieldsChanged.etiqueta) {
+                                        this.fieldsChanged.etiqueta = false;
+                                        this.onBlurEtiqueta();
+                                    } 
+                                }}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <View style={{ padding: 5 }}>
@@ -123,15 +128,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     },
     btClear: {
         width: 40,

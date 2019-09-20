@@ -10,12 +10,15 @@ import {
     Button,
     Image,
     TouchableOpacity,
-    ActivityIndicator,
     Alert
 } from 'react-native';
+import { defaultFormStyles } from '../../utils/Forms';
+import LoadingSpin from '../../utils/LoadingSpin';
 
 import imgPrinter from '../../../../resources/imgs/zoom_nf.png';
 import imgClear from '../../../../resources/imgs/limpa_tela.png';
+import { store } from '../../../App';
+import { doAlertWithTimeout } from '../../utils/Alerts';
 
 class FormConferenciaPlaca extends React.PureComponent {
     constructor(props) {
@@ -33,7 +36,7 @@ class FormConferenciaPlaca extends React.PureComponent {
 	}
     
     componentDidMount() {
-        Actions.refresh({ right: this._renderRightButton });
+        setTimeout(Actions.refresh, 500, { right: this._renderRightButton });
     }
 
     clearForm(all) {
@@ -102,7 +105,6 @@ class FormConferenciaPlaca extends React.PureComponent {
         });        
     }
     onConferePlaca() {
-
         this.setState({watingAction: true});
         var params = { 
             numDoc: this.state.numDoc,
@@ -112,40 +114,50 @@ class FormConferenciaPlaca extends React.PureComponent {
             volumes: this.state.volumes
         };
 
+        store.dispatch({ type: 'modifica_visible_loadingspin', payload: true });
         Axios.get('/coletor/doCheckVolDoc.p', {params})
-        .then(res => {            
+        .then(res => {
+            store.dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+
             if (res.data.success === 'true') {
                 (() => {
                     this.placa.focus();
                     this.clearForm();
                 }).call(this)
             }
-            Alert.alert(
+            doAlertWithTimeout(
                 'Conferência Placa',
                 res.data.message
             ); 
             this.setState({watingAction: false});          
         })
         .catch((err) => {
-            Alert.alert(
+            store.dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+            doAlertWithTimeout(
                 'Erro Inesperado', err
             );
             this.setState({watingAction: false});
         });        
     }
-    onBlurPlaca(event) {
-        if (this.state.prevPlaca != this.state.placa) {
+
+    onBlurPlaca = () => {
+        if (this.state.prevPlaca !== this.state.placa) {
             this.setState({ prevPlaca: this.state.placa });
             this.clearForm();
         }
     }
-    renderBtConfirmar() {
-        if (this.state.watingAction) {
-            return (
-                <ActivityIndicator size="large" />
-            );
-        }
 
+    onChangePlaca = (value) => {
+        this.setState({ placa: value });
+    }
+    onChangeNotaFiscal = (value) => {
+        this.setState({ numDoc: value });
+    }
+    onChangeVolumes = (value) => {
+        this.setState({ volumes: value });
+    }
+
+    renderBtConfirmar() {
         return (
             <View style={[styles.viewBotao, { flex: 1 }]}>
                 <Button
@@ -159,21 +171,24 @@ class FormConferenciaPlaca extends React.PureComponent {
     render() {        
         return (
             <ScrollView style={styles.viewPrinc}>
+                <LoadingSpin />
                 <View style={[styles.viewLinha]}>
                     <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Placa</Text>                   
-                        <TextInput
-                            placeholder=""                           
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={[styles.input]}
-                            returnKeyType="go"
-                            onChangeText={(placa) => this.setState({placa})}
-                            value={this.state.placa}
-                            onBlur={(placa) => this.onBlurPlaca(placa)}
-                            ref={(input) => { this.placa = input; }}
-                        />
+                        <Text style={styles.txtLabel}>Placa</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""                           
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={[defaultFormStyles.input]}
+                                returnKeyType="go"
+                                onChangeText={this.onChangePlaca}
+                                value={this.state.placa}
+                                onBlur={this.onBlurPlaca}
+                                ref={(input) => { this.placa = input; }}
+                            />
+                        </View>                  
                     </View>
                     <TouchableOpacity
                                 style={styles.btSearch}
@@ -187,67 +202,69 @@ class FormConferenciaPlaca extends React.PureComponent {
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Nota Fiscal</Text>                   
-                        <TextInput
-                            placeholder=""
-                            editable={false}
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            returnKeyType="go"
-                            onChangeText={(numDoc) => this.setState({numDoc})}
-                            value={this.state.numDoc}                            
-                            ref={(input) => { this.numDoc = input; }}
-                        />
+                        <Text style={styles.txtLabel}>Nota Fiscal</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                editable={false}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                returnKeyType="go"
+                                onChangeText={this.onChangeNotaFiscal}
+                                value={this.state.numDoc}                            
+                                ref={(input) => { this.numDoc = input; }}
+                            />
+                        </View>                 
                     </View>
                     <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Serie</Text>                   
-                        <TextInput
-                            placeholder=""
-                            editable={false}
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            returnKeyType="go"
-                            onChangeText={(serie) => this.setState({serie})}
-                            value={this.state.serie}
-                            // onBlur={() => this.props.chave && this.buscaEAN()}
-                            ref={(input) => { this.serie = input; }}
-                        />
+                        <Text style={styles.txtLabel}>Serie</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                editable={false}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                returnKeyType="go"
+                                value={this.state.serie}
+                                ref={(input) => { this.serie = input; }}
+                            />
+                        </View>                  
                     </View>
                     <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Fornecedor</Text>                   
-                        <TextInput
-                            placeholder=""
-                            editable={false}                            
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            returnKeyType="go"
-                            onChangeText={(fornec) => this.setState({fornec})}
-                            value={this.state.fornec}
-                            // onBlur={() => this.props.chave && this.buscaEAN()}
-                            ref={(input) => { this.fornec = input; }}
-                        />
+                        <Text style={styles.txtLabel}>Fornecedor</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                editable={false}                            
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                returnKeyType="go"
+                                value={this.state.fornec}
+                                ref={(input) => { this.fornec = input; }}
+                            />
+                        </View>                   
                     </View>
                     <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Natur Oper</Text>                   
-                        <TextInput
-                            placeholder=""
-                            editable={false}
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            returnKeyType="go"
-                            onChangeText={(natOper) => this.setState({natOper})}
-                            value={this.state.natOper}
-                            // onBlur={() => this.props.chave && this.buscaEAN()}
-                            ref={(input) => { this.natOper = input; }}
-                        />
+                        <Text style={styles.txtLabel}>Natur Oper</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                editable={false}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                returnKeyType="go"
+                                value={this.state.natOper}
+                                ref={(input) => { this.natOper = input; }}
+                            />
+                        </View>                   
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -259,32 +276,31 @@ class FormConferenciaPlaca extends React.PureComponent {
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.inputDescricao}
+                            style={defaultFormStyles.inputDescricao}
                             returnKeyType="go"
                             multiline
                             numberOfLines={3}
-                            onChangeText={(nomFornec) => this.setState({nomFornec})}
                             value={this.state.nomFornec}
-                            // onBlur={() => this.props.chave && this.buscaEAN()}
                             ref={(input) => { this.nomFornec = input; }}
                         />
                     </View>
                 </View>
                 <View style={[styles.viewLinha]}>
                     <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Volumes</Text>                   
-                        <TextInput
-                            placeholder=""                           
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={[styles.input, {textAlign: 'left'}]}
-                            returnKeyType="go"
-                            onChangeText={(volumes) => this.setState({volumes})}
-                            value={this.state.volumes}
-                            // onBlur={() => this.props.chave && this.buscaEAN()}
-                            ref={(input) => { this.volumes = input; }}
-                        />
+                        <Text style={styles.txtLabel}>Volumes</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""                           
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                returnKeyType="go"
+                                onChangeText={this.onChangeVolumes}
+                                value={this.state.volumes}
+                                ref={(input) => { this.volumes = input; }}
+                            />
+                        </View>                  
                     </View>
                 </View>
                 
@@ -330,15 +346,6 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-medium',
         fontSize: 13
     },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
-    },
     inputSmall: {
         width: 100
     },
@@ -355,15 +362,6 @@ const styles = StyleSheet.create({
         height: 35,
         padding: 10,
         borderRadius: 10
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
     },
     imgZoom: {        
         marginTop: 25,

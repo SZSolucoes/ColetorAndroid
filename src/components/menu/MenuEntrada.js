@@ -52,12 +52,12 @@ class MenuEntrada extends React.PureComponent {
     renderConfereciaPlaca(key) {
         if (this.props.logConfPlaca) {
             return (
-                <TouchableHighlight key={key} onPress={() => { this.onPressConfPlaca(); }}>        
+                <TouchableHighlight key={key} onPress={this.onPressConfPlaca}>        
                         { this.props.loadingConfPlaca ?
                             (   
                                 <View style={[styles.menu, { justifyContent: 'center' }]}>
                                     <View style={{ marginVertical: 6 }}>
-                                        <ActivityIndicator size={'large'} />
+                                        <ActivityIndicator size={'large'} color={'white'} />
                                     </View>
                                 </View>
                             ) : (
@@ -77,12 +77,12 @@ class MenuEntrada extends React.PureComponent {
     renderConferecia(key) {
         if (this.props.logConfReceb) {
             return (
-                <TouchableHighlight key={key} onPress={() => { this.onPressConf(); }}>        
+                <TouchableHighlight key={key} onPress={this.onPressConf}>
                         { this.props.loadingConf ?
                             (   
                                 <View style={[styles.menu, { justifyContent: 'center' }]}>
                                     <View style={{ marginVertical: 6 }}>
-                                        <ActivityIndicator size={'large'} />
+                                        <ActivityIndicator size={'large'} color={'white'} />
                                     </View>
                                 </View>
                             ) : (
@@ -158,18 +158,20 @@ class MenuEntrada extends React.PureComponent {
     render() {
         return (
             <ScrollView style={styles.opcao}>
-                { Platform.OS !== 'windows' ? (
-                    [
-                        this.renderConfereciaPlaca('6'),
-                        this.renderConferecia('1'),
-                        this.renderArmazenamento('2'),
-                        this.renderTransferencia('3'),
-                        this.renderRelacionaEan('4'),
-                        this.renderImpressao('5')
-                    ]
-                ) : (
-                    this.renderConferecia('1')
-                )}
+                <View style={{ flex: 1, paddingVertical: 5 }}>
+                    { Platform.OS !== 'windows' ? (
+                        [
+                            this.renderConfereciaPlaca('6'),
+                            this.renderConferecia('1'),
+                            this.renderArmazenamento('2'),
+                            this.renderTransferencia('3'),
+                            this.renderRelacionaEan('4'),
+                            this.renderImpressao('5')
+                        ]
+                    ) : (
+                        this.renderConferecia('1')
+                    )}
+                </View>
             </ScrollView>
         );
     }

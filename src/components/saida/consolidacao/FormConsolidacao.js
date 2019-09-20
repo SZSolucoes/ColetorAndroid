@@ -23,6 +23,7 @@ import {
     doFetchEtiqConf,
     doConsolidation
 } from '../../../actions/ConsolidacaoActions';
+import { defaultFormStyles } from '../../utils/Forms';
 
 class FormConsolidacao extends React.PureComponent {
     constructor(props) {
@@ -109,61 +110,67 @@ class FormConsolidacao extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Etiq Volume</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codConf}
-                            ref={(ref) => (this.txtEtiqConf = ref)}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.etiqconf = true; 
-                                this.props.modificaConf(value);
-                            }}
-                            onBlur={() => { 
-                                if (this.props.codConf && 
-                                    this.fieldsChanged.etiqconf) {
-                                        this.fieldsChanged.etiqconf = false;
-                                        this.doFetchEtiqConf();
-                                    } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codConf}
+                                ref={(ref) => (this.txtEtiqConf = ref)}
+                                onFocus={() => this.doChangePersistTap()}
+                                onChangeText={value => {
+                                    this.fieldsChanged.etiqconf = true; 
+                                    this.props.modificaConf(value);
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.codConf && 
+                                        this.fieldsChanged.etiqconf) {
+                                            this.fieldsChanged.etiqconf = false;
+                                            this.doFetchEtiqConf();
+                                        } 
+                                }}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Embarque</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={`${this.props.codEmb}`}
-                            underlineColorAndroid={'transparent'}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={`${this.props.codEmb}`}
+                                underlineColorAndroid={'transparent'}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Etiq Consolidação</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codVol}
-                            ref={(input) => { this.txtEtiqVolume = input; }}
-                            onFocus={() => this.doChangePersistTap(false)}
-                            onChangeText={this.props.modificaVol}
-                            onSubmitEditing={() => this.props.codVol && this.doConsolidation()}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codVol}
+                                ref={(input) => { this.txtEtiqVolume = input; }}
+                                onFocus={() => this.doChangePersistTap(false)}
+                                onChangeText={this.props.modificaVol}
+                                onSubmitEditing={() => this.props.codVol && this.doConsolidation()}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1 }} />
                 </FormRow>
@@ -214,15 +221,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     },
     viewBotao: {
         flexDirection: 'row',

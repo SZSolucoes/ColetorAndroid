@@ -169,7 +169,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        paddingVertical: 5
     },
     itemUser: {
         backgroundColor: '#EEC863',
@@ -178,7 +179,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        paddingVertical: 5
     },
     itemCodCorte: {
         color: '#fff',

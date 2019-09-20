@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { store } from '../App';
+import { doAlertWithTimeout } from '../components/utils/Alerts';
 
 export const modificaEmbarque = (value) => ({
     type: 'modifica_embarque_listaseparacao',
@@ -203,28 +204,31 @@ const onSepSuccess = (dispatch, res, newItemList, refreshTools) => {
                 payload: newItemList.length.toString()
             });
             doSepDispatch(dispatch, newItemList, refreshTools);
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Separação',
-                'Separação efetuada com sucesso.'
-            ), 500);
+                'Separação efetuada com sucesso.', 
+                500
+            );
         } else {
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Erro Separação',
-                res.data.message
-            ), 500);
+                res.data.message,
+                500
+            );
         }
     } else {
-        setTimeout(() => Alert.alert('Erro', 'Ocorreu uma falha interna no servidor.'), 500);  
+        doAlertWithTimeout('Erro', 'Ocorreu uma falha interna no servidor.', 500);  
     }
 };
 
 const onSepError = (error, dispatch) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
-    setTimeout(() => Alert.alert(
+    doAlertWithTimeout(
         'Erro Separação',
-        'Erro Conexão!'
-    ), 500);
+        'Erro Conexão!',
+        500
+    );
 };
 
 const doSepDispatch = (dispatch, newItemList, refreshTools = false) => {
@@ -291,7 +295,7 @@ const doSepDispatch = (dispatch, newItemList, refreshTools = false) => {
                 type: 'modifica_enablefetchbtn_listaseparacao',
                 payload: true
             });
-            setTimeout(() => refreshTools(), 500);
+            setTimeout(refreshTools, 500);
         }
     }
 };
@@ -357,21 +361,23 @@ const doPrintEtiqEANSuccess = (dispatch, res) => {
 
     if (bResOk && typeof res.data === 'object') {
         if (res.data.success === 'true') {
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Impressão Etiqueta',
-                res.data.message
-            ), 500);
+                res.data.message,
+                500
+            );
         } else {
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Erro Impressão Etiqueta',
-                res.data.message
-            ), 500);
+                res.data.message,
+                500
+            );
         }
     } else {
-        setTimeout(() => Alert.alert('Erro', 'Ocorreu uma falha interna no servidor.'), 500);
+        doAlertWithTimeout('Erro', 'Ocorreu uma falha interna no servidor.', 500);
     }
 };
 
 const doPrintEtiqEANError = () => {
-    setTimeout(() => Alert.alert('Erro Impressão', 'Erro Conexão!'), 500);
+    doAlertWithTimeout('Erro Impressão', 'Erro Conexão!', 500);
 };

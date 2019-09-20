@@ -20,6 +20,7 @@ import {
     modificaCleanLocalizacao,
     doFetchLocation
 } from '../../../../actions/ConsultaLocalizacaoActions';
+import { defaultFormStyles } from '../../../utils/Forms';
 
 import LoadingSpin from '../../../utils/LoadingSpin';
 
@@ -37,11 +38,23 @@ class FormConsultaLocalizacao extends React.PureComponent {
     }
 
     componentDidMount() {
-        Actions.refresh({ right: this.renderRightButton });
+        setTimeout(Actions.refresh, 500, { right: this.renderRightButton });
     }
 
     componentWillUnmount() {
         this.props.modificaCleanLocalizacao();
+    }
+
+    onBlurLocalizacao = () => {
+        if (this.props.localizacao && this.fieldsChanged.localizacao) {
+            this.fieldsChanged.localizacao = false;
+            this.doFetchLocation();
+        }
+    }
+
+    onChangeLocalizacao = (value) => {
+        this.fieldsChanged.localizacao = true;
+        this.props.modificaLocalizacao(value);
     }
 
     clearFields() {
@@ -74,26 +87,20 @@ class FormConsultaLocalizacao extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.localizacao}
-                            onChangeText={(value) => { 
-                                this.fieldsChanged.localizacao = true;
-                                this.props.modificaLocalizacao(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.localizacao && this.fieldsChanged.localizacao) {
-                                    this.fieldsChanged.localizacao = false;
-                                    this.doFetchLocation();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.localizacao}
+                                onChangeText={this.onChangeLocalizacao}
+                                onBlur={this.onBlurLocalizacao}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
@@ -108,7 +115,7 @@ class FormConsultaLocalizacao extends React.PureComponent {
                             returnKeyType="next"
                             multiline
                             numberOfLines={3}
-                            style={styles.inputDescricao}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.descLocaliz}
                         />
                     </View>
@@ -145,24 +152,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
     },
     btClear: {
         width: 40,

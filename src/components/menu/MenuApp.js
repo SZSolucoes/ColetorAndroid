@@ -157,15 +157,14 @@ export default class MenuApp extends React.PureComponent {
 
 const styles = StyleSheet.create({
     viewPrinc: {
-        flex: 1,
+        flex: 1.5,
         backgroundColor: '#4b86b4'
     },
     btLogout: {
-        flex: 1,
-        paddingBottom: 15
+        paddingBottom: 10
     },
     opcao: {
-        flex: 8,
+        flex: 1,
         backgroundColor: '#4b86b4'
     },
     menu: {

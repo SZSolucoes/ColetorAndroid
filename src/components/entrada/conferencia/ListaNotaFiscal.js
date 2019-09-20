@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        paddingVertical: 5
     },
     itemNroDoc: {
         color: '#fff',

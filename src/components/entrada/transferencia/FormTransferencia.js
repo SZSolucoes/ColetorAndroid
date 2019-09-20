@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { 
     ScrollView,
@@ -7,7 +8,6 @@ import {
     TextInput,
     Button,
     Alert,
-    ActivityIndicator,
     Keyboard
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -29,6 +29,8 @@ import {
     modificaOnTransferencia,
     modificaTransferenciaClear
 } from '../../../actions/TransfereActions';
+import { defaultFormStyles } from '../../utils/Forms';
+import LoadingSpin from '../../utils/LoadingSpin';
 
 class FormTransferencia extends React.PureComponent {
     componentDidMount() {
@@ -37,6 +39,36 @@ class FormTransferencia extends React.PureComponent {
 
     componentWillUnmount() {
         this.props.modificaTransferenciaClear();
+    }
+
+    onBlurEan = () => {
+        if (this.props.codEAN) this.buscaEAN();
+    }
+
+    onChangeEan = (value) => {
+        this.props.modificaCodEAN(value);
+    }
+    onChangeQuantidade = (value) => {
+        this.props.modificaQtItem(value);
+    }
+    onChangeLote = (value) => {
+        this.props.modificaCodLote(value);
+    }
+    onChangeLocalOrigem = (value) => {
+        this.props.modificaCodLocalOrig(value);
+    }
+    onChangeLocalDestino = (value) => {
+        this.props.modificaCodLocalDest(value);
+    }
+
+    onSubmitEditingQuantidade = () => {
+        this.txtLote.focus();
+    }
+    onSubmitEditingLote = () => {
+        this.txtLocalOrig.focus();
+    }
+    onSubmitEditingLocalOrigem = () => {
+        this.txtLocalDest.focus();
     }
 
     onPressTransfer() {
@@ -141,12 +173,6 @@ class FormTransferencia extends React.PureComponent {
         this.props.buscaInfoEANTransf(codEAN);
     }
     renderBtEfetivar() {
-        if (this.props.onTransferencia) {
-            return (
-                <ActivityIndicator size="large" />
-            );
-        }
-
         return (
             <View style={[styles.viewBotao, { flex: 1 }]}>
                 <Button
@@ -160,36 +186,40 @@ class FormTransferencia extends React.PureComponent {
     render() {
         return (
             <ScrollView style={styles.viewPrinc}>
+                <LoadingSpin />
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            returnKeyType="go"
-                            onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
-                            value={this.props.codEAN}
-                            onBlur={() => this.props.codEAN && this.buscaEAN()}
-                            ref={(input) => { this.txtEAN = input; }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                returnKeyType="go"
+                                onChangeText={this.onChangeEan}
+                                value={this.props.codEAN}
+                                onBlur={this.onBlurEan}
+                                ref={(input) => { this.txtEAN = input; }}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={codItem => this.props.modificaCodItem(codItem)}
-                            value={this.props.codItem}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codItem}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -204,8 +234,7 @@ class FormTransferencia extends React.PureComponent {
                             numberOfLines={3}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.inputDescricao}
-                            onChangeText={descItem => this.props.modificaDescItem(descItem)}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.descItem}
                         />
                     </View>
@@ -213,83 +242,92 @@ class FormTransferencia extends React.PureComponent {
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Quantidade</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
-                            value={this.props.qtItem}
-                            ref={(input) => { this.txtQtItem = input; }}
-                            onSubmitEditing={() => { this.txtLote.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeQuantidade}
+                                value={this.props.qtItem}
+                                ref={(input) => { this.txtQtItem = input; }}
+                                onSubmitEditing={this.onSubmitEditingQuantidade}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={unidMed => this.props.modificaUnidMed(unidMed)}
-                            value={this.props.unidMed}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.unidMed}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>Lote</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={codLote => this.props.modificaCodLote(codLote)}
-                            value={this.props.codLote}
-                            ref={(input) => { this.txtLote = input; }}
-                            onSubmitEditing={() => { this.txtLocalOrig.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeLote}
+                                value={this.props.codLote}
+                                ref={(input) => { this.txtLote = input; }}
+                                onSubmitEditing={this.onSubmitEditingLote}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>Local Origem</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={local => this.props.modificaCodLocalOrig(local)}
-                            value={this.props.codLocalOrig}
-                            ref={(input) => { this.txtLocalOrig = input; }}
-                            onSubmitEditing={() => { this.txtLocalDest.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeLocalOrigem}
+                                value={this.props.codLocalOrig}
+                                ref={(input) => { this.txtLocalOrig = input; }}
+                                onSubmitEditing={this.onSubmitEditingLocalOrigem}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Local Destino</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={local => this.props.modificaCodLocalDest(local)}
-                            value={this.props.codLocalDest}
-                            ref={(input) => { this.txtLocalDest = input; }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeLocalDestino}
+                                value={this.props.codLocalDest}
+                                ref={(input) => { this.txtLocalDest = input; }}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -364,15 +402,6 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-medium',
         fontSize: 13
     },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
-    },
     viewBotao: {
         flexDirection: 'row',
         flex: 1,
@@ -386,14 +415,5 @@ const styles = StyleSheet.create({
         height: 35,
         padding: 10,
         borderRadius: 10
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
     }
 });

@@ -23,8 +23,9 @@ import {
     doConsBatismo
 } from '../../../actions/ConsEtiqBatEntradaActions';
 import LoadingSpin from '../../utils/LoadingSpin';
+import { defaultFormStyles } from '../../utils/Forms';
 
-import imgClear from '../../../../resources/imgs/limpa_tela.png'; 
+import imgClear from '../../../../resources/imgs/limpa_tela.png';
 
 class FormConsultaBatismo extends React.PureComponent {
     constructor(props) {
@@ -39,7 +40,7 @@ class FormConsultaBatismo extends React.PureComponent {
     }
 
     componentDidMount() {
-        Actions.refresh({ right: this.renderRightButtonBar });
+        setTimeout(Actions.refresh, 500, { right: this.renderRightButtonBar });
     }
     
     componentWillUnmount() {
@@ -52,6 +53,19 @@ class FormConsultaBatismo extends React.PureComponent {
         Keyboard.dismiss();
 
         this.props.doConsBatismo(codEtiqBatismo);
+    }
+
+    onBlurBatismo = () => {
+        if (this.props.codEtiqBatismo && 
+            this.fieldsChanged.codEtiqBatismo) {
+            this.fieldsChanged.codEtiqBatismo = false;
+            this.onBlurCodEtiqBatismo();
+        }
+    }
+
+    onChangeBatismo = (value) => {
+        this.fieldsChanged.codEtiqBatismo = true; 
+        this.props.modificaBatismo(value);
     }
 
     renderRightButtonBar() {
@@ -75,28 +89,21 @@ class FormConsultaBatismo extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.codEtiqBatismo}
-                            ref={(input) => { this.batInput = input; }}
-                            onChangeText={value => {
-                                this.fieldsChanged.codEtiqBatismo = true; 
-                                this.props.modificaBatismo(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.codEtiqBatismo && 
-                                    this.fieldsChanged.codEtiqBatismo) {
-                                    this.fieldsChanged.codEtiqBatismo = false;
-                                    this.onBlurCodEtiqBatismo();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.codEtiqBatismo}
+                                ref={(input) => { this.batInput = input; }}
+                                onChangeText={this.onChangeBatismo}
+                                onBlur={this.onBlurBatismo}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <View style={{ padding: 5 }}>
@@ -136,15 +143,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     },
     btClear: {
         width: 40,

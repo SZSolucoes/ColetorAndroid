@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { 
     ScrollView,
@@ -110,15 +111,6 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-medium',
         fontSize: 13
     },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
-    },
     inputSmall: {
         width: 100
     },
@@ -135,15 +127,6 @@ const styles = StyleSheet.create({
         height: 35,
         padding: 10,
         borderRadius: 10
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
     },
     header: {
         width: '100%', 
@@ -169,7 +152,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        paddingVertical: 5
     },
     itemNroDoc: {
         color: '#fff',

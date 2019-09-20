@@ -9,7 +9,6 @@ import {
     Alert,
     TouchableOpacity,
     Image,
-    ActivityIndicator,
     Keyboard
 } from 'react-native';
 
@@ -35,13 +34,13 @@ import {
     modificaOnEfetivar,
     modificaArmazenaClear
 } from '../../../actions/ArmazenaActions';
+import { defaultFormStyles } from '../../utils/Forms';
 
 import LoadingSpin from '../../utils/LoadingSpin';
 
-const imgClear = require('../../../../resources/imgs/limpa_tela.png');
+import imgClear from '../../../../resources/imgs/limpa_tela.png';
 
 class FormArmazena extends React.PureComponent {
-
     constructor(props) {
         super(props);
 
@@ -190,6 +189,56 @@ class FormArmazena extends React.PureComponent {
         this.props.modificaOnEfetivar(true);
         this.props.efetivaArmazena(etiquetaArmazena, itemArmazena, armazenamento);
     }
+
+    onChangeBatismo = (value) => {
+        this.fieldsChanged.batismo = true; 
+        this.props.modificaBatismo(value); 
+    }
+    onChangeEan = (value) => {
+        this.fieldsChanged.ean = true; 
+        this.props.modificaCodEAN(value); 
+    }
+    onChangeLocalizacao = (value) => {
+        this.fieldsChanged.local = true; 
+        this.props.modificaCodLocal(value); 
+    }
+    
+    onBlurBatismo = () => {
+        if (this.props.batismo && this.fieldsChanged.batismo) {
+            this.fieldsChanged.batismo = false;
+            this.validBatismo();
+        } 
+    }
+    onBlurEan = () => {
+        if (this.props.codEAN && this.fieldsChanged.ean) {
+            this.fieldsChanged.ean = false;
+            this.validEAN();
+        } 
+    }
+    onBlurLocalizacao = () => {
+        if (this.props.codLocal && this.fieldsChanged.local) {
+            this.fieldsChanged.local = false;
+            this.validLocal();
+        } 
+    }
+    onBlur = () => {
+        if (this.props.lote && this.fieldsChanged.lote) {
+            this.fieldsChanged.lote = false;
+            this.onPressEfetivar();
+        } 
+    }
+
+    onChangeDeposito = (value) => {
+        this.props.modificaCodDepos(value);
+    }
+    onChangeQuantidade = (value) => {
+        this.props.modificaQtItem(value);
+    }
+    onChangeLote = (value) => {
+        this.fieldsChanged.lote = true; 
+        this.props.modificaLote(value); 
+    }
+
     validEAN() {
         const { listaItem, codEAN } = this.props;
 
@@ -258,11 +307,6 @@ class FormArmazena extends React.PureComponent {
         this.txtEAN.focus();
     }
     renderBtEfetivar() {
-        if (this.props.onArmazena) {
-            return (
-                <ActivityIndicator size="large" />
-            );
-        }
         return (
             <View style={[styles.viewBotao, { flex: 1 }]}>
                 <Button
@@ -281,27 +325,21 @@ class FormArmazena extends React.PureComponent {
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>Batismo</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <TextInput
-                                selectTextOnFocus
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={[styles.input, { flex: 1 }]}
-                                value={this.props.batismo}
-                                ref={(input) => { this.txtBatismo = input; }}
-                                onChangeText={batismo => {
-                                    this.fieldsChanged.batismo = true; 
-                                    this.props.modificaBatismo(batismo); 
-                                }}
-                                onBlur={() => { 
-                                    if (this.props.batismo && this.fieldsChanged.batismo) {
-                                        this.fieldsChanged.batismo = false;
-                                        this.validBatismo();
-                                    } 
-                                }}
-                            />
+                            <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                                <TextInput
+                                    selectTextOnFocus
+                                    placeholder=""
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="go"
+                                    style={defaultFormStyles.input}
+                                    value={this.props.batismo}
+                                    ref={(input) => { this.txtBatismo = input; }}
+                                    onChangeText={this.onChangeBatismo}
+                                    onBlur={this.onBlurBatismo}
+                                />
+                            </View>
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaBatismo()}
                                 style={styles.btClear}
@@ -315,61 +353,55 @@ class FormArmazena extends React.PureComponent {
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Total</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={qtTotal => this.props.modificaQtTotal(qtTotal)}
-                            value={this.props.qtTotal}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.qtTotal}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { alignItems: 'center' }]}>
                         <Text style={[styles.txtLabel]}>Armazenado</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={[styles.input, { width: 60 }]}
-                            onChangeText={
-                                qtArmazenado => this.props.modificaQtArmazenado(qtArmazenado)
-                            }
-                            value={this.props.qtArmazenado}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={[defaultFormStyles.input, { width: 60 }]}
+                                value={this.props.qtArmazenado}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>EAN</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <TextInput
-                                selectTextOnFocus
-                                placeholder=""
-                                keyboardType="numeric"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={[styles.input, { flex: 1 }]}
-                                value={this.props.codEAN}
-                                ref={(input) => { this.txtEAN = input; }}
-                                onChangeText={codEAN => {
-                                    this.fieldsChanged.ean = true; 
-                                    this.props.modificaCodEAN(codEAN); 
-                                }}
-                                onBlur={() => { 
-                                    if (this.props.codEAN && this.fieldsChanged.ean) {
-                                        this.fieldsChanged.ean = false;
-                                        this.validEAN();
-                                    } 
-                                }}
-                            />
+                            <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                                <TextInput
+                                    selectTextOnFocus
+                                    placeholder=""
+                                    keyboardType="numeric"
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="go"
+                                    style={defaultFormStyles.input}
+                                    value={this.props.codEAN}
+                                    ref={(input) => { this.txtEAN = input; }}
+                                    onChangeText={this.onChangeEan}
+                                    onBlur={this.onBlurEan}
+                                />
+                            </View>
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaCodEAN()}
                                 style={styles.btClear}
@@ -385,32 +417,34 @@ class FormArmazena extends React.PureComponent {
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            keyboardType="numeric"
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={codItem => this.props.modificaCodItem(codItem)}
-                            value={this.props.codItem}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                keyboardType="numeric"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codItem}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={unidMed => this.props.modificaUnidMed(unidMed)}
-                            value={this.props.unidMed}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.unidMed}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -425,8 +459,7 @@ class FormArmazena extends React.PureComponent {
                             returnKeyType="next"
                             multiline
                             numberOfLines={3}
-                            style={styles.inputDescricao}
-                            onChangeText={desItem => this.props.modificaDesItem(desItem)}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.desItem}
                         />
                     </View>
@@ -435,27 +468,21 @@ class FormArmazena extends React.PureComponent {
                     <View style={[styles.viewCampo, { flex: 3 }]}>
                         <Text style={[styles.txtLabel, { marginLeft: -30 }]}>Localização</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <TextInput
-                                selectTextOnFocus
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={[styles.input, { flex: 1 }]}
-                                value={this.props.codLocal}
-                                ref={(input) => { this.txtLocal = input; }}
-                                onChangeText={codLocal => {
-                                    this.fieldsChanged.local = true; 
-                                    this.props.modificaCodLocal(codLocal); 
-                                }}
-                                onBlur={() => { 
-                                    if (this.props.codLocal && this.fieldsChanged.local) {
-                                        this.fieldsChanged.local = false;
-                                        this.validLocal();
-                                    } 
-                                }}
-                            />
+                            <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                                <TextInput
+                                    selectTextOnFocus
+                                    placeholder=""
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="next"
+                                    style={defaultFormStyles.input}
+                                    value={this.props.codLocal}
+                                    ref={(input) => { this.txtLocal = input; }}
+                                    onChangeText={this.onChangeLocalizacao}
+                                    onBlur={this.onBlurLocalizacao}
+                                />
+                            </View>
                             <TouchableOpacity 
                                 onPress={() => this.props.modificaCodLocal()}
                                 style={styles.btClear}
@@ -475,62 +502,59 @@ class FormArmazena extends React.PureComponent {
                         >
                             Deposito
                         </Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            //editable={false}
-                            style={[styles.input]}
-                            onChangeText={codDepos => this.props.modificaCodDepos(codDepos)}
-                            value={this.props.codDepos}
-                            ref={(input) => { this.txtDepos = input; }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={[defaultFormStyles.input]}
+                                onChangeText={this.onChangeDeposito}
+                                value={this.props.codDepos}
+                                ref={(input) => { this.txtDepos = input; }}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Quantidade</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            keyboardType="numeric"
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={qtItem => this.props.modificaQtItem(qtItem)}
-                            value={this.props.qtItem}
-                            ref={(input) => { this.txtQuantidade = input; }}
-                            onSubmitEditing={() => { this.txtLote.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                keyboardType="numeric"
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeQuantidade}
+                                value={this.props.qtItem}
+                                ref={(input) => { this.txtQuantidade = input; }}
+                                onSubmitEditing={() => { this.txtLote.focus(); }}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Lote</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.lote}
-                            ref={(input) => { this.txtLote = input; }}
-                            onChangeText={lote => {
-                                this.fieldsChanged.lote = true; 
-                                this.props.modificaLote(lote); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.lote && this.fieldsChanged.lote) {
-                                    this.fieldsChanged.lote = false;
-                                    this.onPressEfetivar();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.lote}
+                                ref={(input) => { this.txtLote = input; }}
+                                onChangeText={this.onChangeLote}
+                                onBlur={this.onBlurLote}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -612,23 +636,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
         fontSize: 13
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-		borderRadius: 10
     },
     viewBotao: {
         flexDirection: 'row',

@@ -102,7 +102,8 @@ class ListaItemConfSep extends React.PureComponent {
                     flex: 1,
                     flexDirection: 'row',
                     marginVertical: 2,
-                    paddingHorizontal: 5
+                    paddingHorizontal: 5,
+                    paddingVertical: 5
                 };
              }
         } else {
@@ -113,7 +114,8 @@ class ListaItemConfSep extends React.PureComponent {
                 flex: 1,
                 flexDirection: 'row',
                 marginVertical: 2,
-                paddingHorizontal: 5
+                paddingHorizontal: 5,
+                paddingVertical: 5
             };
         }
 

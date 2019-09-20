@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
 import { store } from '../App';
+import { doAlertWithTimeout } from '../components/utils/Alerts';
 
 export const modificaOnTransferencia = (ativo) => ({
     type: 'modifica_onTransferencia_trnf',
@@ -81,6 +82,7 @@ const buscaError = () => {
 export const efetivaTransferencia = 
 (usuario, codEAN, codLocalOrig, codLocalDest, qtItem, codLote) => {
     return dispatch => {
+        dispatch({ type: 'modifica_visible_loadingspin', payload: true });
         Axios.get('/coletor/doTransfer.p', {
             params: {
                 usuario,
@@ -98,15 +100,16 @@ export const efetivaTransferencia =
 
 const efetivaSuccess = (dispatch, response) => {
     dispatch({ type: 'modifica_onTransferencia_trnf', payload: false });
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
     if (response.data.success === 'true') {
         dispatch({ type: 'inicia_tela_trnf' });
-        Alert.alert(
+        doAlertWithTimeout(
             'Transferência',
             response.data.message
         );
     } else {
-        Alert.alert(
+        doAlertWithTimeout(
             'Erro Transferência',
             response.data.message
         );
@@ -115,7 +118,9 @@ const efetivaSuccess = (dispatch, response) => {
 
 const efetivaError = (dispatch) => {
     dispatch({ type: 'modifica_onTransferencia_trnf', payload: false });
-    Alert.alert(
+    dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+
+    doAlertWithTimeout(
         'Erro Transferência',
         'Erro Conexão!'
     );

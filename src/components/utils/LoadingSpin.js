@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-class LoadingSpin extends React.Component {
-
+class LoadingSpin extends React.PureComponent {
     render() {
         return (
             <Spinner 

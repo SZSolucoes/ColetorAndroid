@@ -1,6 +1,6 @@
 import Axios from 'axios';
-import { Alert } from 'react-native';
 import { store } from '../App';
+import { doAlertWithTimeout } from '../components/utils/Alerts';
 
 export const modificaConf = codConf => ({
         type: 'modifica_conf_consolid',
@@ -47,19 +47,21 @@ const onFetchSuccess = (dispatch, res, focusInField) => {
         } else {
             dispatch({ type: 'modifica_emb_consolid', payload: '' });
             dispatch({ type: 'modifica_cleanlist_consolid' });
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Consolidação',
-                res.data.message
-            ), 500);
+                res.data.message,
+                500
+            );
             focusInField('etiqconf');
         }
     } else {
         dispatch({ type: 'modifica_emb_consolid', payload: '' });
         dispatch({ type: 'modifica_cleanlist_consolid' });
-        setTimeout(() => Alert.alert(
+        doAlertWithTimeout(
             'Consolidação',
-            'Ocorreu uma falha interna no servidor, verifique a conexão!'
-        ), 500);
+            'Ocorreu uma falha interna no servidor, verifique a conexão!',
+            500
+        );
         focusInField('etiqconf');
     }
 };
@@ -69,10 +71,11 @@ const onFetchError = (dispatch, focusInField) => {
     dispatch({ type: 'modifica_emb_consolid', payload: '' });
     dispatch({ type: 'modifica_cleanlist_consolid' });
 
-    setTimeout(() => Alert.alert(
+    doAlertWithTimeout(
         'Consolidação',
-        'Erro Conexão!'
-    ), 500);
+        'Erro Conexão!',
+        500
+    );
     focusInField('etiqconf');
 };
 
@@ -137,10 +140,11 @@ const onConsSuccess = (dispatch, res, params, focusInField) => {
                 dispatch({
                     type: 'modifica_clean_consolid'
                 });
-                setTimeout(() => Alert.alert(
+                doAlertWithTimeout(
                     'Consolidação',
-                    res.data.message
-                ), 500);
+                    res.data.message,
+                    500
+                );
             } else {
                 dispatch({
                     type: 'modifica_addlist_consolid',
@@ -156,16 +160,18 @@ const onConsSuccess = (dispatch, res, params, focusInField) => {
                 });
             }
         } else {
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Consolidação',
-                res.data.message
-            ), 500);
+                res.data.message,
+                500
+            );
         }
     } else {
-        setTimeout(() => Alert.alert(
+        doAlertWithTimeout(
             'Consolidação',
-            'Ocorreu uma falha interna no servidor, verifique a conexão!'
-        ), 500);
+            'Ocorreu uma falha interna no servidor, verifique a conexão!',
+            500
+        );
     }
 
     focusInField('etiqconf');
@@ -174,10 +180,11 @@ const onConsSuccess = (dispatch, res, params, focusInField) => {
 const onConsError = (dispatch, focusInField) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     
-    setTimeout(() => Alert.alert(
+    doAlertWithTimeout(
         'Consolidação',
-        'Erro Conexão!'
-    ), 500);
+        'Erro Conexão!',
+        500
+    );
     focusInField('etiqvolume');
 };
 

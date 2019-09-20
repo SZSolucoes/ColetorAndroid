@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 
 import FormRow from '../../utils/FormRow';
 import { leftStr } from '../../utils/StrComplex';
+import { defaultFormStyles } from '../../utils/Forms';
 
 import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
 import imgRemove from '../../../../resources/imgs/remove.png';
@@ -32,18 +33,30 @@ class ListaItemAdicao extends React.PureComponent {
     }
     
     onChangePesoBruto(value) {
+        this.props.modificaPesoBruto(value);
+
         const txtParsed = value.replace(/[^0-9\\.\\,]/g, '')
         .replace(/\.\.+/g, '.')
         .replace(/,,+/g, ',')
         .replace(/,\./g, ',')
         .replace(/\.,+/g, '.');
+
         this.props.modificaPesoBruto(txtParsed);
+    }
+
+    onPressAddVolume = () => {
+        this.props.adicionarVolume();
+    }
+
+    onPressPrint = () => {
+        this.props.doPrint();
     }
 
     keyExtractor(item, index) {
         return index.toString();
     }
 
+    removeVolumePass = (value) => this.removeVolume(value)
     removeVolume(index) {
         const { listVolumes } = this.props;
         const newList = [...listVolumes];
@@ -72,15 +85,17 @@ class ListaItemAdicao extends React.PureComponent {
                     <Text style={styles.seq}>{leftStr(index + 1)}</Text>
                     <Text style={styles.embalagem}>{item.embalagem}</Text>
                     <Text style={styles.volume}>{item.volume}</Text>
-                    <TouchableOpacity
-                        style={styles.btSearch}
-                        onPress={() => this.removeVolume(index)}
-                    >
-                        <Image
-                            source={imgRemove}
-                            style={styles.imgSearch}
-                        />
-                    </TouchableOpacity>
+                    <View style={styles.remove}>
+                        <TouchableOpacity
+                            style={styles.btSearch}
+                            onPress={this.removeVolumePass(index)}
+                        >
+                            <Image
+                                source={imgRemove}
+                                style={styles.imgSearch}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </TouchableHighlight>         
         );
@@ -116,7 +131,7 @@ class ListaItemAdicao extends React.PureComponent {
                             { Platform.OS !== 'windows' ? (
                                 <View style={styles.viewAddBtn}>
                                     <Button
-                                        onPress={() => this.props.adicionarVolume()}
+                                        onPress={this.onPressAddVolume}
                                         title="Adicionar"
                                         color="green"
                                     />
@@ -125,7 +140,7 @@ class ListaItemAdicao extends React.PureComponent {
                                 <View style={styles.viewAddBtn}>
                                     <View style={{ width: 150 }}>
                                         <Button
-                                            onPress={() => this.props.adicionarVolume()}
+                                            onPress={this.onPressAddVolume}
                                             title="Adicionar"
                                             color="black"
                                         />
@@ -134,7 +149,7 @@ class ListaItemAdicao extends React.PureComponent {
                             )}
                             <TouchableOpacity
                                 style={styles.btSearch}
-                                onPress={() => this.props.doPrint()}
+                                onPress={this.onPressPrint}
                             >
                                 <Image
                                     source={imgPrinter}
@@ -158,17 +173,19 @@ class ListaItemAdicao extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Peso Bruto</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType={'numeric'}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.pesoBruto}
-                            onChangeText={(value) => this.onChangePesoBruto(value)}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType={'numeric'}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.pesoBruto}
+                                onChangeText={this.onChangePesoBruto}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1 }} />
                 </FormRow>
@@ -209,16 +226,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
-        paddingHorizontal: 5
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
+        paddingHorizontal: 5,
+        paddingVertical: 5
     },
     viewBotao: {
         flexDirection: 'row',

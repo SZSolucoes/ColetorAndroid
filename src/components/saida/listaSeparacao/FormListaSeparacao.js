@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { 
     ScrollView,
@@ -14,15 +15,6 @@ import {
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-
-import FormRow from '../../utils/FormRow';
-import LoadingSpin from '../../utils/LoadingSpin';
-import ListaItemSep from './ListaItemSep';
-
-import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
-import imgUrgent from '../../../../resources/imgs/urgent.png';
-import imgRefresh from '../../../../resources/imgs/refresh.png';
-
 import {
     modificaBatismo,
     modificaCodEAN,
@@ -43,6 +35,16 @@ import {
     fetchListItensSep,
     doPrintEtiqEAN
 } from '../../../actions/ListaSeparacaoActions';
+
+import { defaultFormStyles } from '../../utils/Forms';
+import FormRow from '../../utils/FormRow';
+import LoadingSpin from '../../utils/LoadingSpin';
+import ListaItemSep from './ListaItemSep';
+
+import imgPrinter from '../../../../resources/imgs/impressao_etiq.png';
+import imgUrgent from '../../../../resources/imgs/urgent.png';
+import imgRefresh from '../../../../resources/imgs/refresh.png';
+
 
 class FormListaSeparacao extends React.PureComponent {
     constructor(props) {
@@ -80,7 +82,7 @@ class FormListaSeparacao extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.refreshTools();
+        setTimeout(this.refreshTools, 500);
     }
     
     componentWillUnmount() {
@@ -316,7 +318,7 @@ class FormListaSeparacao extends React.PureComponent {
             this.loteFocus();
         } else {
             this.props.modificaValidQtd(true);
-            setTimeout(() => this.onPressSeparar(), 500);
+            setTimeout(this.onPressSeparar, 500);
         }
     }
 
@@ -484,238 +486,264 @@ class FormListaSeparacao extends React.PureComponent {
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 3 }}>
                         <Text style={styles.txtLabel}>Embarque</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.embarque}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                value={this.props.embarque}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Linhas</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.qtdItem}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                value={this.props.qtdItem}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Qtd Sep</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.qtdSep}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                value={this.props.qtdSep}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Local Sugerido</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={[styles.input, { fontSize: 13 }]}
-                            value={this.props.localizacao}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={[defaultFormStyles.input, { fontSize: 13 }]}
+                                value={this.props.localizacao}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.batismo}
-                            ref={(input) => { this.batismo = input; }}
-                            onFocus={() => this.doChangePersistTap(false)}
-                            onSubmitEditing={() => this.localizacaoConf.focus()}
-                            onChangeText={(value) => this.props.modificaBatismo(value)}
-                            blurOnSubmit={false}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.batismo}
+                                ref={(input) => { this.batismo = input; }}
+                                onFocus={() => this.doChangePersistTap(false)}
+                                onSubmitEditing={() => this.localizacaoConf.focus()}
+                                onChangeText={(value) => this.props.modificaBatismo(value)}
+                                blurOnSubmit={false}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={[styles.input, { fontSize: 13 }]}
-                            value={this.props.localizacaoConf}
-                            ref={(input) => { this.localizacaoConf = input; }}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.localizacaoConf = true; 
-                                this.props.modificaLocalizacaoConf(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.localizacaoConf && 
-                                    this.fieldsChanged.localizacaoConf) {
-                                        this.fieldsChanged.localizacaoConf = false;
-                                        this.validLocalConf();
-                                }
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={[defaultFormStyles.input, { fontSize: 13 }]}
+                                value={this.props.localizacaoConf}
+                                ref={(input) => { this.localizacaoConf = input; }}
+                                onFocus={() => this.doChangePersistTap()}
+                                onChangeText={value => {
+                                    this.fieldsChanged.localizacaoConf = true; 
+                                    this.props.modificaLocalizacaoConf(value); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.localizacaoConf && 
+                                        this.fieldsChanged.localizacaoConf) {
+                                            this.fieldsChanged.localizacaoConf = false;
+                                            this.validLocalConf();
+                                    }
+                                }}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codEAN}
-                            ref={(input) => { this.codEAN = input; }}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.codEAN = true; 
-                                this.props.modificaCodEAN(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.codEAN && this.fieldsChanged.codEAN) {
-                                    this.fieldsChanged.codEAN = false;
-                                    this.findItemEAN();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codEAN}
+                                ref={(input) => { this.codEAN = input; }}
+                                onFocus={() => this.doChangePersistTap()}
+                                onChangeText={value => {
+                                    this.fieldsChanged.codEAN = true; 
+                                    this.props.modificaCodEAN(value); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.codEAN && this.fieldsChanged.codEAN) {
+                                        this.fieldsChanged.codEAN = false;
+                                        this.findItemEAN();
+                                    } 
+                                }}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 0.8 }}>
                         <Text style={styles.txtLabel}>Pedido</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.pedido}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                value={this.props.pedido}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Nome Abrev</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.nomeAbrev}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                value={this.props.nomeAbrev}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 0.5 }}>
                         <Text style={styles.txtLabel}>Qtd</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType='numeric'
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.quantidade}
-                            ref={(input) => { this.quantidade = input; }}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.quantidade = true; 
-                                this.onChangeQtdText(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.quantidade && this.fieldsChanged.quantidade) {
-                                    this.fieldsChanged.quantidade = false;
-                                    this.onSubmitQtd(true);
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType='numeric'
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.quantidade}
+                                ref={(input) => { this.quantidade = input; }}
+                                onFocus={() => this.doChangePersistTap()}
+                                onChangeText={value => {
+                                    this.fieldsChanged.quantidade = true; 
+                                    this.onChangeQtdText(value); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.quantidade && this.fieldsChanged.quantidade) {
+                                        this.fieldsChanged.quantidade = false;
+                                        this.onSubmitQtd(true);
+                                    } 
+                                }}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.codItem}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                value={this.props.codItem}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 1.5 }}>
                         <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.um}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                value={this.props.um}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 3 }}>
                         <Text style={styles.txtLabel}>Lote</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={this.doCheckEnableLote()}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.lote}
-                            ref={(input) => { this.lote = input; }}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.lote = true; 
-                                this.props.modificaLote(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.lote && this.fieldsChanged.lote) {
-                                    this.fieldsChanged.lote = false;
-                                    this.onBlurLote();
-                                }
-                                //this.onPressSeparar();
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={this.doCheckEnableLote()}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.lote}
+                                ref={(input) => { this.lote = input; }}
+                                onFocus={() => this.doChangePersistTap()}
+                                onChangeText={value => {
+                                    this.fieldsChanged.lote = true; 
+                                    this.props.modificaLote(value); 
+                                }}
+                                onBlur={() => { 
+                                    if (this.props.lote && this.fieldsChanged.lote) {
+                                        this.fieldsChanged.lote = false;
+                                        this.onBlurLote();
+                                    }
+                                    //this.onPressSeparar();
+                                }}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
@@ -730,7 +758,7 @@ class FormListaSeparacao extends React.PureComponent {
                             numberOfLines={3}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.inputDescricao}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.desItem}
                             underlineColorAndroid='transparent'
                         />
@@ -739,29 +767,33 @@ class FormListaSeparacao extends React.PureComponent {
                 <FormRow>
                     <View pointerEvents="none">
                         <Text style={styles.txtLabel}>Entrega</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.entrega}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                value={this.props.entrega}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none">
                         <Text style={styles.txtLabel}>Cond Pagamento</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={styles.input}
-                            value={this.props.condPagto}
-                            underlineColorAndroid='transparent'
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                style={defaultFormStyles.input}
+                                value={this.props.condPagto}
+                                underlineColorAndroid='transparent'
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
@@ -772,32 +804,38 @@ class FormListaSeparacao extends React.PureComponent {
                             color="green"
                         />
                     </View>
-                    <View>
-                        <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
+                    <View style={{ flex: 2 }}>
                         <View style={styles.viewBtEtiq}>
-                            <TextInput
-                                selectTextOnFocus
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={styles.input}
-                                value={this.props.qtEtiq}
-                                ref={(input) => { this.qtEtiq = input; }}
-                                onFocus={() => this.doChangePersistTap(false)}
-                                onChangeText={(value) => this.onChangeQtdEtiq(value)}
-                            />
-                            <TouchableOpacity
-                                style={styles.btSearch}                                
-                                onPress={() => this.onPressPrint()}
-                            >
-                                <Image
-                                    source={imgPrinter}
-                                    style={styles.imgSearch}
-                                />
-                            </TouchableOpacity>
+                            <View style={{ flex: 1 }}>
+                                <Text style={styles.txtLabel}>Qtde Etiq</Text>
+                                <View style={defaultFormStyles.inputView}>
+                                    <TextInput
+                                        selectTextOnFocus
+                                        placeholder=""
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                        keyboardType="numeric"
+                                        placeholderTextColor='rgba(255,255,255,0.7)'
+                                        returnKeyType="go"
+                                        style={defaultFormStyles.input}
+                                        value={this.props.qtEtiq}
+                                        ref={(input) => { this.qtEtiq = input; }}
+                                        onFocus={() => this.doChangePersistTap(false)}
+                                        onChangeText={(value) => this.onChangeQtdEtiq(value)}
+                                    />
+                                </View>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center', marginTop: 20, marginLeft: 5 }}>
+                                <TouchableOpacity
+                                    style={styles.btSearch}                                
+                                    onPress={() => this.onPressPrint()}
+                                >
+                                    <Image
+                                        source={imgPrinter}
+                                        style={styles.imgSearch}
+                                    />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>                     
                 </FormRow>
@@ -871,24 +909,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
     },
     viewBotao: {
         flexDirection: 'row',

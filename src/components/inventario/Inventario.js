@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import FormInventario from './FormInventario';
 
-export default class Inventario extends Component {
+export default class Inventario extends React.PureComponent {
     render() {
         return (
             <FormInventario {...this.props} />

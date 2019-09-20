@@ -1,8 +1,9 @@
-import { Alert } from 'react-native';
+/* eslint-disable max-len */
 import Axios from 'axios';
 import { Actions } from 'react-native-router-flux';
 
 import { doFetchInfoBatismo } from './ConfereVolumeActions';
+import { doAlertWithTimeout } from '../components/utils/Alerts';
 
 export const modificaBatismo = (value) => ({
         type: 'modifica_batismo_confsaida',
@@ -86,17 +87,11 @@ const onFetchBatismoSuccess = (dispatch, res, focusInField, checkIfUrgent) => {
             doFetchDispatches(dispatch, res.data.prioridades);
             focusInField('qtdconfitens'); // foco no campo especifico
         } else {
-            setTimeout(() => Alert.alert(
-                'Erro Conferência',
-                res.data.message
-            ), 500);
+            doAlertWithTimeout('Erro Conferência', res.data.message, 500);
             focusInField('batismo'); // foco no campo especifico
         }
     } else {
-        setTimeout(() => Alert.alert(
-            'Conferência',
-            'Ocorreu uma falha interna no servidor, verifique a conexão!'
-        ), 500);
+        doAlertWithTimeout('Conferência', 'Ocorreu uma falha interna no servidor, verifique a conexão!', 500);
         focusInField('batismo'); // foco no campo especifico
     }
     checkIfUrgent();
@@ -105,10 +100,7 @@ const onFetchBatismoSuccess = (dispatch, res, focusInField, checkIfUrgent) => {
 const onFetchBatismoError = (dispatch, focusInField, checkIfUrgent) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
-    setTimeout(() => Alert.alert(
-        'Erro Conferência',
-        'Erro Conexão!'
-    ), 500);
+    doAlertWithTimeout('Erro Conferência', 'Erro Conexão!', 500);
 
     focusInField('batismo');
     checkIfUrgent();
@@ -135,35 +127,39 @@ const onConfSuccess = (dispatch, res, newItemList, listEmpty, params) => {
     if (bResOk && typeof res.data === 'object') {
         if (res.data.success === 'true') {
             doItemDispatches(dispatch, newItemList);
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Conferência',
                 res.data.message,
+                500,
                 [
                     { text: 'OK', onPress: () => checkLastItem(dispatch, listEmpty, params) },
                 ],
                 { cancelable: false }
-            ), 500);
+            );
         } else {
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Erro Conferência',
-                res.data.message
-            ), 500);
+                res.data.message,
+                500
+            );
         }
     } else {
-        setTimeout(() => Alert.alert(
+        doAlertWithTimeout(
             'Conferência',
-            'Ocorreu uma falha interna no servidor, verifique a conexão!'
-        ), 500);
+            'Ocorreu uma falha interna no servidor, verifique a conexão!',
+            500
+        );
     }
 };
 
 const onConfError = (dispatch) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
     
-    setTimeout(() => Alert.alert(
+    doAlertWithTimeout(
         'Erro Conferência',
-        'Erro Conexão!'
-    ), 500);
+        'Erro Conexão!',
+        500
+    );
 };
 
 const doFetchDispatches = (dispatch, prioridades) => {

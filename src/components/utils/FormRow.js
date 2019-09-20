@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-export default class FormRow extends Component {
+export default class FormRow extends React.PureComponent {
     
     renderFilds() {
         return React

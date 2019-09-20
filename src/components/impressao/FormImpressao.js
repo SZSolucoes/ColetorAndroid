@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { 
     ScrollView,
@@ -22,6 +23,7 @@ import {
     limpaTela,
     modificaImpressaoClear
 } from '../../actions/ImpressaoActions';
+import { defaultFormStyles } from '../utils/Forms';
 
 import imgPrinter from '../../../resources/imgs/impressao_etiq.png';
 
@@ -32,6 +34,18 @@ class FormImpressao extends React.PureComponent {
     componentWillUnmount() {
         this.props.modificaImpressaoClear();
     }
+
+    onBlurEan = () => {
+        if (this.props.codEAN) this.fnBuscaInfoEan();
+    }
+
+    onChangeEan = (value) => {
+        this.props.modificaCodEAN(value);
+    }
+    onChangeQtdeEtiq = (value) => {
+        this.props.modificaQtEtiq(value);
+    }
+
     onPressPrint() {
         const { codEAN, qtEtiq, usuario } = this.props;
 
@@ -98,46 +112,52 @@ class FormImpressao extends React.PureComponent {
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            keyboardType="numeric"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
-                            value={this.props.codEAN}
-                            onBlur={() => this.props.codEAN && this.fnBuscaInfoEan()}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                keyboardType="numeric"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeEan}
+                                value={this.props.codEAN}
+                                onBlur={this.onBlurEan}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codItem}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codItem}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.unidMed}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.unidMed}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -152,39 +172,47 @@ class FormImpressao extends React.PureComponent {
                             editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.inputDescricao}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.descItem}
                         />
                     </View>                    
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={[styles.txtLabel, { textAlign: 'left' }]}>Qtde Etiq</Text>
                         <View style={styles.viewBtEtiq}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={styles.input}
-                                onChangeText={qtEtiq => this.props.modificaQtEtiq(qtEtiq)}
-                                value={this.props.qtEtiq}
-                                ref={(input) => { this.qtEtiq = input; }}
-                            />
-                            <TouchableOpacity
-                                style={styles.btSearch}
-                                onPress={() => { this.onPressPrint(); }}
-                            >
-                                <Image
-                                    source={imgPrinter}
-                                    style={styles.imgSearch}
-                                />
-                            </TouchableOpacity>
+                            <View style={{ flex: 1 }}>
+                                <Text style={styles.txtLabel}>Qtde Etiq</Text>
+                                <View style={defaultFormStyles.inputView}>
+                                    <TextInput
+                                        placeholder=""
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                        keyboardType="numeric"
+                                        placeholderTextColor='rgba(255,255,255,0.7)'
+                                        returnKeyType="next"
+                                        style={defaultFormStyles.input}
+                                        onChangeText={this.onChangeQtdeEtiq}
+                                        value={this.props.qtEtiq}
+                                        ref={(input) => { this.qtEtiq = input; }}
+                                    />
+                                </View>
+                            </View>
+                            <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center', marginTop: 20, marginLeft: 5 }}>
+                                <TouchableOpacity
+                                    style={styles.btSearch}
+                                    onPress={() => { this.onPressPrint(); }}
+                                >
+                                    <Image
+                                        source={imgPrinter}
+                                        style={styles.imgSearch}
+                                    />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
+                    <View style={[styles.viewCampo, { flex: 1.5 }]} />
                 </View>
+                <View style={{ marginVertical: 20 }} />
             </ScrollView>
         );
     }
@@ -239,24 +267,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
         fontSize: 13,
-        fontFamily: 'sans-serif-medium'
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
         fontFamily: 'sans-serif-medium'
     },
     viewBotao: {

@@ -22,23 +22,40 @@ import {
     cleanRelEanReducer,
     doConfirm
 } from '../../actions/RelEanActions';
+import { defaultFormStyles } from '../utils/Forms';
 
 import imgClear from '../../../resources/imgs/limpa_tela.png';
 
 class FormDespacho extends React.PureComponent {
     componentDidMount() {
-        Actions.refresh({ right: this._renderRightButton });
+        setTimeout(Actions.refresh, 500, { right: this._renderRightButton });
     }
     componentWillUnmount() {
         this.props.cleanRelEanReducer();
     }
+
+    onBlurItem = () => {
+        if (this.props.codItem) this.confirmButton();
+    }
+
+    onChangeEan = (value) => {
+        this.props.modificaCodEan(value);
+    }
+    onChangeItem = (value) => {
+        this.props.modificaCodItem(value);
+    }
+
+    onSubmitEditingEan = () => {
+        this.txtItem.focus();
+    }
+
     limpaTela() {
         this.props.cleanRelEanReducer();
     }
     _renderRightButton = () => {
         return (
             <TouchableOpacity 
-                onPress={() => this.limpaTela()}
+                onPress={this.limpaTela}
                 style={styles.btClear}
             >
                 <Image
@@ -98,43 +115,47 @@ class FormDespacho extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codEAN}
-                            onChangeText={this.props.modificaCodEan}
-                            ref={(input) => { this.txtEAN = input; }}
-                            onSubmitEditing={() => { this.txtItem.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codEAN}
+                                onChangeText={this.onChangeEan}
+                                ref={(input) => { this.txtEAN = input; }}
+                                onSubmitEditing={this.onSubmitEditingEan}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.codItem}
-                            onChangeText={this.props.modificaCodItem}
-                            ref={(input) => { this.txtItem = input; }}
-                            onBlur={() => this.props.codItem && this.confirmButton()}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.codItem}
+                                onChangeText={this.onChangeItem}
+                                ref={(input) => { this.txtItem = input; }}
+                                onBlur={this.onBlurItem}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow> 
                     <View style={styles.viewBotao} >
                         <Button
-                            onPress={() => this.confirmButton()}
+                            onPress={this.confirmButton}
                             title="Confirmar"
                             color="green"
                         />      
@@ -176,15 +197,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     },
     viewBotao: {
         flexDirection: 'row',

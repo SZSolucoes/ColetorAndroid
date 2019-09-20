@@ -19,6 +19,7 @@ import {
     removeItem,
     modificaClean
 } from '../../../actions/DespachoActions';
+import { defaultFormStyles } from '../../utils/Forms';
 
 class FormDespacho extends React.PureComponent {
     componentWillUnmount() {
@@ -44,36 +45,40 @@ class FormDespacho extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Romaneio</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            blurOnSubmit={false}
-                            style={styles.input}
-                            value={this.props.codRom}
-                            onChangeText={this.props.modificaRom}
-                            ref={(input) => { this.romInput = input; }}
-                            onSubmitEditing={() => this.volInput.focus()}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                blurOnSubmit={false}
+                                style={defaultFormStyles.input}
+                                value={this.props.codRom}
+                                onChangeText={this.props.modificaRom}
+                                ref={(input) => { this.romInput = input; }}
+                                onSubmitEditing={() => this.volInput.focus()}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Volume</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.codVol}
-                            onChangeText={this.props.modificaVol}
-                            onBlur={() => this.props.codVol && this.removeItem()}
-                            ref={(input) => { this.volInput = input; }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.codVol}
+                                onChangeText={this.props.modificaVol}
+                                onBlur={() => this.props.codVol && this.removeItem()}
+                                ref={(input) => { this.volInput = input; }}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow> 
@@ -125,15 +130,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     },
     viewBotao: {
         flexDirection: 'row',

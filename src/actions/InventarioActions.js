@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 
 import { store } from '../App';
+import { doAlertWithTimeout } from '../components/utils/Alerts';
 
 export const modificaCodLocal = (codLocal) => ({ 
         type: 'modifica_codlocal_invent', 
@@ -76,34 +77,28 @@ export const doConfirm = (propparams, newList) => dispatch => {
                     payload: newList
                 });
                 dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-                setTimeout(() => {                    
-                    Alert.alert('Inventário', res.data.message);
-                }, 500);
+                doAlertWithTimeout('Inventário', res.data.message, 500);
                 buscaInventario(propparams.username, dispatch);
             } else {
                 dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-                setTimeout(() => {
-                    Alert.alert('Erro', res.data.message);
-                }, 500);
+                doAlertWithTimeout('Erro', res.data.message, 500);
             }
         } else {
             dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-            setTimeout(() => {
-                Alert.alert(
-                    'Erro',
-                    'Ocorreu uma falha interna no servidor, verifique a conexão!'
-                );
-            }, 500);
+            doAlertWithTimeout(
+                'Erro',
+                'Ocorreu uma falha interna no servidor, verifique a conexão!', 
+                500
+            );
         }
     })
     .catch(() => {
         dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-        setTimeout(() => {
-            Alert.alert(
-                'Erro',
-                'Ocorreu uma falha interna no servidor, verifique a conexão!'
-            );
-        }, 500);
+        doAlertWithTimeout(
+            'Erro',
+            'Ocorreu uma falha interna no servidor, verifique a conexão!',
+            500
+        );
     });
 };
 
@@ -154,29 +149,26 @@ export const getInventoryLocal = (local) => dispatch => {
                 payload: res.data.fichas
             });
         } else if (validRet && res.data.success === 'false') {
-            setTimeout(() => {
-                Alert.alert(
-                    'Erro',
-                    res.data.message
-                );
-            }, 500);
+            doAlertWithTimeout(
+                'Erro',
+                res.data.message, 
+                500
+            );
             cleanInventarioReducerLessLocal(dispatch);
         } else {
-            setTimeout(() => {
-                Alert.alert(
-                    'Erro',
-                    'Ocorreu uma falha interna no servidor, verifique a conexão!'
-                );
-            }, 500);
+            doAlertWithTimeout(
+                'Erro',
+                'Ocorreu uma falha interna no servidor, verifique a conexão!', 
+                500
+            );
             cleanInventarioReducerLessLocal(dispatch);
         }
     })
-    .catch(() => setTimeout(() => {
-        Alert.alert(
-            'Erro',
-            'Ocorreu uma falha interna no servidor, verifique a conexão!'
-        );
-    }, 500));
+    .catch(() => doAlertWithTimeout(
+        'Erro',
+        'Ocorreu uma falha interna no servidor, verifique a conexão!', 
+        500
+    ));
     cleanInventarioReducerLessLocal(dispatch);
 };
 

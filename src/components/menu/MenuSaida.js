@@ -69,7 +69,7 @@ class MenuSaida extends React.PureComponent {
                         (   
                             <View style={[styles.menu, { justifyContent: 'center' }]}>
                                 <View style={{ marginVertical: 6 }}>
-                                    <ActivityIndicator size={'large'} />
+                                    <ActivityIndicator size={'large'} color={'white'} />
                                 </View>
                             </View>
                         ) : (
@@ -178,24 +178,26 @@ class MenuSaida extends React.PureComponent {
     }
     render() {
         return (
-            <ScrollView style={styles.opcao}>                
-                { Platform.OS !== 'windows' ? (
-                    [
-                        this.props.logCorteCabos && this.renderCorte('1'),
-                        this.props.logSeparacao && this.renderListaSep('2'),
-                        this.props.logConfSeparacao && this.renderConferencia('3'),
-                        this.props.logConfSeparacao && this.renderConferenciaVolume('4'),
-                        this.renderConsolid('5'),
-                        //this.renderDespacho('5'),
-                        this.renderRelacionaEan('6'),
-                        this.renderImpressao('7')
-                    ]
-                ) : (
-                    [
-                        this.props.logConfSeparacao && this.renderConferencia('3'),
-                        this.props.logConfSeparacao && this.renderConferenciaVolume('4')
-                    ]
-                )}
+            <ScrollView style={styles.opcao}>
+                <View style={{ flex: 1, paddingVertical: 5 }}>
+                    { Platform.OS !== 'windows' ? (
+                        [
+                            this.props.logCorteCabos && this.renderCorte('1'),
+                            this.props.logSeparacao && this.renderListaSep('2'),
+                            this.props.logConfSeparacao && this.renderConferencia('3'),
+                            this.props.logConfSeparacao && this.renderConferenciaVolume('4'),
+                            this.renderConsolid('5'),
+                            //this.renderDespacho('5'),
+                            this.renderRelacionaEan('6'),
+                            this.renderImpressao('7')
+                        ]
+                    ) : (
+                        [
+                            this.props.logConfSeparacao && this.renderConferencia('3'),
+                            this.props.logConfSeparacao && this.renderConferenciaVolume('4')
+                        ]
+                    )}
+                </View>
             </ScrollView>
         );
     }

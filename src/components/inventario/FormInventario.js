@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { 
     ScrollView,
@@ -39,6 +40,7 @@ import {
     getInventoryLocal,
     buscaContInventario
 } from '../../actions/InventarioActions';
+import { defaultFormStyles } from '../utils/Forms';
 
 import imgClear from '../../../resources/imgs/limpa_tela.png';
 
@@ -60,7 +62,7 @@ class FormInventario extends React.PureComponent {
     }
 
     componentDidMount() {
-        Actions.refresh({ right: this.renderRightButton });
+        setTimeout(Actions.refresh, 500, { right: this.renderRightButton });
     }
     
     componentWillUnmount() {
@@ -70,6 +72,36 @@ class FormInventario extends React.PureComponent {
     onChangeQtdText(value) {
         const txtParsed = value.replace(/[^0-9]/g, '');
         this.props.modificaQtItem(txtParsed);
+    }
+
+    onBlurLocalizacao = () => {
+        if (this.props.codLocal && 
+            this.fieldsChanged.codLocal) {
+                this.fieldsChanged.codLocal = false;
+                this.props.getInventoryLocal(this.props.codLocal);
+        } else if (this.fieldsChanged.codLocal && !this.props.codLocal) {
+            this.props.cleanInventarioReducerWDT();
+            this.props.buscaContInventario(this.props.username, false);
+        }
+    }
+
+    onBlurEanCod = () => {
+        if (this.props.codEAN && 
+            this.fieldsChanged.codEAN) {
+                this.fieldsChanged.codEAN = false;
+                this.onBLurEAN();
+        } else if (this.fieldsChanged.codEAN && !this.props.codEAN) {
+            this.props.modificaCodItem('');
+            this.props.modificaUnidMed('');
+            this.props.modificaCodLote('');
+            this.props.modificaDescItem('');
+            this.props.modificaNrContagem('');
+            this.props.modificaItemSelected(-1);
+        }
+    }
+
+    onBlurLoteCod = () => {
+        this.onBlurLote();
     }
     
     onBLurEAN() {
@@ -188,6 +220,26 @@ class FormInventario extends React.PureComponent {
                 //return;
             }
         }*/
+    }
+
+    onChangeQtde = (value) => {
+        this.fieldsChanged.qtItem = true; 
+        this.onChangeQtdText(value);
+    }
+    onChangeLocalizacao = (value) => {
+        this.fieldsChanged.codLocal = true; 
+        this.props.modificaCodLocal(value); 
+    }
+    onChangeEan = (value) => {
+        this.fieldsChanged.codEAN = true; 
+        this.props.modificaCodEAN(value);
+    }
+    onChangeLote = (value) => {
+        this.props.modificaCodLote(value);
+    }
+
+    onSubmitEditingLocalizacao = () => {
+        this.codEAN.focus();
     }
 
     confirmButton() {
@@ -337,29 +389,21 @@ class FormInventario extends React.PureComponent {
             return (
                 <View style={{ flex: 1 }}>
                     <Text style={styles.txtLabel}>Qtde</Text>
-                    <TextInput
-                        selectTextOnFocus
-                        placeholder=""
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        ref={(input) => { this.qtItem = input; }}
-                        placeholderTextColor='rgba(255,255,255,0.7)'
-                        returnKeyType="go"
-                        keyboardType="numeric"
-                        style={styles.input}
-                        value={this.props.qtItem}
-                        onChangeText={value => {
-                            this.fieldsChanged.qtItem = true; 
-                            this.onChangeQtdText(value);
-                        }}
-                        /* onBlur={() => { 
-                            if (this.props.qtItem && 
-                                this.fieldsChanged.qtItem) {
-                                    this.fieldsChanged.qtItem = false;
-                                    this.confirmButton();
-                                } 
-                        }} */
-                    />
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            selectTextOnFocus
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            ref={(input) => { this.qtItem = input; }}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            keyboardType="numeric"
+                            style={defaultFormStyles.input}
+                            value={this.props.qtItem}
+                            onChangeText={this.onChangeQtde}
+                        />
+                    </View>
                 </View>
             );       
         }
@@ -374,114 +418,93 @@ class FormInventario extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Localização</Text>
-                        <TextInput
-                            ref={(input) => { this.codLocal = input; }}
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codLocal}
-                            onSubmitEditing={() => this.codEAN.focus()}
-                            onChangeText={value => {
-                                this.fieldsChanged.codLocal = true; 
-                                this.props.modificaCodLocal(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.codLocal && 
-                                    this.fieldsChanged.codLocal) {
-                                        this.fieldsChanged.codLocal = false;
-                                        this.props.getInventoryLocal(this.props.codLocal);
-                                } else if (this.fieldsChanged.codLocal && !this.props.codLocal) {
-                                    this.props.cleanInventarioReducerWDT();
-                                    this.props.buscaContInventario(this.props.username, false);
-                                }
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                ref={(input) => { this.codLocal = input; }}
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codLocal}
+                                onSubmitEditing={this.onSubmitEditingLocalizacao}
+                                onChangeText={this.onChangeLocalizacao}
+                                onBlur={this.onBlurLocalizacao}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>EAN</Text>
-                        <TextInput
-                            ref={(input) => { this.codEAN = input; }}
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            keyboardType="numeric"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.codEAN}
-                            //onSubmitEditing={() => this.codLote.focus()}
-                            onChangeText={value => {
-                                this.fieldsChanged.codEAN = true; 
-                                this.props.modificaCodEAN(value);
-                            }}
-                            onBlur={() => { 
-                                if (this.props.codEAN && 
-                                    this.fieldsChanged.codEAN) {
-                                        this.fieldsChanged.codEAN = false;
-                                        this.onBLurEAN();
-                                } else if (this.fieldsChanged.codEAN && !this.props.codEAN) {
-                                    this.props.modificaCodItem('');
-                                    this.props.modificaUnidMed('');
-                                    this.props.modificaCodLote('');
-                                    this.props.modificaDescItem('');
-                                    this.props.modificaNrContagem('');
-                                    this.props.modificaItemSelected(-1);
-                                }
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                ref={(input) => { this.codEAN = input; }}
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                keyboardType="numeric"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.codEAN}
+                                onChangeText={this.onChangeEan}
+                                onBlur={this.onBlurEanCod}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codItem}
-                            underlineColorAndroid={'transparent'}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codItem}
+                                underlineColorAndroid={'transparent'}
+                            />
+                        </View>
                     </View>
                     <View pointerEvents="none" style={{ flex: 1.4 }}>
                         <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.unidMed}
-                            underlineColorAndroid={'transparent'}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.unidMed}
+                                underlineColorAndroid={'transparent'}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 3.7 }}>
                         <Text style={styles.txtLabel}>Lote</Text>
-                        <TextInput
-                            ref={(input) => { this.codLote = input; }}
-                            selectTextOnFocus
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.codLote}
-                            onChangeText={value => {
-                                this.props.modificaCodLote(value);
-                            }}
-                            onBlur={() => { this.onBlurLote(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                ref={(input) => { this.codLote = input; }}
+                                selectTextOnFocus
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codLote}
+                                onChangeText={this.onChangeLote}
+                                onBlur={this.onBlurLoteCod}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
@@ -496,7 +519,7 @@ class FormInventario extends React.PureComponent {
                             editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.inputDescricao}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.descItem}
                             underlineColorAndroid={'transparent'}
                         />
@@ -505,17 +528,19 @@ class FormInventario extends React.PureComponent {
                 <FormRow>
                     <View pointerEvents="none" style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Contagem</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={[styles.input, { flex: 1 }]}
-                            value={this.props.nrContagem}
-                            underlineColorAndroid={'transparent'}
-                        />
+                        <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.nrContagem}
+                                underlineColorAndroid={'transparent'}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1.5 }}>
                         {this.renderQtde()}
@@ -594,37 +619,12 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-medium',
         fontSize: 13
     },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
-    },
     viewBotao: {
         flexDirection: 'row',
         flex: 1,
         justifyContent: 'space-between',
         marginTop: 10,
         paddingHorizontal: 10
-    },
-    dateInput: {
-        height: 35,
-        borderWidth: 0,
-        backgroundColor: '#20293F',    
-        borderRadius: 10,
-        marginBottom: 5,
     },
     dateIcon: {
         marginBottom: 5

@@ -18,6 +18,7 @@ import {
     buscaItemsNF,
     modificaClean 
 } from '../../../actions/ConsultaNFActions';
+import { defaultFormStyles } from '../../utils/Forms';
 
 import imgClear from '../../../../resources/imgs/limpa_tela.png';
 
@@ -32,11 +33,15 @@ class ConsultaNFForm extends React.PureComponent {
     }
 
     componentDidMount() {
-        Actions.refresh({ right: this.renderRightButton });
+        setTimeout(Actions.refresh, 500, { right: this.renderRightButton });
     }
 
     componentWillUnmount() {
         this.props.modificaClean();
+    }
+
+    onBlurNotaFiscal = () => {
+        if (this.props.codNF) this.carregaItemNF();
     }
 
     changeCodNF(value) {
@@ -75,19 +80,21 @@ class ConsultaNFForm extends React.PureComponent {
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 2 }]}>
                         <Text style={styles.txtLabel}>Nota Fiscal</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            onChangeText={nrNotaFis => this.changeCodNF(nrNotaFis)}
-                            value={this.props.codNF}
-                            ref={(input) => { this.nrNotaFis = input; }}
-                            onBlur={() => this.props.codNF && this.carregaItemNF()}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.changeCodNF}
+                                value={this.props.codNF}
+                                ref={(input) => { this.nrNotaFis = input; }}
+                                onBlur={this.onBlurNotaFiscal}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={{ padding: 5 }} >
@@ -130,15 +137,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     },
     btClear: {
         width: 40,

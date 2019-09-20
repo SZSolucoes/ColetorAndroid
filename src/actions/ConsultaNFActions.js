@@ -46,6 +46,8 @@ export const buscaItemsNF = (usuario, codNF) => dispatch => {
         .catch(() => buscaError());
 };
 
+const consultaNfPush = () => Actions.consultaNFPush();
+
 const buscaSuccess = (dispatch, response) => {
     if (response.data.success === 'true') {
         const nfs = _.values(response.data.notas);
@@ -57,7 +59,7 @@ const buscaSuccess = (dispatch, response) => {
                     type: 'modifica_listnf_consultanf',
                     payload: nfs
                 });
-                setTimeout(() => Actions.consultaNFPush(), 200);
+                setTimeout(consultaNfPush, 200);
             } else if (nNotas === 1) {
                 dispatch({
                     type: 'modifica_listitemnf_consultanf',

@@ -31,6 +31,20 @@ class Login extends React.PureComponent {
         this.props.iniciaPermissao();
     }
 
+    onChange = (value) => {
+        this.props.modificaUsuario(value);
+    }
+    onChangeSenha = (value) => {
+        this.props.modificaSenha(value);
+    }
+
+    onSubmitEditingUsuario = () => {
+        this.txtSenha.focus();
+    }
+    onSubmitEditingSenha = () => {
+        this.pressLogin();
+    }
+
     usuarioKeyPress(e) {
         if (e.nativeEvent.key.toLowerCase() === 'tab') {
             this.txtSenha.focus();
@@ -49,7 +63,7 @@ class Login extends React.PureComponent {
     renderBotao() {
         if (this.props.loadingLogin) {
             return (
-                <ActivityIndicator size="large" />
+                <ActivityIndicator size="large" color={'white'} />
             );
         }
         return (
@@ -76,9 +90,9 @@ class Login extends React.PureComponent {
                                     placeholderTextColor='rgba(255,255,255,0.7)'
                                     returnKeyType="next"
                                     style={styles.input}
-                                    onChangeText={usuario => this.props.modificaUsuario(usuario)}
+                                    onChangeText={this.onChangeUsuario}
                                     value={this.props.usuario}
-                                    onSubmitEditing={() => { this.txtSenha.focus(); }}
+                                    onSubmitEditing={this.onSubmitEditingUsuario}
                                     blurOnSubmit={false}
                                 />
                                 <TextInput 
@@ -90,9 +104,9 @@ class Login extends React.PureComponent {
                                     autoCorrect={false}
                                     secureTextEntry={this.props.refreshSenha}
                                     style={styles.input}
-                                    onChangeText={senha => this.props.modificaSenha(senha)}
+                                    onChangeText={this.onChangeSenha}
                                     value={this.props.senha}
-                                    onSubmitEditing={() => { this.pressLogin(); }}
+                                    onSubmitEditing={this.onSubmitEditingSenha}
                                 />
                             </View>
                         ) : (
@@ -104,10 +118,10 @@ class Login extends React.PureComponent {
                                     placeholderTextColor='rgba(255,255,255,0.7)'
                                     returnKeyType="next"
                                     style={styles.input}
-                                    onKeyPress={(e) => this.usuarioKeyPress(e)}
-                                    onChangeText={usuario => this.props.modificaUsuario(usuario)}
+                                    onKeyPress={this.usuarioKeyPress}
+                                    onChangeText={this.onChangeUsuario}
                                     value={this.props.usuario}
-                                    onSubmitEditing={() => { this.txtSenha.focus(); }}
+                                    onSubmitEditing={this.onSubmitEditingUsuario}
                                     blurOnSubmit={false}
                                 />
                                 <TextInput 
@@ -118,9 +132,9 @@ class Login extends React.PureComponent {
                                     autoCorrect={false}
                                     secureTextEntry={this.props.refreshSenha}
                                     style={styles.input}
-                                    onChangeText={senha => this.props.modificaSenha(senha)}
+                                    onChangeText={this.onChangeSenha}
                                     value={this.props.senha}
-                                    onSubmitEditing={() => { this.pressLogin(); }}
+                                    onSubmitEditing={this.onSubmitEditingSenha}
                                 />
                             </View>
                         ) }

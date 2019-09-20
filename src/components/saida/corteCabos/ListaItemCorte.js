@@ -180,7 +180,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        paddingVertical: 5
     },
     itemUser: {
         backgroundColor: '#EEC863',
@@ -189,7 +190,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        paddingVertical: 5
     },
     itemErro: {
         backgroundColor: '#9C0305',
@@ -198,7 +200,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        paddingVertical: 5
     },
     itemInvisible: {
         backgroundColor: 'transparent',

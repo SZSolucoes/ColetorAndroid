@@ -25,17 +25,26 @@ import {
 } from '../../actions/EstoqueActions';
 
 import ListaItemEstoque from './ListaItemEstoque';
+import { defaultFormStyles } from '../utils/Forms';
 
-const imgClear = require('../../../resources/imgs/limpa_tela.png');
+import imgClear from '../../../resources/imgs/limpa_tela.png';
 
 class FormEstoque extends React.PureComponent {
     componentDidMount() {
         this.props.iniciaTela();
-        Actions.refresh({ right: this._renderRightButton });
+        setTimeout(Actions.refresh, 500, { right: this._renderRightButton });
     }
 
     componentWillUnmount() {
         this.props.modificaEstoqueClear();
+    }
+
+    onBlurEan = () => {
+        if (this.props.codEAN) this.fnBuscaEstoque();
+    }
+
+    onChangeEan = (value) => {
+        this.props.modificaCodEAN(value);
     }
 
     limpaTela() {
@@ -84,49 +93,53 @@ class FormEstoque extends React.PureComponent {
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>EAN</Text>
                         <View style={styles.viewBtEtiq}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                keyboardType="numeric"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={[styles.input, { flex: 5 }]}
-                                onChangeText={codEAN => this.props.modificaCodEAN(codEAN)}
-                                value={this.props.codEAN}
-                                onBlur={() => this.props.codEAN && this.fnBuscaEstoque()}
-                            />
+                            <View style={[defaultFormStyles.inputView, { flex: 5 }]}>
+                                <TextInput
+                                    placeholder=""
+                                    autoCapitalize="none"
+                                    keyboardType="numeric"
+                                    autoCorrect={false}
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="go"
+                                    style={defaultFormStyles.input}
+                                    onChangeText={this.onChangeEan}
+                                    value={this.props.codEAN}
+                                    onBlur={this.onBlurEan}
+                                />
+                            </View>
                         </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 4 }]}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={codItem => this.props.modificaCodItem(codItem)}
-                            value={this.props.codItem}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.codItem}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={unidMed => this.props.modificaUnidMed(unidMed)}
-                            value={this.props.unidMed}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.unidMed}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
@@ -141,8 +154,7 @@ class FormEstoque extends React.PureComponent {
                             editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
                             returnKeyType="next"
-                            style={styles.inputDescricao}
-                            onChangeText={descItem => this.props.modificaDescItem(descItem)}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.descItem}
                         />
                     </View>                    
@@ -208,26 +220,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
         fontSize: 13,
-        fontFamily: 'sans-serif-medium'
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        //backgroundColor: 'rgba(255,255,255,0.2)',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        //backgroundColor: 'rgba(255,255,255,0.2)',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
         fontFamily: 'sans-serif-medium'
     },
     viewBotao: {

@@ -2,6 +2,7 @@ import Axios from 'axios';
 import { Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { store } from '../App';
+import { doAlertWithTimeout } from '../components/utils/Alerts';
 
 export const modificaBatismo = (value) => ({
     type: 'modifica_batismo_confvolume',
@@ -69,17 +70,19 @@ const onFetchSuccess = (dispatch, res, focusInField) => {
         if (res.data.success === 'true') {
             doFetchDispatch(dispatch, res.data.embarque);
         } else {
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Erro Conf - Volumes',
-                res.data.message
-            ), 500);
+                res.data.message, 
+                500
+            );
             focusInField('batismo');
         }
     } else {
-        setTimeout(() => Alert.alert(
+        doAlertWithTimeout(
             'Erro Conf - Volumes',
-            'Ocorreu uma falha interna no servidor, verifique a conexão!'
-        ), 500);
+            'Ocorreu uma falha interna no servidor, verifique a conexão!',
+            500
+        );
         focusInField('batismo');
     }
 };
@@ -87,10 +90,12 @@ const onFetchSuccess = (dispatch, res, focusInField) => {
 const onFetchError = (dispatch, focusInField) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
-    setTimeout(() => Alert.alert(
+    doAlertWithTimeout(
         'Erro Conf - Volumes',
-        'Erro Conexão!'
-    ), 500);
+        'Erro Conexão!',
+        500
+    );
+
     focusInField('batismo');
 };
 
@@ -190,9 +195,10 @@ const onConfVolSuccess = (dispatch, res, params, isMenu) => {
             dispatch({
                 type: 'modifica_clean_confvolume'
             });
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Conf - Volumes',
                 res.data.message,
+                500,
                 [
                     { 
                         text: 'OK', 
@@ -207,28 +213,31 @@ const onConfVolSuccess = (dispatch, res, params, isMenu) => {
                     }
                 ],
                 { cancelable: false }
-            ), 500);
+            );
         } else {
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Erro Conf - Volumes',
-                res.data.message
-            ), 500);
+                res.data.message,
+                500
+            );
         }
     } else {
-        setTimeout(() => Alert.alert(
+        doAlertWithTimeout(
             'Erro Conf - Volumes',
-            'Ocorreu uma falha interna no servidor, verifique a conexão!'
-        ), 500);
+            'Ocorreu uma falha interna no servidor, verifique a conexão!',
+            500
+        );
     }
 };
 
 const onConfVolError = (dispatch) => {
     dispatch({ type: 'modifica_visible_loadingspin', payload: false });
 
-    setTimeout(() => Alert.alert(
+    doAlertWithTimeout(
         'Erro Conf - Volumes',
-        'Erro Conexão!'
-    ), 500);
+        'Erro Conexão!',
+        500
+    );
 };
 
 export const doPrint = (params, doAlert = false) => dispatch => {
@@ -247,31 +256,35 @@ const onPrintSuccess = (dispatch, res, doAlert) => {
     if (doAlert) {
         if (bResOk && typeof res.data === 'object') {
             if (res.data.success === 'true') {
-                setTimeout(() => Alert.alert(
+                doAlertWithTimeout(
                     'Conf - Volumes',
-                    res.data.message
-                ), 500);
+                    res.data.message,
+                    500
+                );
             } else {
-                setTimeout(() => Alert.alert(
+                doAlertWithTimeout(
                     'Erro Conf - Volumes',
-                    res.data.message
-                ), 500);
+                    res.data.message,
+                    500
+                );
             }
         } else {
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Erro Conf - Volumes',
-                'Ocorreu uma falha interna no servidor, verifique a conexão!'
-            ), 500);
+                'Ocorreu uma falha interna no servidor, verifique a conexão!',
+                500
+            );
         }
     }
 };
 
 const onPrintError = (doAlert) => {
     if (doAlert) {
-        setTimeout(() => Alert.alert(
+        doAlertWithTimeout(
             'Erro Conf - Volumes',
-            'Erro Conexão!'
-        ), 500);
+            'Erro Conexão!',
+            500
+        );
     }
 };
 

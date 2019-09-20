@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import Axios from 'axios';
 import { store } from '../App';
+import { doAlertWithTimeout } from '../components/utils/Alerts';
 
 export const modificaBatismo = codEtiqBatismo => ({
     type: 'modifica_batismo_consbatentrada',
@@ -33,13 +34,14 @@ const buscaSuccess = (dispatch, res) => {
         if (res.data.success === 'true') {
             dispatch({ type: 'modifica_listitem_consbatentrada', payload: res.data.item });
         } else {
-            setTimeout(() => Alert.alert(
+            doAlertWithTimeout(
                 'Erro Consulta',
-                res.data.message
-            ), 500);
+                res.data.message,
+                500
+            );
         }
     } else {
-        setTimeout(() => Alert.alert('Erro', 'Ocorreu uma falha interna no servidor.'), 500);  
+        doAlertWithTimeout('Erro', 'Ocorreu uma falha interna no servidor.', 500);  
     }
 };
 

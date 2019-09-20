@@ -7,12 +7,16 @@ import {
 } from 'react-native';
 
 export default class ListaItemConfSepPc extends PureComponent {
+    onPressItemPass = (item, index) => this.onPressItem(item, index)
+    onPressItem = (item, index) => {
+        this.props.onPressItem({ ...item }, index);
+    }
+    
     render() {
         const { 
             item, 
             itemSelected, 
             itemStyle,
-            onPressItem,
             index 
         } = this.props;
 
@@ -23,7 +27,7 @@ export default class ListaItemConfSepPc extends PureComponent {
         
         return (
             <TouchableHighlight
-                onPress={() => onPressItem({ ...item }, index)}
+                onPress={this.onPressItemPass({ ...item }, index)}
             >
                 <View
                     style={[styles.item, itemSelectedStyle, itemStyle]} 
@@ -66,6 +70,8 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         marginVertical: 2,
+        paddingHorizontal: 5,
+        paddingVertical: 5
     },
     selectedStyle: {
         borderWidth: 2.5,

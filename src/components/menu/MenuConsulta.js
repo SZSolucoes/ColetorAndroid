@@ -150,13 +150,15 @@ class MenuConsulta extends React.PureComponent {
     
     render() {
         return (
-            <ScrollView style={styles.opcao}>  
-                {this.renderConsultaEstoq()}
-                {this.renderConsultaBatismoEntrada()}
-                {this.renderConsultaBatismoSaida()}
-                {this.renderConsultaLocalizacao()}
-                {this.renderConsultaNF()}                   
-                {this.renderConsultaEAN()}                   
+            <ScrollView style={styles.opcao}>
+                <View style={{ flex: 1, paddingVertical: 5 }}>
+                    {this.renderConsultaEstoq()}
+                    {this.renderConsultaBatismoEntrada()}
+                    {this.renderConsultaBatismoSaida()}
+                    {this.renderConsultaLocalizacao()}
+                    {this.renderConsultaNF()}
+                    {this.renderConsultaEAN()}
+                </View>
             </ScrollView>
         );
     }

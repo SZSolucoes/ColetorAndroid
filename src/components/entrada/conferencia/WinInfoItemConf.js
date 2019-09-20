@@ -18,6 +18,7 @@ import {
     modificaLarguraItem,
     modificaComprimentoItem
 } from '../../../actions/ConfereActions';
+import { defaultFormStyles } from '../../utils/Forms';
 
 class WinInfoItemConf extends React.PureComponent {
     salvarInfoItem = () => {
@@ -49,78 +50,86 @@ class WinInfoItemConf extends React.PureComponent {
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Peso</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={pesoItem => this.props.modificaPesoItem(pesoItem)}
-                            value={this.props.pesoItem}
-                            ref={(input) => { this.pesoItem = input; }}
-                            onSubmitEditing={() => { this.alturaItem.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={pesoItem => this.props.modificaPesoItem(pesoItem)}
+                                value={this.props.pesoItem}
+                                ref={(input) => { this.pesoItem = input; }}
+                                onSubmitEditing={() => { this.alturaItem.focus(); }}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Altura</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={
-                                alturaItem => 
-                                this.props.modificaAlturaItem(alturaItem)
-                            }
-                            value={this.props.altura}
-                            ref={(input) => { this.alturaItem = input; }}
-                            onSubmitEditing={() => { this.larguraItem.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={
+                                    alturaItem => 
+                                    this.props.modificaAlturaItem(alturaItem)
+                                }
+                                value={this.props.altura}
+                                ref={(input) => { this.alturaItem = input; }}
+                                onSubmitEditing={() => { this.larguraItem.focus(); }}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={styles.viewLinha}>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Largura</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={
-                                larguraItem => 
-                                this.props.modificaLarguraItem(larguraItem)
-                            }
-                            value={this.props.largura}
-                            ref={(input) => { this.larguraItem = input; }}
-                            onSubmitEditing={() => { this.comprimentoItem.focus(); }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={
+                                    larguraItem => 
+                                    this.props.modificaLarguraItem(larguraItem)
+                                }
+                                value={this.props.largura}
+                                ref={(input) => { this.larguraItem = input; }}
+                                onSubmitEditing={() => { this.comprimentoItem.focus(); }}
+                            />
+                        </View>
                     </View>
                     <View style={[styles.viewCampo, { flex: 1 }]}>
                         <Text style={styles.txtLabel}>Comprimento</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType="numeric"
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            onChangeText={
-                                comprimentoItem => 
-                                this.props.modificaComprimentoItem(comprimentoItem)
-                            }
-                            value={this.props.comprimento}
-                            ref={(input) => { this.comprimentoItem = input; }}
-                            onBlur={() => this.props.comprimento && this.salvarInfoItem()}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={
+                                    comprimentoItem => 
+                                    this.props.modificaComprimentoItem(comprimentoItem)
+                                }
+                                value={this.props.comprimento}
+                                ref={(input) => { this.comprimentoItem = input; }}
+                                onBlur={() => this.props.comprimento && this.salvarInfoItem()}
+                            />
+                        </View>
                     </View>
                 </View>
                 <View style={{ marginTop: 40, paddingHorizontal: 15 }}>
@@ -177,14 +186,5 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     }
 });

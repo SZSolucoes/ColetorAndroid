@@ -33,12 +33,12 @@ class MenuInventario extends React.PureComponent {
     
     renderInventario(key) {
         return (
-            <TouchableHighlight key={key} onPress={() => { this.onPressInvent(); }}>        
+            <TouchableHighlight key={key} onPress={this.onPressInvent}>
                     { this.props.loadingInvent ?
                         (   
                             <View style={[styles.menu, { justifyContent: 'center' }]}>
                                 <View style={{ marginVertical: 6 }}>
-                                    <ActivityIndicator size={'large'} />
+                                    <ActivityIndicator size={'large'} color={'white'} />
                                 </View>
                             </View>
                         ) : (
@@ -72,8 +72,10 @@ class MenuInventario extends React.PureComponent {
     render() {
         return (
             <ScrollView style={styles.opcao}>
-                {this.renderInventario('1')}
-                {/*this.renderInventarioEst('2')*/}
+                <View style={{ flex: 1, paddingVertical: 5 }}>
+                    {this.renderInventario('1')}
+                    {/*this.renderInventarioEst('2')*/}
+                </View>
             </ScrollView>
         );
     }

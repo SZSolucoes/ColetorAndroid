@@ -35,11 +35,11 @@ import {
     doConfVol,
     doPrint
 } from '../../../actions/ConfereVolumeActions';
+import { defaultFormStyles } from '../../utils/Forms';
 
 import imgSeta from '../../../../resources/imgs/seta.png';
 
 class FormConferenciaVolume extends React.PureComponent {
-
     constructor(props) {
         super(props);
 
@@ -68,9 +68,30 @@ class FormConferenciaVolume extends React.PureComponent {
         this.props.modificaClean();
     }
 
+    onBlurBatismo = () => {
+        if (this.props.batismo && this.fieldsChanged.batismo) {
+            this.fieldsChanged.batismo = false;
+            this.doFetchInfoBatismo();
+        } 
+    }
+
+    onChangeBatismo = (value) => {
+        this.fieldsChanged.batismo = true; 
+        this.props.modificaBatismo(value); 
+    }
     onChangeVolume(value) {
         const txtParsed = value.replace(/[^0-9]/g, '');
         this.props.modificaVolume(txtParsed);
+    }
+
+    onPressEmbalagem = (value) => this.onPressEmbalagemPass(value)
+    onPressEmbalagemPass = (value) => this.props.modificaModalVisible(value)
+
+    onPressCancelModal = (value) => this.onPressCancelModalPass(value)
+    onPressCancelModalPass = (value) => this.props.modificaModalVisible(value)
+
+    onSubmitEditingVolume = () => {
+        if (this.props.volume) this.adicionarVolume();
     }
 
     doPrint() {
@@ -160,6 +181,7 @@ class FormConferenciaVolume extends React.PureComponent {
         this.props.doFetchInfoBatismo({ userName: usuario, etiqueta: batismo }, this.focusInField);
     }
 
+    doChangePersistTapFunc = (value) => this.doChangePersistTap(value);
     doChangePersistTap(notPersist = true) {
         if (notPersist) {
             this.setState({ persistTap: 'never' });
@@ -186,7 +208,7 @@ class FormConferenciaVolume extends React.PureComponent {
                 <Picker
                     selectedValue={this.props.keyEmb}
                     style={{ flex: 2, marginHorizontal: 10 }}
-                    onValueChange={(value) => this.modificaEmbalagemModal(value)} 
+                    onValueChange={this.modificaEmbalagemModal} 
                 >
                     { listEmbalagens && listEmbalagens.map((item, index) => (
                         <Picker.Item key={index} label={item.label} value={item.key} />
@@ -203,54 +225,51 @@ class FormConferenciaVolume extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Batismo</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.batismo}
-                            ref={(input) => { this.txtBatismo = input; }}
-                            onFocus={() => this.doChangePersistTap()}
-                            onChangeText={value => {
-                                this.fieldsChanged.batismo = true; 
-                                this.props.modificaBatismo(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.batismo && 
-                                    this.fieldsChanged.batismo) {
-                                        this.fieldsChanged.batismo = false;
-                                        this.doFetchInfoBatismo();
-                                    } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.batismo}
+                                ref={(input) => { this.txtBatismo = input; }}
+                                onFocus={this.doChangePersistTap}
+                                onChangeText={this.onChangeBatismo}
+                                onBlur={this.onBlurBatismo}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Embarque</Text>
-                        <TextInput
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.embarque}
-                            underlineColorAndroid={'transparent'}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.embarque}
+                                underlineColorAndroid={'transparent'}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Pedido</Text>
-                        <TextInput
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            editable={false}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            style={styles.input}
-                            value={this.props.pedido}
-                            underlineColorAndroid={'transparent'}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                editable={false}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                value={this.props.pedido}
+                                underlineColorAndroid={'transparent'}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
@@ -258,19 +277,21 @@ class FormConferenciaVolume extends React.PureComponent {
                         <View style={{ flex: 2 }}>
                             <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Embalagem</Text>
                             <TouchableOpacity 
-                                onPress={() => this.props.modificaModalVisible(true)}
+                                onPress={this.onPressEmbalagem(true)}
                                 style={{ flexDirection: 'row' }}
                             >
-                                <TextInput
-                                    placeholder=""
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    editable={false}
-                                    placeholderTextColor='rgba(255,255,255,0.7)'
-                                    returnKeyType="next"
-                                    style={[styles.input, { flex: 1 }]}
-                                    value={this.props.embalagem}
-                                />
+                                <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                                    <TextInput
+                                        placeholder=""
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                        editable={false}
+                                        placeholderTextColor='rgba(255,255,255,0.7)'
+                                        returnKeyType="next"
+                                        style={defaultFormStyles.input}
+                                        value={this.props.embalagem}
+                                    />
+                                </View>
                                 <Image
                                     source={imgSeta}
                                     style={styles.imgSeta}
@@ -282,20 +303,22 @@ class FormConferenciaVolume extends React.PureComponent {
                     )}
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>Volume</Text>
-                        <TextInput
-                            placeholder=""
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            keyboardType={'numeric'}
-                            placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="go"
-                            style={styles.input}
-                            value={this.props.volume}
-                            onFocus={() => this.doChangePersistTap(false)}
-                            onChangeText={(value) => this.onChangeVolume(value)}
-                            ref={(input) => { this.txtVolume = input; }}
-                            onSubmitEditing={() => this.props.volume && this.adicionarVolume()}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType={'numeric'}
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="go"
+                                style={defaultFormStyles.input}
+                                value={this.props.volume}
+                                onFocus={this.doChangePersistTapFunc(false)}
+                                onChangeText={this.onChangeVolume}
+                                ref={(input) => { this.txtVolume = input; }}
+                                onSubmitEditing={this.onSubmitEditingVolume}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <View>
@@ -308,7 +331,7 @@ class FormConferenciaVolume extends React.PureComponent {
                     { Platform.OS !== 'windows' ? (
                         <View style={styles.viewBotao}>
                             <Button
-                                onPress={() => this.doConfVol()}
+                                onPress={this.doConfVol}
                                 title="Finalizar"
                                 color="green"
                             />
@@ -317,7 +340,7 @@ class FormConferenciaVolume extends React.PureComponent {
                         <View style={styles.viewBotao}>
                             <View style={{ width: 150 }}>
                                 <Button
-                                    onPress={() => this.doConfVol()}
+                                    onPress={this.doConfVol}
                                     title="Finalizar"
                                     color="black"
                                 />
@@ -332,7 +355,7 @@ class FormConferenciaVolume extends React.PureComponent {
                     noResultsText="Não encontrado"
                     visible={this.props.modalVisible}
                     onSelect={this.modificaEmbalagemModal}
-                    onCancel={() => this.props.modificaModalVisible(false)}
+                    onCancel={this.onPressCancelModal(false)}
                     options={this.props.listEmbalagens}
                 />
             </ScrollView>
@@ -383,15 +406,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontFamily: 'sans-serif-medium',
         fontSize: 13
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
     },
     viewBotao: {
         flexDirection: 'row',

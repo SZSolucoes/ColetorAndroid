@@ -34,6 +34,7 @@ import {
 import { 
     imprimeEtiquetaEAN
 } from '../../../actions/ImpressaoActions';
+import { defaultFormStyles } from '../../utils/Forms';
 
 import LoadingSpin from '../../utils/LoadingSpin';
 import imgClear from '../../../../resources/imgs/limpa_tela.png';
@@ -65,13 +66,32 @@ class ConsultaItemEan extends React.PureComponent {
     }
 
     componentDidMount() {
-        Actions.refresh({ right: this.renderClearButton });
+        setTimeout(Actions.refresh, 500, { right: this.renderClearButton });
     }
 
     componentWillUnmount() {
         this.props.modificaClean();
         this.props.modificaCodEan('');
         this.props.modificaCodItem('');
+    }
+
+    onBlurItem = () => {
+        if (this.props.itCode && 
+            this.fieldsChanged.itCode) {
+            this.fieldsChanged.itCode = false;
+            this.doFetchEan();
+        }
+    }
+
+    onChangeModificaQtdEtiq = label => this.onChangeModificaQtdEtiqPass(label);
+    onChangeModificaQtdEtiqPass = (label, value) => this.modificaQtdEtiq(label, value);
+
+    onChangeModificaEan = label => this.onChangeModificaEanPass(label);
+    onChangeModificaEanPass = (label, value) => this.modificaEan(label, value);
+
+    onChangeItem = (value) => {
+        this.fieldsChanged.itCode = true; 
+        this.props.modificaItCode(value); 
     }
 
     onPressPrint(codEAN, qtdEtiq) {
@@ -231,7 +251,7 @@ class ConsultaItemEan extends React.PureComponent {
             if (!eanFetched.includes(item.fetchedNum)) {
                 return (
                     <FormRow key={index}>
-                        <View style={{ flex: 3 }}>
+                        <View style={{ flex: 1.5 }}>
                             <Text style={styles.txtLabel}>{item.label}</Text>
                             <View style={styles.viewSection}>
                                 <Text
@@ -244,22 +264,25 @@ class ConsultaItemEan extends React.PureComponent {
                             </View>
                         </View>
                         <View style={{ flex: 1 }}>
-                            <Text style={styles.txtLabel}>Qtde Etiq</Text>
                             <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
-                                <View style={{ flex: 1, marginRight: 5 }}>
-                                    <TextInput
-                                        placeholder=""
-                                        autoCapitalize="none"
-                                        autoCorrect={false}
-                                        keyboardType="numeric"
-                                        placeholderTextColor='rgba(255,255,255,0.7)'
-                                        returnKeyType="next"
-                                        style={styles.input}
-                                        onChangeText={valueTxt => this.modificaQtdEtiq(item.label, valueTxt)}
-                                        value={item.qtdEtiq}
-                                    />
+                                <View style={{ flex: 1.5, marginRight: 5, overflow: 'visible' }}>
+                                    <Text style={styles.txtLabel} numberOfLines={1}>Qtde Etiq</Text>
+                                    <View style={defaultFormStyles.inputView}>
+                                        <TextInput
+                                            placeholder=""
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            keyboardType="numeric"
+                                            placeholderTextColor='rgba(255,255,255,0.7)'
+                                            returnKeyType="next"
+                                            style={defaultFormStyles.input}
+                                            onChangeText={this.onChangeModificaQtdEtiq(item.label)}
+                                            value={item.qtdEtiq}
+                                        />
+                                    </View>
                                 </View>
-                                <View style={{ flex: 1 }}>
+                                <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center', marginLeft: 5 }}>
+                                    <Text style={styles.txtLabel} numberOfLines={1} />
                                     <TouchableOpacity
                                         style={styles.btSearch}
                                         onPress={() => { this.onPressPrint(item.value, item.qtdEtiq); }}
@@ -279,14 +302,16 @@ class ConsultaItemEan extends React.PureComponent {
                 <FormRow key={index}>
                     <View>
                         <Text style={styles.txtLabel}>{item.label}</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            autoCapitalize={'none'}
-                            autoCorrect={false}
-                            style={styles.input}
-                            value={item.value}
-                            onChangeText={(value) => this.modificaEan(item.label, value)}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                autoCapitalize={'none'}
+                                autoCorrect={false}
+                                style={defaultFormStyles.input}
+                                value={item.value}
+                                onChangeText={this.onChangeModificaEan(item.label)}
+                            />
+                        </View>
                     </View>
                 </FormRow>
             );
@@ -314,33 +339,28 @@ class ConsultaItemEan extends React.PureComponent {
                 <FormRow>
                     <View style={{ flex: 4 }}>
                         <Text style={styles.txtLabel}>Item</Text>
-                        <TextInput
-                            selectTextOnFocus
-                            autoCapitalize={'none'}
-                            autoCorrect={false}
-                            style={styles.input}
-                            value={this.props.itCode}
-                            onChangeText={value => {
-                                this.fieldsChanged.itCode = true; 
-                                this.props.modificaItCode(value); 
-                            }}
-                            onBlur={() => { 
-                                if (this.props.itCode && 
-                                    this.fieldsChanged.itCode) {
-                                    this.fieldsChanged.itCode = false;
-                                    this.doFetchEan();
-                                } 
-                            }}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                selectTextOnFocus
+                                autoCapitalize={'none'}
+                                autoCorrect={false}
+                                style={defaultFormStyles.input}
+                                value={this.props.itCode}
+                                onChangeText={this.onChangeItem}
+                                onBlur={this.onBlurItem}
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.txtLabel}>UM</Text>
-                        <TextInput
-                            editable={false}
-                            style={styles.input}
-                            value={this.props.un}
-                            underlineColorAndroid={'transparent'}
-                        />
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                editable={false}
+                                style={defaultFormStyles.input}
+                                value={this.props.un}
+                                underlineColorAndroid={'transparent'}
+                            />
+                        </View>
                     </View>
                 </FormRow>
                 <FormRow>
@@ -350,7 +370,7 @@ class ConsultaItemEan extends React.PureComponent {
                             multiline
                             numberOfLines={3}
                             editable={false}
-                            style={styles.inputDescricao}
+                            style={defaultFormStyles.inputDescricao}
                             value={this.props.itDesc}
                             underlineColorAndroid={'transparent'}
                         />
@@ -399,7 +419,7 @@ const styles = StyleSheet.create({
         fontSize: 13
     },
     viewSection: {
-        height: 35,
+        height: 40,
         backgroundColor: '#20293F',
         borderRadius: 10,
         alignItems: 'center',
@@ -410,24 +430,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'white',
         fontFamily: 'sans-serif-medium',
-    },
-    input: {
-        height: 35,
-        fontSize: 14,
-        textAlign: 'center',
-        backgroundColor: '#20293F',
-        color: 'white',
-        fontFamily: 'sans-serif-medium',
-		borderRadius: 10
-    },
-    inputDescricao: {
-        height: 70,
-        fontSize: 14,
-        textAlign: 'left',
-        backgroundColor: '#20293F',
-        color: 'white',
-        borderRadius: 10,
-        fontFamily: 'sans-serif-medium'
     },
     viewBotao: {
         flexDirection: 'row',

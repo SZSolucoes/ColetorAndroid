@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Router, Scene } from 'react-native-router-flux';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Router, Scene, Actions } from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import LoginApp from './components/login/LoginApp';
 import Version from './components/login/Version';
@@ -35,11 +36,31 @@ import ListaCortes from './components/saida/corteCabos/ListaCortes';
 import ConferenciaPlaca from './components/entrada/conferenciaPlaca/ConferenciaPlaca';
 import FormSelecaoNF from './components/entrada/conferenciaPlaca/FormSelecaoNF';
 
+const renderBackButton = () => (
+    <TouchableOpacity
+        onPress={() => Actions.pop()}
+        activeOpacity={0.6}
+    >
+        <View 
+            style={{ 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                width: '100%', 
+                height: '100%',
+                paddingHorizontal: 25
+            }}
+        >
+            <Icon name="ios-arrow-back" size={30} color={'white'} />
+        </View>
+    </TouchableOpacity>
+);
+
 export default () => (
     <Router>
         <Scene 
             key="root"
             navigationBarStyle={styles.header}
+            renderBackButton={renderBackButton}
         >
             <Scene 
                 key='loginApp' 
