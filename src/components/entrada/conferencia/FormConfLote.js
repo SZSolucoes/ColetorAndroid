@@ -27,19 +27,12 @@ import {
 import { defaultFormStyles } from '../../utils/Forms';
 
 class FormConfLote extends React.PureComponent {
-    componentDidMount() {
+    componentDidMount = () => {
         this.props.iniciaConfLote();
-        setTimeout(Actions.refresh, 500, { right: this._renderRightButton });
+        setTimeout(Actions.refresh, 500, { right: this.renderRightButton });
     }
 
-    _renderRightButton = () => {
-        return (
-            <TouchableOpacity onPress={() => this._onPressSalvar() } >
-                <Text style={{ color: 'white', marginRight: 10, fontSize: 16 }}>Salvar</Text>
-            </TouchableOpacity>
-        );
-    };
-    _onPressSalvar = () => {
+    onPressSalvar = () => {
         const { qtItem, listaItemLote } = this.props;
 
         let qtConferida = 0;
@@ -92,7 +85,11 @@ class FormConfLote extends React.PureComponent {
         this.props.modificaQtdItemLote(value);
     }
 
-    criaVolumesLote() {
+    onSubmitEditingLote = () => {
+        this.qtdItemLote.focus();
+    }
+
+    criaVolumesLote = () => {
         const { qtdLote } = this.props;
         let arrLote = [];
 
@@ -122,12 +119,11 @@ class FormConfLote extends React.PureComponent {
 
         this.codLote.focus();
     }
-    salvaQtdLote() {
+
+    salvaQtdLote = () => {
         const { seqLote, codLote, qtdItemLote, listaItemLote } = this.props;
 
-        const index = _.findIndex(listaItemLote, function(item) { 
-            return item.seqLote === seqLote;
-        });
+        const index = _.findIndex(listaItemLote, (item) => item.seqLote === seqLote);
 
         listaItemLote[index] = {
             seqLote,
@@ -141,103 +137,108 @@ class FormConfLote extends React.PureComponent {
         
         Actions.refresh();
     }
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 1 }]}>
-                        <Text style={styles.txtLabel}>Qtde Volumes</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                onChangeText={this.onChangeQtdVolume}
-                                value={this.props.qtdLote}
-                                ref={(input) => { this.qtdLote = input; }}
-                                onBlur={this.onBlurQtdVolume}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.viewBtOk}>
-                        <TouchableOpacity
-                            style={styles.btOk}
-                            onPress={() => { this.criaVolumesLote(); }}                            
-                        >
-                            <Text style={styles.txtBtOk}>OK</Text>
-                        </TouchableOpacity>
-                    </View>                    
-                </View>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 2 }]}>
-                        <Text style={styles.txtLabel}>Seq</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                editable={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={defaultFormStyles.input}
-                                value={this.props.seqLote}
-                            />
-                        </View>
-                    </View>
-                    <View style={[styles.viewCampo, { flex: 4 }]}>
-                        <Text style={styles.txtLabel}>Lote</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={defaultFormStyles.input}
-                                onChangeText={this.onChangeLote}
-                                ref={(input) => { this.codLote = input; }}
-                                value={this.props.codLote}
-                                onSubmitEditing={() => { this.qtdItemLote.focus(); }}
-                            />
-                        </View>
-                    </View>
-                    <View style={[styles.viewCampo, { flex: 3 }]}>
-                        <Text style={styles.txtLabel}>Qtde</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                onChangeText={this.onChangeQuantidade}
-                                value={this.props.qtdItemLote}
-                                ref={(input) => { this.qtdItemLote = input; }}
-                                onBlur={this.onBlurQuantidade}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.viewBtOk}>
-                        <TouchableOpacity
-                            style={styles.btOk}
-                            onPress={() => { this.salvaQtdLote(); }}                            
-                        >
-                            <Text style={styles.txtBtOk}>OK</Text>
-                        </TouchableOpacity>
+
+    renderRightButton = () => (
+        <TouchableOpacity onPress={this.onPressSalvar}>
+            <Text style={{ color: 'white', marginRight: 10, fontSize: 16 }}>Salvar</Text>
+        </TouchableOpacity>
+    );
+
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            <View style={styles.viewLinha}>
+                <View style={[styles.viewCampo, { flex: 1 }]}>
+                    <Text style={styles.txtLabel}>Qtde Volumes</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            onChangeText={this.onChangeQtdVolume}
+                            value={this.props.qtdLote}
+                            ref={(input) => { this.qtdLote = input; }}
+                            onBlur={this.onBlurQtdVolume}
+                        />
                     </View>
                 </View>
-                <View style={{ padding: 5 }} >
-                    <ListaLote />
+                <View style={styles.viewBtOk}>
+                    <TouchableOpacity
+                        style={styles.btOk}
+                        onPress={this.criaVolumesLote}
+                    >
+                        <Text style={styles.txtBtOk}>OK</Text>
+                    </TouchableOpacity>
                 </View>
-            </ScrollView>
-        );
-    }
+            </View>
+            <View style={styles.viewLinha}>
+                <View style={[styles.viewCampo, { flex: 2 }]}>
+                    <Text style={styles.txtLabel}>Seq</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={defaultFormStyles.input}
+                            value={this.props.seqLote}
+                        />
+                    </View>
+                </View>
+                <View style={[styles.viewCampo, { flex: 4 }]}>
+                    <Text style={styles.txtLabel}>Lote</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={defaultFormStyles.input}
+                            onChangeText={this.onChangeLote}
+                            ref={(input) => { this.codLote = input; }}
+                            value={this.props.codLote}
+                            onSubmitEditing={this.onSubmitEditingLote}
+                        />
+                    </View>
+                </View>
+                <View style={[styles.viewCampo, { flex: 3 }]}>
+                    <Text style={styles.txtLabel}>Qtde</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            onChangeText={this.onChangeQuantidade}
+                            value={this.props.qtdItemLote}
+                            ref={(input) => { this.qtdItemLote = input; }}
+                            onBlur={this.onBlurQuantidade}
+                        />
+                    </View>
+                </View>
+                <View style={styles.viewBtOk}>
+                    <TouchableOpacity
+                        style={styles.btOk}
+                        onPress={this.salvaQtdLote}
+                    >
+                        <Text style={styles.txtBtOk}>OK</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <View style={{ padding: 5 }} >
+                <ListaLote />
+            </View>
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => {

@@ -31,7 +31,7 @@ class ListaNotaFiscal extends React.PureComponent {
         this.pureFunctionComponentRenderItem = React.memo(this.renderItem);
     }
 
-    onPressItem(nota) {
+    onPressItem = (nota) => () => {
         const item = nota.itens[0];
         const qtdConf = nota.itens.length;
 
@@ -49,37 +49,37 @@ class ListaNotaFiscal extends React.PureComponent {
 
         Actions.pop();
     }
-    keyExtractor(item, index) {
+
+    keyExtractor = (item) => {
         const chave = item.nroDocto + item.codEmit;
         return (
             chave
         );
     }
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                height: 1,
-                width: '100%',
-                backgroundColor: '#607D8B',
-                }}
-            />
-        );
-    }
-    renderItem = ({ item }) => {
-        return (
-            <TouchableHighlight
-                onPress={() => this.onPressItem(item)}
-            >
-                <View style={styles.item}>
-                    <Text style={styles.itemNroDoc}>{ item.nroDocto}</Text>
-                    <Text style={styles.itemSerie}>{ item.serie}</Text>
-                    <Text style={styles.itemEmitente}>{ item.nomeEmit}</Text>
-                    <Text style={styles.itemNatureza}>{ item.natOper}</Text>
-                </View>
-            </TouchableHighlight>            
-        );
-    }
+
+    renderSeparator = () => (
+        <View
+            style={{
+            height: 1,
+            width: '100%',
+            backgroundColor: '#607D8B',
+            }}
+        />
+    )
+
+    renderItem = ({ item }) => (
+        <TouchableHighlight
+            onPress={this.onPressItem(item)}
+        >
+            <View style={styles.item}>
+                <Text style={styles.itemNroDoc}>{ item.nroDocto}</Text>
+                <Text style={styles.itemSerie}>{ item.serie}</Text>
+                <Text style={styles.itemEmitente}>{ item.nomeEmit}</Text>
+                <Text style={styles.itemNatureza}>{ item.natOper}</Text>
+            </View>
+        </TouchableHighlight>            
+    )
+
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
@@ -100,36 +100,33 @@ class ListaNotaFiscal extends React.PureComponent {
 
         return headerView;
     };
-    render() {
-        return (
-            <View style={styles.viewLista}>
-                <FlatList
-                    data={this.props.listaNF}
-                    style={styles.container}
-                    ItemSeparatorComponent={this.renderSeparator}
-                    keyExtractor={this.keyExtractor}
-                    renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
-                    numColumns='1'
-                    ListHeaderComponent={this.renderHeader}
-                    stickyHeaderIndices={[0]}
-                />
-            </View>
-        );
-    }
+
+    render = () => (
+        <View style={styles.viewLista}>
+            <FlatList
+                data={this.props.listaNF}
+                style={styles.container}
+                ItemSeparatorComponent={this.renderSeparator}
+                keyExtractor={this.keyExtractor}
+                renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
+                numColumns='1'
+                ListHeaderComponent={this.renderHeader}
+                stickyHeaderIndices={[0]}
+            />
+        </View>
+    )
 }
 
-const mapStateToProps = state => {
-    return (
-        {
-            listaNF: state.ConfereReducer.listaNF,
-            nrNotaFis: state.ConfereReducer.nrNotaFis, 
-            fornec: state.ConfereReducer.fornec,
-            qtTotal: state.ConfereReducer.qtTotal,
-            qtConferir: state.ConfereReducer.qtConferir,
-            listaItem: state.ConfereReducer.listaItem
-        }
-    );
-};
+const mapStateToProps = state => (
+    {
+        listaNF: state.ConfereReducer.listaNF,
+        nrNotaFis: state.ConfereReducer.nrNotaFis, 
+        fornec: state.ConfereReducer.fornec,
+        qtTotal: state.ConfereReducer.qtTotal,
+        qtConferir: state.ConfereReducer.qtConferir,
+        listaItem: state.ConfereReducer.listaItem
+    }
+);
 
 export default connect(
     mapStateToProps, 

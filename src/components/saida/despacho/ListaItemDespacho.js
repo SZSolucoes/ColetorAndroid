@@ -16,11 +16,9 @@ class ListaItemDespacho extends React.PureComponent {
 
         this.pureFunctionComponentRenderItem = React.memo(this.renderItem);
     }
-    keyExtractor(item, index) {
-        return (
-            leftStr(item.seq)
-        );
-    }
+
+    keyExtractor = (item) => leftStr(item.seq)
+
     renderSeparator = () => {
         const viewSep = (
             <View
@@ -34,6 +32,7 @@ class ListaItemDespacho extends React.PureComponent {
 
         return viewSep;
     }
+
     renderItem = ({ item }) => {
         const viewItem = (
             <TouchableHighlight
@@ -50,6 +49,7 @@ class ListaItemDespacho extends React.PureComponent {
 
         return viewItem;
     }
+
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
@@ -64,21 +64,20 @@ class ListaItemDespacho extends React.PureComponent {
 
         return headerView;
     };
-    render() {
-        return (   
-            <FlatList
-                data={this.props.listaItens}
-                style={styles.container}
-                ItemSeparatorComponent={this.renderSeparator}
-                keyExtractor={this.keyExtractor}
-                renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
-                extraData={this.props}
-                numColumns='1'
-                ListHeaderComponent={this.renderHeader}
-                alwaysBounceHorizontal
-            />
-        );
-    }
+    
+    render = () => (   
+        <FlatList
+            data={this.props.listaItens}
+            style={styles.container}
+            ItemSeparatorComponent={this.renderSeparator}
+            keyExtractor={this.keyExtractor}
+            renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
+            extraData={this.props}
+            numColumns='1'
+            ListHeaderComponent={this.renderHeader}
+            alwaysBounceHorizontal
+        />
+    )
 }
 
 const mapStateToProps = state => {

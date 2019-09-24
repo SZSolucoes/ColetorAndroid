@@ -33,77 +33,77 @@ class FormConsultaEtiqBatismo extends React.PureComponent {
         this.fieldsChanged = {
             etiqueta: false
         };
-
-        this.onBlurEtiqueta = this.onBlurEtiqueta.bind(this);
-        this.renderRightButtonBar = this.renderRightButtonBar.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         setTimeout(Actions.refresh, 500, { right: this.renderRightButtonBar });
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.props.modificaClean();
     }
 
-    onBlurEtiqueta() {
+    onBlurEtiqueta = () => {
         const { etiqueta } = this.props;
 
         this.props.doConsBatismo({ etiqueta });
     }
-
-    renderRightButtonBar() {
-        return (
-            <TouchableOpacity 
-                onPress={() => this.props.modificaClean()}
-                style={styles.btClear}
-            >
-                <Image
-                    source={imgClear}
-                    style={styles.imgClear}
-                />
-            </TouchableOpacity>
-        );
+    onBlurBatismo = () => {
+        if (this.props.etiqueta && this.fieldsChanged.etiqueta) {
+            this.fieldsChanged.etiqueta = false;
+            this.onBlurEtiqueta();
+        } 
     }
 
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                { Platform.OS !== 'windows' && <LoadingSpin /> }
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Batismo</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                selectTextOnFocus
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                value={this.props.etiqueta}
-                                onChangeText={value => {
-                                    this.fieldsChanged.etiqueta = true; 
-                                    this.props.modificaBatismo(value); 
-                                }}
-                                onBlur={() => { 
-                                    if (this.props.etiqueta && this.fieldsChanged.etiqueta) {
-                                        this.fieldsChanged.etiqueta = false;
-                                        this.onBlurEtiqueta();
-                                    } 
-                                }}
-                            />
-                        </View>
+    onChangeBatismo = (value) => {
+        this.fieldsChanged.etiqueta = true; 
+        this.props.modificaBatismo(value); 
+    }
+
+    onPressCleanBtn = () => {
+        this.props.modificaClean();
+    }
+
+    renderRightButtonBar = () => (
+        <TouchableOpacity 
+            onPress={this.onPressCleanBtn}
+            style={styles.btClear}
+        >
+            <Image
+                source={imgClear}
+                style={styles.imgClear}
+            />
+        </TouchableOpacity>
+    )
+
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            { Platform.OS !== 'windows' && <LoadingSpin /> }
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Batismo</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            selectTextOnFocus
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            value={this.props.etiqueta}
+                            onChangeText={this.onChangeBatismo}
+                            onBlur={this.onBlurBatismo}
+                        />
                     </View>
-                </FormRow>
-                <View style={{ padding: 5 }}>
-                    <ListaItemConsEtiqBat />
                 </View>
-                <View style={{ marginBottom: 50 }} />
-            </ScrollView>
-        );
-    }
+            </FormRow>
+            <View style={{ padding: 5 }}>
+                <ListaItemConsEtiqBat />
+            </View>
+            <View style={{ marginBottom: 50 }} />
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => ({

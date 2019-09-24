@@ -26,7 +26,7 @@ class ListaItem extends React.PureComponent {
         this.pureFunctionComponentRenderItem = React.memo(this.renderItem);
     }
 
-    onPressItem(item) {
+    onPressItem = (item) => {
         const { itCode, itDesc, un, localiz } = item;
 
         this.props.modificaCodItemConf(itCode);
@@ -36,23 +36,17 @@ class ListaItem extends React.PureComponent {
         this.props.modificaItemConfere(item);
     }
 
-    keyExtractor(item) {
-        return (
-            item.seq
-        );
-    }
+    keyExtractor = (item) => item.seq
 
-    renderSeparator() {
-        return (
-            <View
-                style={{
-                height: 1,
-                width: '100%',
-                backgroundColor: '#607D8B',
-                }}
-            />
-        );
-    }
+    renderSeparator = () => (
+        <View
+            style={{
+            height: 1,
+            width: '100%',
+            backgroundColor: '#607D8B',
+            }}
+        />
+    )
 
     renderItem = ({ item }) => {
         const listaItem = this.props.listaItem;
@@ -126,20 +120,18 @@ class ListaItem extends React.PureComponent {
         return headerView;
     };
     
-    render() {
-        return (
-            <FlatList
-                data={this.props.listaItem}
-                style={styles.container}
-                ItemSeparatorComponent={this.renderSeparator}
-                keyExtractor={this.keyExtractor}
-                renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
-                extraData={this.props}
-                numColumns='1'
-                ListHeaderComponent={this.renderHeader}
-            />
-        );
-    }
+    render = () => (
+        <FlatList
+            data={this.props.listaItem}
+            style={styles.container}
+            ItemSeparatorComponent={this.renderSeparator}
+            keyExtractor={this.keyExtractor}
+            renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
+            extraData={this.props}
+            numColumns='1'
+            ListHeaderComponent={this.renderHeader}
+        />
+    )
 }
 
 const mapStateToProps = state => (

@@ -27,32 +27,32 @@ import imgTransEnt from '../../../resources/imgs/transf_entrada.png';
 import imgPrinter from '../../../resources/imgs/impressao_etiq.png';
 
 class MenuEntrada extends React.PureComponent {
-    onPressConfPlaca() {
+    onPressConfPlaca = () => {
         this.props.modificaLoadingConfPlaca();
         Actions.conferenciaPlaca();
     }
-    onPressConf() {
+    onPressConf = () => {
         this.props.modificaLoadingConferencia();
         const usuario = this.props.usuario;
 
         this.props.buscaNotaConferencia(usuario);
     }
-    onPressArm() {
+    onPressArm = () => {
         Actions.armazena();
     }
-    onPressTransferencia() {
+    onPressTransferencia = () => {
         Actions.transferencia();
     }
-    onPressRelEan() {
+    onPressRelEan = () => {
         Actions.relacionaEan();
     }
-    onPressImpressao() {
+    onPressImpressao = () => {
         Actions.impressao();
     }
-    renderConfereciaPlaca(key) {
+    renderConfereciaPlaca = (key) => {
         if (this.props.logConfPlaca) {
             return (
-                <TouchableHighlight key={key} onPress={this.onPressConfPlaca}>        
+                <TouchableHighlight key={key} onPress={this.onPressConfPlaca}>
                         { this.props.loadingConfPlaca ?
                             (   
                                 <View style={[styles.menu, { justifyContent: 'center' }]}>
@@ -74,7 +74,8 @@ class MenuEntrada extends React.PureComponent {
             );
         }
     }
-    renderConferecia(key) {
+
+    renderConferecia = (key) => {
         if (this.props.logConfReceb) {
             return (
                 <TouchableHighlight key={key} onPress={this.onPressConf}>
@@ -99,7 +100,8 @@ class MenuEntrada extends React.PureComponent {
             );
         }
     }
-    renderArmazenamento(key) {
+
+    renderArmazenamento = (key) => {
         if (this.props.logArmazenamento) {
             return (
                 <TouchableHighlight key={key} onPress={this.onPressArm}>
@@ -114,7 +116,8 @@ class MenuEntrada extends React.PureComponent {
             );
         }
     }
-    renderTransferencia(key) {
+
+    renderTransferencia = (key) => {
         if (this.props.logTransferencia) {
             return (
                 <TouchableHighlight key={key} onPress={this.onPressTransferencia}>
@@ -129,52 +132,49 @@ class MenuEntrada extends React.PureComponent {
             );
         }
     }
-    renderRelacionaEan(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressRelEan}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgRelEan}
-                    />
-                    <Text style={styles.txtMenu}>Relaciona EAN</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderImpressao(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressImpressao}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgPrinter}
-                    />
-                    <Text style={styles.txtMenu}>Etiqueta EAN</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    render() {
-        return (
-            <ScrollView style={styles.opcao}>
-                <View style={{ flex: 1, paddingVertical: 5 }}>
-                    { Platform.OS !== 'windows' ? (
-                        [
-                            this.renderConfereciaPlaca('6'),
-                            this.renderConferecia('1'),
-                            this.renderArmazenamento('2'),
-                            this.renderTransferencia('3'),
-                            this.renderRelacionaEan('4'),
-                            this.renderImpressao('5')
-                        ]
-                    ) : (
-                        this.renderConferecia('1')
-                    )}
-                </View>
-            </ScrollView>
-        );
-    }
+
+    renderRelacionaEan = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressRelEan}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgRelEan}
+                />
+                <Text style={styles.txtMenu}>Relaciona EAN</Text>
+            </View>
+        </TouchableHighlight>
+    )
+
+    renderImpressao = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressImpressao}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgPrinter}
+                />
+                <Text style={styles.txtMenu}>Etiqueta EAN</Text>
+            </View>
+        </TouchableHighlight>
+    )
+
+    render = () => (
+        <ScrollView style={styles.opcao}>
+            <View style={{ flex: 1, paddingVertical: 5 }}>
+                { Platform.OS !== 'windows' ? (
+                    [
+                        this.renderConfereciaPlaca('6'),
+                        this.renderConferecia('1'),
+                        this.renderArmazenamento('2'),
+                        this.renderTransferencia('3'),
+                        this.renderRelacionaEan('4'),
+                        this.renderImpressao('5')
+                    ]
+                ) : (
+                    this.renderConferecia('1')
+                )}
+            </View>
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => (

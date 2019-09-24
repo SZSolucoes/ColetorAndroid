@@ -7,7 +7,6 @@ import {
     StyleSheet, 
     TouchableHighlight 
 } from 'react-native';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { 
@@ -30,7 +29,8 @@ class ListaCorteCabos extends React.PureComponent {
 
         this.pureFunctionComponentRenderItem = React.memo(this.renderItem);
     }
-    onPressItem(corte) {
+
+    onPressItem = (corte) => () => {
         this.props.modificaListaItem(corte.itens);
         this.props.modificaCodCorte(corte.codCorte);
 
@@ -50,28 +50,29 @@ class ListaCorteCabos extends React.PureComponent {
 
         Actions.pop();
     }
-    keyExtractor(item, index) {
+
+    keyExtractor = (item) => {
         const chave = item.codCorte;
         return (
             chave
         );
     }
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                height: 1,
-                width: '100%',
-                backgroundColor: '#607D8B',
-                }}
-            />
-        );
-    }
+
+    renderSeparator = () => (
+        <View
+            style={{
+            height: 1,
+            width: '100%',
+            backgroundColor: '#607D8B',
+            }}
+        />
+    )
+
     renderItem = ({ item }) => {
         if (item.userCorte !== undefined && item.userCorte !== '') {
             return (
                 <TouchableHighlight
-                    onPress={() => this.onPressItem(item)}
+                    onPress={this.onPressItem(item)}
                 >
                     <View style={styles.itemUser}>
                         <Text style={styles.itemCodCorte}>{ item.codCorte}</Text>
@@ -83,7 +84,7 @@ class ListaCorteCabos extends React.PureComponent {
         
         return (
             <TouchableHighlight
-                onPress={() => this.onPressItem(item)}
+                onPress={this.onPressItem(item)}
             >
                 <View style={styles.item}>
                     <Text style={styles.itemCodCorte}>{ item.codCorte}</Text>
@@ -92,6 +93,7 @@ class ListaCorteCabos extends React.PureComponent {
             </TouchableHighlight>            
         );        
     }
+
     renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
@@ -104,23 +106,22 @@ class ListaCorteCabos extends React.PureComponent {
             </View>
         );
         return headerView;
-    };
-    render() {
-        return (
-            <View style={styles.viewLista}>
-                <FlatList
-                    data={this.props.listaCortes}
-                    style={styles.container}
-                    ItemSeparatorComponent={this.renderSeparator}
-                    keyExtractor={this.keyExtractor}
-                    renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
-                    numColumns='1'
-                    ListHeaderComponent={this.renderHeader}
-                    stickyHeaderIndices={[0]}
-                />
-            </View>
-        );
     }
+
+    render = () => (
+        <View style={styles.viewLista}>
+            <FlatList
+                data={this.props.listaCortes}
+                style={styles.container}
+                ItemSeparatorComponent={this.renderSeparator}
+                keyExtractor={this.keyExtractor}
+                renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
+                numColumns='1'
+                ListHeaderComponent={this.renderHeader}
+                stickyHeaderIndices={[0]}
+            />
+        </View>
+    )
 }
 
 const mapStateToProps = state => {

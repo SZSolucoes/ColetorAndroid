@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 
 export default class ListaItemConsEtiqBatPc extends React.PureComponent {
-    render() {
+    render = () => {
         const { 
             item,
             styles 

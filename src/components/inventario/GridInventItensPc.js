@@ -7,12 +7,13 @@ import {
 } from 'react-native';
 
 export default class GridInventItensPc extends PureComponent {
-    render() {
+    onPressItem = (item, index) => () => this.props.onPressItem(item, index)
+
+    render = () => {
         const { 
             item, 
             itemSelected, 
             itemStyle,
-            onPressItem,
             index 
         } = this.props;
 
@@ -23,7 +24,7 @@ export default class GridInventItensPc extends PureComponent {
         
         return (
             <TouchableHighlight
-                onPress={() => onPressItem({ ...item }, index)}
+                onPress={this.onPressItem({ ...item }, index)}
             >
                 <View
                     style={[styles.item, itemSelectedStyle, itemStyle]} 

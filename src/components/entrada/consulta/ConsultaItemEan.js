@@ -44,14 +44,6 @@ class ConsultaItemEan extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.renderEans = this.renderEans.bind(this);
-        this.doFetchEan = this.doFetchEan.bind(this);
-        this.modificaEan = this.modificaEan.bind(this);
-        this.modificaQtdEtiq = this.modificaQtdEtiq.bind(this);
-        this.onPressRelacionar = this.onPressRelacionar.bind(this);
-        this.onPressPrint = this.onPressPrint.bind(this);
-        this.renderClearButton = this.renderClearButton.bind(this);
-
         this.fieldsChanged = {
             itCode: false
         };
@@ -65,11 +57,11 @@ class ConsultaItemEan extends React.PureComponent {
         };
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         setTimeout(Actions.refresh, 500, { right: this.renderClearButton });
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.props.modificaClean();
         this.props.modificaCodEan('');
         this.props.modificaCodItem('');
@@ -83,18 +75,16 @@ class ConsultaItemEan extends React.PureComponent {
         }
     }
 
-    onChangeModificaQtdEtiq = label => this.onChangeModificaQtdEtiqPass(label);
-    onChangeModificaQtdEtiqPass = (label, value) => this.modificaQtdEtiq(label, value);
+    onChangeModificaQtdEtiq = (label, value) => () => this.modificaQtdEtiq(label, value);
 
-    onChangeModificaEan = label => this.onChangeModificaEanPass(label);
-    onChangeModificaEanPass = (label, value) => this.modificaEan(label, value);
+    onChangeModificaEan = (label, value) => () => this.modificaEan(label, value);
 
     onChangeItem = (value) => {
         this.fieldsChanged.itCode = true; 
         this.props.modificaItCode(value); 
     }
 
-    onPressPrint(codEAN, qtdEtiq) {
+    onPressPrint = (codEAN, qtdEtiq) => () => {
         const { usuario } = this.props;
 
         if (codEAN) {
@@ -142,7 +132,7 @@ class ConsultaItemEan extends React.PureComponent {
         );
     }
 
-    onPressRelacionar() {
+    onPressRelacionar = () => {
         const {
             itCode,
             eanFetched,
@@ -189,11 +179,15 @@ class ConsultaItemEan extends React.PureComponent {
         Actions.relacionaEan();
     }
 
-    doFetchEan() {
+    onPressCleanBtn = () => {
+        this.props.modificaClean();
+    }
+
+    doFetchEan = () => {
         this.props.doFetchEan({ itCode: this.props.itCode });
     }
 
-    modificaEan(label, value) {
+    modificaEan = (label, value) => {
         switch (label) {
             case 'EAN 1':
                 this.props.modificaEan1(value);
@@ -214,7 +208,7 @@ class ConsultaItemEan extends React.PureComponent {
         }
     }
 
-    modificaQtdEtiq(label, value) {
+    modificaQtdEtiq = (label, value) => {
         const txtParsed = value.replace(/[^0-9]/g, '');
 
         switch (label) {
@@ -237,7 +231,7 @@ class ConsultaItemEan extends React.PureComponent {
         }
     }
 
-    renderEans() {
+    renderEans = () => {
         const { eanFetched } = this.props;
         const eans = [
             { label: 'EAN 1', value: this.props.ean1, qtdEtiq: this.state.qtdEtiqEan1, fetchedNum: 1 },
@@ -285,7 +279,7 @@ class ConsultaItemEan extends React.PureComponent {
                                     <Text style={styles.txtLabel} numberOfLines={1} />
                                     <TouchableOpacity
                                         style={styles.btSearch}
-                                        onPress={() => { this.onPressPrint(item.value, item.qtdEtiq); }}
+                                        onPress={this.onPressPrint(item.value, item.qtdEtiq)}
                                     >
                                         <Image
                                             source={imgPrinter}
@@ -318,78 +312,74 @@ class ConsultaItemEan extends React.PureComponent {
         });
     }
 
-    renderClearButton() {
-        return (
-            <TouchableOpacity 
-                onPress={() => this.props.modificaClean()}
-                style={styles.btClear}
-            >
-                <Image
-                    source={imgClear}
-                    style={styles.imgClear}
-                />
-            </TouchableOpacity>
-        );
-    }
+    renderClearButton = () => (
+        <TouchableOpacity 
+            onPress={this.onPressCleanBtn}
+            style={styles.btClear}
+        >
+            <Image
+                source={imgClear}
+                style={styles.imgClear}
+            />
+        </TouchableOpacity>
+    )
 
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                <LoadingSpin />
-                <FormRow>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Item</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                selectTextOnFocus
-                                autoCapitalize={'none'}
-                                autoCorrect={false}
-                                style={defaultFormStyles.input}
-                                value={this.props.itCode}
-                                onChangeText={this.onChangeItem}
-                                onBlur={this.onBlurItem}
-                            />
-                        </View>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>UM</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                editable={false}
-                                style={defaultFormStyles.input}
-                                value={this.props.un}
-                                underlineColorAndroid={'transparent'}
-                            />
-                        </View>
-                    </View>
-                </FormRow>
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Descrição</Text>
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            <LoadingSpin />
+            <FormRow>
+                <View style={{ flex: 4 }}>
+                    <Text style={styles.txtLabel}>Item</Text>
+                    <View style={defaultFormStyles.inputView}>
                         <TextInput
-                            multiline
-                            numberOfLines={3}
+                            selectTextOnFocus
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            style={defaultFormStyles.input}
+                            value={this.props.itCode}
+                            onChangeText={this.onChangeItem}
+                            onBlur={this.onBlurItem}
+                        />
+                    </View>
+                </View>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>UM</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
                             editable={false}
-                            style={defaultFormStyles.inputDescricao}
-                            value={this.props.itDesc}
+                            style={defaultFormStyles.input}
+                            value={this.props.un}
                             underlineColorAndroid={'transparent'}
                         />
-                    </View>                    
-                </FormRow>
-                { this.renderEans() }
-                <FormRow>
-                    <View style={styles.viewBotao}>
-                        <Button
-                            onPress={() => this.onPressRelacionar()}
-                            title="Relacionar"
-                            color="green"
-                        />
                     </View>
-                </FormRow>
-                <View style={{ marginBottom: 50 }} />
-            </ScrollView>
-        );
-    }
+                </View>
+            </FormRow>
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Descrição</Text>
+                    <TextInput
+                        multiline
+                        numberOfLines={3}
+                        editable={false}
+                        style={defaultFormStyles.inputDescricao}
+                        value={this.props.itDesc}
+                        underlineColorAndroid={'transparent'}
+                    />
+                </View>                    
+            </FormRow>
+            { this.renderEans() }
+            <FormRow>
+                <View style={styles.viewBotao}>
+                    <Button
+                        onPress={this.onPressRelacionar}
+                        title="Relacionar"
+                        color="green"
+                    />
+                </View>
+            </FormRow>
+            <View style={{ marginBottom: 50 }} />
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => ({

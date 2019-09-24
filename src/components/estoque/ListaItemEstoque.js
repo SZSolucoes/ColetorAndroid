@@ -37,23 +37,22 @@ class ListaItem extends React.PureComponent {
 
         this.pureFunctionComponentRenderItem = React.memo(this.renderItem);
     }
-    componentDidMount() {
+
+    componentDidMount = () => {
         if (this.props.listaItem === undefined) {
             this.props.modificaListaItem(dataItem);
         }
     }
 
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                height: 1,
-                width: '100%',
-                backgroundColor: '#607D8B',
-                }}
-            />
-        );
-    };
+    renderSeparator = () => (
+        <View
+            style={{
+            height: 1,
+            width: '100%',
+            backgroundColor: '#607D8B',
+            }}
+        />
+    );
 
     renderHeader = () => {
         const headerView = (
@@ -88,18 +87,16 @@ class ListaItem extends React.PureComponent {
         );
     };
 
-    render() {
-        return (
-            <FlatList
-                data={formatData(this.props.listaItem, numColumns)}
-                ItemSeparatorComponent={this.renderSeparator}
-                style={styles.container}
-                renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
-                numColumns={numColumns}
-                ListHeaderComponent={this.renderHeader}
-            />
-        );
-    }
+    render = () => (
+        <FlatList
+            data={formatData(this.props.listaItem, numColumns)}
+            ItemSeparatorComponent={this.renderSeparator}
+            style={styles.container}
+            renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
+            numColumns={numColumns}
+            ListHeaderComponent={this.renderHeader}
+        />
+    )
 }
 
 const mapStateToProps = state => (

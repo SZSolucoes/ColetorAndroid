@@ -31,23 +31,20 @@ class FormConsultaBatismo extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.onBlurCodEtiqBatismo = this.onBlurCodEtiqBatismo.bind(this);
-        this.renderRightButtonBar = this.renderRightButtonBar.bind(this);
-
         this.fieldsChanged = {
             codEtiqBatismo: false
         };
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         setTimeout(Actions.refresh, 500, { right: this.renderRightButtonBar });
     }
     
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.props.modificaClean();
     }
 
-    onBlurCodEtiqBatismo() {
+    onBlurCodEtiqBatismo = () => {
         const codEtiqBatismo = this.props.codEtiqBatismo;
 
         Keyboard.dismiss();
@@ -68,51 +65,51 @@ class FormConsultaBatismo extends React.PureComponent {
         this.props.modificaBatismo(value);
     }
 
-    renderRightButtonBar() {
-        return (
-            <TouchableOpacity 
-                onPress={() => this.props.modificaClean()}
-                style={styles.btClear}
-            >
-                <Image
-                    source={imgClear}
-                    style={styles.imgClear}
-                />
-            </TouchableOpacity>
-        );
+    onPressCleanBtn = () => {
+        this.props.modificaClean();
     }
 
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                { Platform.OS !== 'windows' && <LoadingSpin /> }
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Batismo</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                selectTextOnFocus
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                value={this.props.codEtiqBatismo}
-                                ref={(input) => { this.batInput = input; }}
-                                onChangeText={this.onChangeBatismo}
-                                onBlur={this.onBlurBatismo}
-                            />
-                        </View>
+    renderRightButtonBar = () => (
+        <TouchableOpacity 
+            onPress={this.onPressCleanBtn}
+            style={styles.btClear}
+        >
+            <Image
+                source={imgClear}
+                style={styles.imgClear}
+            />
+        </TouchableOpacity>
+    )
+
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            { Platform.OS !== 'windows' && <LoadingSpin /> }
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Batismo</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            selectTextOnFocus
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            value={this.props.codEtiqBatismo}
+                            ref={(input) => { this.batInput = input; }}
+                            onChangeText={this.onChangeBatismo}
+                            onBlur={this.onBlurBatismo}
+                        />
                     </View>
-                </FormRow>
-                <View style={{ padding: 5 }}>
-                    <ListaItemConsEtiqBat />
                 </View>
-                <View style={{ marginBottom: 50 }} />
-            </ScrollView>
-        );
-    }
+            </FormRow>
+            <View style={{ padding: 5 }}>
+                <ListaItemConsEtiqBat />
+            </View>
+            <View style={{ marginBottom: 50 }} />
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => {

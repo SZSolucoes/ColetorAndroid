@@ -71,101 +71,100 @@ class InfoItemConferencia extends React.PureComponent {
 
         this.props.modificaInfoVisible(false);
     }
-    render() {
-        return (
-            <Modal isVisible={this.props.isInfoVisible}>
-                <View style={styles.modalContent}>
-                    <View style={styles.viewLinha}>
-                        <View style={[styles.viewCampo, { flex: 1 }]}>
-                            <Text style={styles.txtLabel}>Peso</Text>
-                            <View style={defaultFormStyles.inputView}>
-                                <TextInput
-                                    placeholder=""
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    keyboardType="numeric"
-                                    placeholderTextColor='rgba(255,255,255,0.7)'
-                                    returnKeyType="next"
-                                    style={defaultFormStyles.input}
-                                    onChangeText={this.onChangePeso}
-                                    value={this.props.pesoItem}
-                                    ref={(input) => { this.pesoItem = input; }}
-                                    onSubmitEditing={this.onSubmitEditingPeso}
-                                />
-                            </View>
+    
+    render = () => (
+        <Modal isVisible={this.props.isInfoVisible}>
+            <View style={styles.modalContent}>
+                <View style={styles.viewLinha}>
+                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <Text style={styles.txtLabel}>Peso</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangePeso}
+                                value={this.props.pesoItem}
+                                ref={(input) => { this.pesoItem = input; }}
+                                onSubmitEditing={this.onSubmitEditingPeso}
+                            />
                         </View>
-                    </View>
-                    <View style={styles.viewLinha}>
-                        <View style={[styles.viewCampo, { flex: 1 }]}>
-                            <Text style={styles.txtLabel}>Altura</Text>
-                            <View style={defaultFormStyles.inputView}>
-                                <TextInput
-                                    placeholder=""
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    keyboardType="numeric"
-                                    placeholderTextColor='rgba(255,255,255,0.7)'
-                                    returnKeyType="next"
-                                    style={defaultFormStyles.input}
-                                    onChangeText={this.onChangeAltura}
-                                    value={this.props.altura}
-                                    ref={(input) => { this.alturaItem = input; }}
-                                    onSubmitEditing={this.onSubmitEditingAltura}
-                                />
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.viewLinha}>
-                        <View style={[styles.viewCampo, { flex: 1 }]}>
-                            <Text style={styles.txtLabel}>Largura</Text>
-                            <View style={defaultFormStyles.inputView}>
-                                <TextInput
-                                    placeholder=""
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    keyboardType="numeric"
-                                    placeholderTextColor='rgba(255,255,255,0.7)'
-                                    returnKeyType="next"
-                                    style={defaultFormStyles.input}
-                                    onChangeText={this.onChangeLargura}
-                                    value={this.props.largura}
-                                    ref={(input) => { this.larguraItem = input; }}
-                                    onSubmitEditing={this.onSubmitEditingLargura}
-                                />
-                            </View>
-                        </View>
-                    </View>
-                    <View style={styles.viewLinha}>
-                        <View style={[styles.viewCampo, { flex: 1 }]}>
-                            <Text style={styles.txtLabel}>Comprimento</Text>
-                            <View style={defaultFormStyles.inputView}>
-                                <TextInput
-                                    placeholder=""
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    keyboardType="numeric"
-                                    placeholderTextColor='rgba(255,255,255,0.7)'
-                                    returnKeyType="next"
-                                    style={defaultFormStyles.input}
-                                    onChangeText={this.onChangeComprimento}
-                                    value={this.props.comprimento}
-                                    ref={(input) => { this.comprimentoItem = input; }}
-                                    onBlur={this.onBlurComprimento}
-                                />
-                            </View>
-                        </View>
-                    </View>
-                    <View style={{ padding: 5 }}>
-                        <Button
-                            onPress={(this.salvarInfoItem)}
-                            title="Salvar"
-                            color="green"
-                        />
                     </View>
                 </View>
-            </Modal>
-        );
-    }
+                <View style={styles.viewLinha}>
+                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <Text style={styles.txtLabel}>Altura</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeAltura}
+                                value={this.props.altura}
+                                ref={(input) => { this.alturaItem = input; }}
+                                onSubmitEditing={this.onSubmitEditingAltura}
+                            />
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.viewLinha}>
+                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <Text style={styles.txtLabel}>Largura</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeLargura}
+                                value={this.props.largura}
+                                ref={(input) => { this.larguraItem = input; }}
+                                onSubmitEditing={this.onSubmitEditingLargura}
+                            />
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.viewLinha}>
+                    <View style={[styles.viewCampo, { flex: 1 }]}>
+                        <Text style={styles.txtLabel}>Comprimento</Text>
+                        <View style={defaultFormStyles.inputView}>
+                            <TextInput
+                                placeholder=""
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                keyboardType="numeric"
+                                placeholderTextColor='rgba(255,255,255,0.7)'
+                                returnKeyType="next"
+                                style={defaultFormStyles.input}
+                                onChangeText={this.onChangeComprimento}
+                                value={this.props.comprimento}
+                                ref={(input) => { this.comprimentoItem = input; }}
+                                onBlur={this.onBlurComprimento}
+                            />
+                        </View>
+                    </View>
+                </View>
+                <View style={{ padding: 5 }}>
+                    <Button
+                        onPress={(this.salvarInfoItem)}
+                        title="Salvar"
+                        color="green"
+                    />
+                </View>
+            </View>
+        </Modal>
+    )
 }
 
 const mapStateToProps = state => (

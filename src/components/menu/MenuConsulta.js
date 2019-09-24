@@ -17,46 +17,31 @@ import imgLocation from '../../../resources/imgs/location.png';
 import imgEan from '../../../resources/imgs/eanconsulta.png';
 
 class MenuConsulta extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.renderConsultaEstoq = this.renderConsultaEstoq.bind(this);
-        this.onPressConsEstoq = this.onPressConsEstoq.bind(this);
-        this.renderConsultaBatismoEntrada = this.renderConsultaBatismoEntrada.bind(this);
-        this.onPressConsBatismoEntrada = this.onPressConsBatismoEntrada.bind(this);
-        this.onPressConsBatismoSaida = this.onPressConsBatismoSaida.bind(this);
-        this.renderConsultaNF = this.renderConsultaNF.bind(this);
-        this.onPressConsultaNF = this.onPressConsultaNF.bind(this);
-        this.renderConsultaLocalizacao = this.renderConsultaLocalizacao.bind(this);
-        this.onPressConsultaLocalizacao = this.onPressConsultaLocalizacao.bind(this);
-        this.onPressConsultaEAN = this.onPressConsultaEAN.bind(this);
-    }
-
-    onPressConsEstoq() {
+    onPressConsEstoq = () => {
         Actions.estoque();
     }
 
-    onPressConsBatismoEntrada() {
+    onPressConsBatismoEntrada = () => {
         Actions.consultaBatismoEntrada();
     }
 
-    onPressConsBatismoSaida() {
+    onPressConsBatismoSaida = () => {
         Actions.consultaEtiqBatismoSaida();
     }
 
-    onPressConsultaLocalizacao() {
+    onPressConsultaLocalizacao = () => {
         Actions.consultaLocalizacao();
     }
 
-    onPressConsultaNF() {
+    onPressConsultaNF = () => {
         Actions.consultaNF();
     }
 
-    onPressConsultaEAN() {
+    onPressConsultaEAN = () => {
         Actions.consultaItemEan();
     }    
     
-    renderConsultaEstoq() {
+    renderConsultaEstoq = () => {
         if (this.props.logEstoque) {
             return (
                 <TouchableHighlight onPress={this.onPressConsEstoq}>
@@ -72,7 +57,7 @@ class MenuConsulta extends React.PureComponent {
         }
     }
 
-    renderConsultaBatismoEntrada() {
+    renderConsultaBatismoEntrada = () => {
         if (this.props.logEstoque) {
             return (
                 <TouchableHighlight onPress={this.onPressConsBatismoEntrada}>
@@ -88,7 +73,7 @@ class MenuConsulta extends React.PureComponent {
         }
     }
 
-    renderConsultaBatismoSaida() {
+    renderConsultaBatismoSaida = () => {
         if (this.props.logEstoque) {
             return (
                 <TouchableHighlight onPress={this.onPressConsBatismoSaida}>
@@ -104,7 +89,7 @@ class MenuConsulta extends React.PureComponent {
         }
     }
 
-    renderConsultaLocalizacao() {
+    renderConsultaLocalizacao = () => {
         if (this.props.logEstoque) {
             return (
                 <TouchableHighlight onPress={this.onPressConsultaLocalizacao}>
@@ -120,7 +105,7 @@ class MenuConsulta extends React.PureComponent {
         }
     }
 
-    renderConsultaNF() {
+    renderConsultaNF = () => {
         return (
             <TouchableHighlight onPress={this.onPressConsultaNF}>
                 <View style={styles.menu}>
@@ -134,34 +119,30 @@ class MenuConsulta extends React.PureComponent {
         );
     }
 
-    renderConsultaEAN() {
-        return (
-            <TouchableHighlight onPress={this.onPressConsultaEAN}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgEan}
-                    />
-                    <Text style={styles.txtMenu}>EAN</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
+    renderConsultaEAN = () => (
+        <TouchableHighlight onPress={this.onPressConsultaEAN}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgEan}
+                />
+                <Text style={styles.txtMenu}>EAN</Text>
+            </View>
+        </TouchableHighlight>
+    )
     
-    render() {
-        return (
-            <ScrollView style={styles.opcao}>
-                <View style={{ flex: 1, paddingVertical: 5 }}>
-                    {this.renderConsultaEstoq()}
-                    {this.renderConsultaBatismoEntrada()}
-                    {this.renderConsultaBatismoSaida()}
-                    {this.renderConsultaLocalizacao()}
-                    {this.renderConsultaNF()}
-                    {this.renderConsultaEAN()}
-                </View>
-            </ScrollView>
-        );
-    }
+    render = () => (
+        <ScrollView style={styles.opcao}>
+            <View style={{ flex: 1, paddingVertical: 5 }}>
+                {this.renderConsultaEstoq()}
+                {this.renderConsultaBatismoEntrada()}
+                {this.renderConsultaBatismoSaida()}
+                {this.renderConsultaLocalizacao()}
+                {this.renderConsultaNF()}
+                {this.renderConsultaEAN()}
+            </View>
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = (state) => ({

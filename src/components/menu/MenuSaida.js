@@ -24,183 +24,160 @@ import imgPrinter from '../../../resources/imgs/impressao_etiq.png';
 import imgCorte from '../../../resources/imgs/cortecabos.png';
 
 class MenuSaida extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.onPressListSep = this.onPressListSep.bind(this);
-        this.onPressConf = this.onPressConf.bind(this);
-        this.onPressConfVol = this.onPressConfVol.bind(this);
-        this.onPressRelEan = this.onPressRelEan.bind(this);
-        this.onPressConsolid = this.onPressConsolid.bind(this);
-        this.onPressDespacho = this.onPressDespacho.bind(this);
-        this.onPressImpressao = this.onPressImpressao.bind(this);
-        this.onPressCorte = this.onPressCorte.bind(this);
-    }
-    
-    onPressListSep() {
+    onPressListSep = () => {
         const userName = store.getState().LoginReducer.usuario;
         this.props.fetchListItensSep(userName);
     }
-    onPressConf() {
+    onPressConf = () => {
         Actions.conferenciaSeparacao();
     } 
-    onPressConfVol() {
+    onPressConfVol = () => {
         Actions.conferenciaVolumeSaida({ isMenu: true });
     } 
-    onPressRelEan() {
+    onPressRelEan = () => {
         Actions.relacionaEan();
     }
-    onPressConsolid() {
+    onPressConsolid = () => {
         Actions.consolidacaoSaida();
     }
-    onPressDespacho() {
+    onPressDespacho = () => {
         Actions.despachoSaida();
     }
-    onPressImpressao() {
+    onPressImpressao = () => {
         Actions.impressao();
     }
-    onPressCorte() {
+    onPressCorte = () => {
         Actions.corteCabos();
     }
-    renderListaSep(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressListSep}>
-                    { this.props.loadingListSep ?
-                        (   
-                            <View style={[styles.menu, { justifyContent: 'center' }]}>
-                                <View style={{ marginVertical: 6 }}>
-                                    <ActivityIndicator size={'large'} color={'white'} />
-                                </View>
+    renderListaSep = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressListSep}>
+                { this.props.loadingListSep ?
+                    (   
+                        <View style={[styles.menu, { justifyContent: 'center' }]}>
+                            <View style={{ marginVertical: 6 }}>
+                                <ActivityIndicator size={'large'} color={'white'} />
                             </View>
-                        ) : (
-                                <View style={styles.menu}>
-                                    <Image 
-                                        style={styles.imgMenu} 
-                                        source={imgListSep}
-                                    />
-                                    <Text style={styles.txtMenu}>Lista de Separação</Text>
-                                </View> 
-                            )
-                    }
-            </TouchableHighlight>
-        );
-    }
-    renderConferencia(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressConf}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgConf}
-                    />
-                    <Text style={styles.txtMenu}>Conferência</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderConferenciaVolume(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressConfVol}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgConfCheck}
-                    />
-                    <Text style={styles.txtMenu}>Conferência - Volumes</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderConsolid(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressConsolid}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgConsolid}
-                    />
-                    <Text style={styles.txtMenu}>Consolidação</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderDespacho(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressDespacho}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgDespacho}
-                    />
-                    <Text style={styles.txtMenu}>Despacho</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderRelacionaEan(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressRelEan}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgRelEan}
-                    />
-                    <Text style={styles.txtMenu}>Relaciona EAN</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderImpressao(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressImpressao}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgPrinter}
-                    />
-                    <Text style={styles.txtMenu}>Etiqueta EAN</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    renderCorte(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressCorte}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgCorte}
-                    />
-                    <Text style={styles.txtMenu}>Corte de Cabos</Text>
-                </View>                 
-            </TouchableHighlight>
-        );
-    }
-    render() {
-        return (
-            <ScrollView style={styles.opcao}>
-                <View style={{ flex: 1, paddingVertical: 5 }}>
-                    { Platform.OS !== 'windows' ? (
-                        [
-                            this.props.logCorteCabos && this.renderCorte('1'),
-                            this.props.logSeparacao && this.renderListaSep('2'),
-                            this.props.logConfSeparacao && this.renderConferencia('3'),
-                            this.props.logConfSeparacao && this.renderConferenciaVolume('4'),
-                            this.renderConsolid('5'),
-                            //this.renderDespacho('5'),
-                            this.renderRelacionaEan('6'),
-                            this.renderImpressao('7')
-                        ]
+                        </View>
                     ) : (
-                        [
-                            this.props.logConfSeparacao && this.renderConferencia('3'),
-                            this.props.logConfSeparacao && this.renderConferenciaVolume('4')
-                        ]
-                    )}
-                </View>
-            </ScrollView>
-        );
-    }
+                            <View style={styles.menu}>
+                                <Image 
+                                    style={styles.imgMenu} 
+                                    source={imgListSep}
+                                />
+                                <Text style={styles.txtMenu}>Lista de Separação</Text>
+                            </View> 
+                        )
+                }
+        </TouchableHighlight>
+    )
+
+    renderConferencia = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressConf}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgConf}
+                />
+                <Text style={styles.txtMenu}>Conferência</Text>
+            </View>
+        </TouchableHighlight>
+    )
+
+    renderConferenciaVolume = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressConfVol}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgConfCheck}
+                />
+                <Text style={styles.txtMenu}>Conferência - Volumes</Text>
+            </View>
+        </TouchableHighlight>
+    )
+
+    renderConsolid = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressConsolid}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgConsolid}
+                />
+                <Text style={styles.txtMenu}>Consolidação</Text>
+            </View>
+        </TouchableHighlight>
+    )
+
+    renderDespacho = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressDespacho}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgDespacho}
+                />
+                <Text style={styles.txtMenu}>Despacho</Text>
+            </View>
+        </TouchableHighlight>
+    )
+
+    renderRelacionaEan = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressRelEan}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgRelEan}
+                />
+                <Text style={styles.txtMenu}>Relaciona EAN</Text>
+            </View>
+        </TouchableHighlight>
+    )
+
+    renderImpressao = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressImpressao}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgPrinter}
+                />
+                <Text style={styles.txtMenu}>Etiqueta EAN</Text>
+            </View>
+        </TouchableHighlight>
+    )
+
+    renderCorte = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressCorte}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgCorte}
+                />
+                <Text style={styles.txtMenu}>Corte de Cabos</Text>
+            </View>                 
+        </TouchableHighlight>
+    )
+
+    render = () => (
+        <ScrollView style={styles.opcao}>
+            <View style={{ flex: 1, paddingVertical: 5 }}>
+                { Platform.OS !== 'windows' ? (
+                    [
+                        this.props.logCorteCabos && this.renderCorte('1'),
+                        this.props.logSeparacao && this.renderListaSep('2'),
+                        this.props.logConfSeparacao && this.renderConferencia('3'),
+                        this.props.logConfSeparacao && this.renderConferenciaVolume('4'),
+                        this.renderConsolid('5'),
+                        //this.renderDespacho('5'),
+                        this.renderRelacionaEan('6'),
+                        this.renderImpressao('7')
+                    ]
+                ) : (
+                    [
+                        this.props.logConfSeparacao && this.renderConferencia('3'),
+                        this.props.logConfSeparacao && this.renderConferenciaVolume('4')
+                    ]
+                )}
+            </View>
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => (

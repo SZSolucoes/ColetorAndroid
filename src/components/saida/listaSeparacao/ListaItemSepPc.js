@@ -7,14 +7,16 @@ import {
 } from 'react-native';
 
 export default class ListaItemSepPc extends PureComponent {
-    render() {
+    onPressItem = (item, index) => () => this.props.onPressItem(item, index)
+
+    render = () => {
         const itemSelected = (
             this.props.itemSelected ? 
             styles.selectedStyle : { borderWidth: 2.5, borderColor: '#4b86b4' }
         );
         return (
             <TouchableHighlight
-                onPress={() => this.props.onPressItem({ ...this.props.item }, this.props.index)}
+                onPress={this.onPressItem({ ...this.props.item }, this.props.index)}
             >
                 <View
                     style={[styles.item, itemSelected]} 

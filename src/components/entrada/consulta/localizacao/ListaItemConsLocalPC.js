@@ -7,39 +7,37 @@ import {
 } from 'react-native';
 
 export default class ListaItemConsLocalPC extends PureComponent {
-    render() {
-        return (
-            <TouchableHighlight
-                onPress={() => false}
+    render = () => (
+        <TouchableHighlight
+            onPress={() => false}
+        >
+            <View
+                style={styles.item} 
             >
-                <View
-                    style={styles.item} 
-                >
-                    <Text style={styles.codigoDep}>
-                        {this.props.item.CodDepos}
-                    </Text>
-                    <Text style={styles.codigoItem}>
-                        {this.props.item.codItem}
-                    </Text>
-                    <Text style={styles.descricao}>
-                        {this.props.item.DescItem}
-                    </Text>
-                    <Text style={styles.qtdTot}>
-                        {this.props.item.qtdTotal}
-                    </Text>
-                    <Text style={styles.qtdDisp}>
-                        {this.props.item.qtdDisp}
-                    </Text>
-                    <Text style={styles.um}>
-                        {this.props.item.Un}
-                    </Text>
-                    <Text style={styles.lote}>
-                        {this.props.item.Lote}
-                    </Text>
-                </View>
-            </TouchableHighlight>      
-        );
-    }
+                <Text style={styles.codigoDep}>
+                    {this.props.item.CodDepos}
+                </Text>
+                <Text style={styles.codigoItem}>
+                    {this.props.item.codItem}
+                </Text>
+                <Text style={styles.descricao}>
+                    {this.props.item.DescItem}
+                </Text>
+                <Text style={styles.qtdTot}>
+                    {this.props.item.qtdTotal}
+                </Text>
+                <Text style={styles.qtdDisp}>
+                    {this.props.item.qtdDisp}
+                </Text>
+                <Text style={styles.um}>
+                    {this.props.item.Un}
+                </Text>
+                <Text style={styles.lote}>
+                    {this.props.item.Lote}
+                </Text>
+            </View>
+        </TouchableHighlight>      
+    )
 }
 
 const styleField = {

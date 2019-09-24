@@ -7,12 +7,11 @@ import {
 } from 'react-native';
 
 export default class ListaItemConfSepPc extends PureComponent {
-    onPressItemPass = (item, index) => this.onPressItem(item, index)
-    onPressItem = (item, index) => {
+    onPressItem = (item, index) => () => {
         this.props.onPressItem({ ...item }, index);
     }
     
-    render() {
+    render = () => {
         const { 
             item, 
             itemSelected, 
@@ -27,7 +26,7 @@ export default class ListaItemConfSepPc extends PureComponent {
         
         return (
             <TouchableHighlight
-                onPress={this.onPressItemPass({ ...item }, index)}
+                onPress={this.onPressItem({ ...item }, index)}
             >
                 <View
                     style={[styles.item, itemSelectedStyle, itemStyle]} 
@@ -48,7 +47,7 @@ export default class ListaItemConfSepPc extends PureComponent {
                         {item.lote}
                     </Text>
                 </View>
-            </TouchableHighlight>      
+            </TouchableHighlight>
         );
     }
   }

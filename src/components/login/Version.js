@@ -33,24 +33,21 @@ import { defaultFormStyles } from '../utils/Forms';
 import imgSeta from '../../../resources/imgs/seta.png';
 
 class Version extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.onShowModal = this.onShowModal.bind(this);
-        this.onSelectModal = this.onSelectModal.bind(this);
-    }
-
-    componentDidMount() {
+    componentDidMount = () => {
         this.props.iniciaTela();
 
-        const version = '1.6.0';
+        const version = '1.6.1';
         
         this.props.modificaVersao(version);
         this.props.verificaConexao();
         this.props.verificaServico();
     }
 
-    onShowModal(input) {   
+    onCancelModalFilter = () => {
+        this.props.modificaModalVisible(false);
+    }
+
+    onShowModal = (input) => () => {
         const optionsAmbiente = [
             {
                 key: '1',
@@ -95,7 +92,7 @@ class Version extends React.PureComponent {
         this.props.modificaModalVisible(true);
     }
 
-    onSelectPicker(value, picker) {
+    onSelectPicker = (picker) => (value) => {
         let empresa = '';
         let ambiente = ''; 
         switch (picker) {
@@ -119,7 +116,7 @@ class Version extends React.PureComponent {
         this.setUrlService(empresa, ambiente);
     }
 
-    onSelectModal(value) {
+    onSelectModal = (value) => {
         let empresa = '';
         let ambiente = ''; 
         switch (this.props.inputSelected) {
@@ -143,159 +140,155 @@ class Version extends React.PureComponent {
         this.setUrlService(empresa, ambiente);   
     }
 
-    setUrlService(empresa, ambiente) {
+    setUrlService = (empresa, ambiente) => {
         doChangeUrlService(empresa, ambiente); // Atualiza a baseURL com base na empresa e ambiente
         this.props.verificaConexao();
         this.props.verificaServico();
     }
 
-    renderForWindows() {
-        return (
-            <View>
-                <View style={[styles.viewLinha, { marginTop: 15 }]}>
-                    <View style={{ flex: 1 }}>
-                        <Text 
-                            style={[styles.txtInfo]}
-                            numberOfLines={1}
-                            adjustsFontSizeToFit
-                        >
-                            Empresa:
-                        </Text>
-                    </View>
-                    <Picker
-                        selectedValue={this.props.empresa}
-                        style={{ flex: 2, height: 50, width: 100, marginHorizontal: 10 }}
-                        onValueChange={(value) => this.onSelectPicker(value, 'empresa')} 
+    renderForWindows = () => (
+        <View>
+            <View style={[styles.viewLinha, { marginTop: 15 }]}>
+                <View style={{ flex: 1 }}>
+                    <Text 
+                        style={[styles.txtInfo]}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
                     >
-                        <Picker.Item label='Centelha' value='1' />
-                        <Picker.Item label='DW' value='2' />
-                    </Picker>
+                        Empresa:
+                    </Text>
                 </View>
-                <View style={[styles.viewLinha, { marginTop: 10 }]}>
-                    <View style={{ flex: 1 }}>    
-                        <Text 
-                            style={[styles.txtInfo]}
-                            numberOfLines={1}
-                            adjustsFontSizeToFit
-                        >
-                            Ambiente:
-                        </Text>
-                    </View>
-                    <Picker
-                        selectedValue={this.props.ambiente}
-                        style={{ flex: 2, height: 50, width: 100, marginHorizontal: 10 }}
-                        onValueChange={(value) => this.onSelectPicker(value, 'ambiente')} 
+                <Picker
+                    selectedValue={this.props.empresa}
+                    style={{ flex: 2, height: 50, width: 100, marginHorizontal: 10 }}
+                    onValueChange={this.onSelectPicker('empresa')} 
+                >
+                    <Picker.Item label='Centelha' value='1' />
+                    <Picker.Item label='DW' value='2' />
+                </Picker>
+            </View>
+            <View style={[styles.viewLinha, { marginTop: 10 }]}>
+                <View style={{ flex: 1 }}>    
+                    <Text 
+                        style={[styles.txtInfo]}
+                        numberOfLines={1}
+                        adjustsFontSizeToFit
                     >
-                        <Picker.Item label='Produção' value='1' />
-                        <Picker.Item label='Homologação' value='2' />
-                        <Picker.Item label='Unificado' value='3' />
-                        <Picker.Item label='Unificado Teste' value='4' />
-                    </Picker>
+                        Ambiente:
+                    </Text>
+                </View>
+                <Picker
+                    selectedValue={this.props.ambiente}
+                    style={{ flex: 2, height: 50, width: 100, marginHorizontal: 10 }}
+                    onValueChange={this.onSelectPicker('ambiente')} 
+                >
+                    <Picker.Item label='Produção' value='1' />
+                    <Picker.Item label='Homologação' value='2' />
+                    <Picker.Item label='Unificado' value='3' />
+                    <Picker.Item label='Unificado Teste' value='4' />
+                </Picker>
+            </View>
+        </View>
+    )
+    
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            <View style={styles.viewLinha}>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtInfo}>Versão App: {this.props.versao}</Text>
                 </View>
             </View>
-        );
-    }
-    
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                <View style={styles.viewLinha}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtInfo}>Versão App: {this.props.versao}</Text>
-                    </View>
+            <View style={styles.viewLinha}>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtInfo}>Conexão: {this.props.conexao}</Text>
                 </View>
-                <View style={styles.viewLinha}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtInfo}>Conexão: {this.props.conexao}</Text>
-                    </View>
+            </View>
+            <View style={styles.viewLinha}>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtInfo}>Serviço: {this.props.servico}</Text>
                 </View>
-                <View style={styles.viewLinha}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtInfo}>Serviço: {this.props.servico}</Text>
-                    </View>
-                </View>
-                { Platform.OS !== 'windows' ? (
-                    <View>
-                        <View style={[styles.viewLinha, { marginTop: 15 }]}>
-                            <View style={{ flex: 1 }}>
-                                <Text 
-                                    style={[styles.txtInfo]}
-                                    numberOfLines={1}
-                                    adjustsFontSizeToFit
-                                >
-                                    Empresa:
-                                </Text>
-                            </View>
-                            <TouchableOpacity 
-                                onPress={() => this.onShowModal('empresa')}
-                                style={{ flexDirection: 'row', flex: 2 }}
+            </View>
+            { Platform.OS !== 'windows' ? (
+                <View>
+                    <View style={[styles.viewLinha, { marginTop: 15 }]}>
+                        <View style={{ flex: 1 }}>
+                            <Text 
+                                style={[styles.txtInfo]}
+                                numberOfLines={1}
+                                adjustsFontSizeToFit
                             >
-                                <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
-                                    <TextInput
-                                        placeholder=''
-                                        autoCapitalize='none'
-                                        autoCorrect={false}
-                                        editable={false}
-                                        placeholderTextColor='rgba(255,255,255,0.7)'
-                                        returnKeyType='next'
-                                        style={defaultFormStyles.input}
-                                        value={this.props.desEmpresa}
-                                    />
-                                </View>
-                                <Image
-                                    source={imgSeta}
-                                    style={styles.imgSeta}
-                                />
-                            </TouchableOpacity>
+                                Empresa:
+                            </Text>
                         </View>
-                        <View style={[styles.viewLinha, { marginTop: 10 }]}>
-                            <View style={{ flex: 1 }}>    
-                                <Text 
-                                    style={[styles.txtInfo]}
-                                    numberOfLines={1}
-                                    adjustsFontSizeToFit
-                                >
-                                    Ambiente:
-                                </Text>
+                        <TouchableOpacity 
+                            onPress={this.onShowModal('empresa')}
+                            style={{ flexDirection: 'row', flex: 2 }}
+                        >
+                            <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                                <TextInput
+                                    placeholder=''
+                                    autoCapitalize='none'
+                                    autoCorrect={false}
+                                    editable={false}
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType='next'
+                                    style={defaultFormStyles.input}
+                                    value={this.props.desEmpresa}
+                                />
                             </View>
-                            <TouchableOpacity 
-                                onPress={() => this.onShowModal('ambiente')}
-                                style={{ flexDirection: 'row', flex: 2 }}
-                            >
-                                <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
-                                    <TextInput
-                                        placeholder=''
-                                        autoCapitalize='none'
-                                        autoCorrect={false}
-                                        editable={false}
-                                        placeholderTextColor='rgba(255,255,255,0.7)'
-                                        returnKeyType='next'
-                                        style={defaultFormStyles.input}
-                                        value={this.props.desAmbiente}
-                                    />
-                                </View>
-                                <Image
-                                    source={imgSeta}
-                                    style={styles.imgSeta}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <ModalFilterPicker
-                            placeholderText='Filtro...'
-                            cancelButtonText='Cancelar'
-                            noResultsText='Não encontrado'
-                            visible={this.props.modalVisible}
-                            onSelect={this.onSelectModal}
-                            onCancel={() => this.props.modificaModalVisible(false)}
-                            options={this.props.modalOptions}
-                        />
+                            <Image
+                                source={imgSeta}
+                                style={styles.imgSeta}
+                            />
+                        </TouchableOpacity>
                     </View>
-                ) : (
-                    this.renderForWindows()
-                ) }
-            </ScrollView>
-        );
-    }
+                    <View style={[styles.viewLinha, { marginTop: 10 }]}>
+                        <View style={{ flex: 1 }}>    
+                            <Text 
+                                style={[styles.txtInfo]}
+                                numberOfLines={1}
+                                adjustsFontSizeToFit
+                            >
+                                Ambiente:
+                            </Text>
+                        </View>
+                        <TouchableOpacity 
+                            onPress={this.onShowModal('ambiente')}
+                            style={{ flexDirection: 'row', flex: 2 }}
+                        >
+                            <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                                <TextInput
+                                    placeholder=''
+                                    autoCapitalize='none'
+                                    autoCorrect={false}
+                                    editable={false}
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType='next'
+                                    style={defaultFormStyles.input}
+                                    value={this.props.desAmbiente}
+                                />
+                            </View>
+                            <Image
+                                source={imgSeta}
+                                style={styles.imgSeta}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <ModalFilterPicker
+                        placeholderText='Filtro...'
+                        cancelButtonText='Cancelar'
+                        noResultsText='Não encontrado'
+                        visible={this.props.modalVisible}
+                        onSelect={this.onSelectModal}
+                        onCancel={this.onCancelModalFilter}
+                        options={this.props.modalOptions}
+                    />
+                </View>
+            ) : (
+                this.renderForWindows()
+            ) }
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => (

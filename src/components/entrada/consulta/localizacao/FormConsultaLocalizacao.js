@@ -30,18 +30,14 @@ class FormConsultaLocalizacao extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.doFetchLocation = this.doFetchLocation.bind(this);
-        this.renderRightButton = this.renderRightButton.bind(this);
-        this.clearFields = this.clearFields.bind(this);
-
         this.fieldsChanged = { localizacao: false };
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         setTimeout(Actions.refresh, 500, { right: this.renderRightButton });
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.props.modificaCleanLocalizacao();
     }
 
@@ -57,76 +53,72 @@ class FormConsultaLocalizacao extends React.PureComponent {
         this.props.modificaLocalizacao(value);
     }
 
-    clearFields() {
+    clearFields = () => {
         this.props.modificaCleanLocalizacao();
     }
 
-    doFetchLocation() {
+    doFetchLocation = () => {
         const { localizacao } = this.props;
         this.props.doFetchLocation({ localizacao });
     }
 
-    renderRightButton() {
-        return (
-            <TouchableOpacity 
-                onPress={() => this.clearFields()}
-                style={styles.btClear}
-            >
-                <Image
-                    source={imgClear}
-                    style={styles.imgClear}
-                />
-            </TouchableOpacity>
-        );
-    }
+    renderRightButton = () => (
+        <TouchableOpacity 
+            onPress={this.clearFields}
+            style={styles.btClear}
+        >
+            <Image
+                source={imgClear}
+                style={styles.imgClear}
+            />
+        </TouchableOpacity>
+    )
 
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                <LoadingSpin />
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Localização</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                selectTextOnFocus
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                value={this.props.localizacao}
-                                onChangeText={this.onChangeLocalizacao}
-                                onBlur={this.onBlurLocalizacao}
-                            />
-                        </View>
-                    </View>
-                </FormRow>
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Descrição</Text>
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            <LoadingSpin />
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Localização</Text>
+                    <View style={defaultFormStyles.inputView}>
                         <TextInput
+                            selectTextOnFocus
                             placeholder=""
                             autoCapitalize="none"
                             autoCorrect={false}
-                            editable={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            returnKeyType="next"
-                            multiline
-                            numberOfLines={3}
-                            style={defaultFormStyles.inputDescricao}
-                            value={this.props.descLocaliz}
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            value={this.props.localizacao}
+                            onChangeText={this.onChangeLocalizacao}
+                            onBlur={this.onBlurLocalizacao}
                         />
                     </View>
-                </FormRow>
-                <View style={{ padding: 5 }}>
-                    <ListaItemConsLocal />
                 </View>
-                <View style={{ marginBottom: 50 }} />
-            </ScrollView>
-        );
-    }
+            </FormRow>
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Descrição</Text>
+                    <TextInput
+                        placeholder=""
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        editable={false}
+                        placeholderTextColor='rgba(255,255,255,0.7)'
+                        returnKeyType="next"
+                        multiline
+                        numberOfLines={3}
+                        style={defaultFormStyles.inputDescricao}
+                        value={this.props.descLocaliz}
+                    />
+                </View>
+            </FormRow>
+            <View style={{ padding: 5 }}>
+                <ListaItemConsLocal />
+            </View>
+            <View style={{ marginBottom: 50 }} />
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = (state) => ({

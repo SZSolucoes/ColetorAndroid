@@ -43,16 +43,6 @@ class FormConferenciaVolume extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.doFetchInfoBatismo = this.doFetchInfoBatismo.bind(this);
-        this.doConfVol = this.doConfVol.bind(this);
-        this.focusInField = this.focusInField.bind(this);
-        this.adicionarVolume = this.adicionarVolume.bind(this);
-        this.modificaEmbalagemModal = this.modificaEmbalagemModal.bind(this);
-        this.onChangeVolume = this.onChangeVolume.bind(this);
-        this.renderForWindows = this.renderForWindows.bind(this);
-        this.doPrint = this.doPrint.bind(this);
-        this.doChangePersistTap = this.doChangePersistTap.bind(this);
-
         this.fieldsChanged = { batismo: false };
 
         this.state = {
@@ -60,11 +50,11 @@ class FormConferenciaVolume extends React.PureComponent {
         };
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.props.doFetchListEmbalagens();
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.props.modificaClean();
     }
 
@@ -79,22 +69,20 @@ class FormConferenciaVolume extends React.PureComponent {
         this.fieldsChanged.batismo = true; 
         this.props.modificaBatismo(value); 
     }
-    onChangeVolume(value) {
+    onChangeVolume = (value) => {
         const txtParsed = value.replace(/[^0-9]/g, '');
         this.props.modificaVolume(txtParsed);
     }
 
-    onPressEmbalagem = (value) => this.onPressEmbalagemPass(value)
-    onPressEmbalagemPass = (value) => this.props.modificaModalVisible(value)
+    onPressEmbalagem = (value) => () => this.props.modificaModalVisible(value)
 
-    onPressCancelModal = (value) => this.onPressCancelModalPass(value)
-    onPressCancelModalPass = (value) => this.props.modificaModalVisible(value)
+    onPressCancelModal = (value) => () => this.props.modificaModalVisible(value)
 
     onSubmitEditingVolume = () => {
         if (this.props.volume) this.adicionarVolume();
     }
 
-    doPrint() {
+    doPrint = () => {
         const { embarque, usuario } = this.props;
         if (!embarque) {
             Alert.alert('Conf - Volumes', 'Campo (Embarque) deve ser informado!');
@@ -103,7 +91,7 @@ class FormConferenciaVolume extends React.PureComponent {
         this.props.doPrint({ usuario, embarque, qtdEtiq: '1' }, true);
     }
 
-    adicionarVolume() {
+    adicionarVolume = () => {
         const { embalagem, volume, listVolumes, sigla } = this.props;
 
         if (!embalagem) {
@@ -120,7 +108,7 @@ class FormConferenciaVolume extends React.PureComponent {
         this.props.modificaVolume('');
     }
 
-    modificaEmbalagemModal(key) {
+    modificaEmbalagemModal = (key) => {
         const { listEmbalagens } = this.props;
         const itemEmbalagem = _.find(listEmbalagens, (item) => item.key === key);
         if (itemEmbalagem) {
@@ -131,7 +119,7 @@ class FormConferenciaVolume extends React.PureComponent {
         }
     }
 
-    doConfVol() {
+    doConfVol = () => {
         const {
             batismo,
             embarque,
@@ -176,13 +164,12 @@ class FormConferenciaVolume extends React.PureComponent {
         }
     }
 
-    doFetchInfoBatismo() {
+    doFetchInfoBatismo = () => {
         const { usuario, batismo } = this.props;
         this.props.doFetchInfoBatismo({ userName: usuario, etiqueta: batismo }, this.focusInField);
     }
 
-    doChangePersistTapFunc = (value) => this.doChangePersistTap(value);
-    doChangePersistTap(notPersist = true) {
+    doChangePersistTap = (notPersist = true) => () => {
         if (notPersist) {
             this.setState({ persistTap: 'never' });
         } else {
@@ -190,7 +177,7 @@ class FormConferenciaVolume extends React.PureComponent {
         }
     }
 
-    focusInField(field) {
+    focusInField = (field) => {
         switch (field) {
             case 'batismo':
                 this.txtBatismo.focus();
@@ -200,7 +187,7 @@ class FormConferenciaVolume extends React.PureComponent {
         }
     }
 
-    renderForWindows() {
+    renderForWindows = () => {
         const { listEmbalagens } = this.props;
         return (
             <View style={{ flex: 2 }}>
@@ -218,149 +205,147 @@ class FormConferenciaVolume extends React.PureComponent {
         );
     }
 
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc} keyboardShouldPersistTaps={this.state.persistTap}>
-                { Platform.OS !== 'windows' && <LoadingSpin /> }
-                <FormRow>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Batismo</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                selectTextOnFocus
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                value={this.props.batismo}
-                                ref={(input) => { this.txtBatismo = input; }}
-                                onFocus={this.doChangePersistTap}
-                                onChangeText={this.onChangeBatismo}
-                                onBlur={this.onBlurBatismo}
-                            />
-                        </View>
+    render = () => (
+        <ScrollView style={styles.viewPrinc} keyboardShouldPersistTaps={this.state.persistTap}>
+            { Platform.OS !== 'windows' && <LoadingSpin /> }
+            <FormRow>
+                <View style={{ flex: 4 }}>
+                    <Text style={styles.txtLabel}>Batismo</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            selectTextOnFocus
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            value={this.props.batismo}
+                            ref={(input) => { this.txtBatismo = input; }}
+                            onFocus={this.doChangePersistTap}
+                            onChangeText={this.onChangeBatismo}
+                            onBlur={this.onBlurBatismo}
+                        />
                     </View>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Embarque</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                editable={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={defaultFormStyles.input}
-                                value={this.props.embarque}
-                                underlineColorAndroid={'transparent'}
-                            />
-                        </View>
-                    </View>
-                    <View style={{ flex: 4 }}>
-                        <Text style={styles.txtLabel}>Pedido</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                editable={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={defaultFormStyles.input}
-                                value={this.props.pedido}
-                                underlineColorAndroid={'transparent'}
-                            />
-                        </View>
-                    </View>
-                </FormRow>
-                <FormRow>
-                    { Platform.OS !== 'windows' ? (
-                        <View style={{ flex: 2 }}>
-                            <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Embalagem</Text>
-                            <TouchableOpacity 
-                                onPress={this.onPressEmbalagem(true)}
-                                style={{ flexDirection: 'row' }}
-                            >
-                                <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
-                                    <TextInput
-                                        placeholder=""
-                                        autoCapitalize="none"
-                                        autoCorrect={false}
-                                        editable={false}
-                                        placeholderTextColor='rgba(255,255,255,0.7)'
-                                        returnKeyType="next"
-                                        style={defaultFormStyles.input}
-                                        value={this.props.embalagem}
-                                    />
-                                </View>
-                                <Image
-                                    source={imgSeta}
-                                    style={styles.imgSeta}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    ) : (
-                        this.renderForWindows()
-                    )}
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Volume</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType={'numeric'}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                value={this.props.volume}
-                                onFocus={this.doChangePersistTapFunc(false)}
-                                onChangeText={this.onChangeVolume}
-                                ref={(input) => { this.txtVolume = input; }}
-                                onSubmitEditing={this.onSubmitEditingVolume}
-                            />
-                        </View>
-                    </View>
-                </FormRow>
-                <View>
-                    <ListaItemAdicao 
-                        adicionarVolume={this.adicionarVolume}
-                        doPrint={this.doPrint} 
-                    />
                 </View>
-                <FormRow>
-                    { Platform.OS !== 'windows' ? (
-                        <View style={styles.viewBotao}>
+                <View style={{ flex: 4 }}>
+                    <Text style={styles.txtLabel}>Embarque</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={defaultFormStyles.input}
+                            value={this.props.embarque}
+                            underlineColorAndroid={'transparent'}
+                        />
+                    </View>
+                </View>
+                <View style={{ flex: 4 }}>
+                    <Text style={styles.txtLabel}>Pedido</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={defaultFormStyles.input}
+                            value={this.props.pedido}
+                            underlineColorAndroid={'transparent'}
+                        />
+                    </View>
+                </View>
+            </FormRow>
+            <FormRow>
+                { Platform.OS !== 'windows' ? (
+                    <View style={{ flex: 2 }}>
+                        <Text style={[styles.txtLabel, { marginLeft: -35 }]}>Embalagem</Text>
+                        <TouchableOpacity 
+                            onPress={this.onPressEmbalagem(true)}
+                            style={{ flexDirection: 'row' }}
+                        >
+                            <View style={[defaultFormStyles.inputView, { flex: 1 }]}>
+                                <TextInput
+                                    placeholder=""
+                                    autoCapitalize="none"
+                                    autoCorrect={false}
+                                    editable={false}
+                                    placeholderTextColor='rgba(255,255,255,0.7)'
+                                    returnKeyType="next"
+                                    style={defaultFormStyles.input}
+                                    value={this.props.embalagem}
+                                />
+                            </View>
+                            <Image
+                                source={imgSeta}
+                                style={styles.imgSeta}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                ) : (
+                    this.renderForWindows()
+                )}
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Volume</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType={'numeric'}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            value={this.props.volume}
+                            onFocus={this.doChangePersistTap(false)}
+                            onChangeText={this.onChangeVolume}
+                            ref={(input) => { this.txtVolume = input; }}
+                            onSubmitEditing={this.onSubmitEditingVolume}
+                        />
+                    </View>
+                </View>
+            </FormRow>
+            <View>
+                <ListaItemAdicao 
+                    adicionarVolume={this.adicionarVolume}
+                    doPrint={this.doPrint} 
+                />
+            </View>
+            <FormRow>
+                { Platform.OS !== 'windows' ? (
+                    <View style={styles.viewBotao}>
+                        <Button
+                            onPress={this.doConfVol}
+                            title="Finalizar"
+                            color="green"
+                        />
+                    </View>
+                ) : (
+                    <View style={styles.viewBotao}>
+                        <View style={{ width: 150 }}>
                             <Button
                                 onPress={this.doConfVol}
                                 title="Finalizar"
-                                color="green"
+                                color="black"
                             />
                         </View>
-                    ) : (
-                        <View style={styles.viewBotao}>
-                            <View style={{ width: 150 }}>
-                                <Button
-                                    onPress={this.doConfVol}
-                                    title="Finalizar"
-                                    color="black"
-                                />
-                            </View>
-                        </View>
-                    )}
-                </FormRow>
-                <View style={{ marginBottom: 50 }} />
-                <ModalFilterPicker
-                    placeholderText="Filtro..."
-                    cancelButtonText="Cancelar"
-                    noResultsText="Não encontrado"
-                    visible={this.props.modalVisible}
-                    onSelect={this.modificaEmbalagemModal}
-                    onCancel={this.onPressCancelModal(false)}
-                    options={this.props.listEmbalagens}
-                />
-            </ScrollView>
-        );
-    }
+                    </View>
+                )}
+            </FormRow>
+            <View style={{ marginBottom: 50 }} />
+            <ModalFilterPicker
+                placeholderText="Filtro..."
+                cancelButtonText="Cancelar"
+                noResultsText="Não encontrado"
+                visible={this.props.modalVisible}
+                onSelect={this.modificaEmbalagemModal}
+                onCancel={this.onPressCancelModal(false)}
+                options={this.props.listEmbalagens}
+            />
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = (state) => ({

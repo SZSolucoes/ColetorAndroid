@@ -29,7 +29,7 @@ class ListaItemArm extends React.PureComponent {
         this.pureFunctionComponentRenderItem = React.memo(this.renderItem);
     }
 
-    onPressItem(item) {
+    onPressItem = (item) => () => {
         const { itCode, itDescAbrev, un, localiz, codDepos } = item;
 
         this.props.modificaCodItem(itCode);
@@ -43,28 +43,26 @@ class ListaItemArm extends React.PureComponent {
         this.props.modificaCodDepos(codDepos);
     }
 
-    keyExtractor(item, index) {
+    keyExtractor = (item, index) => {
         const chave = item.sequencia + item.numSeq + item.itCode;
         return (
             chave
         );
     }
 
-    renderSeparator = () => {
-        return (
-            <View
-                style={{
-                height: 1,
-                width: '100%',
-                backgroundColor: '#607D8B',
-                }}
-            />
-        );
-    }
+    renderSeparator = () => (
+        <View
+            style={{
+            height: 1,
+            width: '100%',
+            backgroundColor: '#607D8B',
+            }}
+        />
+    )
 
     renderItem = ({ item }) => (
         <TouchableHighlight
-            onPress={() => this.onPressItem(item)}
+            onPress={this.onPressItem(item)}
         >
             <View
                 style={styles.item}
@@ -97,21 +95,19 @@ class ListaItemArm extends React.PureComponent {
 
         return headerView;
     };
-    render() {
-        return (
-            <FlatList
-                data={this.props.listaItem}
-                style={styles.container}
-                ItemSeparatorComponent={this.renderSeparator}
-                keyExtractor={this.keyExtractor}
-                renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
-                extraData={this.props}
-                numColumns='1'
-                ListHeaderComponent={this.renderHeader}
-                removeClippedSubviews={false}
-            />
-        );
-    }
+    render = () => (
+        <FlatList
+            data={this.props.listaItem}
+            style={styles.container}
+            ItemSeparatorComponent={this.renderSeparator}
+            keyExtractor={this.keyExtractor}
+            renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
+            extraData={this.props}
+            numColumns='1'
+            ListHeaderComponent={this.renderHeader}
+            removeClippedSubviews={false}
+        />
+    )
 }
 
 const mapStateToProps = state => (

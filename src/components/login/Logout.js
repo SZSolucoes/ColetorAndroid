@@ -7,24 +7,17 @@ import {
 import { Actions } from 'react-native-router-flux';
 
 export default class LogoutBtn extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.onPressLogout = this.onPressLogout.bind(this);
-    }
-    onPressLogout() {
+    onPressLogout = () => {
         Actions.pop();
     }
 
-    render() {
-        return (
-            <TouchableOpacity style={styles.buttonLogin} onPress={this.onPressLogout}>
-                <Text style={styles.buttonLabel}> 
-                    LOGOUT
-                </Text>
-            </TouchableOpacity>
-        );
-    }
+    render = () => (
+        <TouchableOpacity style={styles.buttonLogin} onPress={this.onPressLogout}>
+            <Text style={styles.buttonLabel}> 
+                LOGOUT
+            </Text>
+        </TouchableOpacity>
+    )
 }
 
 const styles = StyleSheet.create({

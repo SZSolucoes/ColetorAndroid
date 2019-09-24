@@ -4,7 +4,7 @@ import {
     StyleSheet,
     Image,
     Text,
-    TouchableHighlight,
+    TouchableOpacity,
     KeyboardAvoidingView,
     Keyboard,
     AsyncStorage
@@ -28,12 +28,10 @@ class LoginApp extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.keyboardShow = this.keyboardShow.bind(this);
-        this.keyboardHide = this.keyboardHide.bind(this);
         this.state = { showImg: true };
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         AsyncStorage.getItem('empresa')
             .then((empresa) => {
                 if (empresa) {
@@ -62,24 +60,24 @@ class LoginApp extends React.PureComponent {
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardHide);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
     }
 
-    onPressVersion() {
+    onPressVersion = () => {
         Actions.versionApp();
     }
 
-    keyboardShow() {
+    keyboardShow = () => {
         this.setState({ showImg: false });
     }
     
-    keyboardHide() {
+    keyboardHide = () => {
         this.setState({ showImg: true });
     }
 
-    renderImgLogo() {
+    renderImgLogo = () => {
         switch (this.props.empresa) {
             case '1': // Centelha
                 return (
@@ -107,7 +105,7 @@ class LoginApp extends React.PureComponent {
         }
     }
 
-    renderTextVersion() {
+    renderTextVersion = () => {
         switch (this.props.empresa) {
             case '1': // Centelha
                 return (
@@ -126,32 +124,30 @@ class LoginApp extends React.PureComponent {
         }
     }
 
-    render() {
-        return (
-            <KeyboardAvoidingView
-                style={styles.container}
-            >
-                <View style={styles.viewPrinc}>
-                    { this.state.showImg && 
-                        <View style={styles.viewTop}>
-                            {this.renderImgLogo()}
-                        </View> 
-                    }
-                    <Login />
-                    { this.state.showImg && 
-                        <View style={styles.viewBot}>
-                            <TouchableHighlight 
-                                onPress={this.onPressVersion}
-                                underlayColor={'#2a4d69'}
-                            >
-                                {this.renderTextVersion()}
-                            </TouchableHighlight>
-                        </View>
-                    }
-                </View>
-            </KeyboardAvoidingView>
-        );
-    }
+    render = () => (
+        <KeyboardAvoidingView
+            style={styles.container}
+        >
+            <View style={styles.viewPrinc}>
+                { this.state.showImg && 
+                    <View style={styles.viewTop}>
+                        {this.renderImgLogo()}
+                    </View> 
+                }
+                <Login />
+                { this.state.showImg && 
+                    <View style={styles.viewBot}>
+                        <TouchableOpacity 
+                            onPress={this.onPressVersion}
+                            underlayColor={'#2a4d69'}
+                        >
+                            {this.renderTextVersion()}
+                        </TouchableOpacity>
+                    </View>
+                }
+            </View>
+        </KeyboardAvoidingView>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -186,7 +182,6 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     container: {
-        //backgroundColor: '#4c69a5',
         flex: 1
     }
 });

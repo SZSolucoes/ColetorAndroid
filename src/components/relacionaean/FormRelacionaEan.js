@@ -27,10 +27,11 @@ import { defaultFormStyles } from '../utils/Forms';
 import imgClear from '../../../resources/imgs/limpa_tela.png';
 
 class FormDespacho extends React.PureComponent {
-    componentDidMount() {
-        setTimeout(Actions.refresh, 500, { right: this._renderRightButton });
+    componentDidMount = () => {
+        setTimeout(Actions.refresh, 500, { right: this.renderRightButton });
     }
-    componentWillUnmount() {
+
+    componentWillUnmount = () => {
         this.props.cleanRelEanReducer();
     }
 
@@ -49,23 +50,11 @@ class FormDespacho extends React.PureComponent {
         this.txtItem.focus();
     }
 
-    limpaTela() {
+    limpaTela = () => {
         this.props.cleanRelEanReducer();
     }
-    _renderRightButton = () => {
-        return (
-            <TouchableOpacity 
-                onPress={this.limpaTela}
-                style={styles.btClear}
-            >
-                <Image
-                    source={imgClear}
-                    style={styles.imgClear}
-                />
-            </TouchableOpacity>
-        );
-    }
-    confirmButton() {
+
+    confirmButton = () => {
         const { codEAN, codItem } = this.props;
 
         Keyboard.dismiss();
@@ -109,62 +98,73 @@ class FormDespacho extends React.PureComponent {
         
         this.props.doConfirm(propparams);     
     }
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>EAN</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={defaultFormStyles.input}
-                                value={this.props.codEAN}
-                                onChangeText={this.onChangeEan}
-                                ref={(input) => { this.txtEAN = input; }}
-                                onSubmitEditing={this.onSubmitEditingEan}
-                            />
-                        </View>
+
+    renderRightButton = () => (
+        <TouchableOpacity 
+            onPress={this.limpaTela}
+            style={styles.btClear}
+        >
+            <Image
+                source={imgClear}
+                style={styles.imgClear}
+            />
+        </TouchableOpacity>
+    )
+
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>EAN</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={defaultFormStyles.input}
+                            value={this.props.codEAN}
+                            onChangeText={this.onChangeEan}
+                            ref={(input) => { this.txtEAN = input; }}
+                            onSubmitEditing={this.onSubmitEditingEan}
+                        />
                     </View>
-                </FormRow>
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Item</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                value={this.props.codItem}
-                                onChangeText={this.onChangeItem}
-                                ref={(input) => { this.txtItem = input; }}
-                                onBlur={this.onBlurItem}
-                            />
-                        </View>
+                </View>
+            </FormRow>
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Item</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            value={this.props.codItem}
+                            onChangeText={this.onChangeItem}
+                            ref={(input) => { this.txtItem = input; }}
+                            onBlur={this.onBlurItem}
+                        />
                     </View>
-                </FormRow>
-                <FormRow> 
-                    <View style={styles.viewBotao} >
-                        <Button
-                            onPress={this.confirmButton}
-                            title="Confirmar"
-                            color="green"
-                        />      
-                    </View>
-                </FormRow>
-                <View style={{ marginBottom: 50 }} />
-            </ScrollView>
-        );
-    }
+                </View>
+            </FormRow>
+            <FormRow> 
+                <View style={styles.viewBotao} >
+                    <Button
+                        onPress={this.confirmButton}
+                        title="Confirmar"
+                        color="green"
+                    />      
+                </View>
+            </FormRow>
+            <View style={{ marginBottom: 50 }} />
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => {

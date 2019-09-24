@@ -1,21 +1,19 @@
 import React, { PureComponent } from 'react';
-import { 
-    TouchableHighlight, 
-    View, 
+import {
+    TouchableHighlight,
+    View,
     Text,
-    StyleSheet 
+    StyleSheet
 } from 'react-native';
 
 export default class ConsultaNFPushItem extends PureComponent {
-
-    onNFSelect() {
+    onNFSelect = () => {
         this.props.onNFSelect(this.props.item.itens);
     }
 
-    render() {
-      return (
+    render = () => (
         <TouchableHighlight
-            onPress={() => this.onNFSelect()}
+            onPress={this.onNFSelect}
         >
             <View style={styles.itemlist} >
                 <Text style={styles.documento}>
@@ -23,18 +21,17 @@ export default class ConsultaNFPushItem extends PureComponent {
                 </Text>
                 <Text style={styles.serie}>
                     {this.props.item.serie}
-                </Text> 
+                </Text>
                 <Text style={styles.emitente}>
                     {this.props.item.emitente}
-                </Text> 
+                </Text>
                 <Text style={styles.naturezaope}>
                     {this.props.item.naturezaope}
                 </Text>
             </View>
         </TouchableHighlight>
-      );
-    }
-  }
+    )
+}
 
 const styleField = {
     itemHeaderAndRow: {
@@ -55,25 +52,25 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         paddingVertical: 5
     },
-    documento: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 2 
+    documento: {
+        ...styleField.itemHeaderAndRow,
+        flex: 2
     },
-    serie: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 1 
+    serie: {
+        ...styleField.itemHeaderAndRow,
+        flex: 1
     },
-    emitente: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 2 
+    emitente: {
+        ...styleField.itemHeaderAndRow,
+        flex: 2
     },
-    naturezaope: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 2 
+    naturezaope: {
+        ...styleField.itemHeaderAndRow,
+        flex: 2
     },
-    situacao: { 
-        ...styleField.itemHeaderAndRow, 
-        flex: 2 
+    situacao: {
+        ...styleField.itemHeaderAndRow,
+        flex: 2
     }
 });
 

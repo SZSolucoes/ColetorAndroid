@@ -17,14 +17,17 @@ class FormSelecaoNF extends React.PureComponent {
 
         this.pureFunctionComponentRenderItem = React.memo(this.renderItem);
     }
-    onPressItem(item) {
+    
+    onPressItem = (item) => () => {
         this.props.callback(item);
         Actions.pop();
     }
 
+    getKeyExtractor = (item, index) => index.toString()
+
     renderItem = ({ item }) => (
         <TouchableHighlight  
-            onPress={() => this.onPressItem(item)}
+            onPress={this.onPressItem(item)}
         >
             <View style={styles.item}>
                 <Text style={styles.itemNroDoc}>{ item.numDoc}</Text>
@@ -55,26 +58,25 @@ class FormSelecaoNF extends React.PureComponent {
 
         return headerView;
     };
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>                
-                <View style={styles.viewLinha} />
-                <View style={styles.viewLista}>
-                    <FlatList
-                        data={this.props.listaNF}
-                        style={styles.container}
-                        ItemSeparatorComponent={this.renderSeparator}
-                        keyExtractor={this.keyExtractor}
-                        renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
-                        keyExtractor={(item, index) => index.toString()}
-                        numColumns='1'
-                        ListHeaderComponent={this.renderHeader}
-                        stickyHeaderIndices={[0]}
-                    />
-                </View>
-            </ScrollView>
-        );
-    }
+
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>                
+            <View style={styles.viewLinha} />
+            <View style={styles.viewLista}>
+                <FlatList
+                    data={this.props.listaNF}
+                    style={styles.container}
+                    ItemSeparatorComponent={this.renderSeparator}
+                    keyExtractor={this.keyExtractor}
+                    renderItem={(propsItem) => <this.pureFunctionComponentRenderItem {...propsItem} />}
+                    keyExtractor={this.getKeyExtractor}
+                    numColumns='1'
+                    ListHeaderComponent={this.renderHeader}
+                    stickyHeaderIndices={[0]}
+                />
+            </View>
+        </ScrollView>
+    )
 }
 
 export default FormSelecaoNF;

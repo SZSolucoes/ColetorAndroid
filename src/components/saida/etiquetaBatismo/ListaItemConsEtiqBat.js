@@ -16,47 +16,39 @@ class ListaItemConsEtiqBat extends React.PureComponent {
         super(props);
 
         this.state = { width: Dimensions.get('window').width };
-        this.changedOrientation = this.changedOrientation.bind(this);
-        this.renderItem = this.renderItem.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         Dimensions.addEventListener('change', this.changedOrientation);
     }
     
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         Dimensions.removeEventListener('change', this.changedOrientation);
     }
 
-    changedOrientation(e) {
+    changedOrientation = (e) => {
         this.setState({ width: e.window.width });
     }
     
-    keyExtractor(item, index) {
-        return index.toString();
-    }
+    keyExtractor = (item, index) => index.toString()
 
-    renderSeparator() {
-        return (
-            <View
-                style={{
-                height: 1,
-                width: '100%',
-                backgroundColor: '#607D8B',
-                }}
-            />
-        );
-    }
+    renderSeparator = () => (
+        <View
+            style={{
+            height: 1,
+            width: '100%',
+            backgroundColor: '#607D8B',
+            }}
+        />
+    )
 
-    renderItem({ item, index }) {
-        return (
-            <ListaItemConsEtiqBatPc
-                key={index}
-                item={item}
-                styles={styles}
-            />
-        );
-    }
+    renderItem = ({ item, index }) => (
+        <ListaItemConsEtiqBatPc
+            key={index}
+            item={item}
+            styles={styles}
+        />
+    )
 
     renderHeader = () => {
         const headerView = (
@@ -107,24 +99,23 @@ class ListaItemConsEtiqBat extends React.PureComponent {
         );
 
         return headerView;
-    };
-    render() {
-        return (
-            <ScrollView horizontal >
-                <FlatList
-                    data={this.props.listaItens}
-                    style={[styles.container, { width: this.state.width + 1000 }]}
-                    ItemSeparatorComponent={this.renderSeparator}
-                    keyExtractor={this.keyExtractor}
-                    renderItem={this.renderItem}
-                    extraData={this.props}
-                    numColumns='1'
-                    ListHeaderComponent={this.renderHeader}
-                    alwaysBounceHorizontal
-                />
-            </ScrollView>
-        );
     }
+
+    render = () => (
+        <ScrollView horizontal>
+            <FlatList
+                data={this.props.listaItens}
+                style={[styles.container, { width: this.state.width + 1000 }]}
+                ItemSeparatorComponent={this.renderSeparator}
+                keyExtractor={this.keyExtractor}
+                renderItem={this.renderItem}
+                extraData={this.props}
+                numColumns='1'
+                ListHeaderComponent={this.renderHeader}
+                alwaysBounceHorizontal
+            />
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => ({

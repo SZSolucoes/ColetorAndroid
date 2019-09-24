@@ -7,8 +7,7 @@ import {
 } from 'react-native';
 
 export default class ConsultaNFItem extends PureComponent {
-    render() {
-      return (
+    render = () => (
         <TouchableHighlight
             onPress={() => false}
         >
@@ -33,9 +32,8 @@ export default class ConsultaNFItem extends PureComponent {
                 </Text> 
             </View>
         </TouchableHighlight>
-      );
-    }
-  }
+    )
+}
 
 const styleField = {
     itemHeaderAndRow: {

@@ -85,7 +85,7 @@ const onFetchBatismoSuccess = (dispatch, res, focusInField, checkIfUrgent) => {
                 payload: isUrgent
             });
             doFetchDispatches(dispatch, res.data.prioridades);
-            focusInField('qtdconfitens'); // foco no campo especifico
+            focusInField('codean'); // foco no campo especifico
         } else {
             doAlertWithTimeout('Erro Conferência', res.data.message, 500);
             focusInField('batismo'); // foco no campo especifico

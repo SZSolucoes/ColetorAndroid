@@ -17,24 +17,21 @@ class ConsultaNFList extends React.PureComponent {
         super(props);
 
         this.state = { width: Dimensions.get('window').width };
-        this.changedOrientation = this.changedOrientation.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         Dimensions.addEventListener('change', this.changedOrientation);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         Dimensions.removeEventListener('change', this.changedOrientation);
     }
 
-    changedOrientation(e) {
+    changedOrientation = (e) => {
         this.setState({ width: e.window.width });
     }
 
-    keyExtractor(item, index) {
-        return index.toString();
-    }
+    keyExtractor = (item, index) => index.toString()
     
     renderSeparator = () => {
         const viewSep = (
@@ -52,7 +49,7 @@ class ConsultaNFList extends React.PureComponent {
 
     renderItem = ({ item }) => (
         <ConsultaNFItem item={item} />
-    );
+    )
 
     renderHeader = () => {
         const headerView = (
@@ -79,25 +76,24 @@ class ConsultaNFList extends React.PureComponent {
         );
 
         return headerView;
-    };
-    render() {
-        return (
-            <View {...this.props} >
-                <ScrollView horizontal>
-                    <FlatList
-                        stickyHeaderIndices={[0]}
-                        data={this.props.listItemsNF}
-                        style={[styles.container, { width: this.state.width + 300 }]}
-                        ItemSeparatorComponent={this.renderSeparator}
-                        keyExtractor={this.keyExtractor}
-                        renderItem={this.renderItem}
-                        ListHeaderComponent={this.renderHeader}
-                        initialNumToRender={10}
-                    />
-                </ScrollView>
-            </View>
-        );
     }
+
+    render = () => (
+        <View {...this.props} >
+            <ScrollView horizontal>
+                <FlatList
+                    stickyHeaderIndices={[0]}
+                    data={this.props.listItemsNF}
+                    style={[styles.container, { width: this.state.width + 300 }]}
+                    ItemSeparatorComponent={this.renderSeparator}
+                    keyExtractor={this.keyExtractor}
+                    renderItem={this.renderItem}
+                    ListHeaderComponent={this.renderHeader}
+                    initialNumToRender={10}
+                />
+            </ScrollView>
+        </View>
+    )
 }
 
 const mapStateToProps = (state) => (

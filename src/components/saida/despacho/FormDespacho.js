@@ -22,11 +22,26 @@ import {
 import { defaultFormStyles } from '../../utils/Forms';
 
 class FormDespacho extends React.PureComponent {
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.props.modificaClean();
     }
 
-    removeItem() {
+    onBlurVolume = () => {
+        if (this.props.codVol) this.removeItem();
+    }
+
+    onChangeRomaneio = (value) => {
+        this.props.modificaRom(value);
+    }
+    onChangeVolume = (value) => {
+        this.props.modificaVol(value);
+    }
+
+    onSubmitEditingRomaneio = () => {
+        this.volInput.focus();
+    }
+
+    removeItem = () => {
         const codVol = this.props.codVol;
         const listaItens = this.props.listaItens;
         const index = listaItens.findIndex((value) => value.vol === codVol);
@@ -39,64 +54,62 @@ class FormDespacho extends React.PureComponent {
         }
     }
 
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Romaneio</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                blurOnSubmit={false}
-                                style={defaultFormStyles.input}
-                                value={this.props.codRom}
-                                onChangeText={this.props.modificaRom}
-                                ref={(input) => { this.romInput = input; }}
-                                onSubmitEditing={() => this.volInput.focus()}
-                            />
-                        </View>
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Romaneio</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            blurOnSubmit={false}
+                            style={defaultFormStyles.input}
+                            value={this.props.codRom}
+                            onChangeText={this.onChangeRomaneio}
+                            ref={(input) => { this.romInput = input; }}
+                            onSubmitEditing={this.onSubmitEditingRomaneio}
+                        />
                     </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Volume</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                value={this.props.codVol}
-                                onChangeText={this.props.modificaVol}
-                                onBlur={() => this.props.codVol && this.removeItem()}
-                                ref={(input) => { this.volInput = input; }}
-                            />
-                        </View>
-                    </View>
-                </FormRow>
-                <FormRow> 
-                    <View style={styles.viewBotao} >
-                        <Button
-                            onPress={() => false}
-                            title="Despachar"
-                            color="green"
-                        />      
-                    </View>
-                </FormRow>
-                <View style={{ padding: 5 }}>
-                    <ListaItemDespacho />
                 </View>
-                <View style={{ marginBottom: 50 }} />
-            </ScrollView>
-        );
-    }
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Volume</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            value={this.props.codVol}
+                            onChangeText={this.onChangeVolume}
+                            onBlur={this.onBlurVolume}
+                            ref={(input) => { this.volInput = input; }}
+                        />
+                    </View>
+                </View>
+            </FormRow>
+            <FormRow> 
+                <View style={styles.viewBotao} >
+                    <Button
+                        onPress={() => false}
+                        title="Despachar"
+                        color="green"
+                    />      
+                </View>
+            </FormRow>
+            <View style={{ padding: 5 }}>
+                <ListaItemDespacho />
+            </View>
+            <View style={{ marginBottom: 50 }} />
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => {

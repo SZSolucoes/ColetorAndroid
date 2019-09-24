@@ -19,66 +19,59 @@ import imgInvent from '../../../resources/imgs/inventario_64.png';
 import imgInventEst from '../../../resources/imgs/inventarioestorno.png';
 
 class MenuInventario extends React.PureComponent {
-    onPressInvent() {
-        //Actions.inventario({ estorno: false });
+    onPressInvent = () => {
         this.props.modificaLoadingInvent();
         const usuario = this.props.usuario;
 
         this.props.buscaContInventario(usuario, true);
     }
 
-    onPressInventEst() {
+    onPressInventEst = () => {
         Actions.inventarioEst({ estorno: true });
     }
     
-    renderInventario(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressInvent}>
-                    { this.props.loadingInvent ?
-                        (   
-                            <View style={[styles.menu, { justifyContent: 'center' }]}>
-                                <View style={{ marginVertical: 6 }}>
-                                    <ActivityIndicator size={'large'} color={'white'} />
-                                </View>
+    renderInventario = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressInvent}>
+                { this.props.loadingInvent ?
+                    (   
+                        <View style={[styles.menu, { justifyContent: 'center' }]}>
+                            <View style={{ marginVertical: 6 }}>
+                                <ActivityIndicator size={'large'} color={'white'} />
                             </View>
-                        ) : (
-                                <View style={styles.menu}>
-                                    <Image 
-                                        style={styles.imgMenu} 
-                                        source={imgInvent}
-                                    />
-                                    <Text style={styles.txtMenu}>Inventário</Text>
-                                </View> 
-                            )
-                    } 
-            </TouchableHighlight>            
-        );
-    }
+                        </View>
+                    ) : (
+                            <View style={styles.menu}>
+                                <Image 
+                                    style={styles.imgMenu} 
+                                    source={imgInvent}
+                                />
+                                <Text style={styles.txtMenu}>Inventário</Text>
+                            </View> 
+                        )
+                } 
+        </TouchableHighlight>            
+    )
 
-    renderInventarioEst(key) {
-        return (
-            <TouchableHighlight key={key} onPress={this.onPressInventEst}>
-                <View style={styles.menu}>
-                    <Image 
-                        style={styles.imgMenu} 
-                        source={imgInventEst}
-                    />
-                    <Text style={styles.txtMenu}>Inventário - Estorno</Text>
-                </View>
-            </TouchableHighlight>
-        );
-    }
+    renderInventarioEst = (key) => (
+        <TouchableHighlight key={key} onPress={this.onPressInventEst}>
+            <View style={styles.menu}>
+                <Image 
+                    style={styles.imgMenu} 
+                    source={imgInventEst}
+                />
+                <Text style={styles.txtMenu}>Inventário - Estorno</Text>
+            </View>
+        </TouchableHighlight>
+    )
 
-    render() {
-        return (
-            <ScrollView style={styles.opcao}>
-                <View style={{ flex: 1, paddingVertical: 5 }}>
-                    {this.renderInventario('1')}
-                    {/*this.renderInventarioEst('2')*/}
-                </View>
-            </ScrollView>
-        );
-    }
+    render = () => (
+        <ScrollView style={styles.opcao}>
+            <View style={{ flex: 1, paddingVertical: 5 }}>
+                {this.renderInventario('1')}
+                {/*this.renderInventarioEst('2')*/}
+            </View>
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => (

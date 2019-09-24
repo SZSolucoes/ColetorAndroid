@@ -24,25 +24,7 @@ import imgRemove from '../../../../resources/imgs/remove.png';
 import { modificaListVolumes, modificaPesoBruto } from '../../../actions/ConfereVolumeActions';
 
 class ListaItemAdicao extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        
-        this.renderItem = this.renderItem.bind(this);
-        this.removeVolume = this.removeVolume.bind(this);
-        this.onChangePesoBruto = this.onChangePesoBruto.bind(this);
-    }
-    
-    onChangePesoBruto(value) {
-        this.props.modificaPesoBruto(value);
-
-        const txtParsed = value.replace(/[^0-9\\.\\,]/g, '')
-        .replace(/\.\.+/g, '.')
-        .replace(/,,+/g, ',')
-        .replace(/,\./g, ',')
-        .replace(/\.,+/g, '.');
-
-        this.props.modificaPesoBruto(txtParsed);
-    }
+    onChangePesoBruto = (value) => this.props.modificaPesoBruto(value)
 
     onPressAddVolume = () => {
         this.props.adicionarVolume();
@@ -51,20 +33,23 @@ class ListaItemAdicao extends React.PureComponent {
     onPressPrint = () => {
         this.props.doPrint();
     }
+    
+    keyExtractor = (item, index) => index.toString()
 
-    keyExtractor(item, index) {
-        return index.toString();
-    }
+    maskPesoBruto = (value) => value.replace(/[^0-9\\.\\,]/g, '')
+    .replace(/\.\.+/g, '.')
+    .replace(/,,+/g, ',')
+    .replace(/,\./g, ',')
+    .replace(/\.,+/g, '.');
 
-    removeVolumePass = (value) => this.removeVolume(value)
-    removeVolume(index) {
+    removeVolume = (index) => () => {
         const { listVolumes } = this.props;
         const newList = [...listVolumes];
         newList.splice(index, 1);
         this.props.modificaListVolumes(newList);
     }
 
-    renderSeparator() {
+    renderSeparator = () => {
         const viewSep = (
             <View
                 style={{
@@ -78,7 +63,7 @@ class ListaItemAdicao extends React.PureComponent {
         return viewSep;
     }
 
-    renderItem({ item, index }) {
+    renderItem = ({ item, index }) => {
         const viewItem = (
             <TouchableHighlight onPress={() => false} >
                 <View style={styles.item} >
@@ -88,7 +73,7 @@ class ListaItemAdicao extends React.PureComponent {
                     <View style={styles.remove}>
                         <TouchableOpacity
                             style={styles.btSearch}
-                            onPress={this.removeVolumePass(index)}
+                            onPress={this.removeVolume(index)}
                         >
                             <Image
                                 source={imgRemove}
@@ -97,13 +82,13 @@ class ListaItemAdicao extends React.PureComponent {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </TouchableHighlight>         
+            </TouchableHighlight>
         );
 
         return viewItem;
     }
     
-    renderHeader() {
+    renderHeader = () => {
         const headerView = (
             <View style={styles.header}>
                 <Text style={[styles.seq, styles.sizeFldHeader]}> 
@@ -122,76 +107,74 @@ class ListaItemAdicao extends React.PureComponent {
         return headerView;
     }
 
-    render() {
-        return (
-            <View>
-                <View style={{ padding: 5 }}>
-                    <FormRow >
-                        <View style={styles.viewBotao}>
-                            { Platform.OS !== 'windows' ? (
-                                <View style={styles.viewAddBtn}>
+    render = () => (
+        <View>
+            <View style={{ padding: 5 }}>
+                <FormRow >
+                    <View style={styles.viewBotao}>
+                        { Platform.OS !== 'windows' ? (
+                            <View style={styles.viewAddBtn}>
+                                <Button
+                                    onPress={this.onPressAddVolume}
+                                    title="Adicionar"
+                                    color="green"
+                                />
+                            </View>
+                        ) : (
+                            <View style={styles.viewAddBtn}>
+                                <View style={{ width: 150 }}>
                                     <Button
                                         onPress={this.onPressAddVolume}
                                         title="Adicionar"
-                                        color="green"
+                                        color="black"
                                     />
                                 </View>
-                            ) : (
-                                <View style={styles.viewAddBtn}>
-                                    <View style={{ width: 150 }}>
-                                        <Button
-                                            onPress={this.onPressAddVolume}
-                                            title="Adicionar"
-                                            color="black"
-                                        />
-                                    </View>
-                                </View>
-                            )}
-                            <TouchableOpacity
-                                style={styles.btSearch}
-                                onPress={this.onPressPrint}
-                            >
-                                <Image
-                                    source={imgPrinter}
-                                    style={styles.imgSearch}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </FormRow>
-                    <FlatList
-                        data={this.props.listVolumes}
-                        style={styles.container}
-                        ItemSeparatorComponent={this.renderSeparator}
-                        keyExtractor={this.keyExtractor}
-                        renderItem={this.renderItem}
-                        extraData={this.props}
-                        numColumns='1'
-                        ListHeaderComponent={this.renderHeader}
-                        alwaysBounceHorizontal
-                    />
-                </View>
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Peso Bruto</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType={'numeric'}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={defaultFormStyles.input}
-                                value={this.props.pesoBruto}
-                                onChangeText={this.onChangePesoBruto}
+                            </View>
+                        )}
+                        <TouchableOpacity
+                            style={styles.btSearch}
+                            onPress={this.onPressPrint}
+                        >
+                            <Image
+                                source={imgPrinter}
+                                style={styles.imgSearch}
                             />
-                        </View>
+                        </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 1 }} />
                 </FormRow>
-            </View>   
-        );
-    }
+                <FlatList
+                    data={this.props.listVolumes}
+                    style={styles.container}
+                    ItemSeparatorComponent={this.renderSeparator}
+                    keyExtractor={this.keyExtractor}
+                    renderItem={this.renderItem}
+                    extraData={this.props}
+                    numColumns='1'
+                    ListHeaderComponent={this.renderHeader}
+                    alwaysBounceHorizontal
+                />
+            </View>
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Peso Bruto</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType={'numeric'}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={defaultFormStyles.input}
+                            value={this.maskPesoBruto(this.props.pesoBruto)}
+                            onChangeText={this.onChangePesoBruto}
+                        />
+                    </View>
+                </View>
+                <View style={{ flex: 1 }} />
+            </FormRow>
+        </View>
+    )
 }
 
 const mapStateToProps = (state) => ({

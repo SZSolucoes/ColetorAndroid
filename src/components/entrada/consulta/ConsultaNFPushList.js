@@ -15,20 +15,12 @@ import { modificaListItemsNF } from '../../../actions/ConsultaNFActions';
 import ConsultaNFPushItem from './ConsultaNFPushItem';
 
 class ConsultaNFPushList extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.onNFSelect = this.onNFSelect.bind(this);
-    }
-
-    onNFSelect(value) {
+    onNFSelect = (value) => {
         this.props.modificaListItemsNF(value);
         Actions.pop();
     }
 
-    keyExtractor(item, index) {
-        return index.toString();
-    }
+    keyExtractor = (item, index) => index.toString()
     
     renderSeparator = () => {
         const viewSep = (
@@ -45,8 +37,8 @@ class ConsultaNFPushList extends React.PureComponent {
     }
 
     renderItem = ({ item }) => (
-            <ConsultaNFPushItem item={item} onNFSelect={this.onNFSelect} />
-    );
+        <ConsultaNFPushItem item={item} onNFSelect={this.onNFSelect} />
+    )
 
     renderHeader = () => {
         const headerView = (
@@ -67,25 +59,24 @@ class ConsultaNFPushList extends React.PureComponent {
         );
 
         return headerView;
-    };
-    render() {
-        return (
-            <View {...this.props} style={styles.viewLista} >
-                <ScrollView>
-                    <FlatList
-                        stickyHeaderIndices={[0]}
-                        data={this.props.listNF}
-                        style={styles.container}
-                        ItemSeparatorComponent={this.renderSeparator}
-                        keyExtractor={this.keyExtractor}
-                        renderItem={this.renderItem}
-                        ListHeaderComponent={this.renderHeader}
-                        initialNumToRender={10}
-                    />
-                </ScrollView>
-            </View>
-        );
     }
+
+    render = () => (
+        <View {...this.props} style={styles.viewLista}>
+            <ScrollView>
+                <FlatList
+                    stickyHeaderIndices={[0]}
+                    data={this.props.listNF}
+                    style={styles.container}
+                    ItemSeparatorComponent={this.renderSeparator}
+                    keyExtractor={this.keyExtractor}
+                    renderItem={this.renderItem}
+                    ListHeaderComponent={this.renderHeader}
+                    initialNumToRender={10}
+                />
+            </ScrollView>
+        </View>
+    )
 }
 
 const mapStateToProps = (state) => (

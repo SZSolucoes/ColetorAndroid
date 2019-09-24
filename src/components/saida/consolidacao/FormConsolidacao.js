@@ -29,11 +29,6 @@ class FormConsolidacao extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.doFetchEtiqConf = this.doFetchEtiqConf.bind(this);
-        this.focusInField = this.focusInField.bind(this);
-        this.doConsolidation = this.doConsolidation.bind(this);
-        this.doChangePersistTap = this.doChangePersistTap.bind(this);
-
         this.fieldsChanged = { 
             etiqconf: false 
         };
@@ -43,11 +38,30 @@ class FormConsolidacao extends React.PureComponent {
         };
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.props.modificaClean();
     }
 
-    doChangePersistTap(notPersist = true) {
+    onBlurEtiqVolume = () => {
+        if (this.props.codConf && this.fieldsChanged.etiqconf) {
+            this.fieldsChanged.etiqconf = false;
+            this.doFetchEtiqConf();
+        } 
+    }
+
+    onChangeEtiqVolume = (value) => {
+        this.fieldsChanged.etiqconf = true; 
+        this.props.modificaConf(value);
+    }
+    onChangeEtiqConsolidacao = (value) => {
+        this.props.modificaVol(value);
+    }
+
+    onSubmitEditingEtiqConsolidacao = () => {
+        if (this.props.codVol) this.doConsolidation();
+    }
+
+    doChangePersistTap = (notPersist = true) => () => {
         if (notPersist) {
             this.setState({ persistTap: 'never' });
         } else {
@@ -55,7 +69,7 @@ class FormConsolidacao extends React.PureComponent {
         }
     }
 
-    doConsolidation() {
+    doConsolidation = () => {
         const { 
             codConf,
             codEmb, 
@@ -86,11 +100,11 @@ class FormConsolidacao extends React.PureComponent {
         }
     }
 
-    doFetchEtiqConf() {
+    doFetchEtiqConf = () => {
         this.props.doFetchEtiqConf({ etiqVol: this.props.codConf }, this.focusInField);
     }
 
-    focusInField(field) {
+    focusInField = (field) => {
         switch (field) {
             case 'etiqconf':
                 this.txtEtiqConf.focus();
@@ -103,94 +117,83 @@ class FormConsolidacao extends React.PureComponent {
         }
     }
 
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc} keyboardShouldPersistTaps={this.state.persistTap}>
-                <LoadingSpin />
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Etiq Volume</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                selectTextOnFocus
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={defaultFormStyles.input}
-                                value={this.props.codConf}
-                                ref={(ref) => (this.txtEtiqConf = ref)}
-                                onFocus={() => this.doChangePersistTap()}
-                                onChangeText={value => {
-                                    this.fieldsChanged.etiqconf = true; 
-                                    this.props.modificaConf(value);
-                                }}
-                                onBlur={() => { 
-                                    if (this.props.codConf && 
-                                        this.fieldsChanged.etiqconf) {
-                                            this.fieldsChanged.etiqconf = false;
-                                            this.doFetchEtiqConf();
-                                        } 
-                                }}
-                            />
-                        </View>
+    render = () => (
+        <ScrollView style={styles.viewPrinc} keyboardShouldPersistTaps={this.state.persistTap}>
+            <LoadingSpin />
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Etiq Volume</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            selectTextOnFocus
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={defaultFormStyles.input}
+                            value={this.props.codConf}
+                            ref={(ref) => (this.txtEtiqConf = ref)}
+                            onFocus={this.doChangePersistTap}
+                            onChangeText={this.onChangeEtiqVolume}
+                            onBlur={this.onBlurEtiqVolume}
+                        />
                     </View>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Embarque</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                editable={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={defaultFormStyles.input}
-                                value={`${this.props.codEmb}`}
-                                underlineColorAndroid={'transparent'}
-                            />
-                        </View>
-                    </View>
-                </FormRow>
-                <FormRow>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.txtLabel}>Etiq Consolidação</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="next"
-                                style={defaultFormStyles.input}
-                                value={this.props.codVol}
-                                ref={(input) => { this.txtEtiqVolume = input; }}
-                                onFocus={() => this.doChangePersistTap(false)}
-                                onChangeText={this.props.modificaVol}
-                                onSubmitEditing={() => this.props.codVol && this.doConsolidation()}
-                            />
-                        </View>
-                    </View>
-                    <View style={{ flex: 1 }} />
-                </FormRow>
-                <FormRow>
-                    <View style={styles.viewBotao} >
-                        <Button
-                            onPress={() => this.doConsolidation()}
-                            title="Consolidar"
-                            color="green"
-                        />      
-                    </View>
-                    <View style={{ flex: 1 }} />
-                </FormRow>
-                <View style={{ padding: 5 }}>
-                    <ListaItemConsolidacao />
                 </View>
-                <View style={{ marginBottom: 50 }} />
-            </ScrollView>
-        );
-    }
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Embarque</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            editable={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={defaultFormStyles.input}
+                            value={`${this.props.codEmb}`}
+                            underlineColorAndroid={'transparent'}
+                        />
+                    </View>
+                </View>
+            </FormRow>
+            <FormRow>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.txtLabel}>Etiq Consolidação</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="next"
+                            style={defaultFormStyles.input}
+                            value={this.props.codVol}
+                            ref={(input) => { this.txtEtiqVolume = input; }}
+                            onFocus={this.doChangePersistTap(false)}
+                            onChangeText={this.onChangeEtiqConsolidacao}
+                            onSubmitEditing={this.onSubmitEditingEtiqConsolidacao}
+                        />
+                    </View>
+                </View>
+                <View style={{ flex: 1 }} />
+            </FormRow>
+            <FormRow>
+                <View style={styles.viewBotao} >
+                    <Button
+                        onPress={this.doConsolidation}
+                        title="Consolidar"
+                        color="green"
+                    />      
+                </View>
+                <View style={{ flex: 1 }} />
+            </FormRow>
+            <View style={{ padding: 5 }}>
+                <ListaItemConsolidacao />
+            </View>
+            <View style={{ marginBottom: 50 }} />
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = state => ({

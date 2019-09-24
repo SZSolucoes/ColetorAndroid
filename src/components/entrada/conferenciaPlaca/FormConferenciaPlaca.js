@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { Actions } from 'react-native-router-flux';
 import Axios from 'axios';
@@ -35,109 +36,8 @@ class FormConferenciaPlaca extends React.PureComponent {
          };
 	}
     
-    componentDidMount() {
-        setTimeout(Actions.refresh, 500, { right: this._renderRightButton });
-    }
-
-    clearForm(all) {
-        this.setState({
-            ...this.state,
-            numDoc: '',
-            serie: '', 
-            fornec: '', 
-            nomFornec: '',
-            natOper: '', 
-            volumes: ''
-         });
-         if (all) {
-            this.setState({placa:''});
-         }
-    }
-    _renderRightButton = () => {
-        return (
-            <TouchableOpacity 
-                onPress={() => this.clearForm(true)}
-                style={styles.btClear}
-            >
-                <Image
-                    source={imgClear}
-                    style={styles.imgClear}
-                />
-            </TouchableOpacity>
-        );
-    }    
-    onSelectDoc(item) {
-        this.setState({numDoc: item.numDoc, serie: item.serie, fornec: item.fornec, natOper: item.natOper, nomFornec: item.nomFornec },()=>this.volumes.focus());
-        
-    }    
-    onPressZoom() {
-        var _this = this;
-        
-        if (!this.state.placa || this.state.placa == "") {
-            Alert.alert(
-                'Placa deve ser informada'
-            );
-            return;
-        }
-        var params = { params: { placa: this.state.placa}};
-
-        Axios.get('/coletor/getDocInfoByPlate.p', params)
-        .then(res => {
-            if (res.data.success === 'true') {
-                var listaNF = res.data.notas;
-                if (listaNF.length > 1) {
-                    Actions.formSelecaoNF({ callback: (item) => this.onSelectDoc(item), listaNF: listaNF});
-                } else {
-                    var item = listaNF[0];
-                    this.onSelectDoc(item);
-                }
-            } else {
-                Alert.alert(
-                    'Conferência Placa',
-                    res.data.message
-                );
-            }           
-        })
-        .catch((err) => {
-            Alert.alert(
-                'Erro Inesperado', err
-            );
-        });        
-    }
-    onConferePlaca() {
-        this.setState({watingAction: true});
-        var params = { 
-            numDoc: this.state.numDoc,
-            serie: this.state.serie,
-            fornec: this.state.fornec,
-            natOper: this.state.natOper,
-            volumes: this.state.volumes
-        };
-
-        store.dispatch({ type: 'modifica_visible_loadingspin', payload: true });
-        Axios.get('/coletor/doCheckVolDoc.p', {params})
-        .then(res => {
-            store.dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-
-            if (res.data.success === 'true') {
-                (() => {
-                    this.placa.focus();
-                    this.clearForm();
-                }).call(this)
-            }
-            doAlertWithTimeout(
-                'Conferência Placa',
-                res.data.message
-            ); 
-            this.setState({watingAction: false});          
-        })
-        .catch((err) => {
-            store.dispatch({ type: 'modifica_visible_loadingspin', payload: false });
-            doAlertWithTimeout(
-                'Erro Inesperado', err
-            );
-            this.setState({watingAction: false});
-        });        
+    componentDidMount = () => {
+        setTimeout(Actions.refresh, 500, { right: this.renderRightButton });
     }
 
     onBlurPlaca = () => {
@@ -157,159 +57,256 @@ class FormConferenciaPlaca extends React.PureComponent {
         this.setState({ volumes: value });
     }
 
-    renderBtConfirmar() {
-        return (
-            <View style={[styles.viewBotao, { flex: 1 }]}>
-                <Button
-                    onPress={() => { this.onConferePlaca(); }}
-                    title="Confirmar"
-                    color="green"
-                />
-            </View>
-        );
+    onSelectDoc = (item) => {
+        this.setState({ numDoc: item.numDoc, serie: item.serie, fornec: item.fornec, natOper: item.natOper, nomFornec: item.nomFornec }, () => this.volumes.focus());
     }
-    render() {        
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                <LoadingSpin />
-                <View style={[styles.viewLinha]}>
-                    <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Placa</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""                           
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                style={[defaultFormStyles.input]}
-                                returnKeyType="go"
-                                onChangeText={this.onChangePlaca}
-                                value={this.state.placa}
-                                onBlur={this.onBlurPlaca}
-                                ref={(input) => { this.placa = input; }}
-                            />
-                        </View>                  
-                    </View>
-                    <TouchableOpacity
-                                style={styles.btSearch}
-                                onPress={() => { this.onPressZoom(); }}
-                            >
-                                <Image
-                                    source={imgPrinter}
-                                    style={styles.imgZoom}
-                                />
-                            </TouchableOpacity>
+
+    onPressZoom = () => {
+        if (!this.state.placa || this.state.placa === '') {
+            Alert.alert(
+                'Placa deve ser informada'
+            );
+            return;
+        }
+        const params = { params: { placa: this.state.placa } };
+
+        Axios.get('/coletor/getDocInfoByPlate.p', params)
+        .then(res => {
+            if (res.data.success === 'true') {
+                const listaNF = res.data.notas;
+                if (listaNF.length > 1) {
+                    Actions.formSelecaoNF({ callback: (item) => this.onSelectDoc(item), listaNF });
+                } else {
+                    const item = listaNF[0];
+                    this.onSelectDoc(item);
+                }
+            } else {
+                Alert.alert(
+                    'Conferência Placa',
+                    res.data.message
+                );
+            }           
+        })
+        .catch((err) => {
+            Alert.alert(
+                'Erro Inesperado', err
+            );
+        });        
+    }
+
+    onConferePlaca = () => {
+        this.setState({ watingAction: true });
+        const params = { 
+            numDoc: this.state.numDoc,
+            serie: this.state.serie,
+            fornec: this.state.fornec,
+            natOper: this.state.natOper,
+            volumes: this.state.volumes
+        };
+
+        store.dispatch({ type: 'modifica_visible_loadingspin', payload: true });
+        Axios.get('/coletor/doCheckVolDoc.p', { params })
+        .then(res => {
+            store.dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+
+            if (res.data.success === 'true') {
+                (() => {
+                    this.placa.focus();
+                    this.clearForm();
+                }).call(this);
+            }
+            doAlertWithTimeout(
+                'Conferência Placa',
+                res.data.message
+            ); 
+            this.setState({ watingAction: false });
+        })
+        .catch((err) => {
+            store.dispatch({ type: 'modifica_visible_loadingspin', payload: false });
+            doAlertWithTimeout(
+                'Erro Inesperado', err
+            );
+            this.setState({ watingAction: false });
+        });
+    }
+
+    clearForm = (all) => () => {
+        this.setState({
+            ...this.state,
+            numDoc: '',
+            serie: '', 
+            fornec: '', 
+            nomFornec: '',
+            natOper: '', 
+            volumes: ''
+         });
+         if (all) {
+            this.setState({ placa: '' });
+         }
+    }
+    
+    renderRightButton = () => (
+        <TouchableOpacity 
+            onPress={this.clearForm(true)}
+            style={styles.btClear}
+        >
+            <Image
+                source={imgClear}
+                style={styles.imgClear}
+            />
+        </TouchableOpacity>
+    )  
+
+    renderBtConfirmar = () => (
+        <View style={[styles.viewBotao, { flex: 1 }]}>
+            <Button
+                onPress={this.onConferePlaca}
+                title="Confirmar"
+                color="green"
+            />
+        </View>
+    )
+
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            <LoadingSpin />
+            <View style={[styles.viewLinha]}>
+                <View style={[styles.viewCampo, styles.viewSmall]}>
+                    <Text style={styles.txtLabel}>Placa</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""                           
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            style={[defaultFormStyles.input]}
+                            returnKeyType="go"
+                            onChangeText={this.onChangePlaca}
+                            value={this.state.placa}
+                            onBlur={this.onBlurPlaca}
+                            ref={(input) => { this.placa = input; }}
+                        />
+                    </View>                  
                 </View>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Nota Fiscal</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                editable={false}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                style={defaultFormStyles.input}
-                                returnKeyType="go"
-                                onChangeText={this.onChangeNotaFiscal}
-                                value={this.state.numDoc}                            
-                                ref={(input) => { this.numDoc = input; }}
-                            />
-                        </View>                 
-                    </View>
-                    <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Serie</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                editable={false}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                style={defaultFormStyles.input}
-                                returnKeyType="go"
-                                value={this.state.serie}
-                                ref={(input) => { this.serie = input; }}
-                            />
-                        </View>                  
-                    </View>
-                    <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Fornecedor</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                editable={false}                            
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                style={defaultFormStyles.input}
-                                returnKeyType="go"
-                                value={this.state.fornec}
-                                ref={(input) => { this.fornec = input; }}
-                            />
-                        </View>                   
-                    </View>
-                    <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Natur Oper</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                editable={false}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                style={defaultFormStyles.input}
-                                returnKeyType="go"
-                                value={this.state.natOper}
-                                ref={(input) => { this.natOper = input; }}
-                            />
-                        </View>                   
-                    </View>
-                </View>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 5 }]}>
-                        <Text style={styles.txtLabel}>Nome Fornecedor</Text>             
+                <TouchableOpacity
+                    style={styles.btSearch}
+                    onPress={this.onPressZoom}
+                >
+                    <Image
+                        source={imgPrinter}
+                        style={styles.imgZoom}
+                    />
+                </TouchableOpacity>
+            </View>
+            <View style={styles.viewLinha}>
+                <View style={[styles.viewCampo, styles.viewSmall]}>
+                    <Text style={styles.txtLabel}>Nota Fiscal</Text>
+                    <View style={defaultFormStyles.inputView}>
                         <TextInput
                             placeholder=""
                             editable={false}
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor='rgba(255,255,255,0.7)'
-                            style={defaultFormStyles.inputDescricao}
+                            style={defaultFormStyles.input}
                             returnKeyType="go"
-                            multiline
-                            numberOfLines={3}
-                            value={this.state.nomFornec}
-                            ref={(input) => { this.nomFornec = input; }}
+                            onChangeText={this.onChangeNotaFiscal}
+                            value={this.state.numDoc}                            
+                            ref={(input) => { this.numDoc = input; }}
                         />
-                    </View>
+                    </View>                 
                 </View>
-                <View style={[styles.viewLinha]}>
-                    <View style={[styles.viewCampo, styles.viewSmall]}>
-                        <Text style={styles.txtLabel}>Volumes</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""                           
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                style={defaultFormStyles.input}
-                                returnKeyType="go"
-                                onChangeText={this.onChangeVolumes}
-                                value={this.state.volumes}
-                                ref={(input) => { this.volumes = input; }}
-                            />
-                        </View>                  
-                    </View>
+                <View style={[styles.viewCampo, styles.viewSmall]}>
+                    <Text style={styles.txtLabel}>Serie</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            editable={false}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            style={defaultFormStyles.input}
+                            returnKeyType="go"
+                            value={this.state.serie}
+                            ref={(input) => { this.serie = input; }}
+                        />
+                    </View>                  
                 </View>
-                
-                <View style={styles.viewLinha}>
-                    {this.renderBtConfirmar()}
+                <View style={[styles.viewCampo, styles.viewSmall]}>
+                    <Text style={styles.txtLabel}>Fornecedor</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            editable={false}                            
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            style={defaultFormStyles.input}
+                            returnKeyType="go"
+                            value={this.state.fornec}
+                            ref={(input) => { this.fornec = input; }}
+                        />
+                    </View>                   
                 </View>
-            </ScrollView>
-        );
-    }
+                <View style={[styles.viewCampo, styles.viewSmall]}>
+                    <Text style={styles.txtLabel}>Natur Oper</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            editable={false}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            style={defaultFormStyles.input}
+                            returnKeyType="go"
+                            value={this.state.natOper}
+                            ref={(input) => { this.natOper = input; }}
+                        />
+                    </View>                   
+                </View>
+            </View>
+            <View style={styles.viewLinha}>
+                <View style={[styles.viewCampo, { flex: 5 }]}>
+                    <Text style={styles.txtLabel}>Nome Fornecedor</Text>             
+                    <TextInput
+                        placeholder=""
+                        editable={false}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        placeholderTextColor='rgba(255,255,255,0.7)'
+                        style={defaultFormStyles.inputDescricao}
+                        returnKeyType="go"
+                        multiline
+                        numberOfLines={3}
+                        value={this.state.nomFornec}
+                        ref={(input) => { this.nomFornec = input; }}
+                    />
+                </View>
+            </View>
+            <View style={[styles.viewLinha]}>
+                <View style={[styles.viewCampo, styles.viewSmall]}>
+                    <Text style={styles.txtLabel}>Volumes</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""                           
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            style={defaultFormStyles.input}
+                            returnKeyType="go"
+                            onChangeText={this.onChangeVolumes}
+                            value={this.state.volumes}
+                            ref={(input) => { this.volumes = input; }}
+                        />
+                    </View>                  
+                </View>
+            </View>
+            
+            <View style={styles.viewLinha}>
+                {this.renderBtConfirmar()}
+            </View>
+        </ScrollView>
+    )
 }
 
 export default FormConferenciaPlaca;

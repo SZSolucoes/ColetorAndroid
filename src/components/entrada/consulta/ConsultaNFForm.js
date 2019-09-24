@@ -23,20 +23,11 @@ import { defaultFormStyles } from '../../utils/Forms';
 import imgClear from '../../../../resources/imgs/limpa_tela.png';
 
 class ConsultaNFForm extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.changeCodNF = this.changeCodNF.bind(this);
-        this.carregaItemNF = this.carregaItemNF.bind(this);
-        this.renderRightButton = this.renderRightButton.bind(this);
-        this.clearFields = this.clearFields.bind(this);
-    }
-
-    componentDidMount() {
+    componentDidMount = () => {
         setTimeout(Actions.refresh, 500, { right: this.renderRightButton });
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.props.modificaClean();
     }
 
@@ -44,11 +35,11 @@ class ConsultaNFForm extends React.PureComponent {
         if (this.props.codNF) this.carregaItemNF();
     }
 
-    changeCodNF(value) {
+    changeCodNF = (value) => {
         this.props.modificaCodNF(value);
     }
 
-    carregaItemNF() {
+    carregaItemNF = () => {
         const { usuario, codNF } = this.props;
 
         Keyboard.dismiss();
@@ -56,53 +47,49 @@ class ConsultaNFForm extends React.PureComponent {
         this.props.buscaItemsNF(usuario, codNF);
     }
 
-    clearFields() {
+    clearFields = () => {
         this.props.modificaClean();
     }
 
-    renderRightButton() {
-        return (
-            <TouchableOpacity 
-                onPress={() => this.clearFields()}
-                style={styles.btClear}
-            >
-                <Image
-                    source={imgClear}
-                    style={styles.imgClear}
-                />
-            </TouchableOpacity>
-        );
-    }
+    renderRightButton = () => (
+        <TouchableOpacity 
+            onPress={this.clearFields}
+            style={styles.btClear}
+        >
+            <Image
+                source={imgClear}
+                style={styles.imgClear}
+            />
+        </TouchableOpacity>
+    )
      
-    render() {
-        return (
-            <ScrollView style={styles.viewPrinc}>
-                <View style={styles.viewLinha}>
-                    <View style={[styles.viewCampo, { flex: 2 }]}>
-                        <Text style={styles.txtLabel}>Nota Fiscal</Text>
-                        <View style={defaultFormStyles.inputView}>
-                            <TextInput
-                                placeholder=""
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="numeric"
-                                placeholderTextColor='rgba(255,255,255,0.7)'
-                                returnKeyType="go"
-                                style={defaultFormStyles.input}
-                                onChangeText={this.changeCodNF}
-                                value={this.props.codNF}
-                                ref={(input) => { this.nrNotaFis = input; }}
-                                onBlur={this.onBlurNotaFiscal}
-                            />
-                        </View>
+    render = () => (
+        <ScrollView style={styles.viewPrinc}>
+            <View style={styles.viewLinha}>
+                <View style={[styles.viewCampo, { flex: 2 }]}>
+                    <Text style={styles.txtLabel}>Nota Fiscal</Text>
+                    <View style={defaultFormStyles.inputView}>
+                        <TextInput
+                            placeholder=""
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            keyboardType="numeric"
+                            placeholderTextColor='rgba(255,255,255,0.7)'
+                            returnKeyType="go"
+                            style={defaultFormStyles.input}
+                            onChangeText={this.changeCodNF}
+                            value={this.props.codNF}
+                            ref={(input) => { this.nrNotaFis = input; }}
+                            onBlur={this.onBlurNotaFiscal}
+                        />
                     </View>
                 </View>
-                <View style={{ padding: 5 }} >
-                    <ConsultaNFList />
-                </View>
-            </ScrollView>
-        );
-    }
+            </View>
+            <View style={{ padding: 5 }} >
+                <ConsultaNFList />
+            </View>
+        </ScrollView>
+    )
 }
 
 const mapStateToProps = (state) => (
