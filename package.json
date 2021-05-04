@@ -14,7 +14,7 @@
     "electron": "^1.8.8",
     "extend": "^3.0.2",
     "lodash": "^4.17.11",
-    "merge": "^1.2.1",
+    "merge": "^2.1.1",
     "morgan": "^1.9.1",
     "randomatic": "^3.0.0",
     "react": "^16.3.0-alpha.1",
